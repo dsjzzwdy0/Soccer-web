@@ -9,23 +9,40 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.base.bean;
+package com.loris.soccer.bean;
 
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 
-public interface Entity extends Serializable
+public class UUIDEntity implements Entity
 {
-	/**
-	 * 设置ID值
-	 * 
-	 * @param id
-	 */
-	void setId(String id);
+	/***/
+	private static final long serialVersionUID = 1L;
+
+	/** */
+	@TableId(type = IdType.UUID)
+	protected String id;
 
 	/**
 	 * 获得ID值
 	 * 
-	 * @return
+	 * @return 返回ID值
 	 */
-	String getId();
+	@Override
+	public String getId()
+	{
+		return id;
+	}
+
+	/**
+	 * 设置ID值
+	 * 
+	 * @param id
+	 *            ID值
+	 */
+	@Override
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 }
