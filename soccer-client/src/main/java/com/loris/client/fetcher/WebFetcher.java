@@ -9,10 +9,10 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.net.fetcher;
+package com.loris.client.fetcher;
 
-import com.loris.net.exception.UrlFetchException;
-import com.loris.net.model.WebPage;
+import com.loris.client.exception.UrlFetchException;
+import com.loris.client.model.WebPage;
 
 /**   
  * @ClassName:  WebFetcher   
