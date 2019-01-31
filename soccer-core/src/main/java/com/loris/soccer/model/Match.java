@@ -11,12 +11,14 @@
  */
 package com.loris.soccer.model;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  Match   
- * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @Description: 比赛数据类   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:30:27   
  *     
@@ -28,5 +30,69 @@ public class Match extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
-
+	
+	protected String mid;				//比赛编号：唯一编号
+	protected String homeid;			//主场球队编号
+	protected String clientid;			//客场球队编号
+	protected String lid;				//联赛编号
+	protected String round;				//比赛轮次
+	protected String season;			//比赛赛季
+	protected Date matchtime;			//比赛时间
+	
+	public String getMid()
+	{
+		return mid;
+	}
+	public void setMid(String mid)
+	{
+		this.mid = mid;
+	}
+	public String getHomeid()
+	{
+		return homeid;
+	}
+	public void setHomeid(String homeid)
+	{
+		this.homeid = homeid;
+	}
+	public String getClientid()
+	{
+		return clientid;
+	}
+	public void setClientid(String clientid)
+	{
+		this.clientid = clientid;
+	}
+	public String getLid()
+	{
+		return lid;
+	}
+	public void setLid(String lid)
+	{
+		this.lid = lid;
+	}
+	public String getRound()
+	{
+		return round;
+	}
+	public void setRound(String round)
+	{
+		this.round = round;
+	}
+	public String getSeason()
+	{
+		return season;
+	}
+	public void setSeason(String season)
+	{
+		this.season = season;
+	}
+	public Date getMatchtime()
+	{
+		return matchtime;
+	}
+	public void setMatchtime(Date matchtime)
+	{
+		this.matchtime = matchtime;
+	}
 }

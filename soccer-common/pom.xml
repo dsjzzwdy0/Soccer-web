@@ -15,6 +15,12 @@
 	</parent>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus -->
 		<dependency>
 			<groupId>com.baomidou</groupId>

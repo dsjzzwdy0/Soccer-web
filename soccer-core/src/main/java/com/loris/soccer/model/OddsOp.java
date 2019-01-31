@@ -29,9 +29,21 @@ public class OddsOp extends AutoIdEntity
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	protected String mid;				//比赛编号
+	protected String corpid;			//博彩公司
+	protected String corpname;			//博彩公司名称
+	protected long opentime;			//开盘时间
 	protected float winodds;
 	protected float drawodds;
 	protected float loseodds;
+	protected float winkelly;
+	protected float drawkelly;
+	protected float losekelly;
+	protected float winprob;
+	protected float drawprob;
+	protected float loseprob;
+	protected float lossratio;
+	
 	public float getWinodds()
 	{
 		return winodds;
@@ -55,6 +67,94 @@ public class OddsOp extends AutoIdEntity
 	public void setLoseodds(float loseodds)
 	{
 		this.loseodds = loseodds;
+	}
+	public String getMid()
+	{
+		return mid;
+	}
+	public void setMid(String mid)
+	{
+		this.mid = mid;
+	}
+	public String getCorpid()
+	{
+		return corpid;
+	}
+	public void setCorpid(String corpid)
+	{
+		this.corpid = corpid;
+	}
+	public String getCorpname()
+	{
+		return corpname;
+	}
+	public void setCorpname(String corpname)
+	{
+		this.corpname = corpname;
+	}
+	public long getOpentime()
+	{
+		return opentime;
+	}
+	public void setOpentime(long opentime)
+	{
+		this.opentime = opentime;
+	}
+	public float getWinkelly()
+	{
+		return winkelly;
+	}
+	public void setWinkelly(float winkelly)
+	{
+		this.winkelly = winkelly;
+	}
+	public float getDrawkelly()
+	{
+		return drawkelly;
+	}
+	public void setDrawkelly(float drawkelly)
+	{
+		this.drawkelly = drawkelly;
+	}
+	public float getLosekelly()
+	{
+		return losekelly;
+	}
+	public void setLosekelly(float losekelly)
+	{
+		this.losekelly = losekelly;
+	}
+	public float getWinprob()
+	{
+		return winprob;
+	}
+	public void setWinprob(float winprob)
+	{
+		this.winprob = winprob;
+	}
+	public float getDrawprob()
+	{
+		return drawprob;
+	}
+	public void setDrawprob(float drawprob)
+	{
+		this.drawprob = drawprob;
+	}
+	public float getLoseprob()
+	{
+		return loseprob;
+	}
+	public void setLoseprob(float loseprob)
+	{
+		this.loseprob = loseprob;
+	}
+	public float getLossratio()
+	{
+		return lossratio;
+	}
+	public void setLossratio(float lossratio)
+	{
+		this.lossratio = lossratio;
 	}
 	@Override
 	public String toString()

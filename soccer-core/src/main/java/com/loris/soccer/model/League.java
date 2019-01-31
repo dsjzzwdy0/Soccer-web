@@ -11,20 +11,74 @@
  */
 package com.loris.soccer.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
- * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @Description: 联赛信息描述类  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@TableName("soccer_league")
 public class League extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
-
+	
+	protected String lid;				//联赛编号
+	protected String name;				//联赛名称
+	protected String type;				//赛事类型： league（联赛）、cup（杯赛）
+	protected String country;			//所属国家
+	protected String continent;			//所属洲: 世界、亚洲、欧洲、美洲等
+	
+	public String getLid()
+	{
+		return lid;
+	}
+	public void setLid(String lid)
+	{
+		this.lid = lid;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public String getType()
+	{
+		return type;
+	}
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+	public String getCountry()
+	{
+		return country;
+	}
+	public void setCountry(String country)
+	{
+		this.country = country;
+	}
+	public String getContinent()
+	{
+		return continent;
+	}
+	public void setContinent(String continent)
+	{
+		this.continent = continent;
+	}
+	@Override
+	public String toString()
+	{
+		return "League [lid=" + lid + ", name=" + name + ", type=" + type + ", country=" + country + ", continent="
+				+ continent + ", id=" + id + "]";
+	}
 }
