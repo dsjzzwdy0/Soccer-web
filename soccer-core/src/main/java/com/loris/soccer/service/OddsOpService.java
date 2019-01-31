@@ -18,7 +18,7 @@ import com.loris.soccer.model.OddsOp;
 
 /**   
  * @ClassName:  OddsOpService   
- * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @Description: 欧赔数据业务查询服务 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:33:06   
  *     
