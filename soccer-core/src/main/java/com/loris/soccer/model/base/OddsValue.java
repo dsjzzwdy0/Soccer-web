@@ -38,6 +38,8 @@ public class OddsValue extends AutoIdEntity
 	protected float winprob;
 	protected float loseprob;
 	protected float lossratio;
+	protected String source;			//数据来源
+	
 	public String getMid()
 	{
 		return mid;
@@ -125,5 +127,13 @@ public class OddsValue extends AutoIdEntity
 	public void setLossratio(float lossratio)
 	{
 		this.lossratio = lossratio;
+	}
+	public String getSource()
+	{
+		return source;
+	}
+	public void setSource(String source)
+	{
+		this.source = source;
 	}
 }

@@ -12,7 +12,7 @@
 package com.loris.soccer.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.model.base.IssueMatch;
+import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
@@ -23,20 +23,39 @@ import com.loris.soccer.model.base.IssueMatch;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_match_bd")
-public class MatchBd extends IssueMatch
+@TableName("soccer_league_round")
+public class Round extends AutoIdEntity
 {
-	/***/
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
-	protected String bdno;			//北单编号
-
-	public String getBdno()
+	protected String lid;
+	protected String season;
+	protected String round;
+	public String getLid()
 	{
-		return bdno;
+		return lid;
 	}
-	public void setBdno(String bdno)
+	public void setLid(String lid)
 	{
-		this.bdno = bdno;
+		this.lid = lid;
+	}
+	public String getSeason()
+	{
+		return season;
+	}
+	public void setSeason(String season)
+	{
+		this.season = season;
+	}
+	public String getRound()
+	{
+		return round;
+	}
+	public void setRound(String round)
+	{
+		this.round = round;
 	}
 }

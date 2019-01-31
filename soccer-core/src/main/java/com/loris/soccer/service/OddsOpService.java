@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.OddsOp;
 
@@ -25,5 +27,18 @@ import com.loris.soccer.model.OddsOp;
  */
 public interface OddsOpService extends IService<OddsOp>
 {
-
+	/**
+	 * 通过比赛编号获得欧赔数据列表
+	 * @param mid 比赛编号
+	 * @return 欧赔数据列表
+	 */
+	List<OddsOp> selectOddsOp(String mid);
+	
+	/**
+	 * 通过比赛编号与博彩公司的编号获得欧赔数据列表
+	 * @param mid 比赛编号
+	 * @param corpid 博彩公司编号
+	 * @return 欧赔数据列且
+	 */
+	List<OddsOp> selectOddsOp(String mid, String corpid);
 }

@@ -13,6 +13,7 @@ package com.loris.soccer.model;
 
 import java.sql.Date;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
@@ -24,6 +25,7 @@ import com.loris.soccer.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@TableName("soccer_league_rank")
 public class Rank extends AutoIdEntity
 {
 	/***/

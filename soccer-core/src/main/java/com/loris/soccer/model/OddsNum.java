@@ -11,32 +11,33 @@
  */
 package com.loris.soccer.model;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.model.base.IssueMatch;
+import com.loris.soccer.model.base.OddsValue;
 
 /**   
  * @ClassName:  League   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 大小球盘的数据对比类   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_match_bd")
-public class MatchBd extends IssueMatch
+public class OddsNum extends OddsValue
 {
-	/***/
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
+	
+	protected Float goalnum;			//进球数
 
-	protected String bdno;			//北单编号
+	public Float getGoalnum()
+	{
+		return goalnum;
+	}
 
-	public String getBdno()
+	public void setGoalnum(Float goalnum)
 	{
-		return bdno;
-	}
-	public void setBdno(String bdno)
-	{
-		this.bdno = bdno;
-	}
+		this.goalnum = goalnum;
+	}	
 }

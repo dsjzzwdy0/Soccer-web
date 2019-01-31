@@ -9,10 +9,10 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.model;
+package com.loris.soccer.dao;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.model.base.IssueMatch;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.loris.soccer.model.Match;
 
 /**   
  * @ClassName:  League   
@@ -23,20 +23,7 @@ import com.loris.soccer.model.base.IssueMatch;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_match_bd")
-public class MatchBd extends IssueMatch
+public interface MatchMapper extends BaseMapper<Match>
 {
-	/***/
-	private static final long serialVersionUID = 1L;
 
-	protected String bdno;			//北单编号
-
-	public String getBdno()
-	{
-		return bdno;
-	}
-	public void setBdno(String bdno)
-	{
-		this.bdno = bdno;
-	}
 }

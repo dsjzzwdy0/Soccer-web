@@ -12,31 +12,53 @@
 package com.loris.soccer.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.model.base.IssueMatch;
+import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 用于表示联赛所属的球队  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_match_bd")
-public class MatchBd extends IssueMatch
+@TableName("soccer_season_team")
+public class TeamRfSeason extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	protected String bdno;			//北单编号
-
-	public String getBdno()
+	protected String lid;			//联赛编号
+	protected String season;		//赛季编号
+	protected String tid;			//球队编号
+	public String getLid()
 	{
-		return bdno;
+		return lid;
 	}
-	public void setBdno(String bdno)
+	public void setLid(String lid)
 	{
-		this.bdno = bdno;
+		this.lid = lid;
+	}
+	public String getSeason()
+	{
+		return season;
+	}
+	public void setSeason(String season)
+	{
+		this.season = season;
+	}
+	public String getTid()
+	{
+		return tid;
+	}
+	public void setTid(String tid)
+	{
+		this.tid = tid;
+	}
+	@Override
+	public String toString()
+	{
+		return "LeagueRfTeam [lid=" + lid + ", season=" + season + ", tid=" + tid + "]";
 	}
 }

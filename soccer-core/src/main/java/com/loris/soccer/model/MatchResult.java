@@ -12,7 +12,7 @@
 package com.loris.soccer.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.model.base.IssueMatch;
+import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
@@ -23,20 +23,53 @@ import com.loris.soccer.model.base.IssueMatch;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_match_bd")
-public class MatchBd extends IssueMatch
+@TableName("soccer_match_result")
+public class MatchResult extends AutoIdEntity
 {
-	/***/
+	public static enum ResultType{
+		WIN,      	//胜
+		DRAW,		//平
+		LOSE		//负
+	}
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
-	protected String bdno;			//北单编号
-
-	public String getBdno()
+	protected String mid;				//比赛编号
+	protected ResultType result;		//比赛结果
+	protected Integer homegoal;			//主队进球数
+	protected Integer clientgoal;		//客队进球数
+	public String getMid()
 	{
-		return bdno;
+		return mid;
 	}
-	public void setBdno(String bdno)
+	public void setMid(String mid)
 	{
-		this.bdno = bdno;
+		this.mid = mid;
+	}
+	public ResultType getResult()
+	{
+		return result;
+	}
+	public void setResult(ResultType result)
+	{
+		this.result = result;
+	}
+	public Integer getHomegoal()
+	{
+		return homegoal;
+	}
+	public void setHomegoal(Integer homegoal)
+	{
+		this.homegoal = homegoal;
+	}
+	public Integer getClientgoal()
+	{
+		return clientgoal;
+	}
+	public void setClientgoal(Integer clientgoal)
+	{
+		this.clientgoal = clientgoal;
 	}
 }

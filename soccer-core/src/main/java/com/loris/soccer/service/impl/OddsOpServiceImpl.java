@@ -11,8 +11,11 @@
  */
 package com.loris.soccer.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.soccer.dao.OddsOpMapper;
 import com.loris.soccer.model.OddsOp;
@@ -30,5 +33,28 @@ import com.loris.soccer.service.OddsOpService;
 @Service("oddsOpService")
 public class OddsOpServiceImpl extends ServiceImpl<OddsOpMapper, OddsOp> implements OddsOpService
 {
-
+	/**
+	 * 通过比赛编号获得欧赔数据列表
+	 * @param mid 比赛编号
+	 * @return 欧赔数据列表
+	 */
+	public List<OddsOp> selectOddsOp(String mid)
+	{
+		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("mid", mid);
+		return baseMapper.selectList(queryWrapper);
+	}
+	
+	/**
+	 * 通过比赛编号与博彩公司的编号获得欧赔数据列表
+	 * @param mid 比赛编号
+	 * @param corpid 博彩公司编号
+	 * @return 欧赔数据列且
+	 */
+	public List<OddsOp> selectOddsOp(String mid, String corpid)
+	{
+		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("mid", mid).eq("corpid", corpid);
+		return baseMapper.selectList(queryWrapper);
+	}
 }
