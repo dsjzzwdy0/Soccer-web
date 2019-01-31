@@ -11,8 +11,10 @@
  */
 package com.loris.client.fetcher;
 
+import java.io.Closeable;
+
 import com.loris.client.exception.UrlFetchException;
-import com.loris.client.model.WebPage;
+import com.loris.client.page.WebPage;
 
 /**   
  * @ClassName:  WebFetcher   
@@ -23,7 +25,7 @@ import com.loris.client.model.WebPage;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface WebFetcher
+public interface WebFetcher extends Closeable
 {
 	/**
 	 * 初始化网页数据下载器
@@ -36,5 +38,5 @@ public interface WebFetcher
 	 * @return 下载是否成功的标志
 	 * @throws UrlFetchException 下载过程中出现的异常
 	 */
-	boolean fetch(WebPage page) throws UrlFetchException;
+	boolean download(WebPage page) throws UrlFetchException;
 }
