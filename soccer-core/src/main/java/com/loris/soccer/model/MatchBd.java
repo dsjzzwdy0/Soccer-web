@@ -9,40 +9,32 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.model.ex;
+package com.loris.soccer.model;
 
-import com.loris.soccer.bean.AutoIdEntity;
+import com.loris.soccer.model.base.IssueMatch;
 
 /**   
  * @ClassName:  League   
- * @Description: 博彩足球比赛   
+ * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class AbstractIssueMatch extends AutoIdEntity
+public class MatchBd extends IssueMatch
 {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	protected String mid;					//比赛编号
-	protected String issue;					//比赛期号
-	public String getMid()
+	protected String bdno;			//北单编号
+
+	public String getBdno()
 	{
-		return mid;
+		return bdno;
 	}
-	public void setMid(String mid)
+	public void setBdno(String bdno)
 	{
-		this.mid = mid;
-	}
-	public String getIssue()
-	{
-		return issue;
-	}
-	public void setIssue(String issue)
-	{
-		this.issue = issue;
+		this.bdno = bdno;
 	}
 }
