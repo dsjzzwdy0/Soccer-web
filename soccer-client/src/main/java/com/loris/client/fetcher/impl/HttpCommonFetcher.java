@@ -36,8 +36,8 @@ import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.CookieManager;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.fetcher.util.HttpUtil;
-import com.loris.client.fetcher.util.Monitor;
 import com.loris.client.page.WebPage;
+import com.loris.client.util.Monitor;
 
 /**
  * @ClassName: HttpCommonFetcher

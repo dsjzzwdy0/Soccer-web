@@ -26,6 +26,8 @@ import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.log4j.Logger;
 
+import com.loris.client.util.Monitor;
+
 
 /**
  *
