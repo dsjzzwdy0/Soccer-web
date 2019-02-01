@@ -14,8 +14,6 @@ package com.loris.client.fetcher.setting;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-
 /**   
  * @ClassName:  FetcherSetting   
  * @Description: 配置内容管理类 
@@ -33,29 +31,18 @@ public class SettingFactory
 	private Map<String, FetcherSetting> settings = new HashMap<String, FetcherSetting>();
 	
 	/**
-	 * Create a single ClientSettings.
+	 * 获得设置的所有信息
+	 * @return
 	 */
-	public SettingFactory()
-	{
-		FetcherSetting setting = new FetcherSetting();
-		setting.setConnectionTimeout(30000);
-		setting.setBrowserVersion(BrowserVersion.CHROME);
-		setting.setInterval(4000);
-		
-		settings.put(DEFAULT_NAME, setting);
-		
-		setting = new FetcherSetting();
-		setting.setConnectionTimeout(30000);
-		setting.setBrowserVersion(BrowserVersion.FIREFOX_60);
-		setting.setInterval(4000);
-		settings.put("setting2", setting);
-	}
-	
 	public Map<String, FetcherSetting> getSettings()
 	{
 		return settings;
 	}
 
+	/**
+	 * 设置配置信息
+	 * @param settings
+	 */
 	public void setSettings(Map<String, FetcherSetting> settings)
 	{
 		this.settings = settings;

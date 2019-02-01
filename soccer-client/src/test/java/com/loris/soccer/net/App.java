@@ -7,11 +7,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.loris.client.fetcher.WebFetcher;
-import com.loris.client.fetcher.impl.HtmlUnitFetcher;
+import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.page.WebPage;
+import com.loris.client.parser.WebPageResults;
+import com.loris.client.parser.impl.LinksWebPageParser;
 
 /**
  * Hello world!
@@ -29,8 +31,8 @@ public class App
     	{
     		getApplicationContext();
     		
-    		//testSetting();    		
-    		testContext();
+    		testSetting();    		
+    		//testContext();
     	}
     	catch(Exception e)
     	{
@@ -44,10 +46,8 @@ public class App
     public static void testContext() throws Exception
     {
     	SettingFactory factory = (SettingFactory)context.getBean("settingFactory");
-    	logger.info("Bean has been initialized " + (factory != null));
     	FetcherSetting setting = factory.getFetcherSetting("explorer");
-    	logger.info(setting.getBrowserVersion().getUserAgent());
-    	
+    	logger.info(setting.getBrowserVersion().getUserAgent());    	
     	Map<String, String> headers = setting.getHeaders();
     	logger.info(headers);
     }
@@ -63,18 +63,23 @@ public class App
     	String url = "https://liuinsect.iteye.com/blog/1886237";
     	WebPage page = new WebPage(url);
     	
-    	try(WebFetcher fetcher = new HtmlUnitFetcher(setting))
+    	try(WebFetcher fetcher = new HttpCommonFetcher(setting))
     	{
     		fetcher.init();    		
 	    	if(fetcher.download(page))
 	    	{
 	    		//logger.info(page.getContent());
 	    		logger.info("Success to download: " + page.getUrl());
+	    		LinksWebPageParser parser = new LinksWebPageParser();
+	    		WebPageResults results = parser.parse(page);
+	    		int i = 1;
+	    		for (String key : results.keySet())
+				{
+					logger.info(i +++ " " + key + ": " + results.get(key));
+				}
 	    	}
-    	}
-    	
+    	}    	
     	logger.info(DashBoard.print());    	
-    	//logger.info(BrowserVersion.FIREFOX_60.getUserAgent());
     }
     
     

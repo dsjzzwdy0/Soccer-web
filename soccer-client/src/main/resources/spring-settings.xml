@@ -21,12 +21,14 @@
 		</property>
 	</bean>
 	
+	<!-- 默认的网络客户端系统配置 -->
 	<bean id="defaultSetting" class="com.loris.client.fetcher.setting.FetcherSetting">
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="FIREFOX_60"></property>
 		<property name="interval" value="4500"></property>
 	</bean>
 	
+	<!-- IE网络客户端系统配置 -->
 	<bean id="explorerSetting" class="com.loris.client.fetcher.setting.FetcherSetting">
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="INTERNET_EXPLORER"></property>
@@ -39,6 +41,7 @@
 		</property>
 	</bean>
 	
+	<!-- Chrome网络客户端系统配置 -->
 	<bean id="chromeSetting" class="com.loris.client.fetcher.setting.FetcherSetting">
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="INTERNET_EXPLORER"></property>
