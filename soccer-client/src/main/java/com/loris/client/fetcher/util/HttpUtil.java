@@ -29,6 +29,9 @@ public class HttpUtil
 {
 	protected static Logger log = Logger.getLogger(HttpUtil.class);
 
+	public final static String HTTP_METHOD_POST = "post";
+	public final static String HTTP_METHOD_GET = "get";
+	
 	// 200 - ok
 	public final static int OK_200 = 200;
 

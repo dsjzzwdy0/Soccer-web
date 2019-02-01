@@ -12,14 +12,13 @@
 package com.loris.client.fetcher.impl;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -32,8 +31,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
-import com.loris.client.fetcher.WebFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
+import com.loris.client.fetcher.util.DashBoard;
+import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.page.WebPage;
 
 /**
@@ -80,6 +80,10 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 		hasInitPage = true;
 	}
 
+	/**
+	 * 抓取起始页面
+	 * @throws IOException
+	 */
 	@Override
 	public void init() throws IOException
 	{
@@ -110,6 +114,36 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	{
 		return fetch(page);
 	}
+	
+	/**
+	 * 创建网络请求数据类
+	 * @param page
+	 * @return
+	 * @throws MalformedURLException
+	 */
+	protected static WebRequest createWebRequest(WebPage page) throws MalformedURLException
+	{
+		WebRequest request = new WebRequest(new URL(page.getUrl()));		
+		if(HttpUtil.HTTP_METHOD_POST.equalsIgnoreCase(page.getMethod()))
+		{
+			request.setHttpMethod(HttpMethod.POST);	
+			Map<String, String> params = page.getParams();
+			List<NameValuePair> requestParameters = new ArrayList<>();
+			if (params != null && params.size() > 0)
+			{
+				for (Entry<String, String> param : params.entrySet())
+				{
+					requestParameters.add(new NameValuePair(param.getKey(), param.getValue()));
+				}
+			}
+			request.setRequestParameters(requestParameters);
+		}
+		else
+		{
+			request.setHttpMethod(HttpMethod.GET);
+		}
+		return request;
+	}
 
 	/**
 	 * 下载网络数据
@@ -120,75 +154,27 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	 * @return
 	 * @throws IOException
 	 */
-	protected static Page get(WebPage page, WebClient client, int time) throws IOException
+	protected static Page excuteWebRequest(WebRequest request, WebClient client, int time) throws IOException
 	{
 		try
 		{
 			synchronized (client)
 			{
-				HtmlPage p = client.getPage(page.getUrl());
+				HtmlPage p = client.getPage(request);
 				return p;
 			}
 		}
 		catch (com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException e)
 		{
 			// e.printStackTrace();
-			logger.info("Error occured '" + e.getStatusCode() + "' when get: " + page.getUrl()
+			logger.info("Error occured '" + e.getStatusCode() + "' when get: " + request.getUrl()
 					+ ", Retrieve the page again. Time is" + time);
 			time++;
 			if (time >= 3)
 			{
 				return null;
 			}
-			return get(page, client, time);
-		}
-	}
-
-	/**
-	 * Post the data.
-	 * 
-	 * @param page
-	 *            Page Object.
-	 * @param client
-	 *            WebClient
-	 * @return times.
-	 * @throws IOException
-	 */
-	protected static Page post(WebPage page, WebClient client, int time) throws IOException
-	{
-		try
-		{
-			synchronized (client)
-			{
-				String url = page.getUrl();
-				WebRequest request = new WebRequest(new URL(url));
-				request.setHttpMethod(HttpMethod.POST);
-
-				Map<String, String> params = page.getParams();
-				List<NameValuePair> requestParameters = new ArrayList<>();
-				if (params != null && params.size() > 0)
-				{
-					for (Entry<String, String> param : params.entrySet())
-					{
-						requestParameters.add(new NameValuePair(param.getKey(), param.getValue()));
-					}
-				}
-				request.setRequestParameters(requestParameters);
-
-				Page p = client.getPage(request);
-				return p;
-			}
-		}
-		catch (com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException e)
-		{
-			logger.info("Error occured '" + e.getStatusCode() + "' when post: " + page.getUrl()
-					+ ", Retrieve the page again. Time is" + time);
-			time++;
-			if (time >= 3)
-			{
-				return null;
-			}
-			return post(page, client, time);
+			return excuteWebRequest(request, client, time);
 		}
 	}
 
@@ -208,34 +194,23 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 		}
 		try
 		{
-			Page htmlPage = null;			
-			if (page.getMethod() == WebFetcher.HTTP_METHOD_POST)
-			{
-				htmlPage = post(page, client, 0);
-			}
-			else
-			{
-				htmlPage = get(page, client, 0);
-			}
+			WebRequest request = createWebRequest(page);
 			
-			int status = htmlPage.getWebResponse().getStatusCode();			
-			page.setHttpstatus(status);
+			long startTime = System.currentTimeMillis();			
+			Page htmlPage = excuteWebRequest(request, client, 0);			
+			//计算页面获取的时间
+			long endTime = System.currentTimeMillis();
+			DashBoard.add(page.getUrl(), endTime - startTime);
 			
-			if (status == HttpStatus.SC_OK)
-			{
-				page.setContent(((HtmlPage)htmlPage).asXml());
-				page.setCompleted(true);
-				page.setLoadtime(new Date());
-				return true;
-			}
-			else if (status == HttpStatus.SC_FORBIDDEN)
-			{
-				throw new HostForbiddenException(page.getUrl());
-			}
-			else
-			{
-				throw new UrlFetchException("Error code is '" + status + "', Failed to fetch page: " + page.getUrl());
-			}
+			int statusCode = htmlPage.getWebResponse().getStatusCode();			
+			page.setHttpstatus(statusCode);
+			
+			//检测数据页面返回的状态值
+			checkStatusCode(page, statusCode);
+
+			page.setContent(((HtmlPage)htmlPage).asXml());			
+			return true;
+
 		}
 		catch (IOException e)
 		{
@@ -262,9 +237,9 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 		client.getOptions().setCssEnabled(false);
 		client.getCookieManager().setCookiesEnabled(true);
 		client.setAjaxController(new NicelyResynchronizingAjaxController());
-		client.getOptions().setThrowExceptionOnScriptError(false); // js运行错误时，是否抛出异常
-		client.getOptions().setTimeout(setting.getConnectionTimeout()); // 设置连接超时时间
-																		// ，这里是10S。如果为0，则无限期等;
+		client.getOptions().setThrowExceptionOnScriptError(false);            	// js运行错误时，是否抛出异常
+		client.getOptions().setTimeout(setting.getConnectionTimeout()); 		// 设置连接超时时间// ，这里是10S。如果为0，则无限期等;
+		client.waitForBackgroundJavaScript(waitForBackgroundJavaScript);
 	}
 
 	/**
@@ -327,5 +302,18 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	{
 		this.waitForBackgroundJavaScript = waitForBackgroundJavaScript;
 		waitForBackgroundJavaScript(waitForBackgroundJavaScript);
+	}
+	
+	/**
+	 * 关闭数据下载客户端
+	 * 
+	 */
+	@Override
+	public void close()
+	{
+		if(client != null)
+		{
+			client.close();
+		}
 	}
 }

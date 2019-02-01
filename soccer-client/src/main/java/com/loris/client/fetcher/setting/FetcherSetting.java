@@ -14,6 +14,8 @@ package com.loris.client.fetcher.setting;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+
 /**   
  * @ClassName:  FetcherSetting   
  * @Description: 下载器的基本配置信息  
@@ -25,9 +27,11 @@ import java.util.Map;
  */
 public class FetcherSetting
 {
-	private int interval;
+	private int interval = 4000;
 	private int monitorInterval;
-	private int connectionTimeout;
+	private int connectionTimeout = 30000;
+	
+	private BrowserVersion browser = BrowserVersion.FIREFOX_60;
 	
 	private Map<String, String> headers;
 	
@@ -77,5 +81,39 @@ public class FetcherSetting
 	public void setHeaders(Map<String, String> headers)
 	{
 		this.headers = headers;
+	}
+
+	public BrowserVersion getBrowserVersion()
+	{
+		return browser;
+	}
+
+	public void setBrowserVersion(BrowserVersion browser)
+	{
+		this.browser = browser;
+	}
+	
+	public void setBrowser(String browser)
+	{
+		switch (browser)
+		{
+		case "FIREFOX_60":
+			this.browser = BrowserVersion.FIREFOX_60;
+			break;
+		case "FIREFOX_52":
+			this.browser = BrowserVersion.FIREFOX_52;
+			break;
+		case "INTERNET_EXPLORER":
+			this.browser = BrowserVersion.INTERNET_EXPLORER;
+			break;
+		case "CHROME":
+			this.browser = BrowserVersion.CHROME;
+			break;
+		case "EDGE":
+			this.browser = BrowserVersion.EDGE;
+			break;
+		default:
+			break;
+		}
 	}
 }

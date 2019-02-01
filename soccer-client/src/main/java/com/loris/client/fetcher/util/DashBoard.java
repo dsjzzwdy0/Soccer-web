@@ -28,6 +28,7 @@ import java.util.TreeSet;
 
 public class DashBoard
 {
+	
 	public static final int SIZE = 20;
 	public static final Object watch = new String("w");
 
@@ -44,9 +45,8 @@ public class DashBoard
 	 */
 	public static void add(String url, long time)
 	{
-
+		//logger.info("Add Url time cost: " + url + ", " + time);
 		UrlRecord newSlowUrl = new UrlRecord(url, time);
-
 		if (urlList.size() < DashBoard.SIZE)
 		{
 			urlList.add(newSlowUrl);

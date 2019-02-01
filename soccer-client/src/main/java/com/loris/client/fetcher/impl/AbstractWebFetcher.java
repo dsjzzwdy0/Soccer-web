@@ -12,6 +12,10 @@
 package com.loris.client.fetcher.impl;
 
 import java.io.IOException;
+import java.util.Date;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.log4j.Logger;
 
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
@@ -30,6 +34,8 @@ import com.loris.client.page.WebPage;
  */
 public abstract class AbstractWebFetcher implements WebFetcher
 {
+	private static Logger logger = Logger.getLogger(AbstractWebFetcher.class);
+	
 	/** FetcherSetting 设置信息*/
 	protected FetcherSetting setting;
 
@@ -39,7 +45,7 @@ public abstract class AbstractWebFetcher implements WebFetcher
 	 */
 	@Override
 	public void close() throws IOException
-	{
+	{		
 	}
 
 	/** 
@@ -49,6 +55,7 @@ public abstract class AbstractWebFetcher implements WebFetcher
 	@Override
 	public void init() throws IOException
 	{
+		logger.info("Initializing the WebFetcher...");
 	}
 
 	/** 
@@ -67,5 +74,29 @@ public abstract class AbstractWebFetcher implements WebFetcher
 	 */
 	@Override
 	public abstract boolean download(WebPage page) throws IOException, UrlFetchException, HostForbiddenException;
-
+	
+	/**
+	 * 检查页面返回的代码数据
+	 * @param page
+	 * @param statusCode
+	 * @throws UrlFetchException
+	 * @throws HostForbiddenException
+	 */
+	protected void checkStatusCode(WebPage page, int statusCode) throws UrlFetchException, HostForbiddenException
+	{
+		if(statusCode == HttpStatus.SC_OK)
+		{
+			//do nothing.
+			page.setCompleted(true);
+			page.setLoadtime(new Date());
+		}
+		else if (statusCode == HttpStatus.SC_FORBIDDEN)
+		{
+			throw new HostForbiddenException(page.getUrl());
+		}
+		else
+		{
+			throw new UrlFetchException("Error code is '" + statusCode + "', Failed to fetch page: " + page.getUrl());
+		}
+	}
 }

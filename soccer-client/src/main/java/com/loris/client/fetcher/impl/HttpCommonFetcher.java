@@ -14,7 +14,6 @@ package com.loris.client.fetcher.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -22,7 +21,6 @@ import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -31,11 +29,13 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.log4j.Logger;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.CookieManager;
 import com.loris.client.fetcher.util.DashBoard;
+import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.fetcher.util.Monitor;
 import com.loris.client.page.WebPage;
 
@@ -89,12 +89,8 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 	public boolean fetch(WebPage page, FetcherSetting setting) throws IOException, UrlFetchException, HostForbiddenException
 	{
 		logger.debug("Http '" + page.getMethod() + "' URL: " + page.getUrl());
-		byte[] bs = fetchByteData(page, setting);
+		fetchByteData(page, setting);		
 		
-		page.setContent(uncompress(page.getEncoding(), bs, page.getZiptype()));
-		
-		page.setCompleted(true);
-		page.setLoadtime(new Date());
 		return true;
 	}
 
@@ -144,7 +140,7 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 	 * @return
 	 * @throws UrlFetchException
 	 */
-	protected static byte[] fetchByteData(WebPage page, FetcherSetting setting) throws UrlFetchException, HostForbiddenException
+	protected void fetchByteData(WebPage page, FetcherSetting setting) throws UrlFetchException, HostForbiddenException
 	{
 		String urlString = page.getUrl();
 		byte[] content = null;
@@ -160,7 +156,7 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 		try
 		{
 			String method = page.getMethod();
-			if (HTTP_METHOD_POST.equalsIgnoreCase(method))
+			if (HttpUtil.HTTP_METHOD_POST.equalsIgnoreCase(method))
 			{
 				httpMethod = new UTF8PostMethod(page.getUrl());
 
@@ -189,6 +185,9 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			ex1.printStackTrace();
 			throw new UrlFetchException();
 		}
+		
+		//设置浏览器的类型
+		setBrowser(httpMethod, setting.getBrowserVersion());
 
 		// 系统统一配置的数据请求头
 		Map<String, String> defaultHeaders = setting.getHeaders();
@@ -209,23 +208,27 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			long startTime = System.currentTimeMillis();
 			
 			// 执行页面下载
-			int result = httpclient.executeMethod(httpMethod);
+			int statusCode = httpclient.executeMethod(httpMethod);
 			
 			//计算页面获取的时间
 			long endTime = System.currentTimeMillis();
-			DashBoard.add(urlString, endTime - startTime);
+			DashBoard.add(urlString, endTime - startTime);			
 			
-			page.setHttpstatus(result);
-			if (result == HttpStatus.SC_FORBIDDEN)
+			//处理跳转的问题，在这里与网络爬虫不同，为了提高效率，不再抓取跳转的页面
+			Header locationHeader = httpMethod.getResponseHeader("location");
+			if (locationHeader != null)
 			{
-				throw new HostForbiddenException(urlString);
+				String info = "Error, the url is redirect to : " + locationHeader.getValue();
+				throw new UrlFetchException(info);
 			}
-			else if(result != HttpStatus.SC_OK)
-			{
-				throw new UrlFetchException("Error code is '" + result + "', Failed to fetch page: " + page.getUrl());
-			}
-
-			content = httpMethod.getResponseBody();
+			
+			page.setHttpstatus(statusCode);		
+			
+			//检测数据页面返回的状态值
+			checkStatusCode(page, statusCode);
+			
+			content = httpMethod.getResponseBody();			
+			page.setContent(uncompress(page.getEncoding(), content, page.getZiptype()));
 
 			// Save the cookies
 			Cookie[] cookies = httpclient.getState().getCookies();
@@ -240,14 +243,7 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 				Monitor.fetchedCounter++;
 			}
 
-			//处理跳转的问题，在这里与网络爬虫不同，为了提高效率，不再抓取跳转的页面
-			Header locationHeader = httpMethod.getResponseHeader("location");
-			if (locationHeader != null)
-			{
-				String info = "Error, the url is redirect to : " + locationHeader.getValue();
-				logger.info(info);
-				throw new UrlFetchException(info);
-			}
+			
 		}
 		catch (Exception ex)
 		{
@@ -258,7 +254,20 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			// Release current connection to the connection pool once you are
 			httpMethod.releaseConnection();
 		}
-		return content;
+	}
+	
+	/**
+	 * 设置客户端的类型
+	 * @param httpMethod
+	 * @param browserVersion
+	 */
+	protected static void setBrowser(HttpMethod httpMethod, BrowserVersion browserVersion)
+	{
+		httpMethod.addRequestHeader("Accept", browserVersion.getHtmlAcceptHeader());
+		httpMethod.addRequestHeader("User-Agent", browserVersion.getUserAgent());
+		httpMethod.addRequestHeader("Connection", "keep-alive");
+		httpMethod.addRequestHeader("Accep-language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+		httpMethod.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 	}
 
 	/**

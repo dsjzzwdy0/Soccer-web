@@ -11,12 +11,15 @@
  */
 package com.loris.client.page;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.soccer.bean.AutoIdEntity;
 
 /**   
@@ -33,6 +36,10 @@ public class WebPage extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ENCODING_UTF8 = "utf-8";
+	public static final String ENCODING_GBK = "GBK";
+	public static final String ENCODING_GB2312 = "GB2312";
 		
 	protected String pageid;
 	protected String url;
@@ -46,7 +53,7 @@ public class WebPage extends AutoIdEntity
 	protected Date createtime;					//创建时间
 	protected Date loadtime;					//下载时间
 	protected String ziptype;
-	protected boolean completed = false;		//是否已经下载完成
+	protected boolean completed;				//是否已经下载完成
 	
 	@TableField(exist=false)
 	protected String content;			//页面内容	
@@ -54,7 +61,30 @@ public class WebPage extends AutoIdEntity
 	protected Map<String, String> headers =new LinkedHashMap<>();			//页面头信息
 	@TableField(exist=false)
 	protected Map<String, String> params = new LinkedHashMap<>();			//访问参数
-		
+	
+	/**
+	 * 创建一个默认的数据下载页面
+	 */
+	public WebPage()
+	{
+		encoding = ENCODING_UTF8;
+		protocol = "http";
+		createtime = new Date();
+		completed = false;
+		method = HttpUtil.HTTP_METHOD_GET;
+		port = "80";
+	}
+	
+	/**
+	 * 创建一个WebPage页面
+	 * @param url
+	 */
+	public WebPage(String url)
+	{
+		this();
+		pageid = url;
+		this.url = url;
+	}
 	
 	public String getPageid()
 	{
@@ -183,5 +213,32 @@ public class WebPage extends AutoIdEntity
 	public void setHttpstatus(int httpstatus)
 	{
 		this.httpstatus = httpstatus;
+	}
+	/**
+	 * 获得存储内容的唯一名字，实现的子类需要继承
+	 * @return
+	 */
+	public String getContentFileName()
+	{
+		Date date = loadtime;
+		if(date == null)
+			throw new UnsupportedOperationException("The loadtime is null or invalid value.");
+		return "" + date.getTime();
+	}
+	
+	/**
+	 * 获得目录地址：默认的按照年、月来组织
+	 * @return 目录地址
+	 */
+	public String getPathName()
+	{
+		Date date = createtime;
+		if(date == null)
+		{
+			throw new UnsupportedOperationException("The createtime is null or invalid value.");
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return "" + calendar.get(Calendar.YEAR) + File.separator + calendar.get(Calendar.MONTH) + File.separator;		
 	}
 }

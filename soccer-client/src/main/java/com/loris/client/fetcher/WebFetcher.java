@@ -29,10 +29,7 @@ import com.loris.client.page.WebPage;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 public interface WebFetcher extends Closeable
-{
-	public final static String HTTP_METHOD_POST = "post";
-	public final static String HTTP_METHOD_GET = "get";
-	
+{	
 	/**
 	 * 初始化网页数据下载器
 	 */

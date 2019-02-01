@@ -9,40 +9,26 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.fetcher.setting;
+package com.loris.client.parser;
 
-import java.util.HashMap;
+import com.loris.client.exception.WebParserException;
+import com.loris.client.page.WebPage;
 
 /**   
- * @ClassName:  FetcherSetting   
- * @Description: 配置内容管理类 
+ * @ClassName:  WebPageParser  
+ * @Description: 网页解析工具  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class ClientSettings extends HashMap<String, FetcherSetting>
+public interface WebPageParser 
 {
-	private static final long serialVersionUID = 1L;
-
 	/**
-	 * 获得配置数据信息
-	 * @param name 名称
-	 * @return 配置内容
+	 * 数据页面解析接口
+	 * @param page 数据页面
+	 * @return 数据结果
 	 */
-	public FetcherSetting getFetcherSetting(String name)
-	{
-		return get(name);
-	}
-	
-	/**
-	 * 注册配置信息与内容
-	 * @param name
-	 * @param setting
-	 */
-	public void registFetcherSetting(String name, FetcherSetting setting)
-	{
-		put(name, setting);
-	}
+	WebPageResults parse(WebPage page) throws WebParserException;
 }
