@@ -14,20 +14,29 @@ package com.loris.client.fetcher.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.log4j.Logger;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
-import com.loris.client.fetcher.WebFetcher;
+import com.loris.client.fetcher.setting.FetcherSetting;
+import com.loris.client.fetcher.util.CookieManager;
+import com.loris.client.fetcher.util.DashBoard;
+import com.loris.client.fetcher.util.Monitor;
 import com.loris.client.page.WebPage;
 
 /**
@@ -39,41 +48,23 @@ import com.loris.client.page.WebPage;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class HttpCommonFetcher implements WebFetcher
+public class HttpCommonFetcher extends AbstractWebFetcher
 {
 	private static Logger logger = Logger.getLogger(HttpCommonFetcher.class);
 
-	public static final String Charset = "utf-8";
-
-	// Inner class for UTF-8 support
-	public static class UTF8PostMethod extends PostMethod
-	{
-		public UTF8PostMethod(String url)
-		{
-			super(url);
-		}
-
-		@Override
-		public String getRequestCharSet()
-		{
-			// return super.getRequestCharSet();
-			return Charset;
-		}
-	}
-
 	// -- Reusable conneciton manager.
-	public static MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+	private static MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
 
+	
 	/**
-	 * 初始化页面
-	 * 
-	 * @see com.loris.client.fetcher.WebFetcher#init()
+	 * Create a new instance of HttpCommonFetcher. 
+	 * @param setting 数据配置信息
 	 */
-	@Override
-	public void init()
+	public HttpCommonFetcher(FetcherSetting setting)
 	{
+		setFetcherSetting(setting);
 	}
-
+	
 	/**
 	 * 数据页面下载
 	 * 
@@ -83,20 +74,9 @@ public class HttpCommonFetcher implements WebFetcher
 	 * @see com.loris.client.fetcher.WebFetcher#download(com.loris.client.page.WebPage)
 	 */
 	@Override
-	public boolean download(WebPage page) throws UrlFetchException
+	public boolean download(WebPage page) throws UrlFetchException, IOException, HostForbiddenException
 	{
-		return false;
-	}
-
-	/**
-	 * Close the Fetcher.
-	 * 
-	 * @see java.io.Closeable#close()
-	 */
-	@Override
-	public void close() throws IOException
-	{
-		// Do nothing.
+		return fetch(page, setting);
 	}
 
 	/**
@@ -106,35 +86,15 @@ public class HttpCommonFetcher implements WebFetcher
 	 * @return
 	 * @throws UrlFetchException
 	 */
-	public static boolean fetch(WebPage page) throws UrlFetchException
+	public boolean fetch(WebPage page, FetcherSetting setting) throws IOException, UrlFetchException, HostForbiddenException
 	{
-		logger.debug("Downloading page: " + page);
-
-		// String urlString = page.getURL();
-		String method = page.getMethod();
-		byte[] bs;
-		if ("post".equalsIgnoreCase(method))
-		{
-			bs = postByteData(page);
-		}
-		else
-		{
-			bs = fetchByteData(page);
-		}
-
-		try
-		{
-			page.setContent(uncompress(page.getEncoding(), bs, page.getZiptype()));
-		}
-		catch (Exception e)
-		{
-			logger.warn("Error in Encoding " + page.getUrl() + ": " + e);
-			return false;
-		}
-
-		// page.setBytes(bs);
+		logger.debug("Http '" + page.getMethod() + "' URL: " + page.getUrl());
+		byte[] bs = fetchByteData(page, setting);
+		
+		page.setContent(uncompress(page.getEncoding(), bs, page.getZiptype()));
+		
 		page.setCompleted(true);
-		page.setLoadtime(DateUtil.getCurTimeStr());
+		page.setLoadtime(new Date());
 		return true;
 	}
 
@@ -184,37 +144,45 @@ public class HttpCommonFetcher implements WebFetcher
 	 * @return
 	 * @throws UrlFetchException
 	 */
-	protected static byte[] fetchByteData(WebPage page) throws UrlFetchException
+	protected static byte[] fetchByteData(WebPage page, FetcherSetting setting) throws UrlFetchException, HostForbiddenException
 	{
-		String urlString = page.getFullURL();
-		log.debug("Fetching URL " + urlString);
-
+		String urlString = page.getUrl();
 		byte[] content = null;
 
 		// Prepare HTTP client instance
 		HttpClient httpclient = new HttpClient(connectionManager);
-		// HttpClientConnectionManager connectionManager = new
-		// MultiThreadedHttpConnectionManager();
-		// CloseableHttpClient httpClient2 =
-		// HttpClients.custom().setConnectionManager(connectionManager).build();
-		// httpclient.setHttpConnectionManager(connectionManager);
-
 		HttpConnectionParams managerParams = httpclient.getHttpConnectionManager().getParams();
-		// RequestConfig requestConfig =
-		// RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT)
-		// .build();
-		managerParams.setConnectionTimeout(ConfigParser.getSettings().getConnectionTimeout());
-		// managerParams.setParameter(ClientPNames.COOKIE_POLICY,
-		// CookiePolicy.BEST_MATCH);
-
-		// httpclient.setConnectionTimeout(ConfigParser.getSettings().getConnectionTimeout());
+		managerParams.setConnectionTimeout(setting.getConnectionTimeout());
 		httpclient.setState(CookieManager.getHttpState(urlString));
 
 		// Prepare HTTP GET method
-		GetMethod httpget = null;
+		HttpMethod httpMethod = null;
 		try
 		{
-			httpget = new GetMethod(urlString);
+			String method = page.getMethod();
+			if (HTTP_METHOD_POST.equalsIgnoreCase(method))
+			{
+				httpMethod = new UTF8PostMethod(page.getUrl());
+
+				// 这里是添加请求参数数据
+				Map<String, String> params = page.getParams();
+				if (params != null)
+				{
+					int paramSize = params.size();
+					NameValuePair[] postData = new NameValuePair[paramSize];
+
+					int i = 0;
+					for (String key : params.keySet())
+					{
+						postData[i++] = new NameValuePair(key, params.get(key));
+					}
+					((PostMethod) httpMethod).addParameters(postData);
+				}
+			}
+			else
+			{
+				httpMethod = new GetMethod(urlString);
+			}
 		}
 		catch (IllegalArgumentException ex1)
 		{
@@ -223,49 +191,41 @@ public class HttpCommonFetcher implements WebFetcher
 		}
 
 		// 系统统一配置的数据请求头
-		Map<String, String> headers = ConfigParser.getSettings().getHeaders();
-		if (headers != null)
+		Map<String, String> defaultHeaders = setting.getHeaders();
+		if (defaultHeaders != null && defaultHeaders.size() > 0)
 		{
-			addHeaderParameters(httpget, headers);
+			addHeaderParameters(httpMethod, defaultHeaders);
 		}
 
 		// 请求某页面特殊的请求数据头
-		headers = page.getHeaders();
-		if (page.isHasMoreHeader() && headers != null)
+		Map<String, String> pageHeaders = page.getHeaders();
+		if (pageHeaders != null && pageHeaders.size() > 0)
 		{
-			addHeaderParameters(httpget, headers);
+			addHeaderParameters(httpMethod, pageHeaders);
 		}
-
-		// Execute HTTP GET
-		int result = 0;
+		
 		try
 		{
-
 			long startTime = System.currentTimeMillis();
-			result = httpclient.executeMethod(httpget);
-			page.setHttpstatus(result);
-
-			if (result == HttpUtil.NOT_FOUND_404)
-			{
-				throw (new UrlFetchException("Page not Found."));
-			}
-			else if (result == HttpStatus.SC_FORBIDDEN)
-			{
-				page.setHttpstatus(result);
-			}
-
-			content = httpget.getResponseBody();
-
-			// byte[] bs = httpget.getResponseBody();
-			// System.out.println(new String(bs));
-			// httpget.get
-			// System.out.println(httpget.getResponseCharSet());
-
+			
+			// 执行页面下载
+			int result = httpclient.executeMethod(httpMethod);
+			
+			//计算页面获取的时间
 			long endTime = System.currentTimeMillis();
 			DashBoard.add(urlString, endTime - startTime);
+			
+			page.setHttpstatus(result);
+			if (result == HttpStatus.SC_FORBIDDEN)
+			{
+				throw new HostForbiddenException(urlString);
+			}
+			else if(result != HttpStatus.SC_OK)
+			{
+				throw new UrlFetchException("Error code is '" + result + "', Failed to fetch page: " + page.getUrl());
+			}
 
-			// log.debug( "Content: " );
-			// log.debug( content );
+			content = httpMethod.getResponseBody();
 
 			// Save the cookies
 			Cookie[] cookies = httpclient.getState().getCookies();
@@ -274,41 +234,20 @@ public class HttpCommonFetcher implements WebFetcher
 				CookieManager.addCookie(cookies[i]);
 			}
 
-			MonitorThread.calculateCurrentSpeed();
-
+			// MonitorThread.calculateCurrentSpeed();
 			synchronized (Monitor.watch)
 			{
 				Monitor.fetchedCounter++;
 			}
-			// log.info("FETCHED " + Crawler.fetchedCounter + "th URL: " +
-			// urlString + " " + result);
-			// log.debug ( "Response code: " + result );
-			// CookieManager.printAllCookies();
 
-			String redirectLocation;
-			Header locationHeader = httpget.getResponseHeader("location");
+			//处理跳转的问题，在这里与网络爬虫不同，为了提高效率，不再抓取跳转的页面
+			Header locationHeader = httpMethod.getResponseHeader("location");
 			if (locationHeader != null)
 			{
-				redirectLocation = locationHeader.getValue();
-				log.debug("Redirect Location: " + redirectLocation);
-
-				if (redirectLocation != null)
-				{
-					// Perform Redirect!
-					content = fetchByteArray(redirectLocation);
-				}
-				else
-				{
-					// The response is invalid and did not provide the new
-					// location for
-					// the resource. Report an error or possibly handle the
-					// response
-					// like a 404 Not Found error.
-					log.error("Error redirecting");
-				}
-
+				String info = "Error, the url is redirect to : " + locationHeader.getValue();
+				logger.info(info);
+				throw new UrlFetchException(info);
 			}
-
 		}
 		catch (Exception ex)
 		{
@@ -317,116 +256,7 @@ public class HttpCommonFetcher implements WebFetcher
 		finally
 		{
 			// Release current connection to the connection pool once you are
-			// done
-			httpget.releaseConnection();
-		}
-
-		return content;
-	}
-
-	/**
-	 * Get the ajax method information
-	 * 
-	 * @param page
-	 * @return
-	 */
-	protected static byte[] postByteData(WebPage page) throws UrlFetchException
-	{
-		byte[] content = null;
-		HttpClient client = new HttpClient();
-
-		HttpConnectionParams managerParams = client.getHttpConnectionManager().getParams();
-		// RequestConfig requestConfig =
-		// RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT)
-		// .build();
-		managerParams.setConnectionTimeout(ConfigParser.getSettings().getConnectionTimeout());
-		// managerParams.setParameter(ClientPNames.COOKIE_POLICY,
-		// CookiePolicy.BEST_MATCH);
-
-		// httpclient.setConnectionTimeout(ConfigParser.getSettings().getConnectionTimeout());
-		client.setState(CookieManager.getHttpState(page.getUrl()));
-
-		// Prepare HTTP GET method
-		PostMethod httppost = null;
-		try
-		{
-			httppost = new UTF8PostMethod(page.getUrl());
-		}
-		catch (IllegalArgumentException ex1)
-		{
-			ex1.printStackTrace();
-			throw new UrlFetchException(ex1.toString());
-		}
-
-		// 这里是添加请求参数数据
-		Map<String, String> params = page.getParams();
-		if (params != null)
-		{
-			int paramSize = params.size();
-			NameValuePair[] postData = new NameValuePair[paramSize];
-
-			int i = 0;
-			for (String key : params.keySet())
-			{
-				postData[i++] = new NameValuePair(key, params.get(key));
-			}
-			httppost.addParameters(postData);
-		}
-
-		// PostMethod httppost = new PostMethod(page.getURL());
-		// httppost.addParameters(postData);
-		Map<String, String> headers = ConfigParser.getSettings().getHeaders();
-		if (headers != null)
-		{
-			addHeaderParameters(httppost, headers);
-		}
-
-		// 头部请求数据自定义
-		headers = page.getHeaders();
-		if (page.isHasMoreHeader() && headers != null)
-		{
-			addHeaderParameters(httppost, headers);
-		}
-
-		try
-		{
-			// Execute the method.
-			int statusCode = client.executeMethod(httppost);
-			page.setHttpstatus(statusCode);
-
-			if (statusCode == HttpStatus.SC_NOT_FOUND)
-			{
-				throw (new UrlFetchException("Page not Found."));
-			}
-			else if (statusCode == HttpStatus.SC_FORBIDDEN)
-			{
-				page.setHttpstatus(statusCode);
-			}
-			else if (statusCode != HttpStatus.SC_OK)
-			{
-				logger.info("Method failed: " + httppost.getStatusLine());
-
-			}
-
-			// Read the response body.
-			content = httppost.getResponseBody();
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new UrlFetchException(e);
-		}
-		finally
-		{
-			try
-			{
-				httppost.releaseConnection();
-
-			}
-			catch (Exception e)
-			{
-			}
+			httpMethod.releaseConnection();
 		}
 		return content;
 	}
@@ -441,11 +271,10 @@ public class HttpCommonFetcher implements WebFetcher
 	 */
 	protected static void addHeaderParameters(HttpMethod httpMethod, Map<String, String> headers)
 	{
-		if (headers == null)
+		if (headers == null || headers.size() == 0)
 		{
 			return;
 		}
-
 		String value;
 		for (String key : headers.keySet())
 		{
@@ -453,5 +282,20 @@ public class HttpCommonFetcher implements WebFetcher
 			httpMethod.addRequestHeader(key, value);
 		}
 	}
+	
+	// Inner class for UTF-8 support
+	static class UTF8PostMethod extends PostMethod
+	{
+		final String Charset = "utf-8";
+		public UTF8PostMethod(String url)
+		{
+			super(url);
+		}
 
+		@Override
+		public String getRequestCharSet()
+		{
+			return Charset;
+		}
+	}
 }

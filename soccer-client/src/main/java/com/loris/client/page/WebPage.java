@@ -33,10 +33,7 @@ public class WebPage extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
-	
-	public final static String HTTP_METHOD_POST = "post";
-	public final static String HTTP_METHOD_GET = "get";
-	
+		
 	protected String pageid;
 	protected String url;
 	protected String encoding;
@@ -45,10 +42,11 @@ public class WebPage extends AutoIdEntity
 	protected String port;
 	protected String method;
 	protected String type;
-	protected Date createtime;			//创建时间
-	protected Date loadtime;			//下载时间
+	protected int httpstatus;					//页面下载状态信息
+	protected Date createtime;					//创建时间
+	protected Date loadtime;					//下载时间
 	protected String ziptype;
-	protected boolean completed;		//是否已经下载完成
+	protected boolean completed = false;		//是否已经下载完成
 	
 	@TableField(exist=false)
 	protected String content;			//页面内容	
@@ -177,5 +175,13 @@ public class WebPage extends AutoIdEntity
 	public void setZiptype(String ziptype)
 	{
 		this.ziptype = ziptype;
+	}
+	public int getHttpstatus()
+	{
+		return httpstatus;
+	}
+	public void setHttpstatus(int httpstatus)
+	{
+		this.httpstatus = httpstatus;
 	}
 }

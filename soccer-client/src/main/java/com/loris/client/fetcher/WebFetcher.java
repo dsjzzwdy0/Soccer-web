@@ -12,8 +12,11 @@
 package com.loris.client.fetcher;
 
 import java.io.Closeable;
+import java.io.IOException;
 
+import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
+import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.page.WebPage;
 
 /**   
@@ -27,10 +30,19 @@ import com.loris.client.page.WebPage;
  */
 public interface WebFetcher extends Closeable
 {
+	public final static String HTTP_METHOD_POST = "post";
+	public final static String HTTP_METHOD_GET = "get";
+	
 	/**
 	 * 初始化网页数据下载器
 	 */
-	void init();
+	void init() throws IOException;
+	
+	/**
+	 * 设置基础配置信息
+	 * @param setting
+	 */
+	void setFetcherSetting(FetcherSetting setting);
 	
 	/**
 	 * 下载数据页面
@@ -38,5 +50,5 @@ public interface WebFetcher extends Closeable
 	 * @return 下载是否成功的标志
 	 * @throws UrlFetchException 下载过程中出现的异常
 	 */
-	boolean download(WebPage page) throws UrlFetchException;
+	boolean download(WebPage page) throws IOException, UrlFetchException, HostForbiddenException;
 }
