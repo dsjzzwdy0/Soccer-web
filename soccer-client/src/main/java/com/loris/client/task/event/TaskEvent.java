@@ -1,6 +1,6 @@
-package com.loris.client.scheduler.event;
+package com.loris.client.task.event;
 
-import com.loris.client.scheduler.task.Task;
+import com.loris.client.task.Task;
 
 /**
  * Task的消息信息

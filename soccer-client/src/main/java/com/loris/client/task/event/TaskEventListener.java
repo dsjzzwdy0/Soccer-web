@@ -1,4 +1,4 @@
-package com.loris.client.scheduler.event;
+package com.loris.client.task.event;
 
 /**
  * Task消息监听管理器

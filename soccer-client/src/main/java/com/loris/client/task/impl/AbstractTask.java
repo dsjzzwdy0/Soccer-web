@@ -9,14 +9,15 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.scheduler.task;
+package com.loris.client.task.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.client.scheduler.event.TaskEvent;
-import com.loris.client.scheduler.event.TaskEvent.TaskEventType;
-import com.loris.client.scheduler.event.TaskEventListener;
+import com.loris.client.task.Task;
+import com.loris.client.task.event.TaskEvent;
+import com.loris.client.task.event.TaskEventListener;
+import com.loris.client.task.event.TaskEvent.TaskEventType;
 
 /**   
  * @ClassName:  AbstractTask  
