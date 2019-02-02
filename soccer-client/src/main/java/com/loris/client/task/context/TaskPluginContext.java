@@ -9,46 +9,45 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task;
+package com.loris.client.task.context;
+
+import com.loris.client.task.MainTaskScheduler;
+import com.loris.client.task.TaskPostProcessor;
+import com.loris.client.task.TaskProcessor;
+import com.loris.client.task.TaskProducer;
 
 /**   
- * @ClassName:  Task  
- * @Description: 任务工具  
+ * @ClassName:  TaskPluginContext  
+ * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface Task extends Comparable<Task>
-{	
+public interface TaskPluginContext 
+{
 	/**
-	 * 设置名称
-	 * @param name
+	 * 获得任务的主运行环境参数
+	 * @return 主运行环境
 	 */
-	void setName(String name);
+	MainTaskScheduler getMainTaskScheduler();
 	
 	/**
-	 * 名称
+	 * 获得任务的运行环境
+	 * @return 执行环境
+	 */
+	TaskProcessor getTaskProcessor();
+	
+	/**
+	 * 获得任务的后处理环境
 	 * @return
 	 */
-	String getName();
+	TaskPostProcessor getTaskPostProcessor();
 	
 	/**
-	 * 获得任务的优先等级数量，值越大，将会被优先处理
-	 * @return 返回任务的优先等级
+	 * 获得任务的产生环境
+	 * @return
 	 */
-	double getPriority();
-	
-	/**
-	 * 设置任务的优先等级值
-	 * @param priority 优先等级值
-	 */
-	void setPriority(double priority);
-	
-	/**
-	 * 设置优先等级的精度值,如1000表示精确到小数点后三位
-	 * @param priorityAccuracy 精度值
-	 */
-	void setPriorityAccuracy(int priorityAccuracy);
+	TaskProducer getTaskProducer();
 }

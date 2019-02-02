@@ -11,6 +11,7 @@
  */
 package com.loris.client.task.event;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,13 @@ public abstract class TaskEventProducer
 {
 	/** 任务处理监听器 */
 	protected List<TaskEventListener> listeners = new ArrayList<>();
+	
+	/**
+	 * 初始化
+	 */
+	public void initialize() throws IOException
+	{
+	}
 	
 	/**
 	 * 添加任务监听器

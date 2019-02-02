@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventListener;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable, TaskVector
+public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEventListener, Closeable, TaskVector
 {
 	/** */
 	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
@@ -83,17 +84,33 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	{
 		randTimeSeed = -100;
 		idleThreadInfo = new IdleThreadInfo(this, maxActiveTaskThread);
+		taskProducer = new TaskProducer(this);
+		taskProducer.addTaskEventListener(this);
+		taskProcessor = new TaskProcessor(this);
+		taskProcessor.addTaskEventListener(this);
+		taskPostProcessor = new TaskPostProcessor(this);
+		taskPostProcessor.addTaskEventListener(this);
 	}
-
+	
 	/**
-	 * 构建一个任务调度器，带一个参数任务生成器
-	 * 
-	 * @param producer
+	 * 初始运行应用
+	 * @throws IOException
 	 */
-	public MainTaskScheduler(TaskProducer producer)
+	protected void initialize() throws IOException
 	{
-		this();
-		this.taskProducer = producer;
+		taskPostProcessor.initialize();
+		taskProcessor.initialize();
+		taskProducer.initialize();
+	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.context.TaskPluginContext#getMainTaskScheduler()
+	 */
+	@Override
+	public MainTaskScheduler getMainTaskScheduler()
+	{
+		return this;
 	}
 
 	/**
@@ -224,6 +241,16 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	@Override
 	public void run()
 	{
+		try
+		{
+			initialize();
+		}
+		catch (Exception e)
+		{
+			logger.info("Error occured when initialize the " + getName() + " scheduler, exit.");
+			return;		
+		}
+		
 		try
 		{
 			// 启动任务产生器
@@ -404,8 +431,11 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 		idleThreadInfo = null;
 		taskQueue.clear();
 		taskQueue = null;
+		taskPostProcessor.close();
 		taskPostProcessor = null;
+		taskProcessor.close();
 		taskProcessor = null;
+		taskProducer.close();
 		taskProducer = null;
 	}
 
@@ -431,7 +461,7 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 		taskQueue.remove(task);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.loris.client.task.TaskVector#clear()
@@ -439,7 +469,6 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	@Override
 	public void clear()
 	{
-		// TODO Auto-generated method stub
-
+		taskQueue.clear();
 	}
 }

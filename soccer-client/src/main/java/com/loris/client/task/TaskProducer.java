@@ -11,9 +11,12 @@
  */
 package com.loris.client.task;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEventProducer;
 import com.loris.client.task.plugin.TaskProducePlugin;
 
@@ -27,8 +30,11 @@ import com.loris.client.task.plugin.TaskProducePlugin;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class TaskProducer extends TaskEventProducer implements Runnable
+public class TaskProducer extends TaskEventProducer implements Runnable, Closeable
 {
+	/** 运行环境 */
+	TaskPluginContext context;
+	
 	/** 任务产生的名称 */
 	private String name;
 	
@@ -37,6 +43,12 @@ public class TaskProducer extends TaskEventProducer implements Runnable
 	
 	/** 任务产生的插件工具 */
 	List<TaskProducePlugin> plugins = new ArrayList<>();
+	
+	
+	public TaskProducer(TaskPluginContext context)
+	{
+		this.context = context;
+	}
 	
 	/**
 	 * 是否已经初始化
@@ -89,6 +101,27 @@ public class TaskProducer extends TaskEventProducer implements Runnable
 			
 			//开始产生新的任务
 			taskProducePlugin.produce();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see java.io.Closeable#close()
+	 */
+	@Override
+	public void close() throws IOException
+	{
+		for (TaskProducePlugin plugin : plugins)
+		{
+			plugin.close();
+		}
+	}
+	
+	@Override
+	public void initialize() throws IOException
+	{
+		for (TaskProducePlugin plugin : plugins)
+		{
+			plugin.intialize();
 		}
 	}
 }

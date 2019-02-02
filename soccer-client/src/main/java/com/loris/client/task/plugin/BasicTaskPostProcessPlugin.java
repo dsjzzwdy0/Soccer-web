@@ -13,11 +13,15 @@ package com.loris.client.task.plugin;
 
 import org.apache.log4j.Logger;
 
+import com.loris.client.exception.UrlFetchException;
 import com.loris.client.task.Task;
+import com.loris.client.task.context.TaskPluginContext;
+import com.loris.client.task.event.TaskEvent;
+import com.loris.client.task.event.TaskEvent.TaskEventType;
 
 /**   
  * @ClassName:  BasicTaskPostProcessPlugin  
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 基础任务处理插件
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -42,9 +46,11 @@ public class BasicTaskPostProcessPlugin extends BasicTaskPlugin implements TaskP
 	 * @see com.loris.client.task.plugin.TaskPostProcessPlugin#execute(com.loris.client.task.Task)
 	 */
 	@Override
-	public void execute(Task task)
+	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException
 	{
 		logger.info("Post Process " + task.getName());
+		notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));
+		return true;
 	}
 
 }

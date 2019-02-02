@@ -54,7 +54,6 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 
 	// -- Reusable conneciton manager.
 	private static MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-
 	
 	/**
 	 * Create a new instance of HttpCommonFetcher. 

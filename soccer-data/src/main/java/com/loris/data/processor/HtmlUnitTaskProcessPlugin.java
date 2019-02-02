@@ -9,52 +9,71 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task.plugin;
+package com.loris.data.processor;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
+import com.loris.client.fetcher.impl.HtmlUnitFetcher;
+import com.loris.client.fetcher.setting.FetcherSetting;
+import com.loris.client.page.WebPage;
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.client.task.event.TaskEvent;
-import com.loris.client.task.event.TaskEvent.TaskEventType;
+import com.loris.client.task.plugin.BasicTaskProcessPlugin;
+import com.loris.data.task.WebPageTask;
 
 /**   
- * @ClassName:  BasicTaskProcessPlugin  
- * @Description: 基础任务处理插件，这里什么也不做 
+ * @ClassName:  League   
+ * @Description: HtmlUnit客户端任务处理器  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class BasicTaskProcessPlugin extends BasicTaskPlugin implements TaskProcessPlugin
+public class HtmlUnitTaskProcessPlugin extends BasicTaskProcessPlugin
 {
-	private static Logger logger = Logger.getLogger(BasicTaskProducePlugin.class);
-
+	private HtmlUnitFetcher client = null;
+	
 	/**
-	 *  (non-Javadoc)
+	 * Create a new instance of HtmlUnitTaskProcessPlugin
+	 * @param setting
+	 * @param initPage
+	 */
+	public HtmlUnitTaskProcessPlugin(FetcherSetting setting, WebPage initPage)
+	{
+		client = new HtmlUnitFetcher(setting, initPage);
+	}
+	
+	/**
+	 * 执行运务
+	 * 
+	 * @param context TaskPluginContext 任务插件运行的环境
+	 * @throws HostForbiddenException 
+	 * @throws  
 	 * @see com.loris.client.task.plugin.TaskProcessPlugin#execute(com.loris.client.task.Task)
 	 */
 	@Override
 	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, IOException, HostForbiddenException
 	{
-		logger.info("Execute " + task.getName());
-		notifyTaskEvent(new TaskEvent(task, TaskEventType.Finished));
-		return true;
+		if(!(task.getClass().isInstance(WebPageTask.class)))
+		{
+			WebPage page = ((WebPageTask)task).getPage();
+			return client.download(page);
+		}
+		else
+		{			
+			return false;
+		}
 	}
-
+	
 	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.task.plugin.TaskProcessPlugin#isFit(com.loris.client.task.Task)
+	 * 初始化
 	 */
 	@Override
-	public boolean isFit(Task task)
+	public void initialize() throws IOException
 	{
-		return true;
+		client.init();
 	}
-
 }

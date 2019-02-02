@@ -11,6 +11,8 @@
  */
 package com.loris.client.task;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventProducer;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
@@ -34,9 +37,12 @@ import com.loris.client.task.util.ThreadUtil;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class TaskPostProcessor extends TaskEventProducer implements Runnable
+public class TaskPostProcessor extends TaskEventProducer implements Runnable, Closeable
 {
 	private static Logger logger = Logger.getLogger(TaskPostProcessor.class);
+	
+	/** 插件运行的环境 */
+	TaskPluginContext context;
 	
 	/**
 	 * 任务处理线程
@@ -80,6 +86,15 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable
 	
 	/** 任务后处理的插件 */
 	private List<TaskPostProcessPlugin> plugins = new ArrayList<>();
+	
+	/**
+	 * 运行环境
+	 * @param context
+	 */
+	public TaskPostProcessor(TaskPluginContext context)
+	{
+		this.context = context;
+	}
 	
 	/**
 	 * 获得任务间隔的时间
@@ -166,8 +181,13 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable
 		try
 		{
 			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcess));
-			plugin.execute(task);
-			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));
+			if(plugin.execute(context, task))
+			{
+				notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));
+			}
+			else {
+				notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError));
+			}
 		}
 		catch(Exception e)
 		{
@@ -242,5 +262,29 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable
 			}
 		}
 		return null;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see java.io.Closeable#close()
+	 */
+	@Override
+	public void close() throws IOException
+	{
+		for (TaskPostProcessPlugin plugin : plugins)
+		{
+			plugin.close();
+		}		
+	}
+	
+	/**
+	 * 初始化
+	 */
+	public void initialize() throws IOException
+	{
+		for (TaskPostProcessPlugin plugin : plugins)
+		{
+			plugin.intialize();
+		}	
 	}
 }

@@ -11,7 +11,14 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.Closeable;
+import java.io.IOException;
+
+import com.loris.client.exception.HostForbiddenException;
+import com.loris.client.exception.UrlFetchException;
+import com.loris.client.exception.WebParserException;
 import com.loris.client.task.Task;
+import com.loris.client.task.context.TaskPluginContext;
 
 /**   
  * @ClassName:  TaskPlugin  
@@ -22,7 +29,7 @@ import com.loris.client.task.Task;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskPlugin
+public interface TaskPlugin extends Closeable
 {
 	/**
 	 * 获得插件的名称
@@ -40,7 +47,7 @@ public interface TaskPlugin
 	 * 执行任务
 	 * @param task
 	 */
-	void execute(Task task);
+	boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, WebParserException, IOException, HostForbiddenException;
 	
 	/**
 	 * 是否适合任务
@@ -48,4 +55,9 @@ public interface TaskPlugin
 	 * @return
 	 */
 	boolean isFit(Task task);
+	
+	/**
+	 * 运行环境初始化
+	 */
+	void intialize() throws IOException;
 }

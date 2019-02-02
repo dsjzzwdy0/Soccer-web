@@ -11,13 +11,7 @@
  */
 package com.loris.client.task.basic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.loris.client.task.Task;
-import com.loris.client.task.event.TaskEvent;
-import com.loris.client.task.event.TaskEventListener;
-import com.loris.client.task.event.TaskEvent.TaskEventType;
 
 /**   
  * @ClassName:  AbstractTask  
@@ -41,9 +35,6 @@ public abstract class AbstractTask implements Task
 	
 	/** 任务优先等级的精度表示 */
 	protected int priorityAccuracy = 1000;
-		
-	/** 任务消息管理器 */
-	protected List<TaskEventListener> listeners = new ArrayList<>();
 	
 	/**
 	 * 获得等待时间
@@ -57,31 +48,6 @@ public abstract class AbstractTask implements Task
 	public void setWaitTime(long waitTime)
 	{
 		this.waitTime = waitTime;
-	}
-	
-	@Override
-	public void addTaskEventListener(TaskEventListener listener)
-	{
-		if(!listeners.contains(listener))
-			listeners.add(listener);
-	}
-
-	@Override
-	public void removeTaskEventListener(TaskEventListener listener)
-	{
-		listeners.remove(listener);
-	}
-	
-	/**
-	 * 通知消息
-	 * @param event
-	 */
-	protected void notify(TaskEvent event)
-	{
-		for (TaskEventListener taskEventListener : listeners)
-		{
-			taskEventListener.notify(event);
-		}
 	}
 	
 	/**
@@ -101,33 +67,6 @@ public abstract class AbstractTask implements Task
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-	
-	/**
-	 * 在执行任务之前
-	 */
-	@Override
-	public void preExecute()
-	{
-		notify(new TaskEvent(this, TaskEventType.Excute));
-	}
-	
-	/**
-	 * 在执行任务之后
-	 */
-	@Override
-	public void postExecute()
-	{
-		notify(new TaskEvent(this, TaskEventType.Finished));
-	}
-	
-	/**
-	 * 在执行任务过程中发现有问题
-	 */
-	@Override
-	public void errExecute(Throwable e)
-	{
-		notify(new TaskEvent(this, TaskEventType.Error, e));
 	}
 	
 	/**
@@ -167,9 +106,4 @@ public abstract class AbstractTask implements Task
 	{
 		return (int) (priorityAccuracy * (o.getPriority() - priority ));
 	}
-	
-	/**
-	 * 任务执行过程
-	 */
-	abstract public void execute();
 }

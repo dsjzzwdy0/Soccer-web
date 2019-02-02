@@ -76,6 +76,7 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	 */
 	public HtmlUnitFetcher(FetcherSetting setting, WebPage basePage)
 	{
+		this(setting);
 		this.basePage = basePage;
 		hasInitPage = true;
 	}

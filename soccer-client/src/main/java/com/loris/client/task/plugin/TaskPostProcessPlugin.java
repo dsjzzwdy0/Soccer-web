@@ -11,7 +11,6 @@
  */
 package com.loris.client.task.plugin;
 
-import com.loris.client.task.Task;
 
 /**   
  * @ClassName:  TaskPostProcessPlugin  
@@ -24,15 +23,4 @@ import com.loris.client.task.Task;
  */
 public interface TaskPostProcessPlugin extends TaskPlugin
 {
-	/**
-	 * 检测某任务是否能够使用该插件来处理
-	 * @param task
-	 */
-	boolean isFit(Task task);
-	
-	/**
-	 * 对完成的任务进行后处理
-	 * @param task
-	 */
-	void execute(Task task);
 }

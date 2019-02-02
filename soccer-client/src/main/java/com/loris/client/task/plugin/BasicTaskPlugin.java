@@ -11,7 +11,13 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.IOException;
+
+import com.loris.client.exception.HostForbiddenException;
+import com.loris.client.exception.UrlFetchException;
+import com.loris.client.exception.WebParserException;
 import com.loris.client.task.Task;
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEventProducer;
 
 /**   
@@ -51,9 +57,10 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	 * @see com.loris.client.task.plugin.TaskPlugin#execute(com.loris.client.task.Task)
 	 */
 	@Override
-	public void execute(Task task)
+	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, WebParserException, IOException, HostForbiddenException
 	{
 		//Do nothing.
+		return true;
 	}
 
 	/**
@@ -64,6 +71,20 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	public boolean isFit(Task task)
 	{
 		return true;
+	}
+	
+	@Override
+	public void close()
+	{		
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPlugin#intialize()
+	 */
+	@Override
+	public void intialize()  throws IOException
+	{		
 	}
 
 }

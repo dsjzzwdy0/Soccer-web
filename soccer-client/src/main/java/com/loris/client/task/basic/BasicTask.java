@@ -23,12 +23,4 @@ package com.loris.client.task.basic;
  */
 public class BasicTask extends AbstractTask
 {
-	/**
-	 * (non-Javadoc)
-	 * @see com.loris.client.task.basic.AbstractTask#execute()
-	 */
-	@Override
-	public void execute()
-	{
-	}
 }
