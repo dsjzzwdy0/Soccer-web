@@ -9,43 +9,33 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task.plugin;
-
-import com.loris.client.task.Task;
+package com.loris.client.task;
 
 /**   
- * @ClassName:  TaskPlugin  
- * @Description: 任务的插件类 
+ * @ClassName:  TaskStack  
+ * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskPlugin
+public interface TaskVector
 {
 	/**
-	 * 获得插件的名称
-	 * @return 插件的名称
-	 */
-	String getName();
-	
-	/**
-	 * 设置插件的名称
-	 * @param name
-	 */
-	void setName(String name);
-	
-	/**
-	 * 执行任务
+	 * 添加任务
 	 * @param task
 	 */
-	void execute(Task task);
+	void add(Task task);
 	
 	/**
-	 * 是否适合任务
+	 * 移除任务
 	 * @param task
-	 * @return
 	 */
-	boolean isFit(Task task);
+	void remove(Task task);
+	
+	/**
+	 * 清除记录
+	 */
+	void clear();
 }

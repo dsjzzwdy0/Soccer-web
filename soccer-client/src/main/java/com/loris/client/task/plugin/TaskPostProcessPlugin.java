@@ -11,9 +11,11 @@
  */
 package com.loris.client.task.plugin;
 
+import com.loris.client.task.Task;
+
 /**   
  * @ClassName:  TaskPostProcessPlugin  
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 任务后处理的插件类  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -22,5 +24,15 @@ package com.loris.client.task.plugin;
  */
 public interface TaskPostProcessPlugin extends TaskPlugin
 {
-
+	/**
+	 * 检测某任务是否能够使用该插件来处理
+	 * @param task
+	 */
+	boolean isFit(Task task);
+	
+	/**
+	 * 对完成的任务进行后处理
+	 * @param task
+	 */
+	void execute(Task task);
 }

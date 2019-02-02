@@ -11,11 +11,14 @@ public class TaskEvent
 {
 	public static enum TaskEventType
 	{
-		Created,
-		Start,
-		Finished,
+		Created,			//创建
+		Excute,
+		Finished,		
+		Error,
+		PostProcess,
+		PostProcessed,
+		PostError,
 		Removed,
-		Error
 	}
 	
 	/** Task */

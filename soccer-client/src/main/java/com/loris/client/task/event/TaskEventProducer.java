@@ -9,55 +9,53 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task.plugin;
+package com.loris.client.task.event;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.loris.client.task.event.TaskEventListener;
-
 /**   
- * @ClassName:  TaskProducePlugin  
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @ClassName:  TaskEventProducer  
+ * @Description: 这是任务消息生成器，在进行任务处理的时候生成消息   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskProducePlugin extends TaskPlugin
+public abstract class TaskEventProducer
 {
-	/**
-	 * 检测是否已经初始化
-	 * @return 是否初始化的标志
-	 */
-	boolean isInitialized();
+	/** 任务处理监听器 */
+	protected List<TaskEventListener> listeners = new ArrayList<>();
 	
 	/**
-	 * 加入任务事件监听器
+	 * 添加任务监听器
 	 * @param listener
 	 */
-	void addTaskEventListener(TaskEventListener listener);
+	public void addTaskEventListener(TaskEventListener listener)
+	{
+		listeners.add(listener);
+	}
 	
 	/**
-	 * 删除任务事件监听器
+	 * 移除任务监听器
 	 * @param listener
 	 */
-	void removeTaskEventListner(TaskEventListener listener);
+	public void removeTaskEventListener(TaskEventListener listener)
+	{
+		listeners.remove(listener);
+	}
 	
 	/**
-	 * 加入任务事件监听器队列
-	 * @param listeners
+	 * 通知任务处理监听器
+	 * @param task 任务
+	 * @param type 类型
 	 */
-	void addTaskEventListeners(List<TaskEventListener> listeners);
-	
-	/**
-	 * 清除任务事件监听列表
-	 */
-	void clearTaskEventListners();
-	
-	/**
-	 * 生成新加入的生产任务
-	 * @param taskVector 任务容器
-	 */
-	void produce();
+	public void notifyTaskEvent(TaskEvent event)
+	{
+		for (TaskEventListener listener : listeners)
+		{
+			listener.notify(event);
+		}
+	}
 }

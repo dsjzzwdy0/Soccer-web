@@ -11,41 +11,40 @@
  */
 package com.loris.client.task.plugin;
 
+import org.apache.log4j.Logger;
+
 import com.loris.client.task.Task;
 
 /**   
- * @ClassName:  TaskPlugin  
- * @Description: 任务的插件类 
+ * @ClassName:  BasicTaskPostProcessPlugin  
+ * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskPlugin
+public class BasicTaskPostProcessPlugin extends BasicTaskPlugin implements TaskPostProcessPlugin
 {
-	/**
-	 * 获得插件的名称
-	 * @return 插件的名称
+	private static Logger logger = Logger.getLogger(BasicTaskPostProcessPlugin.class);
+
+	/* (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPostProcessPlugin#isFit(com.loris.client.task.Task)
 	 */
-	String getName();
-	
+	@Override
+	public boolean isFit(Task task)
+	{
+		return true;
+	}
+
 	/**
-	 * 设置插件的名称
-	 * @param name
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPostProcessPlugin#execute(com.loris.client.task.Task)
 	 */
-	void setName(String name);
-	
-	/**
-	 * 执行任务
-	 * @param task
-	 */
-	void execute(Task task);
-	
-	/**
-	 * 是否适合任务
-	 * @param task
-	 * @return
-	 */
-	boolean isFit(Task task);
+	@Override
+	public void execute(Task task)
+	{
+		logger.info("Post Process " + task.getName());
+	}
+
 }

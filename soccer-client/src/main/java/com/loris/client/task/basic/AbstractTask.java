@@ -109,7 +109,7 @@ public abstract class AbstractTask implements Task
 	@Override
 	public void preExecute()
 	{
-		notify(new TaskEvent(this, TaskEventType.Start));
+		notify(new TaskEvent(this, TaskEventType.Excute));
 	}
 	
 	/**
@@ -147,30 +147,6 @@ public abstract class AbstractTask implements Task
 	{
 		this.priority = priority;
 	}
-
-	/**
-	 * 执行任务
-	 */
-	@Override
-	public void run()
-	{
-		try
-		{
-			//在任务执行之前
-			preExecute();
-			
-			//执行任务
-			execute();
-		}
-		catch (Throwable e) 
-		{
-			errExecute(e);
-		}
-		finally 
-		{
-			postExecute();
-		}
-	}
 	
 	public int getPriorityAccuracy()
 	{
@@ -189,7 +165,7 @@ public abstract class AbstractTask implements Task
 	@Override
 	public int compareTo(Task o)
 	{
-		return (int) (priorityAccuracy * (priority - o.getPriority()));
+		return (int) (priorityAccuracy * (o.getPriority() - priority ));
 	}
 	
 	/**

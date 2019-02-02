@@ -11,12 +11,13 @@
  */
 package com.loris.client.task;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
-import com.loris.client.task.event.TaskEventListener;
+import com.loris.client.task.plugin.TaskProcessPlugin;
+import com.loris.client.task.event.TaskEventProducer;
 
 /**
  * @ClassName: TaskProcessor
@@ -27,16 +28,20 @@ import com.loris.client.task.event.TaskEventListener;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class TaskProcessor 
+public class TaskProcessor extends TaskEventProducer
 {
+	/** 执行的任务 */
+	private List<TaskProcessPlugin> plugins = new ArrayList<>();
+	
 	/**
 	 * 任务线程
 	 */
 	class TaskThread extends Thread
 	{
 		Task task = null;
+		
 		/**
-		 * 
+		 * Create a new instance of TaskThread.
 		 */
 		public TaskThread(Task task)
 		{
@@ -50,75 +55,32 @@ public class TaskProcessor
 		@Override
 		public void run()
 		{
-			try
-			{
-				notifyTaskEvent(new TaskEvent(task, TaskEventType.Start));
-				execute(task);
-				notifyTaskEvent(new TaskEvent(task, TaskEventType.Finished));
-			}
-			catch (Exception e)
-			{
-				notifyTaskEvent(new TaskEvent(task, TaskEventType.Error, e));
-			}
+			execute(task);
 		}
 	}
 	
-	/** 任务处理监听器 */
-	private List<TaskEventListener> listeners = new ArrayList<>();
-	
+	/**
+	 * 添加任务处理插件
+	 * @param plugin 插件工具
+	 */
+	public void addTaskProcessPlugIn(TaskProcessPlugin plugin)
+	{
+		this.plugins.add(plugin);
+	}
+		
 	/**
 	 * 处理任务数据
 	 * @param task
 	 */
 	public void process(Task task)
 	{
+		if(task == null)
+		{
+			return;
+		}
 		new TaskThread(task).start();
 	}
-	
-	/**
-	 * 添加任务监听器
-	 * @param listener
-	 */
-	public void addTaskEventListener(TaskEventListener listener)
-	{
-		listeners.add(listener);
-	}
-	
-	/**
-	 * 移除任务监听器
-	 * @param listener
-	 */
-	public void removeTaskEventListener(TaskEventListener listener)
-	{
-		listeners.remove(listener);
-	}
-	
-	/**
-	 * 通知任务处理监听器
-	 * @param task 任务
-	 * @param type 类型
-	 */
-	public void notifyTaskEvent(TaskEvent event)
-	{
-		for (TaskEventListener listener : listeners)
-		{
-			listener.notify(event);
-		}
-	}
-	
-	/**
-	 * 通知任务处理监听器
-	 * @param task 任务
-	 * @param type 类型
-	 */
-	public void notifyTaskEvent(Task task, TaskEventType type, Throwable exception)
-	{
-		TaskEvent event = new TaskEvent(task, type);
-		for (TaskEventListener listener : listeners)
-		{
-			listener.notify(event);
-		}
-	}
+
 	
 	/**
 	 * 执行任务线程
@@ -126,6 +88,35 @@ public class TaskProcessor
 	 */
 	public void execute(Task task)
 	{
-		
+		try
+		{
+			TaskProcessPlugin plugin = getTaskProcessPlugin(task);
+			if(plugin == null)
+			{
+				throw new Exception("There are no TaskProcessPlugin to process the task[" + task.getName() + "]");
+			}
+			notifyTaskEvent(new TaskEvent(task, TaskEventType.Excute));
+			plugin.execute(task);
+			notifyTaskEvent(new TaskEvent(task, TaskEventType.Finished));
+		}
+		catch (Exception e)
+		{
+			notifyTaskEvent(new TaskEvent(task, TaskEventType.Error, e));
+		}
+	}
+	
+	/**
+	 * 根据任务内容来获得任务处理插件
+	 * @param task 任务
+	 * @return 插件
+	 */
+	protected TaskProcessPlugin getTaskProcessPlugin(Task task)
+	{
+		for (TaskProcessPlugin plugin : plugins)
+		{
+			if(plugin.isFit(task))
+				return plugin;
+		}
+		return null;
 	}
 }

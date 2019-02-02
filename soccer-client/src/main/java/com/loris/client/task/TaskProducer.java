@@ -11,6 +11,13 @@
  */
 package com.loris.client.task;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.loris.client.task.event.TaskEventProducer;
+import com.loris.client.task.plugin.TaskProducePlugin;
+
+
 /**
  * @ClassName: TaskProducer
  * @Description: 任务生成器
@@ -20,21 +27,42 @@ package com.loris.client.task;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class TaskProducer implements Runnable
+public class TaskProducer extends TaskEventProducer implements Runnable
 {
 	/** 任务产生的名称 */
 	private String name;
-	private boolean initialized = false;
-		
 	
+	/** 是否已经初始化的标志 */
+	private boolean initialized = false;
+	
+	/** 任务产生的插件工具 */
+	List<TaskProducePlugin> plugins = new ArrayList<>();
+	
+	/**
+	 * 是否已经初始化
+	 * @return
+	 */
 	public boolean isInitialized()
 	{
 		return initialized;
 	}
-
-	public void setInitialized(boolean initialized)
+	
+	/**
+	 * 设置是否已经初始化的标志
+	 * @param initialized
+	 */
+	protected void setInitialized(boolean initialized)
 	{
 		this.initialized = initialized;
+	}
+	
+	/**
+	 * 加入插件工具
+	 * @param plugin 插件
+	 */
+	public void addTaskProducePlugin(TaskProducePlugin plugin)
+	{
+		this.plugins.add(plugin);
 	}
 
 	public String getName()
@@ -54,5 +82,13 @@ public class TaskProducer implements Runnable
 	@Override
 	public void run()
 	{
+		for (TaskProducePlugin taskProducePlugin : plugins)
+		{
+			taskProducePlugin.clearTaskEventListners();
+			taskProducePlugin.addTaskEventListeners(listeners);
+			
+			//开始产生新的任务
+			taskProducePlugin.produce();
+		}
 	}
 }

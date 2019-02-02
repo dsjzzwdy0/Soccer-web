@@ -14,8 +14,15 @@ import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.page.WebPage;
 import com.loris.client.parser.WebPageResults;
 import com.loris.client.parser.impl.LinksWebPageParser;
+import com.loris.client.task.MainTaskScheduler;
 import com.loris.client.task.Task;
+import com.loris.client.task.TaskPostProcessor;
+import com.loris.client.task.TaskProcessor;
+import com.loris.client.task.TaskProducer;
 import com.loris.client.task.basic.BasicTask;
+import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
+import com.loris.client.task.plugin.BasicTaskProcessPlugin;
+import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 
 /**
@@ -36,7 +43,10 @@ public class App
     		
     		//testSetting();  
     		
-    		testQueue();
+    		//testQueue();
+    		
+    		testMailThreadScheduler();
+    		
     		//testContext();
     	}
     	catch(Exception e)
@@ -46,6 +56,33 @@ public class App
     	finally {
 			context = null;
 		}
+    }
+    
+    /**
+     * 测试线程处理工具
+     * @throws Exception
+     */
+    public static void testMailThreadScheduler() throws Exception
+    {
+    	MainTaskScheduler scheduler = new MainTaskScheduler();
+    	scheduler.setName("即时任务下载器");
+    	
+    	TaskProducer producer = new TaskProducer();
+    	producer.addTaskProducePlugin(new BasicTaskProducePlugin());
+    	
+    	TaskProcessor processor = new TaskProcessor();
+    	processor.addTaskProcessPlugIn(new BasicTaskProcessPlugin());
+    	
+    	TaskPostProcessor postProcessor = new TaskPostProcessor();
+    	postProcessor.addTaskPostProcessPlugin(new BasicTaskPostProcessPlugin());
+    	
+    	scheduler.setTaskProducer(producer);
+    	scheduler.setTaskProcessor(processor);
+    	scheduler.setTaskPostProcessor(postProcessor);
+    	
+    	Thread thread = new Thread(scheduler);
+    	thread.start();
+    	
     }
     
     public static void testQueue() throws Exception

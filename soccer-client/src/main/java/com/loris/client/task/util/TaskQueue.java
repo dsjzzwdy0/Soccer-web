@@ -11,6 +11,8 @@
  */
 package com.loris.client.task.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import com.loris.client.task.Task;
@@ -32,6 +34,15 @@ public class TaskQueue extends PriorityQueue<Task>
 	/** 用于统计总的任务数的类 */
 	private int total = 0;
 	
+	/** 最大的优先级有数据  */
+	private double minPriority = Double.MAX_VALUE;
+	
+	/** 任务出错最大处理次数 */
+	public static int maxProcessTimes = 3;
+	
+	/** 出错的任务处理队列 */
+	protected static Map<Task, Integer> errorTasks = new HashMap<>();
+	
 	/**
 	 * 加入任务数据
 	 * @param task 任务对象
@@ -43,12 +54,43 @@ public class TaskQueue extends PriorityQueue<Task>
 		if(super.add(task))
 		{
 			total ++;
+			if(minPriority > task.getPriority())
+			{
+				minPriority = task.getPriority();
+			}
 			return true;
 		}
 		else
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * 将任务推回到任务列表中，为了提高系统的性能，如果推回的次数大于某一阈值
+	 * 则废弃该任务，不再进行处理
+	 * @param task 任务
+	 * @return 是否加入成功的标志
+	 */
+	public boolean pushBack(Task task)
+	{
+		Integer time = errorTasks.get(task);
+		if(time == null)
+		{
+			errorTasks.put(task, 1);
+		}
+		else
+		{
+			time ++;
+			if(time >= maxProcessTimes)
+			{
+				return false;
+			}
+			
+			errorTasks.put(task, time);
+		}		
+		task.setPriority(minPriority - 1.0);
+		return super.add(task);
 	}
 	
 	/**
@@ -67,5 +109,13 @@ public class TaskQueue extends PriorityQueue<Task>
 	public int left()
 	{
 		return this.size();
+	}
+	
+	/**
+	 * 错误任务的清空
+	 */
+	public static void clearErrorTasks()
+	{
+		errorTasks.clear();
 	}
 }

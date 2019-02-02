@@ -11,12 +11,11 @@
  */
 package com.loris.client.task.plugin;
 
-import java.util.List;
-
-import com.loris.client.task.event.TaskEventListener;
+import com.loris.client.task.Task;
+import com.loris.client.task.event.TaskEventProducer;
 
 /**   
- * @ClassName:  TaskProducePlugin  
+ * @ClassName:  BasicTaskPlugin  
  * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
@@ -24,40 +23,47 @@ import com.loris.client.task.event.TaskEventListener;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskProducePlugin extends TaskPlugin
+public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 {
-	/**
-	 * 检测是否已经初始化
-	 * @return 是否初始化的标志
+	/** 插件的名称 */
+	protected String name;
+
+	/* (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPlugin#getName()
 	 */
-	boolean isInitialized();
-	
-	/**
-	 * 加入任务事件监听器
-	 * @param listener
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPlugin#setName(java.lang.String)
 	 */
-	void addTaskEventListener(TaskEventListener listener);
-	
+	@Override
+	public void setName(String name)
+	{
+		this.name = name;		
+	}
+
 	/**
-	 * 删除任务事件监听器
-	 * @param listener
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPlugin#execute(com.loris.client.task.Task)
 	 */
-	void removeTaskEventListner(TaskEventListener listener);
-	
+	@Override
+	public void execute(Task task)
+	{
+		//Do nothing.
+	}
+
 	/**
-	 * 加入任务事件监听器队列
-	 * @param listeners
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPlugin#isFit(com.loris.client.task.Task)
 	 */
-	void addTaskEventListeners(List<TaskEventListener> listeners);
-	
-	/**
-	 * 清除任务事件监听列表
-	 */
-	void clearTaskEventListners();
-	
-	/**
-	 * 生成新加入的生产任务
-	 * @param taskVector 任务容器
-	 */
-	void produce();
+	@Override
+	public boolean isFit(Task task)
+	{
+		return true;
+	}
+
 }

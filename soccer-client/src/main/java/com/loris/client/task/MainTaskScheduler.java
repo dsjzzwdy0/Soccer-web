@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
+public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable, TaskVector
 {
 	/** */
 	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
@@ -45,37 +45,37 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 
 	/** The thread number. */
 	protected int threadIndex = 1;
-	
+
 	/** 任务调度管理器的名称 */
 	private String name;
-		
+
 	/** 两次任务处理过程中的间隔时间 */
-	private int interval;
-	
+	private int interval = 200;
+
 	/** 随机时间的种子值 */
 	private int randTimeSeed;
-		
+
 	/** 是否停止 */
 	private boolean isStopped = false;
-	
+
 	/** 空闲线程信息处理器 */
-	IdleThreadInfo idleThreadInfo;
-	
+	IdleThreadInfo idleThreadInfo = null;
+
 	/** 任务列表 */
 	TaskQueue taskQueue = new TaskQueue();
-	
+
 	/** 任务生成器 */
-	private TaskProducer tasksProducer;
-	
+	private TaskProducer taskProducer;
+
 	/** 任务处理工具类 */
 	private TaskProcessor taskProcessor;
-	
+
 	/** 任务后处理工具 */
 	private TaskPostProcessor taskPostProcessor;
-	
+
 	/** 运行中的线程 */
 	private List<Task> runningTaskThreads = new ArrayList<>();
-	
+
 	/**
 	 * Create a new instance of AbstractTaskScheduler
 	 */
@@ -93,7 +93,7 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	public MainTaskScheduler(TaskProducer producer)
 	{
 		this();
-		this.tasksProducer = producer;
+		this.taskProducer = producer;
 	}
 
 	/**
@@ -143,14 +143,41 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	 * @param task
 	 *            任务
 	 */
-	public void startNewTaskThread(Task task)
+	protected void startNewTaskThread(Task task)
 	{
-		// 启动线程
-		Thread thread = new Thread(task);
-		thread.setDaemon(false);
+		// 设置监听器,将会启动一个新的线程来完成任务
+		if (taskProcessor != null)
+		{
+			taskProcessor.process(task);
+		}
+		else
+		{
+			notify(new TaskEvent(task, TaskEventType.Error, new Exception("The TaskProcess is null.")));
+		}
+	}
 
-		// 设置监听器
-		task.addTaskEventListener(this);
+	/**
+	 * 启动任务后处理线程
+	 */
+	protected void startTaskPostProcessThread()
+	{
+		if (taskPostProcessor == null)
+		{
+			return;
+		}
+
+		// 结束还没有
+		while (taskPostProcessor.isFinished() && taskPostProcessor.isRunning())
+		{
+			logger.info("Waiting for TaskPostProcess to end.");
+			// 等待一秒再进行下一步
+			ThreadUtil.sleep(1000);
+		}
+		taskPostProcessor.setFinished(false);
+
+		// 重新启动新的线程
+		Thread thread = new Thread(taskPostProcessor);
+		thread.setDaemon(false);
 		thread.start();
 	}
 
@@ -163,24 +190,31 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	public void notify(TaskEvent event)
 	{
 		TaskEvent.TaskEventType taskType = event.getType();
-		if(taskType == TaskEventType.Created)
+		Task task = event.getTask();
+		if (taskType == TaskEventType.Created)
 		{
-			taskQueue.add(event.getTask());
+			logger.debug("Create the task " + task.getName());
+			taskQueue.add(task);
 		}
-		else if (taskType == TaskEventType.Start)
+		else if (taskType == TaskEventType.Excute)
 		{
-			logger.info("Starting to excute " + event.getTask().getName());
-			addRunningTask(event.getTask());
+			logger.debug("Starting to excute " + task.getName());
+			addRunningTask(task);
 		}
 		else if (taskType == TaskEventType.Finished)
 		{
-			removeRunningTask(event.getTask());
-			logger.info("Finished to excute " + event.getTask().getName());
+			removeRunningTask(task);
+			if (taskPostProcessor != null)
+			{
+				taskPostProcessor.add(task);
+			}
+			logger.info("Finished to excute " + task.getName());
 		}
-		else if(taskType == TaskEventType.Error)
+		else if (taskType == TaskEventType.Error)
 		{
-			taskQueue.add(event.getTask());
-			logger.info("Error occured when excuting " + event.getTask().getName() + ", push back to TaskQueue.");
+			taskQueue.pushBack(task);
+			removeRunningTask(task);
+			logger.info("Error occured when excuting " + task.getName() + ", push back to TaskQueue.");
 		}
 	}
 
@@ -192,51 +226,70 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	{
 		try
 		{
-			//启动任务产生器
-			if (tasksProducer != null && !tasksProducer.isInitialized())
+			// 启动任务产生器
+			if (taskProducer != null && !taskProducer.isInitialized())
 			{
-				//执行任务产生器
-				//这里不用线程启动，而是直接等待任务产生完成之后再启动线程
-				tasksProducer.run();
+				// 执行任务产生器
+				// 这里不用线程启动，而是直接等待任务产生完成之后再启动线程
+				taskProducer.run();
 			}
-			
-			//输出任务总的信息
-			logger.info("TaskScheduler " + getName() + " has " 
-				+ taskQueue.total() + " task and left " + taskQueue.left() + " to be processed.");
 
-			//处理任务
-			while(hasMoreTask())
+			// 输出任务总的信息
+			logger.info("TaskScheduler " + getName() + " has " + taskQueue.total() + " task and left "
+					+ taskQueue.left() + " to be processed.");
+
+			// 启动任务后处理程序
+			startTaskPostProcessThread();
+
+			// 处理任务
+			while (hasMoreTask())
 			{
-				//如果有空闲的线程，则新建一个任务处理
-				if(hasIdleThread())
+				// 如果有空闲的线程，则新建一个任务处理
+				if (hasIdleThread())
 				{
 					Task task = popup();
-					if(task != null)
+					if (task != null)
 					{
 						startNewTaskThread(task);
 					}
-				}				
+				}
 
-				//线程等待时间
+				// 线程等待时间
 				ThreadUtil.sleep(interval, randTimeSeed);
-				
-				//如果设置停止标志，则中断执行线程
-				if(isStopped())
+
+				// 如果设置停止标志，则中断执行线程
+				if (isStopped())
 				{
-					logger.info("The TaskProcuder " + tasksProducer.getName() + " has been set to stopped, interupped now.");
-					break;
+					logger.info(
+							"The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interupped now.");
+					return;
 				}
 			}
+			finish();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			logger.info("Error occured when process TaskProcuder " + tasksProducer.getName() + ", exit now.");
+			logger.info("Error occured when process TaskProcuder " + taskProducer.getName() + ", exit now.");
 		}
 	}
-	
+
+	/**
+	 * 结束任务处理调度工具
+	 */
+	protected void finish()
+	{
+		if (taskPostProcessor != null)
+		{
+			taskPostProcessor.finish();
+		}
+
+		logger.info("MainTashScheduler[" + getName() + "] has been finished, exit now");
+	}
+
 	/**
 	 * 检测系统中是否有空闲的线程可用
+	 * 
 	 * @return
 	 */
 	protected boolean hasIdleThread()
@@ -244,9 +297,10 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 		int curRunningThreadNum = runningTaskThreads.size();
 		return idleThreadInfo.hasIdleThread(curRunningThreadNum);
 	}
-	
+
 	/**
 	 * 是否还有需要处理的任务
+	 * 
 	 * @return 是否有任务的标志
 	 */
 	public boolean hasMoreTask()
@@ -254,14 +308,15 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 		return !taskQueue.isEmpty();
 	}
 
-	public TaskProducer getTasksProducer()
+	public TaskProducer getTaskProducer()
 	{
-		return tasksProducer;
+		return taskProducer;
 	}
 
-	public void setTasksProducer(TaskProducer tasksProducer)
+	public void setTaskProducer(TaskProducer tasksProducer)
 	{
-		this.tasksProducer = tasksProducer;
+		tasksProducer.addTaskEventListener(this);
+		this.taskProducer = tasksProducer;
 	}
 
 	public TaskProcessor getTaskProcessor()
@@ -271,6 +326,7 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 
 	public void setTaskProcessor(TaskProcessor taskProcessor)
 	{
+		taskProcessor.addTaskEventListener(this);
 		this.taskProcessor = taskProcessor;
 	}
 
@@ -281,6 +337,7 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 
 	public void setTaskPostProcessor(TaskPostProcessor taskPostProcessor)
 	{
+		taskPostProcessor.addTaskEventListener(this);
 		this.taskPostProcessor = taskPostProcessor;
 	}
 
@@ -303,12 +360,12 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	{
 		this.randTimeSeed = randTimeSeed;
 	}
-	
+
 	public int total()
 	{
 		return taskQueue.total();
 	}
-	
+
 	public Task popup()
 	{
 		return taskQueue.poll();
@@ -336,6 +393,7 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 
 	/**
 	 * 关闭任务调度器
+	 * 
 	 * @see java.io.Closeable#close()
 	 */
 	@Override
@@ -348,6 +406,40 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 		taskQueue = null;
 		taskPostProcessor = null;
 		taskProcessor = null;
-		tasksProducer = null;
+		taskProducer = null;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.task.TaskVector#add(com.loris.client.task.Task)
+	 */
+	@Override
+	public void add(Task task)
+	{
+		taskQueue.add(task);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.task.TaskVector#remove(com.loris.client.task.Task)
+	 */
+	@Override
+	public void remove(Task task)
+	{
+		taskQueue.remove(task);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.task.TaskVector#clear()
+	 */
+	@Override
+	public void clear()
+	{
+		// TODO Auto-generated method stub
+
 	}
 }
