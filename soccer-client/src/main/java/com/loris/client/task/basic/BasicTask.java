@@ -9,12 +9,11 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task.util;
+package com.loris.client.task.basic;
 
-import com.loris.soccer.util.RandomUtil;
 
 /**   
- * @ClassName:  ThreadUtil  
+ * @ClassName:  BasicTask  
  * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
@@ -22,44 +21,14 @@ import com.loris.soccer.util.RandomUtil;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class ThreadUtil
-{	
+public class BasicTask extends AbstractTask
+{
 	/**
-	 * 处理线程闲置时间
-	 * @param millis
+	 * (non-Javadoc)
+	 * @see com.loris.client.task.basic.AbstractTask#execute()
 	 */
-	public static void sleep(long millis)
+	@Override
+	public void execute()
 	{
-		if(millis <= 0)
-		{
-			return;
-		}
-		try
-		{
-			Thread.sleep(millis);
-		}
-		catch(Exception e)
-		{
-		}
-	}
-	
-	/**
-	 * 处理线程闲置时间
-	 * @param millis
-	 */
-	public static void sleep(long millis, int randTimeSeed)
-	{
-		if(millis <= 0)
-		{
-			return;
-		}
-		millis += randTimeSeed > 0 ? RandomUtil.getRandom(randTimeSeed) : 0;		
-		try
-		{
-			Thread.sleep(millis);
-		}
-		catch(Exception e)
-		{
-		}
 	}
 }

@@ -11,6 +11,8 @@
  */
 package com.loris.client.task.plugin;
 
+import com.loris.client.task.event.TaskEvent;
+
 /**   
  * @ClassName:  TaskPlugin  
  * @Description: 任务的插件类 
@@ -32,4 +34,10 @@ public interface TaskPlugin extends Runnable
 	 * 运行插件工具
 	 */
 	void run();
+	
+	/**
+	 * 通知任务任务处理的监听器
+	 * @param event 任务监听器
+	 */
+	void notifyTaskEvent(TaskEvent event);
 }

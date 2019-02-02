@@ -11,9 +11,12 @@
  */
 package com.loris.client.task;
 
-import org.apache.log4j.Logger;
+import java.util.List;
+import java.util.ArrayList;
 
-import com.loris.client.exception.WebParserException;
+import com.loris.client.task.event.TaskEvent;
+import com.loris.client.task.event.TaskEvent.TaskEventType;
+import com.loris.client.task.event.TaskEventListener;
 
 /**
  * @ClassName: TaskProcessor
@@ -24,54 +27,105 @@ import com.loris.client.exception.WebParserException;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public abstract class TaskProcessor implements Runnable
+public class TaskProcessor 
 {
-	private static Logger logger = Logger.getLogger(TaskProcessor.class);
-	
-	/** 等处理的任务 */
-	private Task task = null;
-
 	/**
-	 * 处理任务
+	 * 任务线程
 	 */
-	@Override
-	public void run()
+	class TaskThread extends Thread
 	{
-		try
+		Task task = null;
+		/**
+		 * 
+		 */
+		public TaskThread(Task task)
 		{
-			if(task != null)
+			this.task = task;
+		}
+
+		/*
+		 * 执行运务
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run()
+		{
+			try
 			{
-				logger.info("Processing " + task.getName() + "...");
+				notifyTaskEvent(new TaskEvent(task, TaskEventType.Start));
+				execute(task);
+				notifyTaskEvent(new TaskEvent(task, TaskEventType.Finished));
 			}
-			process(task);
-		}
-		catch (Exception e)
-		{
-			
+			catch (Exception e)
+			{
+				notifyTaskEvent(new TaskEvent(task, TaskEventType.Error, e));
+			}
 		}
 	}
-
+	
+	/** 任务处理监听器 */
+	private List<TaskEventListener> listeners = new ArrayList<>();
+	
 	/**
-	 * 获得任务
-	 * @return
+	 * 处理任务数据
+	 * @param task
 	 */
-	public Task getTask()
+	public void process(Task task)
 	{
-		return task;
+		new TaskThread(task).start();
 	}
 	
 	/**
-	 * 设置任务
-	 * @param task
+	 * 添加任务监听器
+	 * @param listener
 	 */
-	public void setTask(Task task)
+	public void addTaskEventListener(TaskEventListener listener)
 	{
-		this.task = task;
+		listeners.add(listener);
 	}
-
+	
 	/**
-	 * 
+	 * 移除任务监听器
+	 * @param listener
+	 */
+	public void removeTaskEventListener(TaskEventListener listener)
+	{
+		listeners.remove(listener);
+	}
+	
+	/**
+	 * 通知任务处理监听器
+	 * @param task 任务
+	 * @param type 类型
+	 */
+	public void notifyTaskEvent(TaskEvent event)
+	{
+		for (TaskEventListener listener : listeners)
+		{
+			listener.notify(event);
+		}
+	}
+	
+	/**
+	 * 通知任务处理监听器
+	 * @param task 任务
+	 * @param type 类型
+	 */
+	public void notifyTaskEvent(Task task, TaskEventType type, Throwable exception)
+	{
+		TaskEvent event = new TaskEvent(task, type);
+		for (TaskEventListener listener : listeners)
+		{
+			listener.notify(event);
+		}
+	}
+	
+	/**
+	 * 执行任务线程
 	 * @param task
 	 */
-	abstract void process(Task task) throws WebParserException;
+	public void execute(Task task)
+	{
+		
+	}
 }

@@ -15,7 +15,7 @@ import com.loris.client.page.WebPage;
 import com.loris.client.parser.WebPageResults;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.task.Task;
-import com.loris.client.task.impl.BasicTask;
+import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.util.TaskQueue;
 
 /**

@@ -40,9 +40,6 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	/** */
 	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
 
-	/** 运行中的线程 */
-	private List<Task> runningTaskThreads = new ArrayList<>();
-
 	/** 最大的在运行状态的线程数 */
 	private int maxActiveTaskThread = 5;
 
@@ -57,10 +54,7 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	
 	/** 随机时间的种子值 */
 	private int randTimeSeed;
-	
-	/** 是否需要进行随机时间的处理 */
-	private boolean needIntervalRandTime;
-	
+		
 	/** 是否停止 */
 	private boolean isStopped = false;
 	
@@ -79,11 +73,15 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	/** 任务后处理工具 */
 	private TaskPostProcessor taskPostProcessor;
 	
+	/** 运行中的线程 */
+	private List<Task> runningTaskThreads = new ArrayList<>();
+	
 	/**
 	 * Create a new instance of AbstractTaskScheduler
 	 */
 	public MainTaskScheduler()
 	{
+		randTimeSeed = -100;
 		idleThreadInfo = new IdleThreadInfo(this, maxActiveTaskThread);
 	}
 
@@ -305,16 +303,6 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	{
 		this.randTimeSeed = randTimeSeed;
 	}
-
-	public boolean isNeedIntervalRandTime()
-	{
-		return needIntervalRandTime;
-	}
-
-	public void setNeedIntervalRandTime(boolean needIntervalRandTime)
-	{
-		this.needIntervalRandTime = needIntervalRandTime;
-	}
 	
 	public int total()
 	{
@@ -353,6 +341,8 @@ public class MainTaskScheduler implements Runnable, TaskEventListener, Closeable
 	@Override
 	public void close() throws IOException
 	{
+		runningTaskThreads.clear();
+		runningTaskThreads = null;
 		idleThreadInfo = null;
 		taskQueue.clear();
 		taskQueue = null;
