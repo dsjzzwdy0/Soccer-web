@@ -9,10 +9,9 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.data.task;
+package com.loris.client.task.basic;
 
 import com.loris.client.page.WebPage;
-import com.loris.client.task.basic.AbstractTask;
 
 /**   
  * @ClassName:  League   
@@ -25,6 +24,7 @@ import com.loris.client.task.basic.AbstractTask;
  */
 public class WebPageTask extends AbstractTask
 {
+	/** 网页下载任务 */
 	WebPage page = null;
 	
 	/**

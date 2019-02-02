@@ -19,9 +19,9 @@ import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.page.WebPage;
 import com.loris.client.task.Task;
+import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
-import com.loris.data.task.WebPageTask;
 
 /**   
  * @ClassName:  League   
