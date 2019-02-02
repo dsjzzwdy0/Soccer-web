@@ -1,6 +1,6 @@
 package com.loris.client.task.event;
 
-import com.loris.client.task.TasksProducer;
+import com.loris.client.task.TaskProducer;
 
 public class TaskProcuderEvent
 {
@@ -11,21 +11,21 @@ public class TaskProcuderEvent
 		Finished
 	}
 	
-	protected TasksProducer producer;
+	protected TaskProducer producer;
 	protected TaskProducerEventType type;
 	
-	public TaskProcuderEvent(TasksProducer producer, TaskProducerEventType type)
+	public TaskProcuderEvent(TaskProducer producer, TaskProducerEventType type)
 	{
 		this.producer = producer;
 		this.type = type;
 	}
 
-	public TasksProducer getProducer()
+	public TaskProducer getProducer()
 	{
 		return producer;
 	}
 
-	public void setProducer(TasksProducer producer)
+	public void setProducer(TaskProducer producer)
 	{
 		this.producer = producer;
 	}

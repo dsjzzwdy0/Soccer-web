@@ -11,7 +11,7 @@ public class TaskEvent
 {
 	public static enum TaskEventType
 	{
-		Add,
+		Created,
 		Start,
 		Finished,
 		Removed,

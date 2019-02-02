@@ -37,7 +37,10 @@ public abstract class AbstractTask implements Task
 	protected String name;
 	
 	/** 任务的优先等级 */
-	protected int priority = 1;
+	protected double priority = 1;
+	
+	/** 任务优先等级的精度表示 */
+	protected int priorityAccuracy = 1000;
 		
 	/** 任务消息管理器 */
 	protected List<TaskEventListener> listeners = new ArrayList<>();
@@ -131,7 +134,7 @@ public abstract class AbstractTask implements Task
 	 * 获得任务的优先级
 	 * @return 任务优先等级
 	 */
-	public int getPriority()
+	public double getPriority()
 	{
 		return priority;
 	}
@@ -140,7 +143,7 @@ public abstract class AbstractTask implements Task
 	 * 设置优先级
 	 * @param priority 优先等级
 	 */
-	public void setPriority(int priority)
+	public void setPriority(double priority)
 	{
 		this.priority = priority;
 	}
@@ -167,6 +170,26 @@ public abstract class AbstractTask implements Task
 		{
 			postExecute();
 		}
+	}
+	
+	public int getPriorityAccuracy()
+	{
+		return priorityAccuracy;
+	}
+
+	public void setPriorityAccuracy(int priorityAccuracy)
+	{
+		this.priorityAccuracy = priorityAccuracy;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Task o)
+	{
+		return (int) (priorityAccuracy * (priority - o.getPriority()));
 	}
 	
 	/**

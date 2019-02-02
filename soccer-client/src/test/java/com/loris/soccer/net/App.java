@@ -14,6 +14,9 @@ import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.page.WebPage;
 import com.loris.client.parser.WebPageResults;
 import com.loris.client.parser.impl.LinksWebPageParser;
+import com.loris.client.task.Task;
+import com.loris.client.task.impl.BasicTask;
+import com.loris.client.task.util.TaskQueue;
 
 /**
  * Hello world!
@@ -31,7 +34,9 @@ public class App
     	{
     		getApplicationContext();
     		
-    		testSetting();    		
+    		//testSetting();  
+    		
+    		testQueue();
     		//testContext();
     	}
     	catch(Exception e)
@@ -42,6 +47,42 @@ public class App
 			context = null;
 		}
     }
+    
+    public static void testQueue() throws Exception
+    {
+    	TaskQueue queue = new TaskQueue();
+    	int num = 100;
+    	
+    	Task task = null;
+    	for(int i = 0; i < num; i ++)
+    	{
+	    	task = new BasicTask();
+	    	task.setName("Task[" + i + "]");
+	    	task.setPriority( 1.0);
+	    	
+	    	queue.add(task);
+    	}
+    	
+    	for(int i = 0; i < num; i ++)
+    	{
+    		task = queue.poll();
+    		logger.info(i + " " + task.getName() + ": " + task.getPriority());
+    	}
+    	
+    	BasicTask b = new BasicTask() {
+    		@Override
+    		public void execute()
+    		{
+    			logger.info("Test");
+    		}
+    	};
+    	
+    	Class<? extends Task> clazz = BasicTask.class;
+    	
+    	logger.info(clazz.isAssignableFrom(b.getClass()));
+    	logger.info(b.getClass().isAssignableFrom(clazz));    
+    }
+    
     
     public static void testContext() throws Exception
     {
