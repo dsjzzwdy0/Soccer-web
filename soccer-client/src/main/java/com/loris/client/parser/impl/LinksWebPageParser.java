@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
-import com.loris.client.parser.WebPageResults;
+import com.loris.soccer.wrapper.TableRecords;
 
 /**
  * @ClassName: LinksWebPageParser
@@ -36,7 +36,7 @@ public class LinksWebPageParser extends AbstractWebPageParser
 	 * @see com.loris.client.parser.WebPageParser#parse(com.loris.client.page.WebPage)
 	 */
 	@Override
-	public WebPageResults parse(WebPage page, Document document, WebPageResults results) throws WebParserException
+	public TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
 		Elements links = ((Element) document).select("a[href]");
 		for (Element link : links)

@@ -9,14 +9,14 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.web.wrapper;
+package com.loris.soccer.wrapper;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**   
  * @ClassName:  Rest   
- * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @Description: Rest Response 服务接口包装类  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午9:22:03   
  *     

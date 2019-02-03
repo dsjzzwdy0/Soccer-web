@@ -12,7 +12,6 @@ import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.page.WebPage;
-import com.loris.client.parser.WebPageResults;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.task.MainTaskScheduler;
 import com.loris.client.task.Task;
@@ -21,6 +20,7 @@ import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
+import com.loris.soccer.wrapper.TableRecords;
 
 /**
  * Hello world!
@@ -144,7 +144,7 @@ public class App
 				// logger.info(page.getContent());
 				logger.info("Success to download: " + page.getUrl());
 				LinksWebPageParser parser = new LinksWebPageParser();
-				WebPageResults results = parser.parse(page);
+				TableRecords results = parser.parse(page);
 				int i = 1;
 				for (String key : results.keySet())
 				{

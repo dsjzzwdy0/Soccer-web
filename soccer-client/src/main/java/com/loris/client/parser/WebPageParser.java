@@ -13,6 +13,7 @@ package com.loris.client.parser;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
+import com.loris.soccer.wrapper.TableRecords;;
 
 /**   
  * @ClassName:  WebPageParser  
@@ -30,5 +31,5 @@ public interface WebPageParser
 	 * @param page 数据页面
 	 * @return 数据结果
 	 */
-	WebPageResults parse(WebPage page) throws WebParserException;
+	TableRecords parse(WebPage page) throws WebParserException;
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsOpService;
-import com.loris.soccer.web.wrapper.Rest;
+import com.loris.soccer.wrapper.Rest;
 
 
 /**   

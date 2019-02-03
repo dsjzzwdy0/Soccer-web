@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.parser;
+package com.loris.soccer.wrapper;
 
 import java.util.HashMap;
 
@@ -22,7 +22,7 @@ import java.util.HashMap;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class WebPageResults extends HashMap<String, Object>
+public class TableRecords extends HashMap<String, Object>
 {
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class WebPageResults extends HashMap<String, Object>
 	/**
 	 * Create a new instance of ParserResults.
 	 */
-	public WebPageResults()
+	public TableRecords()
 	{
 		this(true, "Success");
 	}
@@ -43,7 +43,7 @@ public class WebPageResults extends HashMap<String, Object>
 	 * @param success
 	 * @param info
 	 */
-	public WebPageResults(boolean success, String info)
+	public TableRecords(boolean success, String info)
 	{
 		this.success = success;
 		this.info = info;
@@ -74,17 +74,17 @@ public class WebPageResults extends HashMap<String, Object>
 	 * @param info
 	 * @return
 	 */
-	public static WebPageResults failure(String info)
+	public static TableRecords failure(String info)
 	{
-		return new WebPageResults(false, info);
+		return new TableRecords(false, info);
 	}
 	
 	/**
 	 * 创建一个失败的数据结果
 	 * @return
 	 */
-	public static WebPageResults failure()
+	public static TableRecords failure()
 	{
-		return new WebPageResults(false, "Error result.");
+		return new TableRecords(false, "Error result.");
 	}
 }

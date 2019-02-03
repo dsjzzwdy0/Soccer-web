@@ -18,7 +18,7 @@ import org.jsoup.nodes.Document;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
 import com.loris.client.parser.WebPageParser;
-import com.loris.client.parser.WebPageResults;
+import com.loris.soccer.wrapper.TableRecords;
 
 /**   
  * @ClassName:  AbstractWebPageParser  
@@ -36,7 +36,7 @@ public abstract class AbstractWebPageParser implements WebPageParser
 	 * @see com.loris.client.parser.WebPageParser#parse(com.loris.client.page.WebPage)
 	 */
 	@Override
-	public WebPageResults parse(WebPage page) throws WebParserException
+	public TableRecords parse(WebPage page) throws WebParserException
 	{
 		if(page == null)
 		{
@@ -53,7 +53,7 @@ public abstract class AbstractWebPageParser implements WebPageParser
 			throw new WebParserException("Error occured when parse the page content, not invalid html document.");
 		}
 		
-		WebPageResults results = new WebPageResults();
+		TableRecords results = new TableRecords();
 		return parse(page, document, results);		
 	}
 	
@@ -64,5 +64,5 @@ public abstract class AbstractWebPageParser implements WebPageParser
 	 * @return
 	 * @throws WebParserException
 	 */
-	public abstract WebPageResults parse(WebPage page, Document document, WebPageResults results) throws WebParserException;
+	public abstract TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException;
 }
