@@ -17,9 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.common.wrapper.Rest;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsOpService;
-import com.loris.soccer.wrapper.Rest;
 
 
 /**   

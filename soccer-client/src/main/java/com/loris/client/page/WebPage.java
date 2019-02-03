@@ -20,7 +20,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.client.fetcher.util.HttpUtil;
-import com.loris.soccer.bean.AutoIdEntity;
+import com.loris.common.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  WebPage   

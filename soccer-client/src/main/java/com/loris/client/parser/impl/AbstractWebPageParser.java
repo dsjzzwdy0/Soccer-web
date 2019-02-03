@@ -18,7 +18,7 @@ import org.jsoup.nodes.Document;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
 import com.loris.client.parser.WebPageParser;
-import com.loris.soccer.wrapper.TableRecords;
+import com.loris.common.wrapper.TableRecords;
 
 /**   
  * @ClassName:  AbstractWebPageParser  

@@ -14,7 +14,7 @@ package com.loris.soccer.model;
 import java.sql.Date;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.bean.AutoIdEntity;
+import com.loris.common.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  Rank   

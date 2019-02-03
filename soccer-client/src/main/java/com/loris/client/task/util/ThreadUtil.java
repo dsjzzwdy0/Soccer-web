@@ -11,7 +11,7 @@
  */
 package com.loris.client.task.util;
 
-import com.loris.soccer.util.RandomUtil;
+import com.loris.common.util.RandomUtil;
 
 /**   
  * @ClassName:  ThreadUtil  

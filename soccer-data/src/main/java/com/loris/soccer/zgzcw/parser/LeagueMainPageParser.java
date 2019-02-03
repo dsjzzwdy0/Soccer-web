@@ -9,53 +9,34 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.model;
+package com.loris.soccer.zgzcw.parser;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.common.bean.AutoIdEntity;
+import org.jsoup.nodes.Document;
+
+import com.loris.client.exception.WebParserException;
+import com.loris.client.page.WebPage;
+import com.loris.client.parser.impl.AbstractWebPageParser;
+import com.loris.common.wrapper.TableRecords;
 
 /**   
  * @ClassName:  League   
- * @Description: 球队数据类   
+ * @Description: 主页数据的解析器 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_team")
-public class Team extends AutoIdEntity
+public class LeagueMainPageParser extends AbstractWebPageParser
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	protected String tid;			//球队编号
-	protected String name;			//球队名称
-	protected String country;		//所属国家
-	public String getTid()
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
+	 */
+	@Override
+	public TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
-		return tid;
-	}
-	public void setTid(String tid)
-	{
-		this.tid = tid;
-	}
-	public String getName()
-	{
-		return name;
-	}
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	public String getCountry()
-	{
-		return country;
-	}
-	public void setCountry(String country)
-	{
-		this.country = country;
+		return null;
 	}
 }

@@ -11,7 +11,7 @@
  */
 package com.loris.soccer.model.base;
 
-import com.loris.soccer.bean.AutoIdEntity;
+import com.loris.common.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
