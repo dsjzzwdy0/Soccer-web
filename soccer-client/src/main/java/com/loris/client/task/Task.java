@@ -35,6 +35,12 @@ public interface Task extends Comparable<Task>
 	String getName();
 	
 	/**
+	 * 返回任务的类型
+	 * @return
+	 */
+	String getType();
+	
+	/**
 	 * 获得任务的优先等级数量，值越大，将会被优先处理
 	 * @return 返回任务的优先等级
 	 */

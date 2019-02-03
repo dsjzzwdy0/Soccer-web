@@ -64,5 +64,5 @@ public abstract class AbstractWebPageParser implements WebPageParser
 	 * @return
 	 * @throws WebParserException
 	 */
-	abstract WebPageResults parse(WebPage page, Document document, WebPageResults results) throws WebParserException;
+	public abstract WebPageResults parse(WebPage page, Document document, WebPageResults results) throws WebParserException;
 }

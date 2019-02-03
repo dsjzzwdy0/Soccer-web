@@ -36,7 +36,7 @@ public class LinksWebPageParser extends AbstractWebPageParser
 	 * @see com.loris.client.parser.WebPageParser#parse(com.loris.client.page.WebPage)
 	 */
 	@Override
-	WebPageResults parse(WebPage page, Document document, WebPageResults results) throws WebParserException
+	public WebPageResults parse(WebPage page, Document document, WebPageResults results) throws WebParserException
 	{
 		Elements links = ((Element) document).select("a[href]");
 		for (Element link : links)

@@ -24,32 +24,18 @@ import com.loris.client.task.Task;
  */
 public abstract class AbstractTask implements Task
 {
-	/** 等待时间 (毫秒) */
-	protected long waitTime = 3000;
-	
 	/** 任务的名称 */
 	protected String name;
+	
+	/** 任务的类型 */
+	protected String type;
 	
 	/** 任务的优先等级 */
 	protected double priority = 1;
 	
 	/** 任务优先等级的精度表示 */
 	protected int priorityAccuracy = 1000;
-	
-	/**
-	 * 获得等待时间
-	 * @return 获得等待的时间 
-	 */
-	public long getWaitTime()
-	{
-		return waitTime;
-	}
-
-	public void setWaitTime(long waitTime)
-	{
-		this.waitTime = waitTime;
-	}
-	
+		
 	/**
 	 * 获得任务的名称
 	 * @return 返回任务的名称
@@ -69,6 +55,16 @@ public abstract class AbstractTask implements Task
 		this.name = name;
 	}
 	
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
 	/**
 	 * 获得任务的优先级
 	 * @return 任务优先等级
@@ -92,6 +88,11 @@ public abstract class AbstractTask implements Task
 		return priorityAccuracy;
 	}
 
+	/**
+	 * 设置优先等级的精度值, 精确到小数点后的位数, 默认为3位。
+	 * @param priorityAccuracy 精度值
+	 */
+	@Override
 	public void setPriorityAccuracy(int priorityAccuracy)
 	{
 		this.priorityAccuracy = priorityAccuracy;

@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventListener;
+import com.loris.client.task.plugin.TaskPlugin;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
 import com.loris.client.task.util.IdleThreadInfo;
 import com.loris.client.task.util.TaskQueue;
@@ -76,6 +77,9 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 
 	/** 运行中的线程 */
 	private List<Task> runningTaskThreads = new ArrayList<>();
+	
+	/** 系统的插件 */
+	private List<TaskPlugin> plugins = new ArrayList<>();
 
 	/**
 	 * Create a new instance of AbstractTaskScheduler
@@ -101,16 +105,6 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		taskPostProcessor.initialize();
 		taskProcessor.initialize();
 		taskProducer.initialize();
-	}
-	
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.task.context.TaskPluginContext#getMainTaskScheduler()
-	 */
-	@Override
-	public MainTaskScheduler getMainTaskScheduler()
-	{
-		return this;
 	}
 
 	/**
@@ -334,7 +328,89 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	{
 		return !taskQueue.isEmpty();
 	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.context.TaskPluginContext#getMainTaskScheduler()
+	 */
+	@Override
+	public MainTaskScheduler getMainTaskScheduler()
+	{
+		return this;
+	}
 
+	/**
+	 * 关闭任务调度器
+	 * 
+	 * @see java.io.Closeable#close()
+	 */
+	@Override
+	public void close() throws IOException
+	{
+		runningTaskThreads.clear();
+		runningTaskThreads = null;
+		idleThreadInfo = null;
+		taskQueue.clear();
+		taskQueue = null;
+		taskPostProcessor.close();
+		taskPostProcessor = null;
+		taskProcessor.close();
+		taskProcessor = null;
+		taskProducer.close();
+		taskProducer = null;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.task.TaskVector#add(com.loris.client.task.Task)
+	 */
+	@Override
+	public void add(Task task)
+	{
+		taskQueue.add(task);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.task.TaskVector#remove(com.loris.client.task.Task)
+	 */
+	@Override
+	public void remove(Task task)
+	{
+		taskQueue.remove(task);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.task.TaskVector#clear()
+	 */
+	@Override
+	public void clear()
+	{
+		taskQueue.clear();
+	}
+	
+	/**********************************/
+	/** Getter and Setter methods. */
+	/**********************************/
+	public List<TaskPlugin> getPlugins()
+	{
+		return plugins;
+	}
+
+	public void setPlugins(List<TaskPlugin> plugins)
+	{
+		this.plugins = plugins;
+	}
+	
+	public void addTaskPlugin(TaskPlugin plugin)
+	{
+		plugins.add(plugin);
+	}
+	
 	public TaskProducer getTaskProducer()
 	{
 		return taskProducer;
@@ -416,59 +492,5 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-
-	/**
-	 * 关闭任务调度器
-	 * 
-	 * @see java.io.Closeable#close()
-	 */
-	@Override
-	public void close() throws IOException
-	{
-		runningTaskThreads.clear();
-		runningTaskThreads = null;
-		idleThreadInfo = null;
-		taskQueue.clear();
-		taskQueue = null;
-		taskPostProcessor.close();
-		taskPostProcessor = null;
-		taskProcessor.close();
-		taskProcessor = null;
-		taskProducer.close();
-		taskProducer = null;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.loris.client.task.TaskVector#add(com.loris.client.task.Task)
-	 */
-	@Override
-	public void add(Task task)
-	{
-		taskQueue.add(task);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.loris.client.task.TaskVector#remove(com.loris.client.task.Task)
-	 */
-	@Override
-	public void remove(Task task)
-	{
-		taskQueue.remove(task);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.loris.client.task.TaskVector#clear()
-	 */
-	@Override
-	public void clear()
-	{
-		taskQueue.clear();
 	}
 }

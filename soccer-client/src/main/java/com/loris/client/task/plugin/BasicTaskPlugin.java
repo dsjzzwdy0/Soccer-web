@@ -73,6 +73,9 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 		return true;
 	}
 	
+	/**
+	 * 关闭插件
+	 */
 	@Override
 	public void close()
 	{		
