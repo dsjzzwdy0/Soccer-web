@@ -57,4 +57,14 @@ public class OddsOpServiceImpl extends ServiceImpl<OddsOpMapper, OddsOp> impleme
 		queryWrapper.eq("mid", mid).eq("corpid", corpid);
 		return baseMapper.selectList(queryWrapper);
 	}
+
+	/**
+	 * 插入欧赔数据列表
+	 * @see com.loris.soccer.service.OddsOpService#insertOddsOp(java.util.List)
+	 */
+	@Override
+	public boolean insertOddsOp(List<OddsOp> ops)
+	{
+		return false;
+	}
 }

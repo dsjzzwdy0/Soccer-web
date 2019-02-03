@@ -176,12 +176,12 @@ public class ArraysUtil
 			try
 			{
 				Object t = method.invoke(p);
-				if(!dest.contains(t))
+				if(t != null && !dest.contains(t))
 					dest.add((T)t);
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

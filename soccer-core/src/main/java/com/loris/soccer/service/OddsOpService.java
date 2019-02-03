@@ -41,4 +41,11 @@ public interface OddsOpService extends IService<OddsOp>
 	 * @return 欧赔数据列且
 	 */
 	List<OddsOp> selectOddsOp(String mid, String corpid);
+	
+	/**
+	 * 插入欧赔数据列表
+	 * @param ops 欧赔数据列表
+	 * @return 是否成功的标志
+	 */
+	boolean insertOddsOp(List<OddsOp> ops);
 }
