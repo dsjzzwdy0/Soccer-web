@@ -10,6 +10,11 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
+        
+    <bean id="httpCommonPlugin" class="com.loris.soccer.processor.HttpTaskProcessorPlugin">
+    	<constructor-arg ref="defaultSetting" />
+    	<property name="name" value="HttpCommonClient Plugin"></property>
+    </bean>
             
 	<bean id="settingFactory" class="com.loris.client.fetcher.setting.SettingFactory">
 		<property name="settings">

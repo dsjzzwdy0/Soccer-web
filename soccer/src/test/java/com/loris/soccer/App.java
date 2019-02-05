@@ -32,6 +32,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
+import com.loris.soccer.processor.HttpTaskProcessorPlugin;
 import com.loris.soccer.zgzcw.producer.ZgzcwIssueProducePlugin;
 
 /**
@@ -76,6 +77,8 @@ public class App
 	{
 		try(ZgzcwIssueProducePlugin plugin = context.getBean(ZgzcwIssueProducePlugin.class))
 		{
+			HttpTaskProcessorPlugin httpClient = (HttpTaskProcessorPlugin)context.getBean("httpCommonPlugin");
+			logger.info(httpClient.getName());			
 			plugin.initialize();
 		}
 	}
