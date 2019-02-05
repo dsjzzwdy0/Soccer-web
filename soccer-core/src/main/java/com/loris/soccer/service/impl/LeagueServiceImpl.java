@@ -23,7 +23,7 @@ import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.dao.LeagueMapper;
 import com.loris.soccer.model.League;
 import com.loris.soccer.service.LeagueService;
-import com.loris.soccer.util.LeagueChecker;
+import com.loris.soccer.service.util.LeagueChecker;
 
 /**
  * @ClassName: League

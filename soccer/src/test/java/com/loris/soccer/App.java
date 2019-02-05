@@ -11,6 +11,7 @@
  */
 package com.loris.soccer;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -32,8 +33,9 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
-import com.loris.soccer.processor.HttpTaskProcessorPlugin;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.zgzcw.producer.ZgzcwIssueProducePlugin;
+import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
 
 /**
  * Hello world!
@@ -52,9 +54,10 @@ public class App
 		{
 			getApplicationContext();
 			// testSetting();
-			// testQueue();
+			// testQueue();			
+			//testAutowired();
 			
-			testAutowired();
+			testZgzcwWebPage();
 
 			//testMailThreadScheduler();
 			// testContext();
@@ -69,6 +72,22 @@ public class App
 		}
 	}
 	
+
+	/**
+	 * 创建数据主页面
+	 * @throws Exception
+	 */
+	public static void testZgzcwWebPage() throws Exception
+	{
+		String type = SoccerConstants.MATCH_TYPE_CUP;
+		Map<String, String> params = new LinkedHashMap<>();
+		params.put("lid", "204");
+		params.put("source_league_id", "7");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(type, params);
+		
+		logger.info(page.getUrl());
+	}
+	
 	/**
 	 * 测试
 	 * @throws Exception
@@ -76,9 +95,7 @@ public class App
 	public static void testAutowired() throws Exception
 	{
 		try(ZgzcwIssueProducePlugin plugin = context.getBean(ZgzcwIssueProducePlugin.class))
-		{
-			HttpTaskProcessorPlugin httpClient = (HttpTaskProcessorPlugin)context.getBean("httpCommonPlugin");
-			logger.info(httpClient.getName());			
+		{		
 			plugin.initialize();
 		}
 	}

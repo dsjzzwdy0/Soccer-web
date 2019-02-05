@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.common.bean.AutoIdEntity;
+import com.loris.common.util.EncodingUtil;
 
 /**   
  * @ClassName:  WebPage   
@@ -36,10 +37,6 @@ public class WebPage extends AutoIdEntity
 {
 	/***/
 	private static final long serialVersionUID = 1L;
-	
-	public static final String ENCODING_UTF8 = "utf-8";
-	public static final String ENCODING_GBK = "GBK";
-	public static final String ENCODING_GB2312 = "GB2312";
 		
 	protected String pageid;
 	protected String url;
@@ -49,6 +46,7 @@ public class WebPage extends AutoIdEntity
 	protected String port;
 	protected String method;
 	protected String type;
+	protected String source;					//页面来源
 	protected int httpstatus;					//页面下载状态信息
 	protected Date createtime;					//创建时间
 	protected Date loadtime;					//下载时间
@@ -67,7 +65,7 @@ public class WebPage extends AutoIdEntity
 	 */
 	public WebPage()
 	{
-		encoding = ENCODING_UTF8;
+		encoding = EncodingUtil.ENCODING_UTF8;
 		protocol = "http";
 		createtime = new Date();
 		completed = false;
@@ -226,6 +224,16 @@ public class WebPage extends AutoIdEntity
 		return "" + date.getTime();
 	}
 	
+	public String getSource()
+	{
+		return source;
+	}
+
+	public void setSource(String source)
+	{
+		this.source = source;
+	}
+
 	/**
 	 * 获得目录地址：默认的按照年、月来组织
 	 * @return 目录地址

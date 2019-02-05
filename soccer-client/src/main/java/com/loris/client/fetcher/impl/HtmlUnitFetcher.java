@@ -97,7 +97,8 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 		{
 			// 这里需要有一个起始页面，原因是为了获取起始页面的Cookie值
 			logger.info("Fetching Base Page: " + basePage.getUrl());
-			fetch(basePage);
+			fetch(basePage);			
+			//logger.info("Content: " + basePage.getContent());
 		}
 		catch (Exception exception)
 		{

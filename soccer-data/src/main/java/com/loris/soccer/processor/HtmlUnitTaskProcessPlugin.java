@@ -34,7 +34,11 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
  */
 public class HtmlUnitTaskProcessPlugin extends BasicTaskProcessPlugin
 {
+	/** HtmlUnitFetcher Client. */
 	private HtmlUnitFetcher client = null;
+	
+	/** 初始化标志  */
+	private boolean initialized = false;
 	
 	/**
 	 * Create a new instance of HtmlUnitTaskProcessPlugin
@@ -44,6 +48,7 @@ public class HtmlUnitTaskProcessPlugin extends BasicTaskProcessPlugin
 	public HtmlUnitTaskProcessPlugin(FetcherSetting setting, WebPage initPage)
 	{
 		client = new HtmlUnitFetcher(setting, initPage);
+		initialized = false;
 	}
 	
 	/**
@@ -75,5 +80,16 @@ public class HtmlUnitTaskProcessPlugin extends BasicTaskProcessPlugin
 	public void initialize() throws IOException
 	{
 		client.init();
+		initialized = true;
+	}
+
+	public boolean isInitialized()
+	{
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized)
+	{
+		this.initialized = initialized;
 	}
 }

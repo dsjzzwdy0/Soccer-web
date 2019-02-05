@@ -11,13 +11,13 @@
  */
 package com.loris.soccer.zgzcw.producer;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.loris.client.fetcher.setting.FetcherSetting;
-import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
+import com.loris.soccer.processor.HtmlUnitTaskProcessPlugin;
 
 /**   
  * @ClassName:  League   
@@ -32,14 +32,26 @@ import com.loris.client.task.plugin.BasicTaskProducePlugin;
 public class ZgzcwIssueProducePlugin extends BasicTaskProducePlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
-	
+		
 	@Autowired
-	SettingFactory factory;
+	HtmlUnitTaskProcessPlugin okoooHtmlUnitClient;
 	
 	@Override
-	public void initialize()
+	public void initialize()throws IOException
 	{
-		FetcherSetting setting = factory.getDefaultFetcherSetting();
-		logger.info(setting.getName());
+		
+		if(!okoooHtmlUnitClient.isInitialized())
+		{
+			try
+			{
+				okoooHtmlUnitClient.initialize();
+			}
+			catch (IOException e)
+			{
+				//e.printStackTrace();
+				throw e;
+			}
+		}
+		logger.info(okoooHtmlUnitClient.getName());
 	}
 }

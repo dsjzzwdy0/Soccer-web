@@ -15,6 +15,12 @@
     	<constructor-arg ref="defaultSetting" />
     	<property name="name" value="HttpCommonClient Plugin"></property>
     </bean>
+    
+    <bean id="okoooHtmlUnitClient" class="com.loris.soccer.processor.HtmlUnitTaskProcessPlugin">
+    	<constructor-arg ref="defaultSetting" />
+    	<constructor-arg ref="okoooWebPage" />
+    	<property name="name" value="HttpUint Plugin"></property>
+    </bean>
             
 	<bean id="settingFactory" class="com.loris.client.fetcher.setting.SettingFactory">
 		<property name="settings">
@@ -60,5 +66,11 @@
 				<entry key="User-agent" value="Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"></entry>
 			</map>
 		</property>
+	</bean>
+	
+	<bean id="okoooWebPage" class="com.loris.client.page.WebPage">
+		<property name="pageid" value="okoooMainPage"></property>
+		<property name="url" value="http://www.okooo.com/danchang/"></property>
+		<property name="encoding" value="gb2312"></property>
 	</bean>
 </beans>
