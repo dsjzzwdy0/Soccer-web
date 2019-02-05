@@ -60,7 +60,7 @@ public class SoccerServiceImpl implements SoccerDataService
 		{
 			switch (key)
 			{
-			case SOCCER_DATA_LEAGUE:
+			case SOCCER_DATA_LEAGUE_LIST:
 				List<League> leagues = (List<League>) results.get(key);
 				leagueService.insertLeagues(leagues);
 				break;

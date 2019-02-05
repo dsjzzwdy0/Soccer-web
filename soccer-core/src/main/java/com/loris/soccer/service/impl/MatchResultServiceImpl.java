@@ -9,25 +9,23 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.constant;
+package com.loris.soccer.service.impl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.loris.soccer.dao.MatchResultMapper;
+import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.service.MatchResultService;
 
 /**   
  * @ClassName:  League   
- * @Description: 足彩应用系统中一些常量数据的定义  
+ * @Description: 比赛结果的数据  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class SoccerConstants
+public class MatchResultServiceImpl extends ServiceImpl<MatchResultMapper, MatchResult> implements MatchResultService
 {
-	final static public String SOCCER_DATA_LEAGUE = "league"; 
-	final static public String SOCCER_DATA_LEAGUE_LIST = "leagues"; 
-	final static public String SOCCER_DATA_MATCH = "match";
-	final static public String SOCCER_DATA_MATCH_LIST = "matchs";
-	final static public String SOCCER_DATA_MATCH_BD_LIST = "matchbds";
-	final static public String SOCCER_DATA_MATCH_JC_LIST = "matchjcs";
-	final static public String SOCCER_DATA_MATCH_RESULT_LIST = "resultlist";
-	final static public String SOCCER_DATA_ODDS_NUM = "oddsnum";
+
 }

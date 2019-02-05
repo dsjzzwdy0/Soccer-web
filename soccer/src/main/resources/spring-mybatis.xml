@@ -9,8 +9,12 @@
                         http://www.springframework.org/schema/context/spring-context-3.1.xsd    
                         http://www.springframework.org/schema/mvc    
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-	<!-- 自动扫描 -->	
-	<context:component-scan base-package="com.loris.soccer" />
+	
+	<!-- 自动扫描该包，将注解类的Bean实体扫描到Spring-mvc控制容器中 -->
+	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />
+	
+	 <!-- 引入Spring -->
+    <import resource="classpath:/conf/spring-settings.xml"/>
 	
 	<!-- 引入配置文件 -->
 	<bean id="propertyConfigurer"
@@ -28,6 +32,14 @@
 		<property name="maxIdle" value="${maxIdle}"></property>	 <!-- 连接池最大空闲 -->
 		<property name="minIdle" value="${minIdle}"></property>  <!-- 连接池最小空闲 -->
 		<property name="maxWait" value="${maxWait}"></property>  <!-- 获取连接最大等待时间 -->
+		<property name="validationQuery" value="SELECT 1"></property>
+		<property name="testWhileIdle" value="true"></property>
+		<property name="testOnBorrow" value="true"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="3600000"></property>
+		<property name="numTestsPerEvictionRun" value="50"></property>
+		<property name="minEvictableIdleTimeMillis" value="120000"></property>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="6000000"/>
 	</bean>
 	
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -44,11 +56,12 @@
 		<!-- 自动扫描Mapping.xml文件 -->
 		<property name="mapperLocations">
 			<list>
-			    <value>classpath*:com/loris/soccer/dao/conf/*Mapper.xml</value>
+			    <value>classpath*:com/loris/client/page/dao/mapper/*Mapper.xml</value>
+				<value>classpath*:com/loris/soccer/dao/mapper/*Mapper.xml</value>
 			</list>
 		</property>
-		<property name="configLocation" value="classpath:conf/mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.loris.soccer" />
+		<property name="configLocation" value="classpath:/conf/mybatis-config.xml" />
+		<property name="typeAliasesPackage" value="com.loris.client, com.loris.soccer" />
 		<property name="plugins">
 			<array>
 				<!-- 分页插件配置 -->
@@ -58,15 +71,9 @@
 				</bean>
 			</array>
 		</property>
-		<!-- 全局配置注入 -->
 		<property name="globalConfig">
 	        <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig">
 	            <property name="refresh" value="true"/>
-	            <property name="dbConfig">
-	            	<bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
-	            		<property name="dbType" value="MYSQL"/>
-	            	</bean>
-	            </property>
 	        </bean>
 	    </property>
 	</bean>
@@ -74,8 +81,8 @@
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
 	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="
-		    com.loris.soccer.dao, 
-		    com.loris.soccer.repository.mapper" />
+		    com.loris.client.page.dao,
+		    com.loris.soccer.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 

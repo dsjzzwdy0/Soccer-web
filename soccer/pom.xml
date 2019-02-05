@@ -155,18 +155,35 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		
-		<dependency>
-			<groupId>com.loris</groupId>
-			<artifactId>soccer-core</artifactId>
-			<version>${soccer.version}</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- Soccer库 -->
+		<dependency>
+			<groupId>com.loris</groupId>
+			<artifactId>soccer-common</artifactId>
+			<version>${soccer.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.loris</groupId>
+			<artifactId>soccer-client</artifactId>
+			<version>${soccer.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.loris</groupId>
+			<artifactId>soccer-core</artifactId>
+			<version>${soccer.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.loris</groupId>
+			<artifactId>soccer-data</artifactId>
+			<version>${soccer.version}</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>soccer</finalName>

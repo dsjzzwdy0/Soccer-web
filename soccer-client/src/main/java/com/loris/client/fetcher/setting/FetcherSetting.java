@@ -27,6 +27,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
  */
 public class FetcherSetting
 {
+	private String name;
 	private int interval = 4000;
 	private int monitorInterval;
 	private int connectionTimeout = 30000;
@@ -43,6 +44,16 @@ public class FetcherSetting
 		this.headers = new HashMap<String, String>();
 	}
 	
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	public int getInterval()
 	{
 		return interval;

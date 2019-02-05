@@ -99,7 +99,7 @@ public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProdu
 	@Override
 	public boolean isFit(Task task)
 	{
-		return false;
+		throw new UnsupportedOperationException("This is not used for TaskProducePlugin.");
 	}
 
 }

@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
-        
+            
 	<bean id="settingFactory" class="com.loris.client.fetcher.setting.SettingFactory">
 		<property name="settings">
 			<map>
@@ -23,6 +23,7 @@
 	
 	<!-- 默认的网络客户端系统配置 -->
 	<bean id="defaultSetting" class="com.loris.client.fetcher.setting.FetcherSetting">
+		<property name="name" value="Default"></property>
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="FIREFOX_60"></property>
 		<property name="interval" value="4500"></property>
@@ -30,6 +31,7 @@
 	
 	<!-- IE网络客户端系统配置 -->
 	<bean id="explorerSetting" class="com.loris.client.fetcher.setting.FetcherSetting">
+		<property name="name" value="Explorer"></property>
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="INTERNET_EXPLORER"></property>
 		<property name="interval" value="4500"></property>
@@ -43,6 +45,7 @@
 	
 	<!-- Chrome网络客户端系统配置 -->
 	<bean id="chromeSetting" class="com.loris.client.fetcher.setting.FetcherSetting">
+		<property name="name" value="Chrome"></property>
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="INTERNET_EXPLORER"></property>
 		<property name="interval" value="4500"></property>
