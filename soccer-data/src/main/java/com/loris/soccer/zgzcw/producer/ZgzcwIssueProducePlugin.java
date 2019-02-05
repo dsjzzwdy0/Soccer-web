@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
-import com.loris.soccer.processor.HtmlUnitTaskProcessPlugin;
+import com.loris.soccer.processor.HttpTaskProcessorPlugin;
 
 /**   
  * @ClassName:  League   
@@ -34,24 +34,11 @@ public class ZgzcwIssueProducePlugin extends BasicTaskProducePlugin
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
 		
 	@Autowired
-	HtmlUnitTaskProcessPlugin okoooHtmlUnitClient;
+	HttpTaskProcessorPlugin httpCommonPlugin;
 	
 	@Override
 	public void initialize()throws IOException
 	{
-		
-		if(!okoooHtmlUnitClient.isInitialized())
-		{
-			try
-			{
-				okoooHtmlUnitClient.initialize();
-			}
-			catch (IOException e)
-			{
-				//e.printStackTrace();
-				throw e;
-			}
-		}
-		logger.info(okoooHtmlUnitClient.getName());
+		logger.info(httpCommonPlugin.getName());
 	}
 }
