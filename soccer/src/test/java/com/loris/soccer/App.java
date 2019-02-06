@@ -11,6 +11,7 @@
  */
 package com.loris.soccer;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +38,12 @@ import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.LeagueMainPageParser;
+import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
 import com.loris.soccer.data.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.processor.HttpTaskProcessor;
 
 
@@ -64,7 +67,9 @@ public class App
 			// testQueue();			
 			//testAutowired();
 			
-			testZgzcwWebPage();
+			//testZgzcwWebPage();
+			
+			testZgzcwOpWebPage();
 
 			//testMailThreadScheduler();
 			// testContext();
@@ -87,7 +92,7 @@ public class App
 	@SuppressWarnings("unchecked")
 	public static void testZgzcwWebPage() throws Exception
 	{
-		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER, null);				
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER, null);	
 		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
 		if(!client.isInitialized())
 		{
@@ -113,6 +118,45 @@ public class App
 		for (Logo logo : logos)
 		{
 			logger.info(logo.getPid() + ": " + logo.getUrl());
+		}
+	}
+	
+	/**
+	 * 创建数据主页面
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testZgzcwOpWebPage() throws Exception
+	{
+		Map<String, String> params = new LinkedHashMap<>();
+		params.put("mid", "2432303");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params);	
+		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
+		if(!client.isInitialized())
+		{
+			client.initialize();
+		}
+		
+		if(!client.execute(null, new WebPageTask(page)))
+		{
+			logger.info("Error when downloading: " + page.getUrl());
+		}
+		
+		//logger.info(page.getContent());
+		
+		OddsOpWebPageParser parser = new OddsOpWebPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		int i = 1;
+		List<OddsOp> ops = (List<OddsOp> )records.get(SoccerConstants.SOCCER_DATA_OP_LIST);
+		for (OddsOp op : ops)
+		{
+			logger.info(i +++ ": " + op.getCorpid() + "(" + op.getWinodds() + ", " 
+					+ op.getDrawodds() + ", " + op.getLoseodds() + ")" + op.getOpentime());
 		}
 	}
 	

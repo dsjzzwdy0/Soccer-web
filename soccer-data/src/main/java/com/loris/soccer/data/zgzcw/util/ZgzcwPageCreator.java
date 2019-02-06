@@ -19,7 +19,7 @@ import java.util.Map;
 import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.page.WebPage;
 import com.loris.common.util.EncodingUtil;
-import com.loris.soccer.util.WebUtil;
+import com.loris.common.util.URLBuilder;
 
 /**
  * @ClassName: League
@@ -127,13 +127,14 @@ public class ZgzcwPageCreator
 		}
 
 		String basicUrl = PAGE_TYPES[typeIndex][1];
-		switch (typeIndex)
+		String type = PAGE_TYPES[typeIndex][0];
+		switch (type)
 		{
-		case 5:				//百家OP页面
+		case PAGE_ODDS_OP:				//百家OP页面
 			basicUrl += params.get("mid") + "/bjop";
 			break;
 		default:
-			basicUrl = WebUtil.makeDefaultUrl(basicUrl, params);
+			basicUrl = URLBuilder.makeDefaultUrl(basicUrl, params);
 			break;
 		}
 		page.setUrl(basicUrl);

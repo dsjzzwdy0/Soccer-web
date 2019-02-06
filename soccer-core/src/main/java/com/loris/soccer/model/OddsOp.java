@@ -32,6 +32,18 @@ public class OddsOp extends OddsValue
 	protected float drawodds;
 	protected float drawkelly;
 	protected float drawprob;
+	
+	/**
+	 * Create a new instance of OddsOp
+	 */
+	public OddsOp()
+	{
+	}
+	
+	public OddsOp(String mid)
+	{
+		this.mid = mid;
+	}
 
 	public float getDrawodds()
 	{

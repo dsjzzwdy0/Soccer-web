@@ -20,23 +20,34 @@ import org.jsoup.select.Elements;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
-import com.loris.client.parser.impl.AbstractWebPageParser;
 import com.loris.common.wrapper.TableRecords;
 import static com.loris.soccer.constant.SoccerConstants.*;
+
+import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 
 /**   
  * @ClassName:  League   
- * @Description: 主页数据的解析器 
+ * @Description: 主页数据的解析器，解析的内容包括两部分：
+ *      1. 洲际、国家的联赛、杯赛等数据
+ * 		2. 每个联赛的图标数据
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LeagueMainPageParser extends AbstractWebPageParser
+public class LeagueMainPageParser extends AbstractZgzcwWebPageParser
 {
+	/**
+	 * Create a new instance of LeagueMainPageParser.
+	 */
+	public LeagueMainPageParser()
+	{
+		super(ZgzcwConstants.PAGE_CENTER);
+	}
+	
 	/**
 	 *  (non-Javadoc)
 	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, 

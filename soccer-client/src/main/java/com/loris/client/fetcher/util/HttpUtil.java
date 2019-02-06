@@ -133,6 +133,12 @@ public class HttpUtil
 		return ret;
 	}
 
+	/**
+	 * 从URL地址中解析得到主机地址
+	 * @param url
+	 * @return
+	 * @throws MalformedURLException
+	 */
 	public static String getDomainFromUrl(String url) throws MalformedURLException
 	{
 		URL javaURL = new URL(url);

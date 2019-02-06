@@ -30,7 +30,17 @@ import com.loris.common.wrapper.TableRecords;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 public abstract class AbstractWebPageParser implements WebPageParser
-{
+{	
+	/**
+	 * 是否能够被解析
+	 * @param page 网页页面
+	 * @return 是否能够被解析的标志
+	 */
+	protected boolean accept(WebPage page) throws WebParserException
+	{
+		return true;
+	}
+	
 	/**
 	 * 解析网页数据页面
 	 * @see com.loris.client.parser.WebPageParser#parse(com.loris.client.page.WebPage)
@@ -42,6 +52,12 @@ public abstract class AbstractWebPageParser implements WebPageParser
 		{
 			throw new WebParserException("The page is null, failed to parse.");
 		}
+		
+		if(!accept(page))
+		{
+			throw new WebParserException("The page '" + page.getType() + "' is not be accepted by this Parser '" + getClass().getName() + "'");
+		}
+		
 		if(StringUtils.isAllEmpty(page.getContent()))
 		{
 			throw new WebParserException("The page content is empty, there are no content bo be parsed.");
