@@ -9,20 +9,36 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.zgzcw;
+package com.loris.soccer.data.zgzcw.producer;
 
-import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
+import java.io.IOException;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.loris.client.task.plugin.BasicTaskProducePlugin;
+import com.loris.soccer.processor.HttpTaskProcessor;
 
 /**   
  * @ClassName:  League   
- * @Description: 中国足彩网网页数据处理类   
+ * @Description: 今日足彩数据下载产生器
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class ZgzcwPostProcessPlugin extends BasicTaskPostProcessPlugin
+@Component
+public class ZgzcwIssueProducePlugin extends BasicTaskProducePlugin
 {
-
+	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
+		
+	@Autowired
+	HttpTaskProcessor httpCommonPlugin;
+	
+	@Override
+	public void initialize()throws IOException
+	{
+		logger.info(httpCommonPlugin.getName());
+	}
 }

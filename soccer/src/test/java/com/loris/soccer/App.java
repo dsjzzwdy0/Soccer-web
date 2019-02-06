@@ -35,13 +35,13 @@ import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.parser.LeagueMainPageParser;
+import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
+import com.loris.soccer.data.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.processor.HttpTaskProcessor;
-import com.loris.soccer.zgzcw.constant.ZgzcwConstants;
-import com.loris.soccer.zgzcw.parser.LeagueMainPageParser;
-import com.loris.soccer.zgzcw.producer.ZgzcwIssueProducePlugin;
-import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
 
 
 /**
