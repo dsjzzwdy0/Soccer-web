@@ -11,12 +11,12 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
         
-    <bean id="httpCommonPlugin" class="com.loris.soccer.processor.HttpTaskProcessorPlugin">
+    <bean id="httpCommonPlugin" class="com.loris.soccer.processor.HttpTaskProcessor">
     	<constructor-arg ref="defaultSetting" />
     	<property name="name" value="HttpCommonClient Plugin"></property>
     </bean>
     
-    <bean id="okoooHtmlUnitClient" class="com.loris.soccer.processor.HtmlUnitTaskProcessPlugin">
+    <bean id="okoooHtmlUnitClient" class="com.loris.soccer.processor.HtmlUnitTaskProcessor">
     	<constructor-arg ref="defaultSetting" />
     	<constructor-arg ref="okoooWebPage" />
     	<property name="name" value="HttpUint Plugin"></property>

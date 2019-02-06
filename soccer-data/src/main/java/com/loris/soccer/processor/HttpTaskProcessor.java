@@ -32,7 +32,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class HttpTaskProcessorPlugin extends BasicTaskProcessPlugin
+public class HttpTaskProcessor extends BasicTaskProcessPlugin
 {
 	/** 页面下载 客户端 */
 	private HttpCommonFetcher client = null;
@@ -41,7 +41,7 @@ public class HttpTaskProcessorPlugin extends BasicTaskProcessPlugin
 	 * Create a new HttpTaskProcessPlugin
 	 * @param setting
 	 */
-	public HttpTaskProcessorPlugin(FetcherSetting setting)
+	public HttpTaskProcessor(FetcherSetting setting)
 	{
 		client = new HttpCommonFetcher(setting);
 	}

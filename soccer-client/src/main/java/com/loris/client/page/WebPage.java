@@ -52,11 +52,14 @@ public class WebPage extends AutoIdEntity
 	protected Date loadtime;					//下载时间
 	protected String ziptype;
 	protected boolean completed;				//是否已经下载完成
+	protected boolean plaintext;
 	
 	@TableField(exist=false)
-	protected String content;			//页面内容	
+	protected String content;					//页面内容
 	@TableField(exist=false)
 	protected Map<String, String> headers =new LinkedHashMap<>();			//页面头信息
+	@TableField(exist=false)
+	protected byte[] byteArray = null;
 	@TableField(exist=false)
 	protected Map<String, String> params = new LinkedHashMap<>();			//访问参数
 	
@@ -71,6 +74,7 @@ public class WebPage extends AutoIdEntity
 		completed = false;
 		method = HttpUtil.HTTP_METHOD_GET;
 		port = "80";
+		plaintext = true;
 	}
 	
 	/**
@@ -212,6 +216,26 @@ public class WebPage extends AutoIdEntity
 	{
 		this.httpstatus = httpstatus;
 	}
+	public byte[] getByteArray()
+	{
+		return byteArray;
+	}
+
+	public void setByteArray(byte[] byteArray)
+	{
+		this.byteArray = byteArray;
+	}
+
+	public boolean isPlaintext()
+	{
+		return plaintext;
+	}
+
+	public void setPlaintext(boolean plaintext)
+	{
+		this.plaintext = plaintext;
+	}
+
 	/**
 	 * 获得存储内容的唯一名字，实现的子类需要继承
 	 * @return

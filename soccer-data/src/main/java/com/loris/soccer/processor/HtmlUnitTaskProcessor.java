@@ -32,20 +32,17 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class HtmlUnitTaskProcessPlugin extends BasicTaskProcessPlugin
+public class HtmlUnitTaskProcessor extends BasicTaskProcessPlugin
 {
 	/** HtmlUnitFetcher Client. */
 	private HtmlUnitFetcher client = null;
-	
-	/** 初始化标志  */
-	private boolean initialized = false;
-	
+		
 	/**
 	 * Create a new instance of HtmlUnitTaskProcessPlugin
 	 * @param setting
 	 * @param initPage
 	 */
-	public HtmlUnitTaskProcessPlugin(FetcherSetting setting, WebPage initPage)
+	public HtmlUnitTaskProcessor(FetcherSetting setting, WebPage initPage)
 	{
 		client = new HtmlUnitFetcher(setting, initPage);
 		initialized = false;
@@ -83,13 +80,9 @@ public class HtmlUnitTaskProcessPlugin extends BasicTaskProcessPlugin
 		initialized = true;
 	}
 
-	public boolean isInitialized()
+	public void close()
 	{
-		return initialized;
-	}
-
-	public void setInitialized(boolean initialized)
-	{
-		this.initialized = initialized;
+		super.close();
+		client.close();
 	}
 }

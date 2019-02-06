@@ -11,7 +11,7 @@
  */
 package com.loris.soccer;
 
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -28,14 +28,21 @@ import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.task.MainTaskScheduler;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
+import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.model.League;
+import com.loris.soccer.model.Logo;
+import com.loris.soccer.processor.HttpTaskProcessor;
+import com.loris.soccer.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.zgzcw.parser.LeagueMainPageParser;
 import com.loris.soccer.zgzcw.producer.ZgzcwIssueProducePlugin;
 import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
+
 
 /**
  * Hello world!
@@ -77,15 +84,36 @@ public class App
 	 * 创建数据主页面
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public static void testZgzcwWebPage() throws Exception
 	{
-		String type = SoccerConstants.MATCH_TYPE_CUP;
-		Map<String, String> params = new LinkedHashMap<>();
-		params.put("lid", "204");
-		params.put("source_league_id", "7");
-		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(type, params);
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER, null);				
+		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
+		if(!client.isInitialized())
+		{
+			client.initialize();
+		}
 		
-		logger.info(page.getUrl());
+		client.execute(null, new WebPageTask(page));
+		
+		LeagueMainPageParser parser = new LeagueMainPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		List<League> leagues = (List<League>)records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST);
+		for (League league : leagues)
+		{
+			logger.info(league.getLid() + ", " + league.getName());
+		}
+		
+		List<Logo> logos = (List<Logo>) records.get(SoccerConstants.SOCCER_DATA_LOGO_LIST);
+		for (Logo logo : logos)
+		{
+			logger.info(logo.getPid() + ": " + logo.getUrl());
+		}
 	}
 	
 	/**

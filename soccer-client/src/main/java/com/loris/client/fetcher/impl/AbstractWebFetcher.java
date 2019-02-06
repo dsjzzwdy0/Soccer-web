@@ -82,7 +82,7 @@ public abstract class AbstractWebFetcher implements WebFetcher
 	 * @throws UrlFetchException
 	 * @throws HostForbiddenException
 	 */
-	protected void checkStatusCode(WebPage page, int statusCode) throws UrlFetchException, HostForbiddenException
+	protected static void checkStatusCode(WebPage page, int statusCode) throws UrlFetchException, HostForbiddenException
 	{
 		if(statusCode == HttpStatus.SC_OK)
 		{

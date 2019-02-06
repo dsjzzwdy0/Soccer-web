@@ -134,21 +134,19 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 	}
 
 	/**
-	 * 
+	 * 下载数据页面内容
 	 * @param urlString
 	 * @return
 	 * @throws UrlFetchException
 	 */
-	protected void fetchByteData(WebPage page, FetcherSetting setting) throws UrlFetchException, HostForbiddenException
+	public static void fetchByteData(WebPage page, FetcherSetting setting) throws UrlFetchException, HostForbiddenException
 	{
-		String urlString = page.getUrl();
-		byte[] content = null;
-
+		String url = page.getUrl();
 		// Prepare HTTP client instance
 		HttpClient httpclient = new HttpClient(connectionManager);
 		HttpConnectionParams managerParams = httpclient.getHttpConnectionManager().getParams();
 		managerParams.setConnectionTimeout(setting.getConnectionTimeout());
-		httpclient.setState(CookieManager.getHttpState(urlString));
+		httpclient.setState(CookieManager.getHttpState(url));
 
 		// Prepare HTTP GET method
 		HttpMethod httpMethod = null;
@@ -157,9 +155,8 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			String method = page.getMethod();
 			if (HttpUtil.HTTP_METHOD_POST.equalsIgnoreCase(method))
 			{
-				httpMethod = new UTF8PostMethod(page.getUrl());
-
-				// 这里是添加请求参数数据
+				httpMethod = new UTF8PostMethod(url);
+				
 				Map<String, String> params = page.getParams();
 				if (params != null)
 				{
@@ -176,7 +173,7 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			}
 			else
 			{
-				httpMethod = new GetMethod(urlString);
+				httpMethod = new GetMethod(url);
 			}
 		}
 		catch (IllegalArgumentException ex1)
@@ -209,9 +206,12 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			// 执行页面下载
 			int statusCode = httpclient.executeMethod(httpMethod);
 			
+			//检测数据页面返回的状态值
+			checkStatusCode(page, statusCode);
+						
 			//计算页面获取的时间
 			long endTime = System.currentTimeMillis();
-			DashBoard.add(urlString, endTime - startTime);			
+			DashBoard.add(url, endTime - startTime);			
 			
 			//处理跳转的问题，在这里与网络爬虫不同，为了提高效率，不再抓取跳转的页面
 			Header locationHeader = httpMethod.getResponseHeader("location");
@@ -221,14 +221,14 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 				throw new UrlFetchException(info);
 			}
 			
-			page.setHttpstatus(statusCode);		
+			page.setByteArray(httpMethod.getResponseBody());
 			
-			//检测数据页面返回的状态值
-			checkStatusCode(page, statusCode);
+			//需要进行数据解码
+			if(page.isPlaintext())
+			{
+				page.setContent(uncompress(page.getEncoding(), page.getByteArray(), page.getZiptype()));
+			}
 			
-			content = httpMethod.getResponseBody();			
-			page.setContent(uncompress(page.getEncoding(), content, page.getZiptype()));
-
 			// Save the cookies
 			Cookie[] cookies = httpclient.getState().getCookies();
 			for (int i = 0; i < cookies.length; i++)
@@ -241,8 +241,6 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			{
 				Monitor.fetchedCounter++;
 			}
-
-			
 		}
 		catch (Exception ex)
 		{
@@ -253,6 +251,22 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 			// Release current connection to the connection pool once you are
 			httpMethod.releaseConnection();
 		}
+	}
+	
+	/**
+	 * 下载数据链接地址
+	 * @param url 链接地址
+	 * @param setting 下载设置
+	 * @return 数组
+	 * @throws UrlFetchException
+	 * @throws HostForbiddenException
+	 */
+	public static byte[] fetchByteData(String url, FetcherSetting setting) throws UrlFetchException, HostForbiddenException
+	{
+		WebPage page = new WebPage(url);
+		page.setPlaintext(true);
+		fetchByteData(page, setting);
+		return page.getByteArray();
 	}
 	
 	/**

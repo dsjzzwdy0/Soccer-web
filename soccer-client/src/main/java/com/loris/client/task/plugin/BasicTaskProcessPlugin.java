@@ -35,6 +35,9 @@ public class BasicTaskProcessPlugin extends BasicTaskPlugin implements TaskProce
 {
 	private static Logger logger = Logger.getLogger(BasicTaskProducePlugin.class);
 
+	/** 初始化标志  */
+	protected boolean initialized = false;
+
 	/**
 	 *  (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskProcessPlugin#execute(com.loris.client.task.Task)
@@ -57,4 +60,19 @@ public class BasicTaskProcessPlugin extends BasicTaskPlugin implements TaskProce
 		return true;
 	}
 
+	public boolean isInitialized()
+	{
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized)
+	{
+		this.initialized = initialized;
+	}
+
+	@Override
+	public void close()
+	{
+		initialized = false;
+	}
 }

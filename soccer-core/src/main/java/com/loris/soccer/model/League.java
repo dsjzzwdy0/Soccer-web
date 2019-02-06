@@ -34,6 +34,7 @@ public class League extends AutoIdEntity
 	protected String type;				//赛事类型： league（联赛）、cup（杯赛）
 	protected String country;			//所属国家
 	protected String continent;			//所属洲: 世界、亚洲、欧洲、美洲等
+	protected String introduction;		//介绍
 	
 	public String getLid()
 	{
@@ -74,6 +75,14 @@ public class League extends AutoIdEntity
 	public void setContinent(String continent)
 	{
 		this.continent = continent;
+	}
+	public String getIntroduction()
+	{
+		return introduction;
+	}
+	public void setIntroduction(String introduction)
+	{
+		this.introduction = introduction;
 	}
 	@Override
 	public String toString()

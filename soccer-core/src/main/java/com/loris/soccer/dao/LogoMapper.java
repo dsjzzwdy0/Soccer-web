@@ -9,29 +9,21 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.parser;
+package com.loris.soccer.dao;
 
-import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
-import com.loris.common.wrapper.TableRecords;;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.loris.soccer.model.Logo;
 
 /**   
- * @ClassName:  WebPageParser  
- * @Description: 网页解析工具  
+ * @ClassName:  League   
+ * @Description: 图标服务类 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface WebPageParser 
+public interface LogoMapper extends BaseMapper<Logo>
 {
-	String RIGHT_SPLASH = "/";
-	
-	/**
-	 * 数据页面解析接口
-	 * @param page 数据页面
-	 * @return 数据结果
-	 */
-	TableRecords parse(WebPage page) throws WebParserException;
+
 }

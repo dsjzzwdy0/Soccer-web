@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
-import com.loris.soccer.processor.HttpTaskProcessorPlugin;
+import com.loris.soccer.processor.HttpTaskProcessor;
 
 /**   
  * @ClassName:  League   
@@ -34,7 +34,7 @@ public class ZgzcwIssueProducePlugin extends BasicTaskProducePlugin
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
 		
 	@Autowired
-	HttpTaskProcessorPlugin httpCommonPlugin;
+	HttpTaskProcessor httpCommonPlugin;
 	
 	@Override
 	public void initialize()throws IOException

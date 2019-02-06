@@ -33,6 +33,10 @@ public class WebUtil
 	 */
 	public static String makeDefaultUrl(String basicUrl, Map<String, String> params)
 	{
+		if(params == null)
+		{
+			return basicUrl;
+		}
 		if (basicUrl.contains("?"))
 		{
 			basicUrl += "&";
@@ -53,7 +57,6 @@ public class WebUtil
 			i++;
 		}
 		basicUrl += paramStr;
-
 		return basicUrl;
 	}
 }
