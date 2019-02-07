@@ -70,8 +70,8 @@ public class LeagueWebPageParser extends AbstractZgzcwWebPageParser
 		String lid = page.getParams().get(SoccerConstants.NAME_FIELD_LID);
 		String season = page.getParams().get(SoccerConstants.NAME_FIELD_SEASON);
 		
-		Element element = document.select(".league .left .team_out .div-select").first();		
 		//解析赛季信息
+		Element element = document.select(".league .left .team_out .div-select").first();		
 		parseSeasons(element);
 		
 		if(StringUtils.isEmpty(seasonInfo))
