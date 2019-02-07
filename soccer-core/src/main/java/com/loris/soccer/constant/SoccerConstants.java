@@ -35,6 +35,10 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_OP_LIST = "oplist";
 	final static public String SOCCER_DATA_YP_LIST = "yplist";
 	final static public String SOCCER_DATA_NUM_LIST = "numlist";
+	final static public String SOCCER_DATA_TEAM_LIST = "teamlist";
+	final static public String SOCCER_DATA_TEAM_SEASON = "teamrfseason";
+	final static public String SOCCER_DATA_ROUND_LIST = "roundlist";
+	final static public String SOCCER_DATA_RANK_LIST = "ranklist";
 
 	/** 北京单场 */
 	final static public String LOTTERY_BD = "bd";
@@ -68,4 +72,16 @@ public interface SoccerConstants
 	final static public String NAME_FIELD_LID = "lid";
 	final static public String NAME_FIELD_MATCHTIME = "matchtime";
 	final static public String NAME_FIELD_SEASON = "season";
+	
+	/** 图标的类型 */
+	final static public String LOGO_TYPE_LEAGUE = "league";
+	final static public String LOGO_TYPE_TEAM = "team";
+	
+	/** 球队排名的类型 */
+	final static public String RANK_TOTAL = "total";
+	final static public String RANK_HOME= "home";
+	final static public String RANK_CLIENT = "guest";
+	final static public String RANK_LATEST_6 = "r6";
+	final static public String RANK_FIRST_HALF = "firsthalf";
+	final static public String RANK_SECOND_HALF = "secondhalf";
 }

@@ -31,12 +31,16 @@ public class Rank extends AutoIdEntity
 	/***/
 	private static final long serialVersionUID = 1L;
 	
+	protected String type;				//类型
 	protected String lid;				//联赛编号
 	protected String season;			//赛季
 	protected String round;				//轮次
 	protected String teamid;			//球队编号
 	protected Integer rank;				//排名
 	protected Integer gamenum;			//比赛场次
+	protected Integer winnum;			//胜场次
+	protected Integer drawnum;
+	protected Integer losenum;
 	protected Integer score;			//总积分
 	protected Integer wingoal;			//进球数
 	protected Integer losegoal;			//失球数
@@ -44,6 +48,14 @@ public class Rank extends AutoIdEntity
 	public String getLid()
 	{
 		return lid;
+	}
+	public String getType()
+	{
+		return type;
+	}
+	public void setType(String type)
+	{
+		this.type = type;
 	}
 	public void setLid(String lid)
 	{
@@ -120,5 +132,29 @@ public class Rank extends AutoIdEntity
 	public void setRanktime(Date ranktime)
 	{
 		this.ranktime = ranktime;
+	}
+	public Integer getWinnum()
+	{
+		return winnum;
+	}
+	public void setWinnum(Integer winnum)
+	{
+		this.winnum = winnum;
+	}
+	public Integer getDrawnum()
+	{
+		return drawnum;
+	}
+	public void setDrawnum(Integer drawnum)
+	{
+		this.drawnum = drawnum;
+	}
+	public Integer getLosenum()
+	{
+		return losenum;
+	}
+	public void setLosenum(Integer losenum)
+	{
+		this.losenum = losenum;
 	}
 }

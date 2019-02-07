@@ -31,38 +31,23 @@ public class Match extends MatchItem
 	/***/
 	private static final long serialVersionUID = 1L;
 	
-	protected String mid;				//比赛编号：唯一编号
-	protected String homeid;			//主场球队编号
-	protected String clientid;			//客场球队编号
 	protected String lid;				//联赛编号
 	protected String round;				//比赛轮次
 	protected String season;			//比赛赛季
+	protected String homeid;			//主场球队编号
+	protected String clientid;			//客场球队编号
 	protected Date matchtime;			//比赛时间
 	
-	public String getMid()
+	public Match()
 	{
-		return mid;
 	}
-	public void setMid(String mid)
+	
+	public Match(String mid)
 	{
 		this.mid = mid;
 	}
-	public String getHomeid()
-	{
-		return homeid;
-	}
-	public void setHomeid(String homeid)
-	{
-		this.homeid = homeid;
-	}
-	public String getClientid()
-	{
-		return clientid;
-	}
-	public void setClientid(String clientid)
-	{
-		this.clientid = clientid;
-	}
+	
+	
 	public String getLid()
 	{
 		return lid;
@@ -86,11 +71,31 @@ public class Match extends MatchItem
 	public void setSeason(String season)
 	{
 		this.season = season;
+	}public String getHomeid()
+	{
+		return homeid;
 	}
+
+	public void setHomeid(String homeid)
+	{
+		this.homeid = homeid;
+	}
+
+	public String getClientid()
+	{
+		return clientid;
+	}
+
+	public void setClientid(String clientid)
+	{
+		this.clientid = clientid;
+	}
+
 	public Date getMatchtime()
 	{
 		return matchtime;
 	}
+
 	public void setMatchtime(Date matchtime)
 	{
 		this.matchtime = matchtime;

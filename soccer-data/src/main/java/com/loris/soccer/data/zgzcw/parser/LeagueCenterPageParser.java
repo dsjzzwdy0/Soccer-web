@@ -23,6 +23,7 @@ import com.loris.client.page.WebPage;
 import com.loris.common.wrapper.TableRecords;
 import static com.loris.soccer.constant.SoccerConstants.*;
 
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
@@ -142,7 +143,7 @@ public class LeagueCenterPageParser extends AbstractZgzcwWebPageParser
 				{			
 					Logo logo = new Logo();
 					logo.setPid(league.getLid());
-					logo.setType("league");
+					logo.setType(SoccerConstants.LOGO_TYPE_LEAGUE);
 					logo.setUrl(element2.attr("src"));
 					logos.add(logo);
 				}

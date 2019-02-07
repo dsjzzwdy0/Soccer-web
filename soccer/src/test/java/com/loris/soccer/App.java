@@ -38,14 +38,17 @@ import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.LeagueCenterPageParser;
+import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
 import com.loris.soccer.data.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.Match;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.Team;
 import com.loris.soccer.processor.HttpTaskProcessor;
 
 
@@ -71,8 +74,9 @@ public class App
 			
 			//testZgzcwWebPage();			
 			//testZgzcwOpWebPage();
+			//testZgzcwNumWebPage();
 			
-			testZgzcwNumWebPage();
+			testZgzcwLeagueWebPage();
 
 			//testMailThreadScheduler();
 			// testContext();
@@ -84,6 +88,51 @@ public class App
 		finally
 		{
 			context = null;
+		}
+	}
+	
+	/**
+	 * 创建数据主页面
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testZgzcwLeagueWebPage() throws Exception
+	{
+		Map<String, String> params = new LinkedHashMap<>();
+		params.put("lid", "37");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, params);	
+		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
+		if(!client.isInitialized())
+		{
+			client.initialize();
+		}
+		
+		if(!client.execute(null, new WebPageTask(page)))
+		{
+			logger.info("Error when downloading: " + page.getUrl());
+		}
+		
+		//logger.info(page.getContent());
+		
+		LeagueWebPageParser parser = new LeagueWebPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		int i = 1;
+		List<Match> matchs = (List<Match> )records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		for (Match match : matchs)
+		{
+			logger.info(i +++ ": " + match.getMid() + "(" + match.getMatchtime() + ")");
+		}
+		
+		List<Team> teams = (List<Team>)records.get(SoccerConstants.SOCCER_DATA_TEAM_LIST);
+		i = 1;
+		for (Team team : teams)
+		{
+			logger.info(i +++ ": " + team.getTid() + ", " + team.getName());
 		}
 	}
 	

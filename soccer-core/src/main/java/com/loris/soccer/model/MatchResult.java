@@ -38,6 +38,17 @@ public class MatchResult extends AutoIdEntity
 	protected ResultType result;		//比赛结果
 	protected Integer homegoal;			//主队进球数
 	protected Integer clientgoal;		//客队进球数
+	
+	public MatchResult()
+	{
+	}
+	
+	public MatchResult(String mid, String score)
+	{
+		this.mid = mid;
+		setScore(score);
+	}
+	
 	public String getMid()
 	{
 		return mid;
@@ -98,6 +109,30 @@ public class MatchResult extends AutoIdEntity
 		catch(Exception e)
 		{
 			//Do nothing
+		}
+	}
+	
+	/**
+	 * 检测是否是一个比赛结果数据
+	 * @param score 比赛结果字符串
+	 * @return 是否的标志
+	 */
+	public static boolean validateScore(String score)
+	{
+		String[] str = score.split(":");	
+		if(str.length != 2)
+		{
+			return false;
+		}
+		try
+		{
+			Integer.parseInt(str[0]);
+			Integer.parseInt(str[1]);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
 		}
 	}
 }

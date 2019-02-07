@@ -27,7 +27,8 @@ public class MatchItem extends AutoIdEntity
 	/***/
 	private static final long serialVersionUID = 1L;
 	
-	protected String mid;				//比赛编号
+	protected String mid;				//比赛编号：唯一编号
+	
 
 	public String getMid()
 	{
