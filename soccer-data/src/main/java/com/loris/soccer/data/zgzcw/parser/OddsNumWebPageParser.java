@@ -39,8 +39,17 @@ import com.loris.soccer.model.OddsNum;
 public class OddsNumWebPageParser extends OddsYpWebPageParser
 {
 	/**
+	 * Create a new instance of OddsYpWebPageParser
+	 */
+	public OddsNumWebPageParser()
+	{
+		super(ZgzcwConstants.PAGE_ODDS_NUM);
+	}
+	
+	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, 
+	 * 		org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
 	 */
 	@Override
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
@@ -51,8 +60,8 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			throw new WebParserException("The document is not a validate Soccer Match yp page.");
 		}
 
-		String mid = page.getParams().get("mid");
-		String mathTime = page.getParams().get("matchtime");
+		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
+		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(mathTime);
 
 		List<OddsNum> nums = new ArrayList<>();
@@ -111,10 +120,10 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		firstOdds.setWinodds(firstwinyp);
 		firstOdds.setGoalnum(getGoalNum(firsthandicap));
 		firstOdds.setLoseodds(firstloseyp);
+		firstOdds.setWinprob(homeprob);
 		firstOdds.setLoseprob(guestprob);
 		firstOdds.setWinkelly(homekelly);
 		firstOdds.setLosekelly(guestkelly);
-		firstOdds.setLossratio(lossratio);
 		firstOdds.setLossratio(lossratio);
 
 		odds.setCorpid(compid);
@@ -138,10 +147,10 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 	 * @param value 进球数
 	 * @return 球数
 	 */
-	private float getGoalNum(String value)
+	private String getGoalNum(String value)
 	{
 		value = value.replace("球", "");
-		return Float.valueOf(value);
+		return value;
 	}
 
 }

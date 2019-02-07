@@ -136,6 +136,10 @@ public class WebPage extends AutoIdEntity
 	{
 		this.params = params;
 	}
+	public String getParam(String key)
+	{
+		return params.get(key);
+	}
 	public String getProtocol()
 	{
 		return protocol;

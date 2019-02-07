@@ -173,3 +173,55 @@ public class HandicapDict
 		return -100.0f;
 	}
 }
+
+/**
+ * 让球名称与让球数的映射关系值
+ * @ClassName:  League   
+ * @Description: 让球名称与让球数的映射关系值   
+ * @author: 东方足彩
+ * @date:   2019年1月28日 下午8:59:32   
+ *     
+ * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
+ * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
+ */
+class HandicapValue
+{
+	float value;
+	String name;
+	
+	public HandicapValue()
+	{
+	}
+	
+	public HandicapValue(String name, float value)
+	{
+		this.name = name;
+		this.value = value;
+	}
+	
+	public float getValue()
+	{
+		return value;
+	}
+	public void setValue(float value)
+	{
+		this.value = value;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public boolean isSameName(String n)
+	{
+		if(name.equalsIgnoreCase(n))
+		{
+			return true;
+		}
+		return false;
+	}
+}

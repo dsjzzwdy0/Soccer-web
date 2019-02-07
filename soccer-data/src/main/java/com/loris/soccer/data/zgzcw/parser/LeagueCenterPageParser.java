@@ -28,7 +28,7 @@ import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 
 /**   
- * @ClassName:  League   
+ * @ClassName:  LeagueCenterPageParser   
  * @Description: 主页数据的解析器，解析的内容包括两部分：
  *      1. 洲际、国家的联赛、杯赛等数据
  * 		2. 每个联赛的图标数据
@@ -38,12 +38,12 @@ import com.loris.soccer.model.Logo;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LeagueMainPageParser extends AbstractZgzcwWebPageParser
+public class LeagueCenterPageParser extends AbstractZgzcwWebPageParser
 {
 	/**
 	 * Create a new instance of LeagueMainPageParser.
 	 */
-	public LeagueMainPageParser()
+	public LeagueCenterPageParser()
 	{
 		super(ZgzcwConstants.PAGE_CENTER);
 	}

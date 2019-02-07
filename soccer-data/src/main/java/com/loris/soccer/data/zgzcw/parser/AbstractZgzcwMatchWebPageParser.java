@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
+import com.loris.soccer.constant.SoccerConstants;
 
 /**   
  * @ClassName:  League   
@@ -52,7 +53,7 @@ public abstract class AbstractZgzcwMatchWebPageParser extends AbstractZgzcwWebPa
 			return false;
 		}
 		
-		String mid = page.getParams().get("mid");
+		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
 		if(StringUtils.isEmpty(mid))
 		{
 			throw new WebParserException("Error occured, the Page hasn't set the 'mid' param.");

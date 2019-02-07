@@ -37,12 +37,14 @@ import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
-import com.loris.soccer.data.zgzcw.parser.LeagueMainPageParser;
+import com.loris.soccer.data.zgzcw.parser.LeagueCenterPageParser;
+import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
 import com.loris.soccer.data.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.processor.HttpTaskProcessor;
 
@@ -67,9 +69,10 @@ public class App
 			// testQueue();			
 			//testAutowired();
 			
-			//testZgzcwWebPage();
+			//testZgzcwWebPage();			
+			//testZgzcwOpWebPage();
 			
-			testZgzcwOpWebPage();
+			testZgzcwNumWebPage();
 
 			//testMailThreadScheduler();
 			// testContext();
@@ -101,7 +104,7 @@ public class App
 		
 		client.execute(null, new WebPageTask(page));
 		
-		LeagueMainPageParser parser = new LeagueMainPageParser();
+		LeagueCenterPageParser parser = new LeagueCenterPageParser();
 		TableRecords records = parser.parse(page);
 		if(records == null)
 		{
@@ -157,6 +160,46 @@ public class App
 		{
 			logger.info(i +++ ": " + op.getCorpid() + "(" + op.getWinodds() + ", " 
 					+ op.getDrawodds() + ", " + op.getLoseodds() + ")" + op.getOpentime());
+		}
+	}
+	
+	/**
+	 * 创建数据主页面
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testZgzcwNumWebPage() throws Exception
+	{
+		Map<String, String> params = new LinkedHashMap<>();
+		params.put("mid", "2437113");
+		params.put("matchtime", "2019-02-02 14:35:00");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params);	
+		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
+		if(!client.isInitialized())
+		{
+			client.initialize();
+		}
+		
+		if(!client.execute(null, new WebPageTask(page)))
+		{
+			logger.info("Error when downloading: " + page.getUrl());
+		}
+		
+		//logger.info(page.getContent());
+		
+		OddsNumWebPageParser parser = new OddsNumWebPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		int i = 1;
+		List<OddsNum> odds = (List<OddsNum> )records.get(SoccerConstants.SOCCER_DATA_NUM_LIST);
+		for (OddsNum odd : odds)
+		{
+			logger.info(i +++ ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " 
+					+ odd.getGoalnum() + ", " + odd.getLoseodds() + ")" + odd.getOpentime());
 		}
 	}
 	

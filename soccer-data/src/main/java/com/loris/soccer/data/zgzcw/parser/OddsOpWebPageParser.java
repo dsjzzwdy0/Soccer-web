@@ -61,7 +61,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			throw new WebParserException("The document is not a validate Soccer Match op page.");
 		}
 		
-		String mid = page.getParams().get("mid");
+		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
 		List<OddsOp> ops = new ArrayList<>();		
 		for (Element element2 : elements)
 		{

@@ -16,7 +16,7 @@ import com.loris.common.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 比赛的比分数据 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -31,9 +31,7 @@ public class MatchResult extends AutoIdEntity
 		DRAW,		//平
 		LOSE		//负
 	}
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	protected String mid;				//比赛编号
@@ -71,5 +69,35 @@ public class MatchResult extends AutoIdEntity
 	public void setClientgoal(Integer clientgoal)
 	{
 		this.clientgoal = clientgoal;
+	}
+	
+	public void setScore(String score)
+	{
+		String[] str = score.split(":");	
+		if(str.length != 2)
+		{
+			return;
+		}
+		try
+		{
+			homegoal = Integer.parseInt(str[0]);
+			clientgoal = Integer.parseInt(str[1]);
+			if(homegoal > clientgoal)
+			{
+				result = ResultType.WIN;
+			}
+			else if(homegoal == clientgoal)
+			{
+				result = ResultType.DRAW;
+			}
+			else
+			{
+				result = ResultType.LOSE;
+			}
+		}
+		catch(Exception e)
+		{
+			//Do nothing
+		}
 	}
 }

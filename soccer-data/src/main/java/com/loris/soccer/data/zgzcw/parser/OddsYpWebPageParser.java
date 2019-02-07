@@ -46,9 +46,17 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 */
 	public OddsYpWebPageParser()
 	{
-		super(SoccerConstants.ODDS_TYPE_YP);
+		super(ZgzcwConstants.PAGE_ODDS_YP);
 	}
 
+	/**
+	 * Create a new instance of OddsYpWebPageParser
+	 */
+	public OddsYpWebPageParser(String acceptType)
+	{
+		super(acceptType);
+	}
+	
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -62,7 +70,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			return false;
 		}
 
-		String mathTime = page.getParams().get("matchtime");
+		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		if (StringUtils.isEmpty(mathTime))
 		{
 			throw new WebParserException("Error occured, the Page hasn't set the 'matchtime' param.");
@@ -86,8 +94,8 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			throw new WebParserException("The document is not a validate Soccer Match yp page.");
 		}
 
-		String mid = page.getParams().get("mid");
-		String mathTime = page.getParams().get("matchtime");
+		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
+		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(mathTime);
 
 		List<OddsYp> yps = new ArrayList<>();
@@ -146,10 +154,10 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		firstOdds.setWinodds(firstwinyp);
 		firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
 		firstOdds.setLoseodds(firstloseyp);
+		firstOdds.setWinprob(homeprob);
 		firstOdds.setLoseprob(guestprob);
 		firstOdds.setWinkelly(homekelly);
 		firstOdds.setLosekelly(guestkelly);
-		firstOdds.setLossratio(lossratio);
 		firstOdds.setLossratio(lossratio);
 
 		odds.setCorpid(compid);

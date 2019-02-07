@@ -62,4 +62,10 @@ public interface SoccerConstants
 
 	/** 大小球数 */
 	final static public String ODDS_TYPE_NUM = "num";
+	
+	/** 关键字名称 */
+	final static public String NAME_FIELD_MID = "mid";
+	final static public String NAME_FIELD_LID = "lid";
+	final static public String NAME_FIELD_MATCHTIME = "matchtime";
+	final static public String NAME_FIELD_SEASON = "season";
 }

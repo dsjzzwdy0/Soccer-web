@@ -19,7 +19,7 @@ import com.loris.client.parser.impl.AbstractWebPageParser;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 
 /**   
- * @ClassName:  League   
+ * @ClassName:  AbstractZgzcwWebPageParser  
  * @Description: 中国足彩网网页解析父类 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   

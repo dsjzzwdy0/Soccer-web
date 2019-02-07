@@ -25,13 +25,24 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName("soccer_odds_score")
 public class OddsScore extends MatchResult
 {
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
+	protected String type;				//类型：竞彩比分、北单比分
 	protected Float oddsvalue;			//赔率
 	protected String name;				//名称
+	protected long opentime;			//开盘时间
+	protected String source;			//数据来源: 
+	
+	public OddsScore()
+	{
+	}
+	
+	public OddsScore(String mid)
+	{
+		this.mid = mid;
+	}
+	
 	public Float getOddsvalue()
 	{
 		return oddsvalue;
@@ -47,5 +58,31 @@ public class OddsScore extends MatchResult
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+	public String getType()
+	{
+		return type;
+	}
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+	public String getSource()
+	{
+		return source;
+	}
+	public void setSource(String source)
+	{
+		this.source = source;
+	}
+
+	public long getOpentime()
+	{
+		return opentime;
+	}
+
+	public void setOpentime(long opentime)
+	{
+		this.opentime = opentime;
 	}	
 }

@@ -30,6 +30,15 @@ public class MatchBd extends IssueMatch
 	private static final long serialVersionUID = 1L;
 
 	protected String bdno;			//北单编号
+	
+	public MatchBd()
+	{
+	}
+	
+	public MatchBd(String mid)
+	{
+		this.mid = mid;
+	}
 
 	public String getBdno()
 	{

@@ -29,4 +29,12 @@ public class MatchJc extends IssueMatch
 	/***/
 	private static final long serialVersionUID = 1L;
 
+	public MatchJc()
+	{
+	}
+	
+	public MatchJc(String mid)
+	{
+		this.mid = mid;
+	}
 }

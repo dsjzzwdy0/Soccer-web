@@ -39,13 +39,17 @@ public class ZgzcwPageCreator
 	public static final String[][] PAGE_TYPES =
 	{
 		{PAGE_CENTER, 				"http://saishi.zgzcw.com/soccer/"}, 	// 数据主页面
-		{PAGE_LEAGUE_LEAGUE, 		"http://saishi.zgzcw.com/summary/liansaiAjax.action" }, // ?source_league_id=8&currentRound=3&season=2017-2018&seasonType=";//联赛类型的数据
+		{PAGE_LEAGUE_LEAGUE,    	"http://saishi.zgzcw.com/soccer/"},  	// "cup/51/2017-2018/" 杯赛类型的数据
 		{PAGE_LEAGUE_CUP,    		"http://saishi.zgzcw.com/soccer/"},  	// "cup/51/2017-2018/" 杯赛类型的数据
+		{PAGE_LEAGUE_LEAGUE_ROUND, 	"http://saishi.zgzcw.com/summary/liansaiAjax.action" }, // ?source_league_id=8&currentRound=3&season=2017-2018&seasonType=";//联赛类型的数据
 		{PAGE_LOTTERY_BD,        	"http://cp.zgzcw.com/lottery/bdplayvsforJsp.action?lotteryId=200"}, // &issue=80401 // 北单足彩
 		{PAGE_LOTTERY_JC,        	"http://cp.zgzcw.com/lottery/jchtplayvsForJsp.action?lotteryId=47&type=jcmini"}, // &issue=2018-03-25 // 竞彩足球
 		{PAGE_LOTTERY_ZC,       	"http://cp.zgzcw.com/lottery/zcplayvs.action?lotteryId=13"}, // &issue=300&v=2018-02-22" 足彩足球
+		{PAGE_SCORE_BD, 			"http://cp.zgzcw.com/lottery/bdplayvsforJsp.action?lotteryId=250"},    //&issue=
+		{PAGE_SCORE_JC, 			"http://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=23"},
 		{PAGE_ODDS_OP,      		"http://fenxi.zgzcw.com/"}, 			// 2249815/bjop /mid/bjop
 		{PAGE_ODDS_YP,      		"http://fenxi.zgzcw.com/"}, 			// 2249815/ypdb /mid/ypdb
+		{PAGE_ODDS_NUM,      		"http://fenxi.zgzcw.com/"}, 			// 2249815/ypdb /mid/dxdb
 		{"season",                  "http://saishi.zgzcw.com/soccer/"}, 	// "cup/51/2017-2018/" 杯赛类型的数据
 		{"rank",                    "http://saishi.zgzcw.com/soccer/league/"}, // lid 联赛球队排名数据获取
 		{"team",                    "http://saishi.zgzcw.com/soccer/team/"}, // tid 球队主页信息
@@ -132,6 +136,12 @@ public class ZgzcwPageCreator
 		{
 		case PAGE_ODDS_OP:				//百家OP页面
 			basicUrl += params.get("mid") + "/bjop";
+			break;
+		case PAGE_ODDS_YP:				//百家OP页面
+			basicUrl += params.get("mid") + "/ybdb";
+			break;
+		case PAGE_ODDS_NUM:
+			basicUrl += params.get("mid") + "/dxdb";
 			break;
 		default:
 			basicUrl = URLBuilder.makeDefaultUrl(basicUrl, params);

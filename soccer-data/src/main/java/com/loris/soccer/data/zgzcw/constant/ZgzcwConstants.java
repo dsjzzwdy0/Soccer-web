@@ -27,12 +27,16 @@ public interface ZgzcwConstants
 	
 	/** 数据页面名称定义 */
 	final static public String PAGE_LEAGUE_LEAGUE = "league";
+	final static public String PAGE_LEAGUE_LEAGUE_ROUND = "leagueround";
 	final static public String PAGE_LEAGUE_CUP = "cup";
 	final static public String PAGE_CENTER = "center";
 	final static public String PAGE_ODDS_OP = "op";
 	final static public String PAGE_ODDS_YP = "yp";
+	final static public String PAGE_ODDS_NUM = "num";
 	final static public String PAGE_LOTTERY_JC = "jc";
 	final static public String PAGE_LOTTERY_BD = "bd";
 	final static public String PAGE_LOTTERY_ZC = "zc";
 	final static public String PAGE_CALENDAR = "calendar";
+	final static public String PAGE_SCORE_BD = "bdscore";
+	final static public String PAGE_SCORE_JC = "jcscore";
 }

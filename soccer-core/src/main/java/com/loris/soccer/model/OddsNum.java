@@ -29,7 +29,7 @@ public class OddsNum extends OddsValue
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected Float goalnum;			//进球数
+	protected String goalnum;			//进球数
 	
 	public OddsNum()
 	{
@@ -40,12 +40,12 @@ public class OddsNum extends OddsValue
 		this.mid = mid;
 	}
 
-	public Float getGoalnum()
+	public String getGoalnum()
 	{
 		return goalnum;
 	}
 
-	public void setGoalnum(Float goalnum)
+	public void setGoalnum(String goalnum)
 	{
 		this.goalnum = goalnum;
 	}	
