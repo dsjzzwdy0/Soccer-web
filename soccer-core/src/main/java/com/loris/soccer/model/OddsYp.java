@@ -30,6 +30,15 @@ public class OddsYp extends OddsValue
 	private static final long serialVersionUID = 1L;
 	
 	protected Float handicap;			//让球数据
+	
+	public OddsYp()
+	{
+	}
+	
+	public OddsYp(String mid)
+	{
+		this.mid = mid;
+	}
 
 	public Float getHandicap()
 	{
@@ -40,6 +49,4 @@ public class OddsYp extends OddsValue
 	{
 		this.handicap = handicap;
 	}
-	
-	
 }

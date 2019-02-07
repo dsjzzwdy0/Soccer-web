@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -39,7 +38,7 @@ import com.loris.soccer.model.OddsOp;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class OddsOpWebPageParser extends AbstractZgzcwWebPageParser
+public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 {
 	/**
 	 * Create a new instance of OddsOpWebPageParser
@@ -47,27 +46,6 @@ public class OddsOpWebPageParser extends AbstractZgzcwWebPageParser
 	public OddsOpWebPageParser()
 	{
 		super(ZgzcwConstants.PAGE_ODDS_OP);
-	}
-	
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.data.zgzcw.parser.AbstractZgzcwWebPageParser#accept(com.loris.client.page.WebPage)
-	 */
-	@Override
-	protected boolean accept(WebPage page) throws WebParserException
-	{
-		if(!super.accept(page))
-		{
-			return false;
-		}
-		
-		String mid = page.getParams().get("mid");
-		if(StringUtils.isEmpty(mid))
-		{
-			throw new WebParserException("Error occured, the Page hasn't set the 'mid' param.");
-		}
-		
-		return true;
 	}
 
 	/**
@@ -111,6 +89,9 @@ public class OddsOpWebPageParser extends AbstractZgzcwWebPageParser
 	{
 		OddsOp firstOdds = new OddsOp(mid);
 		OddsOp odds = new OddsOp(mid);
+		
+		firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 		
 		String first = element.attr("firsttime");
 		String last = element.attr("lasttime");
@@ -269,7 +250,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwWebPageParser
 	{
 		if(el != null)
 		{
-			return NumberUtil.parseFloat(el.attr("data"));
+			return NumberUtil.parseFloat(el.attr(dataAttr));
 		}
 		return 0.0f;
 	}

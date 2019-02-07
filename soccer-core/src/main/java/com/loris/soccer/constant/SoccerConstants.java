@@ -33,6 +33,8 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_ODDS_NUM = "oddsnum";
 	final static public String SOCCER_DATA_LOGO_LIST = "logolist";
 	final static public String SOCCER_DATA_OP_LIST = "oplist";
+	final static public String SOCCER_DATA_YP_LIST = "yplist";
+	final static public String SOCCER_DATA_NUM_LIST = "numlist";
 
 	/** 北京单场 */
 	final static public String LOTTERY_BD = "bd";

@@ -9,44 +9,55 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.model;
-
-import com.loris.soccer.model.base.OddsValue;
+package com.loris.soccer.dict;
 
 /**   
  * @ClassName:  League   
- * @Description: 大小球盘的数据对比类   
+ * @Description: 让球数据对应关系表  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class OddsNum extends OddsValue
+public class HandicapValue
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	float value;
+	String name;
 	
-	protected Float goalnum;			//进球数
-	
-	public OddsNum()
+	public HandicapValue()
 	{
 	}
 	
-	public OddsNum(String mid)
+	public HandicapValue(String name, float value)
 	{
-		this.mid = mid;
+		this.name = name;
+		this.value = value;
 	}
-
-	public Float getGoalnum()
+	
+	public float getValue()
 	{
-		return goalnum;
+		return value;
 	}
-
-	public void setGoalnum(Float goalnum)
+	public void setValue(float value)
 	{
-		this.goalnum = goalnum;
-	}	
+		this.value = value;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public boolean isSameName(String n)
+	{
+		if(name.equalsIgnoreCase(n))
+		{
+			return true;
+		}
+		return false;
+	}
 }
