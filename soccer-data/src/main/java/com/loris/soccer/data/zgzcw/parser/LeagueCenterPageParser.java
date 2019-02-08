@@ -25,6 +25,7 @@ import static com.loris.soccer.constant.SoccerConstants.*;
 
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 

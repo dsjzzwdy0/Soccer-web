@@ -37,8 +37,8 @@ import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LeagueCenterPageParser;
-import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
@@ -99,8 +99,8 @@ public class App
 	public static void testZgzcwLeagueWebPage() throws Exception
 	{
 		Map<String, String> params = new LinkedHashMap<>();
-		params.put("lid", "37");
-		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, params);	
+		params.put("lid", "83");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_CUP, params);	
 		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
 		if(!client.isInitialized())
 		{
@@ -114,7 +114,7 @@ public class App
 		
 		//logger.info(page.getContent());
 		
-		LeagueWebPageParser parser = new LeagueWebPageParser();
+		CupWebPageParser parser = new CupWebPageParser();
 		TableRecords records = parser.parse(page);
 		if(records == null)
 		{

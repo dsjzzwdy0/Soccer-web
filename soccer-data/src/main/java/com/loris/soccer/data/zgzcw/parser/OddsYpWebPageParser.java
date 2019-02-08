@@ -27,6 +27,7 @@ import com.loris.common.util.NumberUtil;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
 import com.loris.soccer.dict.HandicapDict;
 import com.loris.soccer.model.OddsYp;
 
@@ -60,7 +61,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.loris.soccer.data.zgzcw.parser.AbstractZgzcwWebPageParser#accept(com.loris.client.page.WebPage)
+	 * @see com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser#accept(com.loris.client.page.WebPage)
 	 */
 	@Override
 	protected boolean accept(WebPage page) throws WebParserException

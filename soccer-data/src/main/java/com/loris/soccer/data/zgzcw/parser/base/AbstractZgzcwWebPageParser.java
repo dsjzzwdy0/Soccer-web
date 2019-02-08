@@ -9,41 +9,48 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.zgzcw.parser;
+package com.loris.soccer.data.zgzcw.parser.base;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.page.WebPage;
-import com.loris.soccer.constant.SoccerConstants;
+import com.loris.client.parser.impl.AbstractWebPageParser;
+import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 
 /**   
- * @ClassName:  League   
- * @Description: 比赛数据页面的解析类,如百家欧赔、亚盘对比、大小对比、比赛历史等   
+ * @ClassName:  AbstractZgzcwWebPageParser  
+ * @Description: 中国足彩网网页解析父类 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public abstract class AbstractZgzcwMatchWebPageParser extends AbstractZgzcwWebPageParser
+public abstract class AbstractZgzcwWebPageParser extends AbstractWebPageParser
 {
-	final static String dataAttr = "data";
-	final static String compIdAttr = "cid";
+	/** 接受的类型 */
+	protected String acceptType = null;
 	
-	
-	public AbstractZgzcwMatchWebPageParser()
-	{		
+	/**
+	 * Create a new instance of AbstractZgzcwWebPageParser
+	 */
+	public AbstractZgzcwWebPageParser()
+	{
 	}
 	
-	public AbstractZgzcwMatchWebPageParser(String acceptType)
+	/**
+	 * Create a new instance of AbstractZgzcwWebPageParser
+	 * @param acceptType
+	 */
+	public AbstractZgzcwWebPageParser(String acceptType)
 	{
-		super(acceptType);
+		this.acceptType = acceptType;
 	}
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.data.zgzcw.parser.AbstractZgzcwWebPageParser#accept(com.loris.client.page.WebPage)
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#accept(com.loris.client.page.WebPage)
 	 */
 	@Override
 	protected boolean accept(WebPage page) throws WebParserException
@@ -53,12 +60,15 @@ public abstract class AbstractZgzcwMatchWebPageParser extends AbstractZgzcwWebPa
 			return false;
 		}
 		
-		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
-		if(StringUtils.isEmpty(mid))
+		if(!ZgzcwConstants.SOURCE_ZGZCW.equalsIgnoreCase(page.getSource()))
 		{
-			throw new WebParserException("Error occured, the Page hasn't set the 'mid' param.");
+			return false;
 		}
 		
+		if(StringUtils.isNotEmpty(acceptType) && !acceptType.equalsIgnoreCase(page.getType()))
+		{
+			return false;
+		}
 		return true;
 	}
 }

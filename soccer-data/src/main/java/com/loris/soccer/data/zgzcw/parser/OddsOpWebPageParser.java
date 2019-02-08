@@ -27,6 +27,7 @@ import com.loris.common.util.URLParser;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
 import com.loris.soccer.model.OddsOp;
 
 /**   
