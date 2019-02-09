@@ -38,7 +38,7 @@ import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
-import com.loris.soccer.data.zgzcw.parser.LeagueCenterPageParser;
+import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
@@ -153,7 +153,7 @@ public class App
 		
 		client.execute(null, new WebPageTask(page));
 		
-		LeagueCenterPageParser parser = new LeagueCenterPageParser();
+		CenterPageParser parser = new CenterPageParser();
 		TableRecords records = parser.parse(page);
 		if(records == null)
 		{

@@ -40,12 +40,12 @@ import com.loris.soccer.model.Logo;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LeagueCenterPageParser extends AbstractZgzcwWebPageParser
+public class CenterPageParser extends AbstractZgzcwWebPageParser
 {
 	/**
 	 * Create a new instance of LeagueMainPageParser.
 	 */
-	public LeagueCenterPageParser()
+	public CenterPageParser()
 	{
 		super(ZgzcwConstants.PAGE_CENTER);
 	}

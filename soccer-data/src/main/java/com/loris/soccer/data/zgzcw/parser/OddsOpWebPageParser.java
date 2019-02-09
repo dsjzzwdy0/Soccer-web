@@ -66,15 +66,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		List<OddsOp> ops = new ArrayList<>();		
 		for (Element element2 : elements)
 		{
-			try
-			{
-				parseOdds(element2, mid, ops);
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-				//Do nothing.
-			}
+			parseOdds(element2, mid, ops);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_OP_LIST, ops);
 		return results;

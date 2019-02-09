@@ -64,8 +64,6 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		String season = page.getParams().get(SoccerConstants.NAME_FIELD_SEASON);
 		String round = null;
 		
-		Element element = null;
-		
 		if(StringUtils.isEmpty(season))
 		{
 			season = parseFirstSeasonInfo(document);
@@ -89,8 +87,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		parseMatchs(document, lid, season, round, matchs, matchResults, logos);
 		
 		// 球队的排名情况
-		element = document.selectFirst(".league .league_right #hideList .table_out");
-		parseRanks(element, lid, season, round, ranks);
+		parseRanks(document, lid, season, round, ranks);
 		
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_LIST, teams);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_SEASON, teamRfSeasons);
@@ -178,10 +175,11 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 	 * @param round
 	 * @param ranks
 	 */
-	protected void parseRanks(Element element, String lid, String season, String round, List<Rank> ranks)
+	protected void parseRanks(Document document, String lid, String season, String round, List<Rank> ranks)
 	{
 		// 球队的排名情况
-		Elements elements = element.select(".tabs1_main_ul");
+		Elements elements = document.select(".league .league_right #hideList .table_out .tabs1_main_ul");
+		
 		String type = SoccerConstants.RANK_TOTAL;
 		parseRanks(elements.get(0), type, lid, season, round, ranks);
 		
