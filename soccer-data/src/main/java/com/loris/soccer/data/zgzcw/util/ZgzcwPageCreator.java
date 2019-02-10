@@ -131,8 +131,8 @@ public class ZgzcwPageCreator
 			page.setParams(params);
 		}
 
-		String basicUrl = PAGE_TYPES[typeIndex][1];
 		String type = PAGE_TYPES[typeIndex][0];
+		String basicUrl = PAGE_TYPES[typeIndex][1];
 		switch (type)
 		{
 		case PAGE_LEAGUE_LEAGUE:

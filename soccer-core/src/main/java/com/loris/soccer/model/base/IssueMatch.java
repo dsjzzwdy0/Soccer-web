@@ -11,7 +11,7 @@
  */
 package com.loris.soccer.model.base;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**   
  * @ClassName:  League   
@@ -28,14 +28,11 @@ public class IssueMatch extends MatchItem
 	private static final long serialVersionUID = 1L;
 
 	protected String issue;					//比赛期号
+	protected String ordinary;				//序号
 	protected Date closetime;				//投注截止时间
 	protected Float winodds;				//胜赔率
 	protected Float drawodds;				//平赔率
 	protected Float loseodds;				//负赔率
-	protected boolean opened;				//是否受注
-	protected Float rqwinodds;				//让球胜赔率
-	protected Float rqdrawodds;				//让球平赔率
-	protected Float rqloseodds;				//让球负赔率
 	protected Integer rqnum;				//让球数
 	protected boolean rqopened;				//让球是否受注
 	protected boolean delayed;				//是否延期
@@ -48,6 +45,14 @@ public class IssueMatch extends MatchItem
 	public void setIssue(String issue)
 	{
 		this.issue = issue;
+	}
+	public String getOrdinary()
+	{
+		return ordinary;
+	}
+	public void setOrdinary(String ordinary)
+	{
+		this.ordinary = ordinary;
 	}
 	public Date getClosetime()
 	{
@@ -80,38 +85,6 @@ public class IssueMatch extends MatchItem
 	public void setLoseodds(Float loseodds)
 	{
 		this.loseodds = loseodds;
-	}
-	public boolean isOpened()
-	{
-		return opened;
-	}
-	public void setOpened(boolean opened)
-	{
-		this.opened = opened;
-	}
-	public Float getRqwinodds()
-	{
-		return rqwinodds;
-	}
-	public void setRqwinodds(Float rqwinodds)
-	{
-		this.rqwinodds = rqwinodds;
-	}
-	public Float getRqdrawodds()
-	{
-		return rqdrawodds;
-	}
-	public void setRqdrawodds(Float rqdrawodds)
-	{
-		this.rqdrawodds = rqdrawodds;
-	}
-	public Float getRqloseodds()
-	{
-		return rqloseodds;
-	}
-	public void setRqloseodds(Float rqloseodds)
-	{
-		this.rqloseodds = rqloseodds;
 	}
 	public Integer getRqnum()
 	{

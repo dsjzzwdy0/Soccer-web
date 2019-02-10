@@ -16,7 +16,7 @@ import com.loris.soccer.model.base.IssueMatch;
 
 /**   
  * @ClassName:  League   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 北单比赛数据  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -29,7 +29,7 @@ public class MatchBd extends IssueMatch
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	protected String bdno;			//北单编号
+	protected String bdno;			//北单期号
 	
 	public MatchBd()
 	{
@@ -47,5 +47,14 @@ public class MatchBd extends IssueMatch
 	public void setBdno(String bdno)
 	{
 		this.bdno = bdno;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "MatchBd [bdno=" + bdno + ", issue=" + issue + ", ordinary=" + ordinary + ", closetime=" + closetime
+				+ ", winodds=" + winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum
+				+ ", rqopened=" + rqopened + ", delayed=" + delayed + ", delaytime=" + delaytime + ", mid=" + mid
+				+ ", id=" + id + "]";
 	}
 }

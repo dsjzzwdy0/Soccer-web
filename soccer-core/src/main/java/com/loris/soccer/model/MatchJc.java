@@ -28,6 +28,11 @@ public class MatchJc extends IssueMatch
 {
 	/***/
 	private static final long serialVersionUID = 1L;
+	
+	protected boolean opened;				//正常比分是否受注
+	protected Float rqwinodds;				//让球胜赔率
+	protected Float rqdrawodds;				//让球平赔率
+	protected Float rqloseodds;				//让球负赔率
 
 	public MatchJc()
 	{
@@ -36,5 +41,46 @@ public class MatchJc extends IssueMatch
 	public MatchJc(String mid)
 	{
 		this.mid = mid;
+	}
+	public boolean isOpened()
+	{
+		return opened;
+	}
+	public void setOpened(boolean opened)
+	{
+		this.opened = opened;
+	}
+	public Float getRqwinodds()
+	{
+		return rqwinodds;
+	}
+	public void setRqwinodds(Float rqwinodds)
+	{
+		this.rqwinodds = rqwinodds;
+	}
+	public Float getRqdrawodds()
+	{
+		return rqdrawodds;
+	}
+	public void setRqdrawodds(Float rqdrawodds)
+	{
+		this.rqdrawodds = rqdrawodds;
+	}
+	public Float getRqloseodds()
+	{
+		return rqloseodds;
+	}
+	public void setRqloseodds(Float rqloseodds)
+	{
+		this.rqloseodds = rqloseodds;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "MatchJc [opened=" + opened + ", rqwinodds=" + rqwinodds + ", rqdrawodds=" + rqdrawodds + ", rqloseodds="
+				+ rqloseodds + ", issue=" + issue + ", ordinary=" + ordinary + ", closetime=" + closetime + ", winodds="
+				+ winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum + ", rqopened="
+				+ rqopened + ", delayed=" + delayed + ", delaytime=" + delaytime + ", mid=" + mid + ", id=" + id + "]";
 	}
 }

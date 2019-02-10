@@ -11,9 +11,13 @@
  */
 package com.loris.soccer.data.zgzcw.parser.base;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 /**   
  * @ClassName:  AbstractLotteryWebPageParser  
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 开盘数据的解析类 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -22,6 +26,10 @@ package com.loris.soccer.data.zgzcw.parser.base;
  */
 public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageParser
 {
+	/** 日期格式数据 */
+	protected String dataFormat = "\\d{4}[-]\\d{2}[-]\\d{2}";
+	
+	
 	/**
 	 * Create a new instance of AbstractLotteryWebPageParser
 	 * @param acceptType
@@ -29,5 +37,26 @@ public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageP
 	public AbstractLotteryWebPageParser(String acceptType)
 	{
 		super(acceptType);
+	}
+	
+	/**
+	 * 解析比赛期号
+	 * 
+	 * @param document
+	 * @return issue value.
+	 */
+	protected String parseIssueElement(Document document)
+	{
+		Element issueElement = document.selectFirst(".tz-condition .qici #selectissue");
+		Elements elements = issueElement.children();
+		for (Element element : elements)
+		{
+			if (element.hasAttr("selected"))
+			{
+				String issue = element.attr("value");
+				return issue;
+			}
+		}
+		return "";
 	}
 }

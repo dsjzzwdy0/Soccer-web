@@ -594,4 +594,16 @@ public class DateUtil
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * 按照给定的格式解析日期数据
+	 * @param value 时间
+	 * @param format 格式
+	 * @return 解析之后 的数据
+	 * @throws ParseException
+	 */
+	public static Date parse(String value, String format) throws ParseException
+	{
+		return new SimpleDateFormat(format).parse(value);
+	}
 }

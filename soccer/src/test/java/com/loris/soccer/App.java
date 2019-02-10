@@ -38,6 +38,8 @@ import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
@@ -46,6 +48,8 @@ import com.loris.soccer.data.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
+import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.Team;
@@ -71,12 +75,13 @@ public class App
 			// testSetting();
 			// testQueue();			
 			//testAutowired();
-			
 			//testZgzcwWebPage();			
 			//testZgzcwOpWebPage();
 			//testZgzcwNumWebPage();
+			//testZgzcwLeagueWebPage();
+			//testBdWebPage();
 			
-			testZgzcwLeagueWebPage();
+			testJcWebPage();
 
 			//testMailThreadScheduler();
 			// testContext();
@@ -92,24 +97,82 @@ public class App
 	}
 	
 	/**
+	 * 测试竞彩页面
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testJcWebPage() throws Exception
+	{		
+		Map<String, String> params = new LinkedHashMap<>();
+		params.put(SoccerConstants.NAME_FIELD_ISSUE, "2019-02-02");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC, params);
+		
+		if(!getWebPage(page))
+		{
+			return;
+		}
+		
+		LotteryJcWebPageParser parser = new LotteryJcWebPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		List<MatchJc> matchJcs = (List<MatchJc>)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		
+		int i = 1;
+		for (MatchJc matchJc : matchJcs)
+		{
+			logger.info(i +++ ": " + matchJc);
+		}
+	}
+	
+	/**
+	 * 测试北单页面
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testBdWebPage() throws Exception
+	{		
+		Map<String, String> params = new LinkedHashMap<>();
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD, params);
+		
+		if(!getWebPage(page))
+		{
+			return;
+		}
+		
+		LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		List<MatchBd> matchBds = (List<MatchBd>)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
+		
+		int i = 1;
+		for (MatchBd matchBd : matchBds)
+		{
+			logger.info(i +++ ": " + matchBd);
+		}
+	}
+	
+	/**
 	 * 创建数据主页面
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static void testZgzcwLeagueWebPage() throws Exception
-	{
+	{		
 		Map<String, String> params = new LinkedHashMap<>();
 		params.put("lid", "83");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_CUP, params);	
-		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
-		if(!client.isInitialized())
+
+		if(!getWebPage(page))
 		{
-			client.initialize();
-		}
-		
-		if(!client.execute(null, new WebPageTask(page)))
-		{
-			logger.info("Error when downloading: " + page.getUrl());
+			return;
 		}
 		
 		//logger.info(page.getContent());
@@ -145,13 +208,11 @@ public class App
 	public static void testZgzcwWebPage() throws Exception
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER, null);	
-		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
-		if(!client.isInitialized())
+
+		if(!getWebPage(page))
 		{
-			client.initialize();
+			return;
 		}
-		
-		client.execute(null, new WebPageTask(page));
 		
 		CenterPageParser parser = new CenterPageParser();
 		TableRecords records = parser.parse(page);
@@ -183,15 +244,10 @@ public class App
 		Map<String, String> params = new LinkedHashMap<>();
 		params.put("mid", "2432303");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params);	
-		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
-		if(!client.isInitialized())
+
+		if(!getWebPage(page))
 		{
-			client.initialize();
-		}
-		
-		if(!client.execute(null, new WebPageTask(page)))
-		{
-			logger.info("Error when downloading: " + page.getUrl());
+			return;
 		}
 		
 		//logger.info(page.getContent());
@@ -223,15 +279,10 @@ public class App
 		params.put("mid", "2437113");
 		params.put("matchtime", "2019-02-02 14:35:00");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params);	
-		HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin");
-		if(!client.isInitialized())
+
+		if(!getWebPage(page))
 		{
-			client.initialize();
-		}
-		
-		if(!client.execute(null, new WebPageTask(page)))
-		{
-			logger.info("Error when downloading: " + page.getUrl());
+			return;
 		}
 		
 		//logger.info(page.getContent());
@@ -363,6 +414,24 @@ public class App
 			}
 		}
 		logger.info(DashBoard.print());
+	}
+	
+	private static boolean getWebPage(WebPage page) throws Exception
+	{
+		try(HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin"))
+		{
+			if(!client.isInitialized())
+			{
+				client.initialize();
+			}
+			
+			if(!client.execute(null, new WebPageTask(page)))
+			{
+				logger.info("Error when downloading: " + page.getUrl());
+				return false;
+			}
+			return true;
+		}		
 	}
 
 	/**
