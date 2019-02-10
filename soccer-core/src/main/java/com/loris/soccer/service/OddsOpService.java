@@ -48,4 +48,9 @@ public interface OddsOpService extends IService<OddsOp>
 	 * @return 是否成功的标志
 	 */
 	boolean insertOddsOp(List<OddsOp> ops);
+	
+	/**
+	 * 更新数据列表
+	 */
+	void updateOpList();
 }

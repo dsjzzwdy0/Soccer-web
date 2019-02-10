@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,5 +63,21 @@ public class UserController
 		
 		oddsOpService.save(op);
 		return Rest.okData(op);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/users")
+	public Rest getAllUsers()
+	{
+		List<OddsOp> ops = oddsOpService.selectOddsOp("10");
+		return Rest.okData(ops);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/update")
+	public Rest updateUsers()
+	{
+		oddsOpService.updateOpList();
+		return Rest.ok();
 	}
 }

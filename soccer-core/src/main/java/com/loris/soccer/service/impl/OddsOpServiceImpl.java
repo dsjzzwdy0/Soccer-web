@@ -13,17 +13,20 @@ package com.loris.soccer.service.impl;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.OddsOpMapper;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsOpService;
 
 /**   
  * @ClassName:  OddsOpServiceImpl   
- * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @Description: 更新数据时使用 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:33:53   
  *     
@@ -38,6 +41,8 @@ public class OddsOpServiceImpl extends ServiceImpl<OddsOpMapper, OddsOp> impleme
 	 * @param mid 比赛编号
 	 * @return 欧赔数据列表
 	 */
+	@Override
+	@Cacheable(value=SoccerConstants.CAHE_ODDS_NAME, key="#mid")
 	public List<OddsOp> selectOddsOp(String mid)
 	{
 		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
@@ -51,6 +56,8 @@ public class OddsOpServiceImpl extends ServiceImpl<OddsOpMapper, OddsOp> impleme
 	 * @param corpid 博彩公司编号
 	 * @return 欧赔数据列且
 	 */
+	@Override
+	@Cacheable(value=SoccerConstants.CAHE_ODDS_NAME, key="#mid,#corpid")
 	public List<OddsOp> selectOddsOp(String mid, String corpid)
 	{
 		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
@@ -66,5 +73,15 @@ public class OddsOpServiceImpl extends ServiceImpl<OddsOpMapper, OddsOp> impleme
 	public boolean insertOddsOp(List<OddsOp> ops)
 	{
 		return false;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsOpService#updateOpList()
+	 */
+	@Override
+	@CacheEvict(value=SoccerConstants.CAHE_ODDS_NAME, allEntries=true, beforeInvocation=true)
+	public void updateOpList()
+	{
 	}
 }

@@ -17,7 +17,7 @@
 		<java.version>1.8</java.version>
 		<shiro.version>1.4.0</shiro.version>
 		<kaptcha.version>2.3</kaptcha.version>
-		<ehcache.version>3.3.1</ehcache.version>
+		<ehcache.version>2.10.6</ehcache.version>
 		<beetl.version>2.9.3</beetl.version>
 		<swagger.version>2.9.2</swagger.version>
 		<ehcache.core.version>3.6.3</ehcache.core.version>
@@ -32,7 +32,6 @@
 		<mybatisplus.version>3.0.7.1</mybatisplus.version>
 		<hutool.version>4.1.2</hutool.version>
 		<dbcp.version>1.4</dbcp.version>
-		<ehcache.version>2.6.11</ehcache.version>
 		<aspectj.version>1.9.2</aspectj.version>
 		<htmlunit.version>2.33</htmlunit.version>
 		<httpclient.version>3.1</httpclient.version>
@@ -336,6 +335,13 @@
 				<artifactId>commons-digester</artifactId>
 				<version>1.8.1</version>
 			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache -->
+			<dependency>
+			    <groupId>net.sf.ehcache</groupId>
+			    <artifactId>ehcache</artifactId>
+			    <version>${ehcache.version}</version>
+			</dependency>		
 
 			<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
 			<dependency>
