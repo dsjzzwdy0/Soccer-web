@@ -320,7 +320,7 @@ public class App
 	 * 
 	 * @throws Exception
 	 */
-	public static void testMailThreadScheduler() throws Exception
+	public static void testMainThreadScheduler() throws Exception
 	{
 		MainTaskScheduler scheduler = new MainTaskScheduler();
 		scheduler.setMaxActiveTaskThread(1);

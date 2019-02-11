@@ -13,8 +13,10 @@ package com.loris.client.task;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventListener;
@@ -223,9 +225,22 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		}
 		else if (taskType == TaskEventType.Error)
 		{
-			taskQueue.pushBack(task);
-			removeRunningTask(task);
-			logger.info("Error occured when excuting " + task.getName() + ", push back to TaskQueue.");
+			Throwable throwable = event.getError();
+			if(throwable instanceof HostForbiddenException)      //如果是被禁止，则停止当前的类型的数据
+			{
+				String type = task.getType();
+				if(StringUtils.isNotEmpty(type))
+				{
+					logger.info("The host forbidden the client to get data, remove all '" + type + "' task to be executed.");
+					taskQueue.removeByType(type);
+				}
+			}
+			else
+			{
+				logger.info("Error occured when excuting " + task.getName() + ", push back to TaskQueue.");				
+				taskQueue.pushBack(task);
+				removeRunningTask(task);
+			}					
 		}
 	}
 
@@ -281,8 +296,7 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 				// 如果设置停止标志，则中断执行线程
 				if (isStopped())
 				{
-					logger.info(
-							"The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interupped now.");
+					logger.info("The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interupped now.");
 					return;
 				}
 			}
@@ -492,5 +506,35 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.context.TaskPluginContext#getTaskVector()
+	 */
+	@Override
+	public TaskVector getTaskVector()
+	{
+		return this;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.TaskVector#removeTask(java.lang.String)
+	 */
+	@Override
+	public void removeTask(String name)
+	{
+		taskQueue.removeByName(name);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.TaskVector#removeTaskByType(java.lang.String)
+	 */
+	@Override
+	public void removeTaskByType(String type)
+	{
+		taskQueue.removeByType(type);
 	}
 }

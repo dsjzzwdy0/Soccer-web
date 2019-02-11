@@ -104,7 +104,8 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 *  (non-Javadoc)
 	 * @see java.io.Closeable#close()
 	 */
 	@Override
@@ -116,12 +117,15 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 		}
 	}
 	
+	/**
+	 * 初始化任务的处理
+	 */
 	@Override
 	public void initialize() throws IOException
 	{
 		for (TaskProducePlugin plugin : plugins)
 		{
-			plugin.intialize();
+			plugin.intialize(context);
 		}
 	}
 }

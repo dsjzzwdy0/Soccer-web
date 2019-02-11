@@ -284,7 +284,7 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable, Cl
 	{
 		for (TaskPostProcessPlugin plugin : plugins)
 		{
-			plugin.intialize();
+			plugin.intialize(context);
 		}	
 	}
 }

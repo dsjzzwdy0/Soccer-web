@@ -29,13 +29,13 @@ public interface Task extends Comparable<Task>
 	void setName(String name);
 	
 	/**
-	 * 名称
+	 * 获得任务的名称，在这里名称应该是系统中唯一的名称
 	 * @return
 	 */
 	String getName();
 	
 	/**
-	 * 返回任务的类型
+	 * 获得任务的类型
 	 * @return
 	 */
 	String getType();

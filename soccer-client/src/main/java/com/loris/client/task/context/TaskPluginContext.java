@@ -15,6 +15,7 @@ import com.loris.client.task.MainTaskScheduler;
 import com.loris.client.task.TaskPostProcessor;
 import com.loris.client.task.TaskProcessor;
 import com.loris.client.task.TaskProducer;
+import com.loris.client.task.TaskVector;
 
 /**   
  * @ClassName:  TaskPluginContext  
@@ -50,4 +51,10 @@ public interface TaskPluginContext
 	 * @return
 	 */
 	TaskProducer getTaskProducer();
+	
+	/**
+	 * 获得任务的容器环境
+	 * @return
+	 */
+	TaskVector getTaskVector();
 }

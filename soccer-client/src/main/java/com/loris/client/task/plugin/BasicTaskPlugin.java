@@ -86,8 +86,7 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	 * @see com.loris.client.task.plugin.TaskPlugin#intialize()
 	 */
 	@Override
-	public void intialize()  throws IOException
-	{		
+	public void intialize(TaskPluginContext context)  throws IOException
+	{
 	}
-
 }

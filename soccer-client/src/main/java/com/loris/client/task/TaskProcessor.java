@@ -160,7 +160,7 @@ public class TaskProcessor extends TaskEventProducer implements Closeable
 	{
 		for (TaskProcessPlugin plugin : plugins)
 		{
-			plugin.intialize();
+			plugin.intialize(context);
 		}
 	}
 }

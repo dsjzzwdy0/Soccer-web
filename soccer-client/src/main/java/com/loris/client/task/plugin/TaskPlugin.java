@@ -59,5 +59,5 @@ public interface TaskPlugin extends Closeable
 	/**
 	 * 运行环境初始化
 	 */
-	void intialize() throws IOException;
+	void intialize(TaskPluginContext context) throws IOException;
 }

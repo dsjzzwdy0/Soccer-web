@@ -12,6 +12,7 @@
 package com.loris.client.task.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -109,6 +110,40 @@ public class TaskQueue extends PriorityQueue<Task>
 	public int left()
 	{
 		return this.size();
+	}
+	
+	/**
+	 * 通过名称删除元素
+	 * @param name
+	 */
+	public void removeByName(String name)
+	{
+		Iterator<Task> it = this.iterator();
+		while (it.hasNext())
+		{
+			Task task = it.next();
+			if (name.equals(task.getName()))
+			{
+				it.remove();
+			}
+		}
+	}
+	
+	/**
+	 * 通过名称删除元素
+	 * @param name
+	 */
+	public void removeByType(String type)
+	{
+		Iterator<Task> it = this.iterator();
+		while (it.hasNext())
+		{
+			Task task = it.next();
+			if (type.equals(task.getType()))
+			{
+				it.remove();
+			}
+		}
 	}
 	
 	/**
