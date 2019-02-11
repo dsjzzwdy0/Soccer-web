@@ -160,9 +160,10 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 	}
 
 	/**
-	 * @param match
-	 * @param type
-	 * @param element
+	 * 解析赔率数据与比赛信息
+	 * @param match 比赛数据
+	 * @param type 类型，0表示未让球、1表示让球的赔率
+	 * @param element DOM元素
 	 */
 	protected void processOddsValue(Element element, int type, MatchJc match)
 	{
