@@ -72,7 +72,7 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	private TaskProducer taskProducer;
 
 	/** 任务处理工具类 */
-	private TaskProcessor taskProcessor;
+	private TaskExecutor taskExecutor;
 
 	/** 任务后处理工具 */
 	private TaskPostProcessor taskPostProcessor;
@@ -92,8 +92,8 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		idleThreadInfo = new IdleThreadInfo(this, maxActiveTaskThread);
 		taskProducer = new TaskProducer(this);
 		taskProducer.addTaskEventListener(this);
-		taskProcessor = new TaskProcessor(this);
-		taskProcessor.addTaskEventListener(this);
+		taskExecutor = new TaskExecutor(this);
+		taskExecutor.addTaskEventListener(this);
 		taskPostProcessor = new TaskPostProcessor(this);
 		taskPostProcessor.addTaskEventListener(this);
 	}
@@ -104,9 +104,9 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	 */
 	protected void initialize() throws IOException
 	{
-		taskPostProcessor.initialize();
-		taskProcessor.initialize();
-		taskProducer.initialize();
+		taskPostProcessor.initialize(this);
+		taskExecutor.initialize(this);
+		taskProducer.initialize(this);
 	}
 
 	/**
@@ -159,9 +159,9 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	protected void startNewTaskThread(Task task)
 	{
 		// 设置监听器,将会启动一个新的线程来完成任务
-		if (taskProcessor != null)
+		if (taskExecutor != null)
 		{
-			taskProcessor.process(task);
+			taskExecutor.process(task);
 		}
 		else
 		{
@@ -172,26 +172,16 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	/**
 	 * 启动任务后处理线程
 	 */
-	protected void startTaskPostProcessThread()
+	protected void startTaskPostProcess(Task task)
 	{
-		if (taskPostProcessor == null)
+		try
 		{
-			return;
+			taskPostProcessor.execute(task);
 		}
-
-		// 结束还没有
-		while (taskPostProcessor.isFinished() && taskPostProcessor.isRunning())
+		catch(Exception e)
 		{
-			logger.info("Waiting for TaskPostProcess to end.");
-			// 等待一秒再进行下一步
-			ThreadUtil.sleep(1000);
+			e.printStackTrace();
 		}
-		taskPostProcessor.setFinished(false);
-
-		// 重新启动新的线程
-		Thread thread = new Thread(taskPostProcessor);
-		thread.setDaemon(false);
-		thread.start();
 	}
 
 	/**
@@ -217,11 +207,11 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		else if (taskType == TaskEventType.Finished)
 		{
 			removeRunningTask(task);
+			logger.info("Finished to excute " + task.getName());
 			if (taskPostProcessor != null)
 			{
-				taskPostProcessor.add(task);
+				startTaskPostProcess(task);
 			}
-			logger.info("Finished to excute " + task.getName());
 		}
 		else if (taskType == TaskEventType.Error)
 		{
@@ -263,7 +253,7 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		try
 		{
 			// 启动任务产生器
-			if (taskProducer != null && !taskProducer.isInitialized())
+			if (taskProducer != null)
 			{
 				// 执行任务产生器
 				// 这里不用线程启动，而是直接等待任务产生完成之后再启动线程
@@ -273,9 +263,6 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 			// 输出任务总的信息
 			logger.info("TaskScheduler " + getName() + " has " + taskQueue.total() + " task and left "
 					+ taskQueue.left() + " to be processed.");
-
-			// 启动任务后处理程序
-			startTaskPostProcessThread();
 
 			// 处理任务
 			while (hasMoreTask())
@@ -296,7 +283,7 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 				// 如果设置停止标志，则中断执行线程
 				if (isStopped())
 				{
-					logger.info("The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interupped now.");
+					logger.info("The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interrupted now.");
 					return;
 				}
 			}
@@ -314,11 +301,6 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	 */
 	protected void finish()
 	{
-		if (taskPostProcessor != null)
-		{
-			taskPostProcessor.finish();
-		}
-
 		logger.info("MainTashScheduler[" + getName() + "] has been finished, exit now");
 	}
 
@@ -368,8 +350,8 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		taskQueue = null;
 		taskPostProcessor.close();
 		taskPostProcessor = null;
-		taskProcessor.close();
-		taskProcessor = null;
+		taskExecutor.close();
+		taskExecutor = null;
 		taskProducer.close();
 		taskProducer = null;
 	}
@@ -436,15 +418,15 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		this.taskProducer = tasksProducer;
 	}
 
-	public TaskProcessor getTaskProcessor()
+	public TaskExecutor getTaskProcessor()
 	{
-		return taskProcessor;
+		return taskExecutor;
 	}
 
-	public void setTaskProcessor(TaskProcessor taskProcessor)
+	public void setTaskProcessor(TaskExecutor taskProcessor)
 	{
 		taskProcessor.addTaskEventListener(this);
-		this.taskProcessor = taskProcessor;
+		this.taskExecutor = taskProcessor;
 	}
 
 	public TaskPostProcessor getTaskPostProcessor()
@@ -536,5 +518,15 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	public void removeTaskByType(String type)
 	{
 		taskQueue.removeByType(type);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.context.TaskPluginContext#getTaskEventListener()
+	 */
+	@Override
+	public TaskEventListener getTaskEventListener()
+	{
+		return this;
 	}
 }

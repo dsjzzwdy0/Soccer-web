@@ -11,10 +11,13 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
 import com.loris.client.task.event.TaskEventListener;
@@ -29,20 +32,7 @@ import com.loris.client.task.event.TaskEventListener;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProducePlugin
-{	
-	/** 是否已经初始化的标志 */
-	private boolean initialized = false;
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.task.plugin.TaskProducePlugin#isInitialized()
-	 */
-	@Override
-	public boolean isInitialized()
-	{
-		return initialized;
-	}
-
+{
 	/**
 	 *  (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskProducePlugin#removeTaskEventListner(com.loris.client.task.event.TaskEventListener)
@@ -78,7 +68,7 @@ public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProdu
 	 * @see com.loris.client.task.plugin.TaskProducePlugin#produce()
 	 */
 	@Override
-	public void produce()
+	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
 		//System.out.println("产生新的任务");
 		for(int i = 0; i < 30; i ++)
@@ -89,11 +79,10 @@ public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProdu
 			
 			notifyTaskEvent(new TaskEvent(task, TaskEventType.Created));
 		}
-		
-		initialized = true;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 *  (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskPlugin#isFit(com.loris.client.task.Task)
 	 */
 	@Override
@@ -102,4 +91,13 @@ public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProdu
 		throw new UnsupportedOperationException("This is not used for TaskProducePlugin.");
 	}
 
+	/**
+	 * 该方法将不会被执行
+	 * @param
+	 */
+	@Override
+	public boolean execute(TaskPluginContext context, Task task)
+	{
+		throw new UnsupportedOperationException("This will not be called.");
+	}
 }

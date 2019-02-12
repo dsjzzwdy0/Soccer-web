@@ -14,18 +14,12 @@ package com.loris.client.task;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-
-import org.apache.log4j.Logger;
-
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventProducer;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
 import com.loris.client.task.plugin.TaskPostProcessPlugin;
-import com.loris.client.task.util.ThreadUtil;
 
 
 /**   
@@ -37,10 +31,8 @@ import com.loris.client.task.util.ThreadUtil;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class TaskPostProcessor extends TaskEventProducer implements Runnable, Closeable
-{
-	private static Logger logger = Logger.getLogger(TaskPostProcessor.class);
-	
+public class TaskPostProcessor extends TaskEventProducer implements Closeable
+{	
 	/** 插件运行的环境 */
 	TaskPluginContext context;
 	
@@ -69,21 +61,6 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable, Cl
 		}
 	}
 	
-	/** 任务中断时间 */
-	private int taskSleepTime = 10;
-	
-	/** 无任务处理过程中闲置的时间  */
-	private int idleSleepTime = 1000;
-	
-	/** 是否完成任务 */
-	private boolean finished = false;
-	
-	/** 是否正在运行过程中 */
-	private boolean isRunning = false;
-		
-	/** 任务队列数据 */
-	private Queue<Task> tasks = new LinkedList<Task>();
-	
 	/** 任务后处理的插件 */
 	private List<TaskPostProcessPlugin> plugins = new ArrayList<>();
 	
@@ -97,30 +74,6 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable, Cl
 	}
 	
 	/**
-	 * 获得任务间隔的时间
-	 * @return
-	 */
-	public int getTaskSleepTime()
-	{
-		return taskSleepTime;
-	}
-
-	public void setTaskSleepTime(int taskSleepTime)
-	{
-		this.taskSleepTime = taskSleepTime;
-	}
-
-	public int getIdleSleepTime()
-	{
-		return idleSleepTime;
-	}
-
-	public void setIdleSleepTime(int idleSleepTime)
-	{
-		this.idleSleepTime = idleSleepTime;
-	}
-	
-	/**
 	 * 添加任务处理的插件工具
 	 * @param plugin 插件
 	 */
@@ -128,55 +81,13 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable, Cl
 	{
 		plugins.add(plugin);
 	}
-
-	public boolean isRunning()
-	{
-		return isRunning;
-	}
-
-	protected void setRunning(boolean isRunning)
-	{
-		this.isRunning = isRunning;
-	}
-
-	public boolean isFinished()
-	{
-		return finished;
-	}
-
-	public void setFinished(boolean finished)
-	{
-		this.finished = finished;
-	}
 	
 	/**
-	 * 结束任务的处理
+	 * 执行任务
+	 * @param plugin
+	 * @param task
 	 */
-	public void finish()
-	{
-		this.finished = true;
-	}
-
-	/**
-	 * 添加任务队列
-	 * @param task 任务
-	 */
-	public void add(Task task)
-	{
-		tasks.add(task);
-	}
-	
-	/**
-	 * 删除任务
-	 * 
-	 * @param task 任务
-	 */
-	public void remove(Task task)
-	{
-		tasks.remove(task);
-	}
-	
-	public void execute(TaskPostProcessPlugin plugin, Task task)
+	protected void execute(TaskPostProcessPlugin plugin, Task task)
 	{
 		try
 		{
@@ -194,57 +105,21 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable, Cl
 			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError, e));
 		}
 	}
-
+	
 	/**
-	 *  (non-Javadoc)
-	 * @see java.lang.Runnable#run()
+	 * 执行任务后处理
+	 * @param task
 	 */
-	@Override
-	public void run()
+	public void execute(Task task)
 	{
-		logger.info("Start TaskPostProcessor...");
-		isRunning = true;
-		while(true)
+		TaskPostProcessPlugin plugin = getBestFitProcessPlugin(task);
+		if(plugin == null)
 		{
-			//logger.info("TaskPostProcessor Post process " + tasks.size() + "...");
-			if(tasks.size() > 0)
-			{
-				Task task = tasks.poll();
-				try
-				{
-					TaskPostProcessPlugin plugin = getBestFitProcessPlugin(task);
-					if(plugin == null)
-					{
-						notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError,
-								new Exception("No TaskPostProcessPlugin to process the Task[" + task.getName() + "]")));
-					}
-					else
-					{
-						//开启任务处理的线程
-						new TaskPostProcessPluginThread(plugin, task).start();
-					}
-				}
-				catch(Exception e)
-				{
-					notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError, e));
-				}				
-				ThreadUtil.sleep(taskSleepTime);
-			}
-			else
-			{
-				//任务后处理，已经结束了，停止该线程处理，
-				if(finished)
-				{
-					break;
-				}
-				//线程停止一个闲置的时间
-				ThreadUtil.sleep(idleSleepTime);
-			}
+			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError, 
+					new Throwable("There are no plugin to process the task '" + task.getName() + "'")));
+			return;
 		}
-		
-		//设置没有运行中的标志
-		isRunning = false;		
-		//logger.info("End TaskPostProcessor...");
+		execute(plugin, task);
 	}
 	
 	/**
@@ -280,11 +155,12 @@ public class TaskPostProcessor extends TaskEventProducer implements Runnable, Cl
 	/**
 	 * 初始化
 	 */
-	public void initialize() throws IOException
+	@Override
+	public void initialize(TaskPluginContext context) throws IOException
 	{
 		for (TaskPostProcessPlugin plugin : plugins)
 		{
-			plugin.intialize(context);
+			plugin.initialize(context);
 		}	
 	}
 }

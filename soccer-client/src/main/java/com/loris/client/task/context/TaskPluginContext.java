@@ -13,9 +13,10 @@ package com.loris.client.task.context;
 
 import com.loris.client.task.MainTaskScheduler;
 import com.loris.client.task.TaskPostProcessor;
-import com.loris.client.task.TaskProcessor;
+import com.loris.client.task.TaskExecutor;
 import com.loris.client.task.TaskProducer;
 import com.loris.client.task.TaskVector;
+import com.loris.client.task.event.TaskEventListener;
 
 /**   
  * @ClassName:  TaskPluginContext  
@@ -38,7 +39,7 @@ public interface TaskPluginContext
 	 * 获得任务的运行环境
 	 * @return 执行环境
 	 */
-	TaskProcessor getTaskProcessor();
+	TaskExecutor getTaskProcessor();
 	
 	/**
 	 * 获得任务的后处理环境
@@ -51,6 +52,12 @@ public interface TaskPluginContext
 	 * @return
 	 */
 	TaskProducer getTaskProducer();
+	
+	/**
+	 * 获得事件监听处理程序
+	 * @return
+	 */
+	TaskEventListener getTaskEventListener();
 	
 	/**
 	 * 获得任务的容器环境

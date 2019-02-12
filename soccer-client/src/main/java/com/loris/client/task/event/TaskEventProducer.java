@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.loris.client.task.context.TaskPluginContext;
+
 /**   
  * @ClassName:  TaskEventProducer  
  * @Description: 这是任务消息生成器，在进行任务处理的时候生成消息   
@@ -32,7 +34,7 @@ public abstract class TaskEventProducer
 	/**
 	 * 初始化
 	 */
-	public void initialize() throws IOException
+	public void initialize(TaskPluginContext context) throws IOException
 	{
 	}
 	
