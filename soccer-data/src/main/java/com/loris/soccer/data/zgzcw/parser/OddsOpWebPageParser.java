@@ -20,7 +20,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.common.util.URLParser;
@@ -51,7 +51,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage, org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
 	 */
 	@Override
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException

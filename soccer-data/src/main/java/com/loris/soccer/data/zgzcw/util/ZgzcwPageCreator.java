@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.loris.client.fetcher.util.HttpUtil;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.common.util.EncodingUtil;
 import com.loris.common.util.URLBuilder;
 import com.loris.soccer.constant.SoccerConstants;

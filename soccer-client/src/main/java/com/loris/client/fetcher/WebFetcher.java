@@ -17,7 +17,7 @@ import java.io.IOException;
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.fetcher.setting.FetcherSetting;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 
 /**   
  * @ClassName:  WebFetcher   

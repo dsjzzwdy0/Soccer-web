@@ -19,7 +19,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.common.wrapper.TableRecords;
 import static com.loris.soccer.constant.SoccerConstants.*;
 
@@ -52,7 +52,7 @@ public class CenterPageParser extends AbstractZgzcwWebPageParser
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, 
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage, 
 	 * org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
 	 */
 	@Override

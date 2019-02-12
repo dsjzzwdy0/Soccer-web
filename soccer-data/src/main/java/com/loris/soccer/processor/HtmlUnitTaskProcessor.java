@@ -17,7 +17,7 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.fetcher.impl.HtmlUnitFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;

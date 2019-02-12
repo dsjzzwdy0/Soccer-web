@@ -14,7 +14,7 @@ package com.loris.soccer.data.zgzcw.parser.base;
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.AbstractWebPageParser;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 
@@ -50,7 +50,7 @@ public abstract class AbstractZgzcwWebPageParser extends AbstractWebPageParser
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#accept(com.loris.client.page.WebPage)
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#accept(com.loris.client.model.WebPage)
 	 */
 	@Override
 	protected boolean accept(WebPage page) throws WebParserException

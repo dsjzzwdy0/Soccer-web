@@ -52,18 +52,18 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 {
 	/** */
 	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
-
-	/** 最大的在运行状态的线程数 */
-	private int maxActiveTaskThread = 5;
-
-	/** The thread number. */
-	protected int threadIndex = 1;
 	
 	/** The MainTaskScheduler id value. */
 	private String id;
 
 	/** 任务调度管理器的名称 */
 	private String name;
+
+	/** 最大的在运行状态的线程数 */
+	private int maxActiveTaskThread = 5;
+
+	/** The thread number. */
+	protected int threadIndex = 1;
 
 	/** 两次任务处理过程中的间隔时间 */
 	private int interval = 200;

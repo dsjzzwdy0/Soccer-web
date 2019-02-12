@@ -33,7 +33,7 @@ import com.loris.client.task.event.TaskEvent.TaskEventType;
  */
 public class BasicTaskProcessPlugin extends BasicTaskPlugin implements TaskProcessPlugin
 {
-	private static Logger logger = Logger.getLogger(BasicTaskProducePlugin.class);
+	private static Logger logger = Logger.getLogger(BasicTaskProcessPlugin.class);
 
 	/**
 	 *  (non-Javadoc)

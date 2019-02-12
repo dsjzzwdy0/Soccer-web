@@ -21,7 +21,7 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.fetcher.WebFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 
 /**   
  * @ClassName:  FetcherSetting   
@@ -70,7 +70,7 @@ public abstract class AbstractWebFetcher implements WebFetcher
 
 	/** 
 	 * (non-Javadoc)
-	 * @see com.loris.client.fetcher.WebFetcher#download(com.loris.client.page.WebPage)
+	 * @see com.loris.client.fetcher.WebFetcher#download(com.loris.client.model.WebPage)
 	 */
 	@Override
 	public abstract boolean download(WebPage page) throws IOException, UrlFetchException, HostForbiddenException;

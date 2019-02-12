@@ -12,7 +12,7 @@
 package com.loris.client.parser;
 
 import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.common.wrapper.TableRecords;;
 
 /**   

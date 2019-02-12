@@ -21,7 +21,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.common.wrapper.TableRecords;
@@ -61,7 +61,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser#accept(com.loris.client.page.WebPage)
+	 * @see com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser#accept(com.loris.client.model.WebPage)
 	 */
 	@Override
 	protected boolean accept(WebPage page) throws WebParserException
@@ -83,7 +83,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage,
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage,
 	 *      org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
 	 */
 	@Override

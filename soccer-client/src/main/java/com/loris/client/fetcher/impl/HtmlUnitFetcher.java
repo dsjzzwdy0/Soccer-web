@@ -34,7 +34,7 @@ import com.loris.client.exception.UrlFetchException;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.fetcher.util.HttpUtil;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 
 /**
  * @ClassName: HtmlUnitFetcher
@@ -109,7 +109,7 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.loris.client.fetcher.impl.AbstractWebFetcher#download(com.loris.client.page.WebPage)
+	 * @see com.loris.client.fetcher.impl.AbstractWebFetcher#download(com.loris.client.model.WebPage)
 	 */
 	@Override
 	public boolean download(WebPage page) throws UrlFetchException, HostForbiddenException

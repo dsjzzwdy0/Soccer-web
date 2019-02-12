@@ -54,7 +54,7 @@
 		<!-- 自动扫描Mapping.xml文件 -->
 		<property name="mapperLocations">
 			<list>
-			    <value>classpath*:com/loris/client/page/dao/mapper/*Mapper.xml</value>
+			    <value>classpath*:com/loris/client/*/dao/mapper/*Mapper.xml</value>
 				<value>classpath*:com/loris/soccer/dao/mapper/*Mapper.xml</value>
 			</list>
 		</property>
@@ -79,7 +79,7 @@
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
 	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="
-		    com.loris.client.page.dao,
+		    com.loris.client.*.dao,
 		    com.loris.soccer.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>

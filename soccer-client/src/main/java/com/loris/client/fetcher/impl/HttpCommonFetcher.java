@@ -36,7 +36,7 @@ import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.CookieManager;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.fetcher.util.HttpUtil;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.client.util.Monitor;
 
 /**
@@ -70,7 +70,7 @@ public class HttpCommonFetcher extends AbstractWebFetcher
 	 * @param page
 	 *            数据页面
 	 * @return 返回是否下载成功的标志
-	 * @see com.loris.client.fetcher.WebFetcher#download(com.loris.client.page.WebPage)
+	 * @see com.loris.client.fetcher.WebFetcher#download(com.loris.client.model.WebPage)
 	 */
 	@Override
 	public boolean download(WebPage page) throws UrlFetchException, IOException, HostForbiddenException

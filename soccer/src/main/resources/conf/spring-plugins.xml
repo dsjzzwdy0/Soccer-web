@@ -68,7 +68,7 @@
 		</property>
 	</bean>
 	
-	<bean id="okoooWebPage" class="com.loris.client.page.WebPage">
+	<bean id="okoooWebPage" class="com.loris.client.model.WebPage">
 		<property name="pageid" value="okoooMainPage"></property>
 		<property name="url" value="http://www.okooo.com/danchang/"></property>
 		<property name="encoding" value="gb2312"></property>

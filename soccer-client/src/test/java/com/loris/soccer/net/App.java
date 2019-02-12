@@ -11,7 +11,7 @@ import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.MainTaskScheduler;
 import com.loris.client.task.Task;

@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.page.service.impl;
+package com.loris.client.model.service.impl;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.loris.client.page.WebPage;
-import com.loris.client.page.dao.WebPageMapper;
-import com.loris.client.page.service.WebPageService;
+import com.loris.client.model.WebPage;
+import com.loris.client.model.dao.WebPageMapper;
+import com.loris.client.model.service.WebPageService;
 
 /**   
  * @ClassName:  WebPageServiceImpl   

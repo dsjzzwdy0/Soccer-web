@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.page.io;
+package com.loris.client.model.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +19,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import com.loris.client.page.WebPage;
+
+import com.loris.client.model.WebPage;
 
 /**   
  * @ClassName:  WebPageContentIO  

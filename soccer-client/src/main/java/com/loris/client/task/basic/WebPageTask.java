@@ -11,7 +11,7 @@
  */
 package com.loris.client.task.basic;
 
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 
 /**   
  * @ClassName:  League   

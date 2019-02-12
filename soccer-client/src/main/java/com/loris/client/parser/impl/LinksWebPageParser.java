@@ -16,7 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
+import com.loris.client.model.WebPage;
 import com.loris.common.wrapper.TableRecords;
 
 /**
@@ -33,7 +33,7 @@ public class LinksWebPageParser extends AbstractWebPageParser
 	/**
 	 * 解析网页中的所有超连接数据
 	 * 
-	 * @see com.loris.client.parser.WebPageParser#parse(com.loris.client.page.WebPage)
+	 * @see com.loris.client.parser.WebPageParser#parse(com.loris.client.model.WebPage)
 	 */
 	@Override
 	public TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
