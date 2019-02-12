@@ -11,8 +11,11 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEventListener;
 
 /**   
@@ -59,5 +62,5 @@ public interface TaskProducePlugin extends TaskPlugin
 	 * 生成新加入的生产任务
 	 * @param taskVector 任务容器
 	 */
-	void produce();
+	void produce(TaskPluginContext context) throws IOException, SQLException;
 }

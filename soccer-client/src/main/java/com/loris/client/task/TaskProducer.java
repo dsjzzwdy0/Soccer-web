@@ -13,6 +13,7 @@ package com.loris.client.task;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,34 +39,19 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 	/** 任务产生的名称 */
 	private String name;
 	
-	/** 是否已经初始化的标志 */
-	private boolean initialized = false;
-	
+	/** 是否已经停止运行 */
+	private boolean finished = false;
+		
 	/** 任务产生的插件工具 */
 	List<TaskProducePlugin> plugins = new ArrayList<>();
 	
-	
+	/**
+	 * Create a new instance of TaskProducer.
+	 * @param context
+	 */
 	public TaskProducer(TaskPluginContext context)
 	{
 		this.context = context;
-	}
-	
-	/**
-	 * 是否已经初始化
-	 * @return
-	 */
-	public boolean isInitialized()
-	{
-		return initialized;
-	}
-	
-	/**
-	 * 设置是否已经初始化的标志
-	 * @param initialized
-	 */
-	protected void setInitialized(boolean initialized)
-	{
-		this.initialized = initialized;
 	}
 	
 	/**
@@ -94,14 +80,35 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 	@Override
 	public void run()
 	{
+		//初始化
+		try
+		{
+			initialize(context);
+		}
+		catch(Exception e)
+		{
+		}
+		
 		for (TaskProducePlugin taskProducePlugin : plugins)
 		{
 			taskProducePlugin.clearTaskEventListners();
-			taskProducePlugin.addTaskEventListeners(listeners);
-			
-			//开始产生新的任务
-			taskProducePlugin.produce();
+			taskProducePlugin.addTaskEventListeners(listeners);			
+			try
+			{
+				//开始产生新的任务
+				taskProducePlugin.produce(context);
+			}
+			catch(SQLException e)
+			{
+				//Do nothing
+			}
+			catch (IOException e)
+			{
+				//Do nothing
+			}
 		}
+		
+		setFinished(true);
 	}
 
 	/**
@@ -121,11 +128,24 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 	 * 初始化任务的处理
 	 */
 	@Override
-	public void initialize() throws IOException
+	public void initialize(TaskPluginContext context) throws IOException
 	{
 		for (TaskProducePlugin plugin : plugins)
 		{
-			plugin.intialize(context);
+			if(!plugin.isInitialized())
+			{
+				plugin.initialize(context);
+			}
 		}
+	}
+
+	public boolean isFinished()
+	{
+		return finished;
+	}
+
+	protected void setFinished(boolean finished)
+	{
+		this.finished = finished;
 	}
 }

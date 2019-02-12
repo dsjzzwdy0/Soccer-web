@@ -36,6 +36,7 @@ import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.data.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
@@ -43,7 +44,6 @@ import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
-import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
 import com.loris.soccer.data.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
@@ -81,9 +81,9 @@ public class App
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
 			
-			testJcWebPage();
+			//testJcWebPage();
 
-			//testMailThreadScheduler();
+			testMainThreadScheduler();
 			// testContext();
 		}
 		catch (Exception e)
@@ -311,7 +311,7 @@ public class App
 	{
 		try(ZgzcwIssueProducePlugin plugin = context.getBean(ZgzcwIssueProducePlugin.class))
 		{		
-			plugin.initialize();
+			plugin.initialize(null);
 		}
 	}
 
@@ -422,7 +422,7 @@ public class App
 		{
 			if(!client.isInitialized())
 			{
-				client.initialize();
+				client.initialize(null);
 			}
 			
 			if(!client.execute(null, new WebPageTask(page)))

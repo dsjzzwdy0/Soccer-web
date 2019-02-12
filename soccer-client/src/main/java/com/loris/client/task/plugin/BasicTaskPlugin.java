@@ -12,6 +12,7 @@
 package com.loris.client.task.plugin;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
@@ -33,6 +34,9 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 {
 	/** 插件的名称 */
 	protected String name;
+
+	/** 是否已经初始化的标志 */
+	private boolean initialized = false;
 
 	/* (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskPlugin#getName()
@@ -57,7 +61,8 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	 * @see com.loris.client.task.plugin.TaskPlugin#execute(com.loris.client.task.Task)
 	 */
 	@Override
-	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, WebParserException, IOException, HostForbiddenException
+	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, 
+		WebParserException, IOException, HostForbiddenException, SQLException
 	{
 		//Do nothing.
 		return true;
@@ -78,7 +83,27 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	 */
 	@Override
 	public void close()
-	{		
+	{
+		initialized = false;
+	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskProducePlugin#isInitialized()
+	 */
+	@Override
+	public boolean isInitialized()
+	{
+		return initialized;
+	}
+	
+	/**
+	 * 设置是否已经初始化
+	 * @param initialized
+	 */
+	public void setInitialized(boolean initialized)
+	{
+		this.initialized = initialized;
 	}
 
 	/**
@@ -86,7 +111,8 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	 * @see com.loris.client.task.plugin.TaskPlugin#intialize()
 	 */
 	@Override
-	public void intialize(TaskPluginContext context)  throws IOException
+	public void initialize(TaskPluginContext context) throws IOException
 	{
+		initialized = true;
 	}
 }

@@ -45,7 +45,6 @@ public class HtmlUnitTaskProcessor extends BasicTaskProcessPlugin
 	public HtmlUnitTaskProcessor(FetcherSetting setting, WebPage initPage)
 	{
 		client = new HtmlUnitFetcher(setting, initPage);
-		initialized = false;
 	}
 	
 	/**
@@ -74,15 +73,19 @@ public class HtmlUnitTaskProcessor extends BasicTaskProcessPlugin
 	 * 初始化
 	 */
 	@Override
-	public void initialize() throws IOException
+	public void initialize(TaskPluginContext context) throws IOException
 	{
 		client.init();
-		initialized = true;
+		super.initialize(context);
 	}
 
+	/**
+	 * 关闭数据接口
+	 */
+	@Override
 	public void close()
 	{
-		super.close();
 		client.close();
+		super.close();
 	}
 }

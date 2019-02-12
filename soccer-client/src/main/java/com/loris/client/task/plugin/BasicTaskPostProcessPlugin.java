@@ -11,9 +11,11 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import org.apache.log4j.Logger;
 
-import com.loris.client.exception.UrlFetchException;
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
@@ -46,7 +48,7 @@ public class BasicTaskPostProcessPlugin extends BasicTaskPlugin implements TaskP
 	 * @see com.loris.client.task.plugin.TaskPostProcessPlugin#execute(com.loris.client.task.Task)
 	 */
 	@Override
-	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException
+	public boolean execute(TaskPluginContext context, Task task) throws IOException, SQLException
 	{
 		logger.info("Post Process " + task.getName());
 		notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));

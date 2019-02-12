@@ -13,6 +13,7 @@ package com.loris.client.task.plugin;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
@@ -47,7 +48,8 @@ public interface TaskPlugin extends Closeable
 	 * 执行任务
 	 * @param task
 	 */
-	boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, WebParserException, IOException, HostForbiddenException;
+	boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, 
+		WebParserException, IOException, HostForbiddenException, SQLException;
 	
 	/**
 	 * 是否适合任务
@@ -57,7 +59,13 @@ public interface TaskPlugin extends Closeable
 	boolean isFit(Task task);
 	
 	/**
+	 * 是否已经初始化
+	 * @return
+	 */
+	boolean isInitialized();
+	
+	/**
 	 * 运行环境初始化
 	 */
-	void intialize(TaskPluginContext context) throws IOException;
+	void initialize(TaskPluginContext context) throws IOException;
 }

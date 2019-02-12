@@ -72,5 +72,6 @@ public class HttpTaskProcessor extends BasicTaskProcessPlugin
 	public void close()
 	{
 		client = null;
+		super.close();
 	}
 }

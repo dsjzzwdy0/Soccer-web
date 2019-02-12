@@ -11,6 +11,11 @@
  */
 package com.loris.soccer.data.zgzcw;
 
+import org.apache.log4j.Logger;
+
+import com.loris.client.task.Task;
+import com.loris.client.task.basic.WebPageTask;
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 
 /**   
@@ -24,5 +29,34 @@ import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
  */
 public class ZgzcwPostProcessPlugin extends BasicTaskPostProcessPlugin
 {
-
+	/** */
+	private static Logger logger = Logger.getLogger(ZgzcwPostProcessPlugin.class);
+	
+	/**
+	 * 执行任务处理工作
+	 * @param context TaskPluginContext运行环境
+	 * @param task 任务
+	 * @return 任务执行成功与否的标志
+	 */
+	@Override
+	public boolean execute(TaskPluginContext context, Task task)
+	{
+		if(task instanceof WebPageTask)
+		{
+			return execute(context, (WebPageTask)task);
+		}
+		return false;
+	}
+	
+	/**
+	 * 执行网页任务后处理，这里有两个步骤：一是网页内容的解析、二是网页内容存储到数据库中
+	 * @param context 运行环境
+	 * @param task 任务
+	 * @return 任务执行成功与否的标志
+	 */
+	protected boolean execute(TaskPluginContext context, WebPageTask task)
+	{
+		logger.info("Post Execute WebPageTask: " + task.getPage().getUrl());
+		return false;
+	}
 }

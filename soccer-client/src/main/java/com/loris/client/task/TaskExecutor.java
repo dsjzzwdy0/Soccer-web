@@ -31,7 +31,7 @@ import com.loris.client.task.event.TaskEventProducer;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class TaskProcessor extends TaskEventProducer implements Closeable
+public class TaskExecutor extends TaskEventProducer implements Closeable
 {
 	/** 执行的任务 */
 	private List<TaskProcessPlugin> plugins = new ArrayList<>();
@@ -42,14 +42,14 @@ public class TaskProcessor extends TaskEventProducer implements Closeable
 	/**
 	 * 任务线程
 	 */
-	class TaskThread extends Thread
+	class TaskExecutorThread extends Thread
 	{
 		Task task = null;
 
 		/**
 		 * Create a new instance of TaskThread.
 		 */
-		public TaskThread(Task task)
+		public TaskExecutorThread(Task task)
 		{
 			this.task = task;
 		}
@@ -65,7 +65,11 @@ public class TaskProcessor extends TaskEventProducer implements Closeable
 		}
 	}
 
-	public TaskProcessor(TaskPluginContext context)
+	/**
+	 * Create a new instance of TaskExecutor.
+	 * @param context TaskPluginContext
+	 */
+	public TaskExecutor(TaskPluginContext context)
 	{
 		this.context = context;
 	}
@@ -92,7 +96,7 @@ public class TaskProcessor extends TaskEventProducer implements Closeable
 		{
 			return;
 		}
-		new TaskThread(task).start();
+		new TaskExecutorThread(task).start();
 	}
 
 	/**
@@ -136,7 +140,9 @@ public class TaskProcessor extends TaskEventProducer implements Closeable
 		for (TaskProcessPlugin plugin : plugins)
 		{
 			if (plugin.isFit(task))
+			{
 				return plugin;
+			}
 		}
 		return null;
 	}
@@ -155,12 +161,15 @@ public class TaskProcessor extends TaskEventProducer implements Closeable
 		}
 	}
 	
+	/**
+	 * 数据初始化
+	 */
 	@Override
-	public void initialize() throws IOException
+	public void initialize(TaskPluginContext context) throws IOException
 	{
 		for (TaskProcessPlugin plugin : plugins)
 		{
-			plugin.intialize(context);
+			plugin.initialize(context);
 		}
 	}
 }

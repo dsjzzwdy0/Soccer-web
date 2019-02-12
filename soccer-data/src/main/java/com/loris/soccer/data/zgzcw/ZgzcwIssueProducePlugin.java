@@ -9,13 +9,16 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.zgzcw.producer;
+package com.loris.soccer.data.zgzcw;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.soccer.processor.HttpTaskProcessor;
 
@@ -37,8 +40,19 @@ public class ZgzcwIssueProducePlugin extends BasicTaskProducePlugin
 	HttpTaskProcessor httpCommonPlugin;
 	
 	@Override
-	public void initialize()throws IOException
+	public void initialize(TaskPluginContext context) throws IOException
 	{
-		logger.info(httpCommonPlugin.getName());
+		logger.info("Intialize the HttpCommonPlugin '" + httpCommonPlugin.getName() + "'. ");	
+		super.initialize(context);	
+	}
+	
+	/**
+	 * 产生任务程序
+	 * @param context 插件运行环境
+	 */
+	@Override
+	public void produce(TaskPluginContext context) throws IOException, SQLException
+	{
+		
 	}
 }

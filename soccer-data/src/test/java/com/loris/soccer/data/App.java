@@ -21,7 +21,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.wrapper.TableRecords;
-import com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin;
+import com.loris.soccer.data.zgzcw.ZgzcwIssueProducePlugin;
 
 /**
  * Hello world!
@@ -63,9 +63,9 @@ public class App
 	 */
 	public static void testAutowired() throws Exception
 	{
-		try(ZgzcwIssueProducePlugin plugin = context.getBean(com.loris.soccer.data.zgzcw.producer.ZgzcwIssueProducePlugin.class))
+		try(ZgzcwIssueProducePlugin plugin = context.getBean(com.loris.soccer.data.zgzcw.ZgzcwIssueProducePlugin.class))
 		{
-			plugin.initialize();
+			plugin.initialize(null);
 		}
 	}
 
