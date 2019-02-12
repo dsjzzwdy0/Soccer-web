@@ -11,11 +11,7 @@
  */
 package com.loris.soccer.data.zgzcw.parser;
 
-import org.jsoup.nodes.Document;
-
-import com.loris.client.exception.WebParserException;
-import com.loris.client.page.WebPage;
-import com.loris.common.wrapper.TableRecords;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryScoreWebPageParser;
 
@@ -35,19 +31,6 @@ public class LotteryJcScoreWebPageParser extends AbstractLotteryScoreWebPagePars
 	 */
 	public LotteryJcScoreWebPageParser()
 	{
-		super(ZgzcwConstants.PAGE_SCORE_JC);
-		
+		super(ZgzcwConstants.PAGE_SCORE_JC, SoccerConstants.LOTTERY_JC);
 	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.page.WebPage, 
-	 * 		org.jsoup.nodes.Document, com.loris.common.wrapper.TableRecords)
-	 */
-	@Override
-	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
-	{
-		return null;
-	}
-
 }

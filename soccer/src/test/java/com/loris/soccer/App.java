@@ -39,6 +39,7 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LotteryJcScoreWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
@@ -52,6 +53,7 @@ import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.processor.HttpTaskProcessor;
 
@@ -81,7 +83,8 @@ public class App
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
 			
-			testJcWebPage();
+			//testJcWebPage();
+			testScoreWebPage();
 
 			//testMailThreadScheduler();
 			// testContext();
@@ -93,6 +96,33 @@ public class App
 		finally
 		{
 			context = null;
+		}
+	}
+	
+	/**
+	 * 测试比分数据页面
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testScoreWebPage() throws Exception
+	{
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_SCORE_JC);
+		if(!getWebPage(page))
+		{
+			return;
+		}
+		
+		LotteryJcScoreWebPageParser parser = new LotteryJcScoreWebPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		List<OddsScore> scores = (List<OddsScore>)records.get(SoccerConstants.SOCCER_DATA_ODDS_NUM);
+		int i = 1;
+		for (OddsScore oddsScore : scores)
+		{
+			logger.info(i +++ ": " + oddsScore.getOrdinary() + " " + oddsScore.getMid() + " " + oddsScore.getOddsvalue());
 		}
 	}
 	
