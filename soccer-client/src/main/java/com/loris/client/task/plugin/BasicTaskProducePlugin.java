@@ -75,7 +75,7 @@ public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProdu
 		{
 			Task task = new BasicTask();
 			task.setName("Task[" + i + "]");
-			task.setPriority(i + (i % 7));
+			task.setPriority((i % 7));
 			
 			notifyTaskEvent(new TaskEvent(task, TaskEventType.Created));
 		}

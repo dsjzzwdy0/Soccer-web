@@ -13,7 +13,7 @@ package com.loris.client.task.util;
 
 import org.apache.log4j.Logger;
 
-import com.loris.client.task.MainTaskScheduler;
+import com.loris.client.scheduler.MainTaskScheduler;
 
 /**   
  * @ClassName:  BusyInfo  

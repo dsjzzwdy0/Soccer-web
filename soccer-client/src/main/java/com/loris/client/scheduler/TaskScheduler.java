@@ -9,38 +9,42 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task.context;
+package com.loris.client.scheduler;
 
-import com.loris.client.scheduler.MainTaskScheduler;
-import com.loris.client.task.TaskVector;
-import com.loris.client.task.event.TaskEventListener;
+import java.io.Closeable;
+
+import com.loris.client.task.plugin.TaskPlugin;
 
 /**   
- * @ClassName:  TaskPluginContext  
- * @Description: 插件执行的运行环境
+ * @ClassName:  TaskScheduler  
+ * @Description: 任务调度器 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskPluginContext 
+public interface TaskScheduler extends Runnable, Closeable
 {
 	/**
-	 * 获得任务的主运行环境参数
-	 * @return 主运行环境
+	 * 加入任务处理插件工具
+	 * @param plugin
 	 */
-	MainTaskScheduler getMainTaskScheduler();
+	void addTaskPlugin(TaskPlugin plugin);
 	
 	/**
-	 * 获得事件监听处理程序
-	 * @return
+	 * 查询当前的状态信息
+	 * @return 状态信息
 	 */
-	TaskEventListener getTaskEventListener();
+	SchedulerStatus getSchedulerStatus();
 	
 	/**
-	 * 获得任务的容器环境
-	 * @return
+	 * 启动任务管理器
+	 * @param scheduler
 	 */
-	TaskVector getTaskVector();
+	public static void startTaskScheduler(TaskScheduler scheduler)
+	{
+		Thread thread = new Thread(scheduler);
+		thread.start();
+	}
 }

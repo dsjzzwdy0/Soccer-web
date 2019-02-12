@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task;
+package com.loris.client.scheduler;
 
 import java.util.List;
 
@@ -17,16 +17,25 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.loris.client.exception.HostForbiddenException;
+import com.loris.client.task.Task;
+import com.loris.client.task.TaskExecutor;
+import com.loris.client.task.TaskPostProcessor;
+import com.loris.client.task.TaskProducer;
+import com.loris.client.task.TaskVector;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventListener;
 import com.loris.client.task.plugin.TaskPlugin;
+import com.loris.client.task.plugin.TaskPostProcessPlugin;
+import com.loris.client.task.plugin.TaskProcessPlugin;
+import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
 import com.loris.client.task.util.IdleThreadInfo;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.client.task.util.ThreadUtil;
 
-import java.io.Closeable;
+import static com.loris.client.scheduler.SchedulerStatus.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -39,7 +48,7 @@ import java.util.ArrayList;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEventListener, Closeable, TaskVector
+public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, TaskVector, TaskScheduler
 {
 	/** */
 	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
@@ -49,6 +58,9 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 
 	/** The thread number. */
 	protected int threadIndex = 1;
+	
+	/** The MainTaskScheduler id value. */
+	private String id;
 
 	/** 任务调度管理器的名称 */
 	private String name;
@@ -61,6 +73,12 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 
 	/** 是否停止 */
 	private boolean isStopped = false;
+	
+	/** 任务调度完成 */
+	private boolean isFinished = false;
+	
+	/** 是否已经初始化 */
+	private boolean initialized =false;
 
 	/** 空闲线程信息处理器 */
 	IdleThreadInfo idleThreadInfo = null;
@@ -80,9 +98,6 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	/** 运行中的线程 */
 	private List<Task> runningTaskThreads = new ArrayList<>();
 	
-	/** 系统的插件 */
-	private List<TaskPlugin> plugins = new ArrayList<>();
-
 	/**
 	 * Create a new instance of AbstractTaskScheduler
 	 */
@@ -96,6 +111,7 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		taskExecutor.addTaskEventListener(this);
 		taskPostProcessor = new TaskPostProcessor(this);
 		taskPostProcessor.addTaskEventListener(this);
+		initialized = false;
 	}
 	
 	/**
@@ -104,9 +120,20 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	 */
 	protected void initialize() throws IOException
 	{
+		try
+		{
+			taskProducer.initialize(this);
+			
+			taskProducer.run();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		taskPostProcessor.initialize(this);
 		taskExecutor.initialize(this);
-		taskProducer.initialize(this);
+		
+		initialized = true;
 	}
 
 	/**
@@ -242,7 +269,8 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	{
 		try
 		{
-			initialize();
+			if(!initialized)
+				initialize();
 		}
 		catch (Exception e)
 		{
@@ -252,14 +280,6 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		
 		try
 		{
-			// 启动任务产生器
-			if (taskProducer != null)
-			{
-				// 执行任务产生器
-				// 这里不用线程启动，而是直接等待任务产生完成之后再启动线程
-				taskProducer.run();
-			}
-
 			// 输出任务总的信息
 			logger.info("TaskScheduler " + getName() + " has " + taskQueue.total() + " task and left "
 					+ taskQueue.left() + " to be processed.");
@@ -301,6 +321,7 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	 */
 	protected void finish()
 	{
+		isFinished = true;
 		logger.info("MainTashScheduler[" + getName() + "] has been finished, exit now");
 	}
 
@@ -389,29 +410,43 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 		taskQueue.clear();
 	}
 	
+	/**
+	 * 加入任务处理插件工具
+	 * @param plugin 插件
+	 */
+	@Override
+	public void addTaskPlugin(TaskPlugin plugin)
+	{
+		if(plugin instanceof TaskProducePlugin)
+		{
+			taskProducer.addTaskProducePlugin((TaskProducePlugin)plugin);
+		}
+		else if(plugin instanceof TaskProcessPlugin)
+		{
+			taskExecutor.addTaskProcessPlugin((TaskProcessPlugin)plugin);
+		}
+		else if(plugin instanceof TaskPostProcessPlugin)
+		{
+			taskPostProcessor.addTaskPostProcessPlugin((TaskPostProcessPlugin)plugin);
+		}
+	}
+	
 	/**********************************/
 	/** Getter and Setter methods. */
 	/**********************************/
-	public List<TaskPlugin> getPlugins()
+	public String getId()
 	{
-		return plugins;
+		return id;
 	}
 
-	public void setPlugins(List<TaskPlugin> plugins)
+	public void setId(String id)
 	{
-		this.plugins = plugins;
+		this.id = id;
 	}
-	
-	public void addTaskPlugin(TaskPlugin plugin)
-	{
-		plugins.add(plugin);
-	}
-	
 	public TaskProducer getTaskProducer()
 	{
 		return taskProducer;
 	}
-
 	public void setTaskProducer(TaskProducer tasksProducer)
 	{
 		tasksProducer.addTaskEventListener(this);
@@ -528,5 +563,16 @@ public class MainTaskScheduler implements TaskPluginContext, Runnable, TaskEvent
 	public TaskEventListener getTaskEventListener()
 	{
 		return this;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.scheduler.TaskScheduler#getSchedulerStatus()
+	 */
+	@Override
+	public SchedulerStatus getSchedulerStatus()
+	{
+		int state = isFinished ? STATUS_FINISHED : isStopped ? STATUS_FINISHED : STATUS_INIT;
+		return new SchedulerStatus(id, name, taskQueue.total(), taskQueue.left(), state);
 	}
 }

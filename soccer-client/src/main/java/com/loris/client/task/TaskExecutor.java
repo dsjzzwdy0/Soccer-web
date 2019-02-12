@@ -80,7 +80,7 @@ public class TaskExecutor extends TaskEventProducer implements Closeable
 	 * @param plugin
 	 *            插件工具
 	 */
-	public void addTaskProcessPlugIn(TaskProcessPlugin plugin)
+	public void addTaskProcessPlugin(TaskProcessPlugin plugin)
 	{
 		this.plugins.add(plugin);
 	}

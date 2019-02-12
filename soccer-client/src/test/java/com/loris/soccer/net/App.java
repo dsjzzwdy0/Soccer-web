@@ -13,7 +13,7 @@ import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.page.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
-import com.loris.client.task.MainTaskScheduler;
+import com.loris.client.scheduler.MainTaskScheduler;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
@@ -66,7 +66,7 @@ public class App
 		scheduler.setName("即时任务下载器");
 
 		scheduler.getTaskProducer().addTaskProducePlugin(new BasicTaskProducePlugin());
-		scheduler.getTaskProcessor().addTaskProcessPlugIn(new BasicTaskProcessPlugin());
+		scheduler.getTaskProcessor().addTaskProcessPlugin(new BasicTaskProcessPlugin());
 		scheduler.getTaskPostProcessor().addTaskPostProcessPlugin(new BasicTaskPostProcessPlugin());
 
 		Thread thread = new Thread(scheduler);

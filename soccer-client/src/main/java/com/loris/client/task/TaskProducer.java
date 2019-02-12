@@ -79,16 +79,7 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 	 */
 	@Override
 	public void run()
-	{
-		//初始化
-		try
-		{
-			initialize(context);
-		}
-		catch(Exception e)
-		{
-		}
-		
+	{		
 		for (TaskProducePlugin taskProducePlugin : plugins)
 		{
 			taskProducePlugin.clearTaskEventListners();
