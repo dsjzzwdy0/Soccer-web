@@ -32,11 +32,11 @@ import com.loris.client.model.service.SchedulerInfoService;
 @Component
 public class SchedulerFactory
 {
-	/** Scheduler 的列表 */
-	private List<SchedulerInfo> schedulers = new ArrayList<>();
-	
 	@Autowired
 	SchedulerInfoService schedulerInfoService;
+	
+	/** Scheduler 的列表 */
+	private List<SchedulerInfo> schedulers = new ArrayList<>();
 
 	/**
 	 * 获得数据列表
@@ -61,7 +61,7 @@ public class SchedulerFactory
 	 * @param sid Sid编号
 	 * @return 
 	 */
-	public SchedulerInfo getNewSchedulerInfo(String sid)
+	public SchedulerInfo getInitSchedulerInfo(String sid)
 	{
 		for (SchedulerInfo schedulerInfo : schedulers)
 		{
@@ -77,9 +77,9 @@ public class SchedulerFactory
 	 * 保存计划数据到列表中
 	 * @param info
 	 */
-	public void save(SchedulerInfo info)
+	public boolean save(SchedulerInfo info)
 	{
-		schedulerInfoService.save(info);
+		return schedulerInfoService.save(info);
 	}
 	
 	/**

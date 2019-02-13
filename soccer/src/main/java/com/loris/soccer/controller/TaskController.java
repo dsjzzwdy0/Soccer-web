@@ -57,7 +57,7 @@ public class TaskController
 	@RequestMapping("/create")
 	public Rest create(String sid)
 	{
-		SchedulerInfo schedulerInfo = schedulerFactory.getNewSchedulerInfo(sid);
+		SchedulerInfo schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
 		if(schedulerInfo != null)
 		{
 			schedulerFactory.save(schedulerInfo);

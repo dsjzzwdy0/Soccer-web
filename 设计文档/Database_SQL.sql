@@ -14,7 +14,7 @@ create table soccer_web_page(
 	ziptype varchar(5),
 	completed tinyint(1),
 	plaintext tinyint(1),
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
 	INDEX `index_url` (`url`) USING BTREE ,
 	INDEX `index_host` (`host`) USING BTREE ,
 	INDEX `index_type` (`type`) USING BTREE ,
