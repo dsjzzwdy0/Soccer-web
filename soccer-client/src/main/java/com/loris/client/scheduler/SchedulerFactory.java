@@ -1,7 +1,7 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  League.java   
- * @Package com.loris.soccer.model   
+ * @Title:  SchedulerFactory.java   
+ * @Package com.loris.client.scheduler   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
  * @date:   2019年1月28日 下午8:59:32   
@@ -11,38 +11,51 @@
  */
 package com.loris.client.scheduler;
 
-import java.io.Closeable;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.loris.client.task.plugin.TaskPlugin;
+import org.springframework.stereotype.Component;
+
+import com.loris.client.model.SchedulerInfo;
 
 /**   
- * @ClassName:  TaskScheduler  
- * @Description: 任务调度器 
+ * @ClassName:  SchedulerFactory    
+ * @Description: 任务调度器的工厂类 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
- * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
+ * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface TaskScheduler extends Runnable, Closeable
+@Component
+public class SchedulerFactory
 {
+	/** Scheduler 的列表 */
+	private List<SchedulerInfo> schedulers = new ArrayList<>();
+
 	/**
-	 * 加入任务处理插件工具
-	 * @param plugin
+	 * 获得数据列表
+	 * @return
 	 */
-	void addTaskPlugin(TaskPlugin plugin);
-	
+	public List<SchedulerInfo> getSchedulers()
+	{
+		return schedulers;
+	}
+
 	/**
-	 * 查询当前的状态信息
-	 * @return 状态信息
+	 * 设置数据列表
+	 * @param schedulers
 	 */
-	SchedulerStatus getSchedulerStatus();
+	public void setSchedulers(List<SchedulerInfo> schedulers)
+	{
+		this.schedulers = schedulers;
+	}
 	
 	/**
 	 * 启动任务管理器
 	 * @param scheduler
 	 */
-	public static void startTaskScheduler(TaskScheduler scheduler)
+	public static void startTaskScheduler(Scheduler scheduler)
 	{
 		Thread thread = new Thread(scheduler);
 		thread.start();

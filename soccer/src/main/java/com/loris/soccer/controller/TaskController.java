@@ -11,8 +11,14 @@
  */
 package com.loris.soccer.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.loris.client.scheduler.SchedulerFactory;
+import com.loris.common.page.PageInfo;
+import com.loris.common.wrapper.Rest;
 
 /**   
  * @ClassName:  League   
@@ -27,5 +33,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/task")
 public class TaskController
 {
-
+	//private static Logger logger = Logger.getLogger(TaskController.class);
+	@Autowired
+	SchedulerFactory schedulerFactory;
+	
+	@ResponseBody
+	@RequestMapping("/listSchedulers")
+	public Rest getSchedulerInfoList()
+	{
+		return Rest.okData(schedulerFactory.getSchedulers());
+	}
+	
+	@ResponseBody
+	@RequestMapping("/list")
+	public Rest list(PageInfo pageInfo)
+	{
+		//logger.info("index=" + pageInfo.getIndex() + ", pernum=" + pageInfo.getPernum());
+		return Rest.okData(pageInfo);
+	}
 }

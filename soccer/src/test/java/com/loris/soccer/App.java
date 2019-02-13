@@ -27,7 +27,7 @@ import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.MainTaskScheduler;
-import com.loris.client.scheduler.TaskScheduler;
+import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.basic.WebPageTask;
@@ -360,7 +360,7 @@ public class App
 		scheduler.addTaskPlugin(new BasicTaskProcessPlugin());
 		scheduler.addTaskPlugin(new BasicTaskPostProcessPlugin());
 
-		TaskScheduler.startTaskScheduler(scheduler);
+		SchedulerFactory.startTaskScheduler(scheduler);
 
 	}
 

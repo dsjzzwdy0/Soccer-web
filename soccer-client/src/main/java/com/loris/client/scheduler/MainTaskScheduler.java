@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.loris.client.exception.HostForbiddenException;
+import com.loris.client.scheduler.status.SchedulerStatus;
 import com.loris.client.task.Task;
 import com.loris.client.task.TaskExecutor;
 import com.loris.client.task.TaskPostProcessor;
@@ -34,7 +35,7 @@ import com.loris.client.task.util.IdleThreadInfo;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.client.task.util.ThreadUtil;
 
-import static com.loris.client.scheduler.SchedulerStatus.*;
+import static com.loris.client.scheduler.status.SchedulerStatus.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,13 +49,13 @@ import java.util.ArrayList;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, TaskVector, TaskScheduler
+public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, TaskVector, Scheduler
 {
 	/** */
 	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
 	
 	/** The MainTaskScheduler id value. */
-	private String id;
+	private String sid;
 
 	/** 任务调度管理器的名称 */
 	private String name;
@@ -281,7 +282,7 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 		try
 		{
 			// 输出任务总的信息
-			logger.info("TaskScheduler " + getName() + " has " + taskQueue.total() + " task and left "
+			logger.info("MainTaskScheduler " + getName() + " has " + taskQueue.total() + " task and left "
 					+ taskQueue.left() + " to be processed.");
 
 			// 处理任务
@@ -434,19 +435,21 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	/**********************************/
 	/** Getter and Setter methods. */
 	/**********************************/
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
-	}
+	
 	public TaskProducer getTaskProducer()
 	{
 		return taskProducer;
 	}
+	public String getSid()
+	{
+		return sid;
+	}
+
+	public void setSid(String sid)
+	{
+		this.sid = sid;
+	}
+
 	public void setTaskProducer(TaskProducer tasksProducer)
 	{
 		tasksProducer.addTaskEventListener(this);
@@ -567,12 +570,12 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.scheduler.TaskScheduler#getSchedulerStatus()
+	 * @see com.loris.client.scheduler.Scheduler#getSchedulerStatus()
 	 */
 	@Override
 	public SchedulerStatus getSchedulerStatus()
 	{
 		int state = isFinished ? STATUS_FINISHED : isStopped ? STATUS_FINISHED : STATUS_INIT;
-		return new SchedulerStatus(id, name, taskQueue.total(), taskQueue.left(), state);
+		return new SchedulerStatus(sid, name, taskQueue.total(), taskQueue.left(), state);
 	}
 }

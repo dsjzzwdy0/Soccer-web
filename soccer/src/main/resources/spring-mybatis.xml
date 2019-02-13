@@ -16,9 +16,10 @@
 	<!-- 自动扫描该包，将注解类的Bean实体扫描到Spring-mvc控制容器中 -->
 	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />
 	
-	 <!-- 引入Spring -->
-    <import resource="classpath:/conf/spring-plugins.xml"/>
-	
+	<!-- 引入Spring -->
+    <import resource="classpath:/conf/spring-plugins.xml"/>    
+    <import resource="classpath:/conf/spring-schedulers.xml"/>
+    
 	<!-- 引入配置文件 -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

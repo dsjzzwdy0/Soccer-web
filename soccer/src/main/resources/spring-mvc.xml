@@ -13,6 +13,9 @@
 	<!-- 自动扫描该包，将注解类的Bean实体扫描到Spring-mvc控制容器中 -->
 	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />
 	
+	<!-- 引入Spring -->
+    <import resource="classpath:spring-mybatis.xml" />
+	
 	<!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">

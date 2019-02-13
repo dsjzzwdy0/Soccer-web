@@ -14,6 +14,7 @@ package com.loris.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.loris.client.scheduler.status.SchedulerStatus;
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -25,17 +26,18 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class Scheduler extends AutoIdEntity
+public class SchedulerInfo extends AutoIdEntity
 {
 	/** */
 	private static final long serialVersionUID = 1L;
 
+	private String sid;
 	private String name;
 	private int threadIndex;
 	private int maxActiveTaskThread;
 	private int interval;
 	private int randTimeSeed;
-	private int type;
+	private String type;
 	private int total;			//总数
 	private int leftsize;		//剩余数
 	private int state;			//1表示处理完成、0表示创建、2表示暂停
@@ -43,6 +45,14 @@ public class Scheduler extends AutoIdEntity
 	/** 插件数据 */
 	private List<String> pluginClasses = new ArrayList<>();
 	
+	public String getSid()
+	{
+		return sid;
+	}
+	public void setSid(String sid)
+	{
+		this.sid = sid;
+	}
 	public String getName()
 	{
 		return name;
@@ -83,11 +93,11 @@ public class Scheduler extends AutoIdEntity
 	{
 		this.randTimeSeed = randTimeSeed;
 	}
-	public int getType()
+	public String getType()
 	{
 		return type;
 	}
-	public void setType(int type)
+	public void setType(String type)
 	{
 		this.type = type;
 	}
@@ -122,6 +132,12 @@ public class Scheduler extends AutoIdEntity
 		this.leftsize = leftsize;
 		this.state = state;
 	}
+	
+	public void setStatus(SchedulerStatus status)
+	{
+		this.total = status.getTotal();
+	}
+	
 	public List<String> getPluginClasses()
 	{
 		return pluginClasses;
