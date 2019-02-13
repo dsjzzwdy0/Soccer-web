@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.client.model.SchedulerInfo;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.common.page.PageInfo;
 import com.loris.common.wrapper.Rest;
@@ -50,5 +51,21 @@ public class TaskController
 	{
 		//logger.info("index=" + pageInfo.getIndex() + ", pernum=" + pageInfo.getPernum());
 		return Rest.okData(pageInfo);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/create")
+	public Rest create(String sid)
+	{
+		SchedulerInfo schedulerInfo = schedulerFactory.getNewSchedulerInfo(sid);
+		if(schedulerInfo != null)
+		{
+			schedulerFactory.save(schedulerInfo);
+			return Rest.okData(schedulerInfo);
+		}
+		else
+		{
+			return Rest.failure("There are no SchedulerInfo of sid='" + sid + "'");
+		}
 	}
 }

@@ -67,7 +67,7 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	protected int threadIndex = 1;
 
 	/** 两次任务处理过程中的间隔时间 */
-	private int interval = 200;
+	private int intervaltime = 200;
 
 	/** 随机时间的种子值 */
 	private int randTimeSeed;
@@ -299,7 +299,7 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 				}
 
 				// 线程等待时间
-				ThreadUtil.sleep(interval, randTimeSeed);
+				ThreadUtil.sleep(intervaltime, randTimeSeed);
 
 				// 如果设置停止标志，则中断执行线程
 				if (isStopped())
@@ -478,14 +478,14 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 		this.taskPostProcessor = taskPostProcessor;
 	}
 
-	public int getInterval()
+	public int getIntervaltime()
 	{
-		return interval;
+		return intervaltime;
 	}
 
-	public void setInterval(int interval)
+	public void setIntervaltime(int interval)
 	{
-		this.interval = interval;
+		this.intervaltime = interval;
 	}
 
 	public int getRandTimeSeed()

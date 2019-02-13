@@ -14,6 +14,8 @@ package com.loris.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.client.scheduler.status.SchedulerStatus;
 import com.loris.common.bean.AutoIdEntity;
 
@@ -26,6 +28,7 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@TableName("soccer_scheduler_info")
 public class SchedulerInfo extends AutoIdEntity
 {
 	/** */
@@ -33,9 +36,8 @@ public class SchedulerInfo extends AutoIdEntity
 
 	private String sid;
 	private String name;
-	private int threadIndex;
 	private int maxActiveTaskThread;
-	private int interval;
+	private int intervaltime;
 	private int randTimeSeed;
 	private String type;
 	private int total;			//总数
@@ -43,6 +45,7 @@ public class SchedulerInfo extends AutoIdEntity
 	private int state;			//1表示处理完成、0表示创建、2表示暂停
 	
 	/** 插件数据 */
+	@TableField(exist=false)
 	private List<String> pluginClasses = new ArrayList<>();
 	
 	public String getSid()
@@ -61,14 +64,6 @@ public class SchedulerInfo extends AutoIdEntity
 	{
 		this.name = name;
 	}
-	public int getThreadIndex()
-	{
-		return threadIndex;
-	}
-	public void setThreadIndex(int threadIndex)
-	{
-		this.threadIndex = threadIndex;
-	}
 	public int getMaxActiveTaskThread()
 	{
 		return maxActiveTaskThread;
@@ -77,13 +72,14 @@ public class SchedulerInfo extends AutoIdEntity
 	{
 		this.maxActiveTaskThread = maxActiveTaskThread;
 	}
-	public int getInterval()
+	
+	public int getIntervaltime()
 	{
-		return interval;
+		return intervaltime;
 	}
-	public void setInterval(int interval)
+	public void setIntervaltime(int intervaltime)
 	{
-		this.interval = interval;
+		this.intervaltime = intervaltime;
 	}
 	public int getRandTimeSeed()
 	{

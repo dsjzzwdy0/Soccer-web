@@ -14,9 +14,11 @@ package com.loris.client.scheduler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.service.SchedulerInfoService;
 
 /**   
  * @ClassName:  SchedulerFactory    
@@ -32,6 +34,9 @@ public class SchedulerFactory
 {
 	/** Scheduler 的列表 */
 	private List<SchedulerInfo> schedulers = new ArrayList<>();
+	
+	@Autowired
+	SchedulerInfoService schedulerInfoService;
 
 	/**
 	 * 获得数据列表
@@ -49,6 +54,32 @@ public class SchedulerFactory
 	public void setSchedulers(List<SchedulerInfo> schedulers)
 	{
 		this.schedulers = schedulers;
+	}
+	
+	/**
+	 * 获得新的配置信息
+	 * @param sid Sid编号
+	 * @return 
+	 */
+	public SchedulerInfo getNewSchedulerInfo(String sid)
+	{
+		for (SchedulerInfo schedulerInfo : schedulers)
+		{
+			if(sid.equals(schedulerInfo.getSid()))
+			{
+				return schedulerInfo;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 保存计划数据到列表中
+	 * @param info
+	 */
+	public void save(SchedulerInfo info)
+	{
+		schedulerInfoService.save(info);
 	}
 	
 	/**

@@ -19,4 +19,18 @@ create table soccer_web_page(
 	INDEX `index_host` (`host`) USING BTREE ,
 	INDEX `index_type` (`type`) USING BTREE ,
 	INDEX `index_source` (`source`) USING BTREE 
+);
+
+create table soccer_scheduler_info(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	sid varchar(20),
+	name varchar(30),
+	maxActiveTaskThread int(11),
+	`intervaltime` int(11),
+	randTimeSeed int(11),
+	type varchar(20),
+	total int(11),
+	leftsize int(11),
+	state smallint,
+	PRIMARY KEY (`id`)
 )

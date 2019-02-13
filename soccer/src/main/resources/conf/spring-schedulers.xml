@@ -21,7 +21,7 @@
     
     <bean id="schedulerInfo0" class="com.loris.client.model.SchedulerInfo">
     	<property name="sid" value="1001-1001"/>
-    	<property name="interval" value="4000"/>
+    	<property name="intervaltime" value="4000"/>
     	<property name="name" value="当日数据下载" />
     	<property name="type" value="zgzcw.downloader" />
     	<property name="maxActiveTaskThread" value="5" />
