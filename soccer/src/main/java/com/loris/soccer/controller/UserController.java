@@ -35,7 +35,7 @@ import com.loris.soccer.service.OddsOpService;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController
+public class UserController extends BaseController
 {
 	@Autowired
 	private OddsOpService oddsOpService;

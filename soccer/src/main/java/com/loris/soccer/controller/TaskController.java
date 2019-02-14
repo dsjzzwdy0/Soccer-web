@@ -11,14 +11,20 @@
  */
 package com.loris.soccer.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.client.model.SchedulerInfo;
+import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
-import com.loris.common.page.PageInfo;
+import com.loris.common.pagination.PageInfo;
 import com.loris.common.wrapper.Rest;
 
 /**   
@@ -32,11 +38,15 @@ import com.loris.common.wrapper.Rest;
  */
 @Controller
 @RequestMapping("/task")
-public class TaskController
+public class TaskController extends BaseController
 {
 	//private static Logger logger = Logger.getLogger(TaskController.class);
+	
 	@Autowired
 	SchedulerFactory schedulerFactory;
+	
+	/** 当前的处理任务 */
+	Map<SchedulerInfo, Scheduler> schedulers = new HashMap<>();
 	
 	@ResponseBody
 	@RequestMapping("/listSchedulers")
@@ -47,12 +57,21 @@ public class TaskController
 	
 	@ResponseBody
 	@RequestMapping("/list")
-	public Rest list(PageInfo pageInfo)
+	public Rest list(@Validated PageInfo pageInfo, BindingResult bindingResult)
 	{
 		//logger.info("index=" + pageInfo.getIndex() + ", pernum=" + pageInfo.getPernum());
+		if(bindingResult.hasErrors())
+		{
+			return Rest.failureData(errorInfos(bindingResult));
+		}		
 		return Rest.okData(pageInfo);
 	}
 	
+	/**
+	 * 通过SID创建任务
+	 * @param sid 任务调度编号
+	 * @return 返回信息状态
+	 */
 	@ResponseBody
 	@RequestMapping("/create")
 	public Rest create(String sid)

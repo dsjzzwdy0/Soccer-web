@@ -42,11 +42,10 @@
 	<!-- 支持 静态资源与springMVC的动态资源访问，两个缺一不可，缺少都无法支持访问 -->
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven />
-	<!--启用缓存注解-->
-    <cache:annotation-driven cache-manager="cacheManager"/>
-
-	<!--以下三种视图配置根据需要任选一种即可 -->
-	 <!--配置Jsp视图解析器-->      
+	
+	<!--以下视图配置根据需要任选一种即可 -->
+	
+	<!--配置Jsp视图解析器，该视图解析器Order宜为最大，因为是否找到一个视图模板，其始终返回一个默认的视图-->      
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">      
         <property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView" />  
         <property name="prefix" value="/WEB-INF/views/"/>        
@@ -83,12 +82,5 @@
                 </constructor-arg>
             </bean>
         </property>
-    </bean>
-
-    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
-    </bean>
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-        <property name="cacheManager" ref="cacheManagerFactory"/>
     </bean>
 </beans>

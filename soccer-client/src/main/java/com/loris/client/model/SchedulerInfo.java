@@ -14,6 +14,8 @@ package com.loris.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.client.scheduler.status.SchedulerStatus;
@@ -34,6 +36,7 @@ public class SchedulerInfo extends AutoIdEntity
 	/** */
 	private static final long serialVersionUID = 1L;
 
+	@NotBlank
 	private String sid;
 	private String name;
 	private int maxActiveTaskThread;

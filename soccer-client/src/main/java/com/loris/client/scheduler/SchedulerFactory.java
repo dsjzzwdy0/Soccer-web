@@ -91,4 +91,9 @@ public class SchedulerFactory
 		Thread thread = new Thread(scheduler);
 		thread.start();
 	}
+	
+	public static Scheduler createTaskScheduler(SchedulerInfo schedulerInfo)
+	{
+		return null;
+	}
 }

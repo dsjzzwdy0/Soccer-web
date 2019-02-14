@@ -186,5 +186,13 @@ public class Rest
 		rest.setMsg(msg);
 		return rest;
 	}
+	
+	public static Rest failureData(Object data)
+	{
+		Rest rest = new Rest();
+		rest.setStatus(500);
+		rest.setData(data);
+		return rest;
+	}
 
 }

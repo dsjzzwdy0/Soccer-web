@@ -22,6 +22,10 @@ package com.loris.soccer.constant;
  */
 public interface SoccerConstants
 {
+	/** 登录的用户 */
+	final static public String SOCCER_SESSION_USER = "login_user";
+	final static public String SOCCER_SESSION_LOGINTIME = "login_time";
+	
 	/** 缓存的名称 */
 	final static public String CAHE_ODDS_NAME = "oddscache";
 	
