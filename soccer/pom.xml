@@ -99,6 +99,12 @@
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
 
+		<!--beetl模板引擎 -->
+		<dependency>
+			<groupId>com.ibeetl</groupId>
+			<artifactId>beetl</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

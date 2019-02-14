@@ -52,6 +52,12 @@ public class UserController extends BaseController
 		return "login";
 	}
 	
+	@RequestMapping("/test")
+	public String test(Model model)
+	{
+		return "test.html";
+	}
+	
 	@ResponseBody
 	@RequestMapping("/submit")
 	public Rest submitOddsOp()

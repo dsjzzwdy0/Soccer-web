@@ -14,6 +14,9 @@ package com.loris.soccer.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -40,7 +43,7 @@ import com.loris.common.wrapper.Rest;
 @RequestMapping("/task")
 public class TaskController extends BaseController
 {
-	//private static Logger logger = Logger.getLogger(TaskController.class);
+	private static Logger logger = Logger.getLogger(TaskController.class);
 	
 	@Autowired
 	SchedulerFactory schedulerFactory;
@@ -50,8 +53,9 @@ public class TaskController extends BaseController
 	
 	@ResponseBody
 	@RequestMapping("/listSchedulers")
-	public Rest getSchedulerInfoList()
+	public Rest getSchedulerInfoList(HttpServletRequest request)
 	{
+		logger.info(getCurrentIp(request));
 		return Rest.okData(schedulerFactory.getSchedulers());
 	}
 	

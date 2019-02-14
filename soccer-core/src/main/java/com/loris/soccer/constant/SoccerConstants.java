@@ -25,6 +25,7 @@ public interface SoccerConstants
 	/** 登录的用户 */
 	final static public String SOCCER_SESSION_USER = "login_user";
 	final static public String SOCCER_SESSION_LOGINTIME = "login_time";
+	final static public String SOCCER_KAPTCHA_SESSION_KEY = "kaptcha";
 	
 	/** 缓存的名称 */
 	final static public String CAHE_ODDS_NAME = "oddscache";

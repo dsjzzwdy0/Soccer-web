@@ -19,7 +19,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -38,18 +37,13 @@ import com.loris.soccer.controller.util.CookieUtils;
  */
 public class BaseController
 {
-	@Autowired
-    private HttpServletRequest request;
-	
-	@Autowired
-	private HttpServletResponse response;
 	
 	/**
 	 * 获得当前登录用户对象
 	 * 
 	 * @return
 	 */
-	public LoginUser getCurrentUser() 
+	public LoginUser getCurrentUser(HttpServletRequest request) 
 	{
 		LoginUser user = (LoginUser) request.getSession().getAttribute(SoccerConstants.SOCCER_SESSION_USER);
 		return user;
@@ -62,7 +56,7 @@ public class BaseController
 	 * @param session
 	 * @return
 	 */
-	public LoginUser setCurrentUser(LoginUser user)
+	public LoginUser setCurrentUser(LoginUser user, HttpServletRequest request)
 	{
 		request.getSession().setAttribute(SoccerConstants.SOCCER_SESSION_USER, user);
 		return user;
@@ -74,7 +68,7 @@ public class BaseController
 	 * @param user
 	 * @return
 	 */
-	public void clearCurrentUser() 
+	public void clearCurrentUser(HttpServletRequest request) 
 	{
 		request.getSession().setAttribute(SoccerConstants.SOCCER_SESSION_USER, null);
 	}
@@ -85,7 +79,7 @@ public class BaseController
 	 * @param user
 	 * @return
 	 */
-	public void setLoginTime() 
+	public void setLoginTime(HttpServletRequest request) 
 	{
 		request.getSession().setAttribute(SoccerConstants.SOCCER_SESSION_LOGINTIME, new Date());
 	}
@@ -93,7 +87,7 @@ public class BaseController
 	/**
 	 * 获得当前登录时间
 	 */
-	public Date getLoginTime()
+	public Date getLoginTime(HttpServletRequest request)
 	{
 		return (Date) request.getSession().getAttribute(SoccerConstants.SOCCER_SESSION_LOGINTIME);
 	}
@@ -103,7 +97,7 @@ public class BaseController
 	 * 
 	 * @return
 	 */
-	public String getCurrentIp()
+	public String getCurrentIp(HttpServletRequest request)
 	{
 		return request.getRemoteAddr();
 	}
@@ -114,7 +108,7 @@ public class BaseController
 	 * @param cookieName
 	 * @param value
 	 */
-	public void setCookie(String cookieName, String value)
+	public void setCookie(String cookieName, String value, HttpServletResponse response)
 	{
 		Cookie cookie = new Cookie(cookieName, value);
 		int expireday = 60 * 60 * 24 * 30; // 不设置的话，则cookies不写入硬盘,而是写在内存,只在当前页面有用,以秒为单位
@@ -128,7 +122,7 @@ public class BaseController
 	 * @param cookieName
 	 * @param value
 	 */
-	public void delCookie(String cookieName)
+	public void delCookie(String cookieName, HttpServletRequest request, HttpServletResponse response)
 	{
 		CookieUtils.delCookie(request, response, cookieName);
 	}
@@ -138,7 +132,7 @@ public class BaseController
 	 * @param cookieName Cookie的名称
 	 * @return Cookie的值
 	 */
-	public String getCookieValue(String cookieName)
+	public String getCookieValue(String cookieName, HttpServletRequest request)
 	{
 		Cookie cookie = CookieUtils.getCookie(request, cookieName);
 		return cookie == null ? null : cookie.getValue();
