@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.common.controller;
+package com.loris.common.web;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -23,8 +23,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import com.loris.common.constant.Constants;
-import com.loris.common.controller.util.CookieUtils;
 import com.loris.common.model.LoginUser;
+import com.loris.common.web.util.CookieUtils;
 
 /**   
  * @ClassName:  BaseController    
@@ -37,7 +37,6 @@ import com.loris.common.model.LoginUser;
  */
 public class BaseController
 {
-	
 	/**
 	 * 获得当前登录用户对象
 	 * 

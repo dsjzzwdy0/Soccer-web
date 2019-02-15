@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
-import com.loris.common.controller.BaseController;
 import com.loris.common.pagination.PageInfo;
+import com.loris.common.web.BaseController;
 import com.loris.common.wrapper.Rest;
 
 /**   

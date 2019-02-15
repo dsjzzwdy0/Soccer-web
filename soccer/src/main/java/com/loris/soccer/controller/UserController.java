@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loris.common.controller.BaseController;
+import com.loris.common.web.BaseController;
 import com.loris.common.wrapper.Rest;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsOpService;
