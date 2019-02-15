@@ -283,6 +283,35 @@
 				<artifactId>commons-httpclient</artifactId>
 				<version>${httpclient.version}</version>
 			</dependency>
+			
+			<!--shiro依赖和缓存 -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${shiro.version}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+				<version>${shiro.version}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
 			<dependency>
 				<groupId>xalan</groupId>
@@ -354,6 +383,13 @@
 				<groupId>com.google.code.kaptcha</groupId>
 				<artifactId>kaptcha</artifactId>
 				<version>${kaptcha.version}</version>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
+			<dependency>
+			    <groupId>cn.hutool</groupId>
+			    <artifactId>hutool-core</artifactId>
+			    <version>${hutool.version}</version>
 			</dependency>
 
 			<dependency>

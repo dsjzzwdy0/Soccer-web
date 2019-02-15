@@ -11,6 +11,7 @@
  */
 package com.loris.common.context;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -61,5 +62,24 @@ public class ApplicationContextHelper implements ApplicationContextAware
 			return null;
 		}
 		return applicationContext.getBean(name, clazz);
+	}
+	
+	/**
+	 * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(String name)
+	{
+		assertContextInjected();
+		return (T) applicationContext.getBean(name);
+	}
+	
+	/**
+	 * 检查ApplicationContext不为空.
+	 */
+	private static void assertContextInjected()
+	{
+		Validate.validState(applicationContext != null,
+				"applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.");
 	}
 }

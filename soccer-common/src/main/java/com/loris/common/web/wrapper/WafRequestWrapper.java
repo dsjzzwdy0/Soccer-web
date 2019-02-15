@@ -19,7 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.loris.common.web.util.WafKit;
+import com.loris.common.support.WafKit;
 /**   
  * @ClassName:  WafRequestWrapper    
  * @Description: 防止Xss、SQL注入的信息  
