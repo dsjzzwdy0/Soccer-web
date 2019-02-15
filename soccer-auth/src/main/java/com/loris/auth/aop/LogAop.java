@@ -35,7 +35,7 @@ public class LogAop {
 
     private Logger logger = Logger.getLogger(this.getClass());
 
-    @Pointcut(value = "@annotation(com.tigis.geoqs.common.annotation.BussinessLog)")
+    @Pointcut(value = "@annotation(com.loris.common.annotation.BussinessLog)")
     public void cutService() {
     }
 

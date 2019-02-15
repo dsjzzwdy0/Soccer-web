@@ -3,12 +3,10 @@
 ## Folders                  ##
 
 ##############################
-
+soccer-core/target
+soccer-auth/target
+soccer-common/target
+soccer-data/target
+soccer-client/target
 soccer/target
-
-soccer-base/target
-
-soccer-net/target
-
-Backup
 logs

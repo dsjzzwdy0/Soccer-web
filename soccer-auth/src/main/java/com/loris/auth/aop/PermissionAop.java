@@ -36,10 +36,9 @@ import java.lang.reflect.Method;
 public class PermissionAop
 {
 
-	@Pointcut(value = "@annotation(com.tigis.geoqs.common.annotation.Permission)")
+	@Pointcut(value = "@annotation(com.loris.common.annotation.Permission)")
 	private void cutPermission()
 	{
-
 	}
 
 	@Around("cutPermission()")
