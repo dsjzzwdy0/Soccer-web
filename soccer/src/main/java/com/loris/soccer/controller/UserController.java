@@ -16,9 +16,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.common.controller.BaseController;
 import com.loris.common.wrapper.Rest;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsOpService;
@@ -52,10 +54,12 @@ public class UserController extends BaseController
 		return "login";
 	}
 	
-	@RequestMapping("/test")
-	public String test(Model model)
+	@RequestMapping("/test/{page}")
+	public String test(@PathVariable String page, Model model)
 	{
-		return "test.html";
+		model.addAttribute("user", "TestUser");
+		model.addAttribute("page", page);
+		return "/user/test";
 	}
 	
 	@ResponseBody

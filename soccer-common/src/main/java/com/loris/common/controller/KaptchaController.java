@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.controller;
+package com.loris.common.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.code.kaptcha.Producer;
-import com.loris.soccer.constant.SoccerConstants;
+import com.loris.common.constant.Constants;
 
 /**   
  * @ClassName:  KaptchaController    
@@ -42,7 +42,7 @@ import com.loris.soccer.constant.SoccerConstants;
 public class KaptchaController extends BaseController
 {
 	@Autowired
-    private Producer producer;
+    private Producer captchaProducer;
 
     /**
      * 生成验证码
@@ -66,13 +66,13 @@ public class KaptchaController extends BaseController
         response.setContentType("image/jpeg");
 
         // create the text for the image
-        String capText = producer.createText();
+        String capText = captchaProducer.createText();
 
         // store the text in the session
-        session.setAttribute(SoccerConstants.SOCCER_KAPTCHA_SESSION_KEY, capText);
+        session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
 
         // create the image with the text
-        BufferedImage bi = producer.createImage(capText);
+        BufferedImage bi = captchaProducer.createImage(capText);
         ServletOutputStream out = null;
         try
         {

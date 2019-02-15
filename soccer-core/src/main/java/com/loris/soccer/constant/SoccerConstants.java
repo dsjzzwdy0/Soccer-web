@@ -21,12 +21,7 @@ package com.loris.soccer.constant;
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 public interface SoccerConstants
-{
-	/** 登录的用户 */
-	final static public String SOCCER_SESSION_USER = "login_user";
-	final static public String SOCCER_SESSION_LOGINTIME = "login_time";
-	final static public String SOCCER_KAPTCHA_SESSION_KEY = "kaptcha";
-	
+{	
 	/** 缓存的名称 */
 	final static public String CAHE_ODDS_NAME = "oddscache";
 	

@@ -10,6 +10,10 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+	<!-- 支持 静态资源与springMVC的动态资源访问，两个缺一不可，缺少都无法支持访问 -->
+	<mvc:default-servlet-handler />
+	<mvc:annotation-driven />
+	
 	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
 	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />
 	
@@ -37,10 +41,6 @@
 	
 	<!-- 基础数据所需的运行环境类 -->
 	<bean id="applicationContext" class="com.loris.common.context.ApplicationContextHelper"/>
-
-	<!-- 支持 静态资源与springMVC的动态资源访问，两个缺一不可，缺少都无法支持访问 -->
-	<mvc:default-servlet-handler />
-	<mvc:annotation-driven />
 	
 	<!--以下视图配置根据需要任选一种即可 -->
 	<bean name="beetlConfig" class="org.beetl.ext.spring.BeetlGroupUtilConfiguration" init-method="init">
@@ -77,24 +77,4 @@
 		<!-- 内存中的最大值 -->
 		<property name="maxInMemorySize" value="40960" />
 	</bean>
-	
-	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
-        <property name="config">
-            <bean class="com.google.code.kaptcha.util.Config">
-                <constructor-arg>
-                    <props>
-                        <prop key="kaptcha.border">yes</prop>
-                        <prop key="kaptcha.border.color">105,179,90</prop>
-                        <prop key="kaptcha.textproducer.font.color">blue</prop>
-                        <prop key="kaptcha.image.width">125</prop>
-                        <prop key="kaptcha.image.height">45</prop>
-                        <prop key="kaptcha.textproducer.font.size">45</prop>
-                        <prop key="kaptcha.session.key">code</prop>
-                        <prop key="kaptcha.textproducer.char.length">4</prop>
-                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
-                    </props>
-                </constructor-arg>
-            </bean>
-        </property>
-    </bean>
 </beans>

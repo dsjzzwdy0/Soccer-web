@@ -1,7 +1,7 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  LoginUser.java   
- * @Package com.loris.common.bean   
+ * @Title:  Constants.java   
+ * @Package com.loris.common.constant   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
  * @date:   2019年1月28日 下午8:59:32   
@@ -9,34 +9,21 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.common.bean;
+package com.loris.common.constant;
 
 /**   
- * @ClassName:  LoginUser    
- * @Description: 用户接口信息   
+ * @ClassName:  Constants    
+ * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface LoginUser
+public interface Constants
 {
-	/**
-	 * 用户的名称
-	 * @return
-	 */
-	String getName();
-	
-	/**
-	 * 获得登录名称
-	 * @return
-	 */
-	String getLoginName();
-	
-	/**
-	 * 获得用户密码
-	 * @return
-	 */
-	String getPassword();
+	/** 登录的用户 */
+	final static public String SESSION_USER = "login_user";
+	final static public String SESSION_LOGINTIME = "login_time";
+	final static public String KAPTCHA_SESSION_KEY = "kaptcha";
 }

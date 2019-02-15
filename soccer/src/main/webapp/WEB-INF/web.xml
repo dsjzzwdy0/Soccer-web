@@ -7,7 +7,7 @@
 	id="WebApp_ID" version="3.0">
 
 	<display-name>Archetype Created Web Application</display-name>  
-
+	
 	<!--启动SpringMVC容器 -->
 	<servlet>
 		<servlet-name>SpringMVC</servlet-name>

@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.controller;
+package com.loris.common.controller;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -22,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.loris.common.bean.LoginUser;
-import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.controller.util.CookieUtils;
+import com.loris.common.constant.Constants;
+import com.loris.common.controller.util.CookieUtils;
+import com.loris.common.model.LoginUser;
 
 /**   
  * @ClassName:  BaseController    
@@ -45,7 +45,7 @@ public class BaseController
 	 */
 	public LoginUser getCurrentUser(HttpServletRequest request) 
 	{
-		LoginUser user = (LoginUser) request.getSession().getAttribute(SoccerConstants.SOCCER_SESSION_USER);
+		LoginUser user = (LoginUser) request.getSession().getAttribute(Constants.SESSION_USER);
 		return user;
 	}
 	
@@ -58,7 +58,7 @@ public class BaseController
 	 */
 	public LoginUser setCurrentUser(LoginUser user, HttpServletRequest request)
 	{
-		request.getSession().setAttribute(SoccerConstants.SOCCER_SESSION_USER, user);
+		request.getSession().setAttribute(Constants.SESSION_USER, user);
 		return user;
 	}
 	
@@ -70,7 +70,7 @@ public class BaseController
 	 */
 	public void clearCurrentUser(HttpServletRequest request) 
 	{
-		request.getSession().setAttribute(SoccerConstants.SOCCER_SESSION_USER, null);
+		request.getSession().setAttribute(Constants.SESSION_USER, null);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public class BaseController
 	 */
 	public void setLoginTime(HttpServletRequest request) 
 	{
-		request.getSession().setAttribute(SoccerConstants.SOCCER_SESSION_LOGINTIME, new Date());
+		request.getSession().setAttribute(Constants.SESSION_LOGINTIME, new Date());
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class BaseController
 	 */
 	public Date getLoginTime(HttpServletRequest request)
 	{
-		return (Date) request.getSession().getAttribute(SoccerConstants.SOCCER_SESSION_LOGINTIME);
+		return (Date) request.getSession().getAttribute(Constants.SESSION_LOGINTIME);
 	}
 	
 	/**
