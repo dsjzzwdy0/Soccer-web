@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.loris.auth.security.ShiroKit;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.InvalidKaptchaException;
 import com.loris.common.exception.enums.BizExceptionEnum;
 import com.loris.common.log.LogManager;
 import com.loris.common.log.LogTaskFactory;
 import com.loris.common.wrapper.tips.ErrorTip;
-import com.loris.security.ShiroKit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

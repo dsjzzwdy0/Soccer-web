@@ -6,9 +6,9 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Map;
 
-import com.loris.common.constant.dictmap.base.AbstractDictMap;
-import com.loris.common.constant.dictmap.factory.DictFieldWarpperFactory;
-import com.loris.common.constant.dictmap.factory.DictMapFactory;
+import com.loris.auth.dictmap.base.AbstractDictMap;
+import com.loris.auth.dictmap.factory.DictFieldWarpperFactory;
+import com.loris.auth.dictmap.factory.DictMapFactory;
 import com.loris.common.support.StrKit;
 import com.loris.common.util.DateUtil;
 

@@ -18,8 +18,8 @@ package com.loris.auth.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.auth.dao.OperationLogMapper;
-import com.loris.auth.model.OperationLog;
 import com.loris.auth.service.OperationLogService;
+import com.loris.common.model.OperationLog;
 
 import org.springframework.stereotype.Service;
 

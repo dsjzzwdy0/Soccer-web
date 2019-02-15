@@ -17,8 +17,8 @@ package com.loris.auth.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.loris.auth.model.Menu;
-import com.loris.common.node.MenuNode;
-import com.loris.common.node.ZTreeNode;
+import com.loris.auth.node.MenuNode;
+import com.loris.auth.node.ZTreeNode;
 
 import org.apache.ibatis.annotations.Param;
 

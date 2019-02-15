@@ -22,9 +22,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.auth.dao.MenuMapper;
 import com.loris.auth.model.Menu;
+import com.loris.auth.node.MenuNode;
+import com.loris.auth.node.ZTreeNode;
 import com.loris.auth.service.MenuService;
-import com.loris.common.node.MenuNode;
-import com.loris.common.node.ZTreeNode;
 
 import javax.annotation.Resource;
 import java.util.List;

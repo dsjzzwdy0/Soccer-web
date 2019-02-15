@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-import static com.loris.common.constant.factory.MutiStrFactory.*;
+import static com.loris.auth.factory.MutiStrFactory.*;
 
 import java.util.List;
 import java.util.Map;

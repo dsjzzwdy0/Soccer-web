@@ -17,7 +17,7 @@ package com.loris.auth.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.loris.auth.model.OperationLog;
+import com.loris.common.model.OperationLog;
 
 import org.apache.ibatis.annotations.Param;
 

@@ -17,7 +17,7 @@ package com.loris.auth.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.loris.auth.model.Role;
-import com.loris.common.node.ZTreeNode;
+import com.loris.auth.node.ZTreeNode;
 
 import org.apache.ibatis.annotations.Param;
 

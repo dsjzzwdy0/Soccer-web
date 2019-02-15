@@ -19,7 +19,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.auth.model.Role;
-import com.loris.common.node.ZTreeNode;
+import com.loris.auth.node.ZTreeNode;
 
 import java.util.List;
 import java.util.Map;

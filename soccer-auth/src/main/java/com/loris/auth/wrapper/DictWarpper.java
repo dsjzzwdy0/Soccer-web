@@ -3,8 +3,8 @@ package com.loris.auth.wrapper;
 import java.util.List;
 import java.util.Map;
 
+import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.model.Dict;
-import com.loris.common.constant.factory.ConstantFactory;
 import com.loris.common.util.ToolUtil;
 import com.loris.common.wrapper.BaseControllerWarpper;
 

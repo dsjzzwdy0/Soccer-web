@@ -2,8 +2,8 @@ package com.loris.auth.wrapper;
 
 import java.util.Map;
 
+import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.util.Contrast;
-import com.loris.common.constant.factory.ConstantFactory;
 import com.loris.common.util.ToolUtil;
 import com.loris.common.wrapper.BaseControllerWarpper;
 

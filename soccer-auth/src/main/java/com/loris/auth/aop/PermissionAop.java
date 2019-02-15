@@ -22,8 +22,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import com.loris.auth.security.check.PermissionCheckManager;
 import com.loris.common.annotation.Permission;
-import com.loris.security.check.PermissionCheckManager;
 
 import javax.naming.NoPermissionException;
 import java.lang.reflect.Method;

@@ -9,16 +9,16 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import com.loris.auth.dictmap.base.AbstractDictMap;
+import com.loris.auth.dictmap.factory.DictMapFactory;
+import com.loris.auth.security.ShiroKit;
+import com.loris.auth.security.ShiroUser;
 import com.loris.auth.util.Contrast;
 import com.loris.common.annotation.BussinessLog;
-import com.loris.common.constant.dictmap.base.AbstractDictMap;
-import com.loris.common.constant.dictmap.factory.DictMapFactory;
 import com.loris.common.log.LogManager;
 import com.loris.common.log.LogObjectHolder;
 import com.loris.common.log.LogTaskFactory;
 import com.loris.common.support.HttpKit;
-import com.loris.security.ShiroKit;
-import com.loris.security.ShiroUser;
 
 import java.lang.reflect.Method;
 import java.util.Map;

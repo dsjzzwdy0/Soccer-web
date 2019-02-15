@@ -3,7 +3,7 @@ package com.loris.auth.wrapper;
 import java.util.Map;
 import java.util.List;
 
-import com.loris.common.constant.factory.ConstantFactory;
+import com.loris.auth.factory.ConstantFactory;
 import com.loris.common.wrapper.BaseControllerWarpper;
 import com.loris.common.wrapper.tips.IsMenu;
 

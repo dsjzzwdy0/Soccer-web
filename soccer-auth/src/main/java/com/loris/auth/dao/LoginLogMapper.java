@@ -1,7 +1,7 @@
 package com.loris.auth.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.loris.auth.model.LoginLog;
+import com.loris.common.model.LoginLog;
 
 import org.apache.ibatis.annotations.Param;
 
