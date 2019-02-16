@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.loris.auth.log.LogManager;
 import com.loris.auth.log.LogTaskFactory;
 import com.loris.auth.security.ShiroKit;
+import com.loris.common.constant.tips.ErrorTip;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.InvalidKaptchaException;
 import com.loris.common.exception.enums.BizExceptionEnum;
-import com.loris.common.wrapper.tips.ErrorTip;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

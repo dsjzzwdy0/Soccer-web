@@ -94,6 +94,12 @@
 			<artifactId>mybatis-plus-core</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

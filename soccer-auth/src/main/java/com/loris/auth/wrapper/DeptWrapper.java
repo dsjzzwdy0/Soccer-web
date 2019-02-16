@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.common.util.ToolUtil;
-import com.loris.common.wrapper.BaseControllerWarpper;
+import com.loris.common.wrapper.BaseWrapper;
 
 /**
  * 部门列表的包装
@@ -12,7 +12,7 @@ import com.loris.common.wrapper.BaseControllerWarpper;
  * @author fengshuonan
  * @date 2017年4月25日 18:10:31
  */
-public class DeptWrapper extends BaseControllerWarpper {
+public class DeptWrapper extends BaseWrapper {
 
     public DeptWrapper(Object list) {
         super(list);

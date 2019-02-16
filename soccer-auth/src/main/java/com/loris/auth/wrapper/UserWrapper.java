@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.loris.auth.factory.ConstantFactory;
-import com.loris.common.wrapper.BaseControllerWarpper;
+import com.loris.common.wrapper.BaseWrapper;
 
 /**
  * 用户管理的包装类
@@ -12,7 +12,7 @@ import com.loris.common.wrapper.BaseControllerWarpper;
  * @author fengshuonan
  * @date 2017年2月13日 下午10:47:03
  */
-public class UserWrapper extends BaseControllerWarpper {
+public class UserWrapper extends BaseWrapper {
 
     public UserWrapper(List<Map<String, Object>> list) {
         super(list);

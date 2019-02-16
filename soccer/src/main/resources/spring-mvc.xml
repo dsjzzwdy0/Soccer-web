@@ -47,6 +47,20 @@
 	<bean id="applicationContext" class="com.loris.common.context.ApplicationContextHelper"/>
 	
 	<!--以下视图配置根据需要任选一种即可 -->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" >
+		<property name="definitions">
+			<list>
+				<value>classpath:/conf/tiles-defs.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置视图解析器 -->
+	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<property name="order" value="1" />
+	</bean>
+	
 	<bean name="beetlConfig" class="org.beetl.ext.spring.BeetlGroupUtilConfiguration" init-method="init">
     	<property name="configFileResource" value="classpath:/conf/beetl.properties" />
     </bean> 
@@ -55,7 +69,7 @@
     	<property name="config" ref="beetlConfig" />
     	<property name="contentType" value="text/html;charset=UTF-8" />
     	<property name="suffix" value=".html" />
-    	<property name="order" value="1" />
+    	<property name="order" value="2" />
     	<property name="viewNames">
     		<list>
     			<value>/user/**</value>

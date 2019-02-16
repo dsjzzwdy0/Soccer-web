@@ -5,7 +5,7 @@ import java.util.Map;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.util.Contrast;
 import com.loris.common.util.ToolUtil;
-import com.loris.common.wrapper.BaseControllerWarpper;
+import com.loris.common.wrapper.BaseWrapper;
 
 /**
  * 日志列表的包装类
@@ -13,7 +13,7 @@ import com.loris.common.wrapper.BaseControllerWarpper;
  * @author fengshuonan
  * @date 2017年4月5日22:56:24
  */
-public class LogWrapper extends BaseControllerWarpper {
+public class LogWrapper extends BaseWrapper {
 
     public LogWrapper(Object list) {
         super(list);

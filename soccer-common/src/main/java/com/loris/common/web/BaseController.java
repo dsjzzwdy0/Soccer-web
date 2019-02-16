@@ -18,13 +18,20 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import com.loris.common.model.LoginUser;
+import com.loris.common.pagination.PageReq;
+import com.loris.common.support.HttpKit;
+import com.loris.common.util.ToolUtil;
 import com.loris.common.constant.Constants;
+import com.loris.common.constant.state.Order;
+import com.loris.common.constant.tips.SuccessTip;
 import com.loris.common.web.util.CookieUtils;
+import com.loris.common.wrapper.BaseWrapper;
 
 /**   
  * @ClassName:  BaseController    
@@ -37,6 +44,14 @@ import com.loris.common.web.util.CookieUtils;
  */
 public class BaseController
 {
+	protected static String SUCCESS = "SUCCESS";
+	protected static String ERROR = "ERROR";
+
+	protected static String REDIRECT = "redirect:";
+	protected static String FORWARD = "forward:";
+	
+	protected static SuccessTip SUCCESS_TIP = new SuccessTip();
+	
 	/**
 	 * 获得当前登录用户对象
 	 * 
@@ -154,5 +169,70 @@ public class BaseController
 			return errorInfoMap;
 		}
 		return null;
+	}
+	
+	public PageReq defaultPage()
+	{
+		HttpServletRequest request = HttpKit.getRequest();
+		int limit = Integer.valueOf(request.getParameter("limit"));
+		int offset = Integer.valueOf(request.getParameter("offset"));
+		String sort = request.getParameter("sort");
+		String order = request.getParameter("order");
+		PageReq pageReq = new PageReq(limit, offset, sort, order);
+		if (ToolUtil.isEmpty(sort))
+		{
+			pageReq.setOpenSort(false);
+		}
+		else
+		{
+			pageReq.setOpenSort(true);
+			if (Order.ASC.getDes().equals(order))
+			{
+				pageReq.setAsc(true);
+			}
+			else
+			{
+				pageReq.setAsc(false);
+			}
+		}
+		return pageReq;
+	}
+	
+	/**
+	 * 包装一个list，让list增加额外属性
+	 */
+	protected Object warpObject(BaseWrapper warpper)
+	{
+		return warpper.warp();
+	}
+	
+	protected HttpServletRequest getHttpServletRequest()
+	{
+		return HttpKit.getRequest();
+	}
+
+	protected HttpServletResponse getHttpServletResponse()
+	{
+		return HttpKit.getResponse();
+	}
+
+	protected HttpSession getSession()
+	{
+		return HttpKit.getRequest().getSession();
+	}
+
+	protected HttpSession getSession(Boolean flag)
+	{
+		return HttpKit.getRequest().getSession(flag);
+	}
+
+	protected String getPara(String name)
+	{
+		return HttpKit.getRequest().getParameter(name);
+	}
+
+	protected void setAttr(String name, Object value)
+	{
+		HttpKit.getRequest().setAttribute(name, value);
 	}
 }

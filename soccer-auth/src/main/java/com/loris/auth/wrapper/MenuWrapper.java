@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.List;
 
 import com.loris.auth.factory.ConstantFactory;
-import com.loris.common.wrapper.BaseControllerWarpper;
-import com.loris.common.wrapper.tips.IsMenu;
+import com.loris.common.constant.tips.IsMenu;
+import com.loris.common.wrapper.BaseWrapper;
 
-public class MenuWrapper extends BaseControllerWarpper 
+public class MenuWrapper extends BaseWrapper 
 {
 
     public MenuWrapper(List<Map<String, Object>> list) {

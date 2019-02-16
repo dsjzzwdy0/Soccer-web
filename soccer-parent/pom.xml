@@ -206,6 +206,13 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
 			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+			<dependency>
+			    <groupId>com.github.pagehelper</groupId>
+			    <artifactId>pagehelper</artifactId>
+			    <version>5.1.7</version>
+			</dependency>
 
 			<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 			<dependency>
