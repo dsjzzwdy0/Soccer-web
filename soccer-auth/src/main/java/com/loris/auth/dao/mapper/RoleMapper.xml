@@ -30,13 +30,13 @@
 		delete from sys_relation where roleid = #{roleId}
 	</delete>
 
-	<select id="roleTreeList" resultType="com.tigis.geoqs.common.node.ZTreeNode">
+	<select id="roleTreeList" resultType="com.loris.auth.node.ZTreeNode">
 		select id "id",pId
 		"pId",name as "name",(case when (pId=0 or pId is null) then 'true'
 		else 'false' end) "open" from sys_role
 	</select>
 
-	<select id="roleTreeListByRoleId" resultType="com.tigis.geoqs.common.node.ZTreeNode">
+	<select id="roleTreeListByRoleId" resultType="com.loris.auth.node.ZTreeNode">
 		SELECT
 		r.id "id",
 		pId "pId",

@@ -42,7 +42,7 @@
         sys_relation where roleid = #{roleId}
     </select>
 
-    <select id="menuTreeList" resultType="com.tigis.geoqs.common.node.ZTreeNode">
+    <select id="menuTreeList" resultType="com.loris.auth.node.ZTreeNode">
         SELECT
         m1.id AS id,
         (
@@ -70,7 +70,7 @@
         m1.id ASC
     </select>
 
-    <select id="menuTreeListByMenuIds" resultType="com.tigis.geoqs.common.node.ZTreeNode">
+    <select id="menuTreeListByMenuIds" resultType="com.loris.auth.node.ZTreeNode">
         SELECT
         m1.id AS id,
         (
@@ -132,7 +132,7 @@
         where rel.roleid = #{roleId}
     </select>
 
-    <select id="getMenusByRoleIds" resultType="com.tigis.geoqs.common.node.MenuNode">
+    <select id="getMenusByRoleIds" resultType="com.loris.auth.node.MenuNode">
         SELECT
         m1.id AS id,
         m1.icon AS icon,

@@ -1,4 +1,4 @@
-package com.loris.common.model;
+package com.loris.auth.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

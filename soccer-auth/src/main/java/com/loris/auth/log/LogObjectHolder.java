@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.common.log;
+package com.loris.auth.log;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

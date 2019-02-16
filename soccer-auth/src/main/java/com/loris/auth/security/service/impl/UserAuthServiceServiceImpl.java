@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@DependsOn("springContextHolder")
+@DependsOn("applicationContext")
 @Transactional(readOnly = true)
 public class UserAuthServiceServiceImpl implements UserAuthService {
 

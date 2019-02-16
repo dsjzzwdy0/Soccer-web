@@ -12,6 +12,7 @@ import com.loris.auth.dao.MenuMapper;
 import com.loris.auth.dao.NoticeMapper;
 import com.loris.auth.dao.RoleMapper;
 import com.loris.auth.dao.UserMapper;
+import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.Dept;
 import com.loris.auth.model.Dict;
 import com.loris.auth.model.Menu;
@@ -21,7 +22,6 @@ import com.loris.auth.model.User;
 import com.loris.common.constant.state.ManagerStatus;
 import com.loris.common.constant.state.MenuStatus;
 import com.loris.common.context.ApplicationContextHelper;
-import com.loris.common.log.LogObjectHolder;
 import com.loris.common.util.Convert;
 import com.loris.common.util.ToolUtil;
 

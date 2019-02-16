@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.common.log;
+package com.loris.auth.log;
 
+import com.loris.auth.dao.LoginLogMapper;
+import com.loris.auth.dao.OperationLogMapper;
+import com.loris.auth.model.LoginLog;
+import com.loris.auth.model.OperationLog;
 import com.loris.common.constant.state.LogSucceed;
 import com.loris.common.constant.state.LogType;
 import com.loris.common.context.ApplicationContextHelper;
-import com.loris.common.dao.LoginLogMapper;
-import com.loris.common.dao.OperationLogMapper;
-import com.loris.common.model.LoginLog;
-import com.loris.common.model.OperationLog;
 import com.loris.common.util.ToolUtil;
 
 import java.util.TimerTask;

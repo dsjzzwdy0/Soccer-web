@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.loris.common.constant.Constants;
 import com.loris.common.model.LoginUser;
+import com.loris.common.constant.Constants;
 import com.loris.common.web.util.CookieUtils;
 
 /**   

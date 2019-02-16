@@ -9,6 +9,9 @@
         <dependent-module archiveName="soccer-client-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-client/soccer-client">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="soccer-auth-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-auth/soccer-auth">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="soccer-core-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-core/soccer-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>

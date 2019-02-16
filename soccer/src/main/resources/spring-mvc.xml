@@ -14,11 +14,9 @@
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven />
 	
-	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
-	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />
-	
 	<!-- 引入Spring -->
     <import resource="classpath:spring-mybatis.xml" />
+    <import resource="classpath:spring-shiro.xml" />
 	
 	<!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
@@ -38,6 +36,12 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- 使用xml配置aop -->  
+	<!-- 强制使用cglib代理，如果不设置，将默认使用jdk的代理，但是jdk的代理是基于接口的 -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>  
+	<aop:config proxy-target-class="true" />
+	<aop:config>  <!--定义切面--> </aop:config>
 	
 	<!-- 基础数据所需的运行环境类 -->
 	<bean id="applicationContext" class="com.loris.common.context.ApplicationContextHelper"/>

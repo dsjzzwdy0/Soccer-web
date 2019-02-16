@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.common.log;
+package com.loris.auth.log;
 
 import java.util.Date;
 
+import com.loris.auth.model.LoginLog;
+import com.loris.auth.model.OperationLog;
 import com.loris.common.constant.state.LogSucceed;
 import com.loris.common.constant.state.LogType;
-import com.loris.common.model.LoginLog;
-import com.loris.common.model.OperationLog;
 
 /**
  * 日志对象创建工厂

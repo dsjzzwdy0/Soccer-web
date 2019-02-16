@@ -21,7 +21,7 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.loris.common.model.OperationLog;
+import com.loris.auth.model.OperationLog;
 
 /**
  * <p>

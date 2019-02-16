@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  * 权限自定义检查
  */
 @Service
-@DependsOn("springContextHolder")
+@DependsOn("applicationContext")
 @Transactional(readOnly = true)
 public class PermissionCheckFactory implements ICheck
 {

@@ -22,8 +22,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import com.loris.auth.annotation.Permission;
 import com.loris.auth.security.check.PermissionCheckManager;
-import com.loris.common.annotation.Permission;
 
 import javax.naming.NoPermissionException;
 import java.lang.reflect.Method;
@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
 public class PermissionAop
 {
 
-	@Pointcut(value = "@annotation(com.loris.common.annotation.Permission)")
+	@Pointcut(value = "@annotation(com.loris.auth.annotation.Permission)")
 	private void cutPermission()
 	{
 	}
