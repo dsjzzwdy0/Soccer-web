@@ -3,6 +3,7 @@ package com.loris.auth.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -36,12 +37,18 @@ import cn.hutool.core.util.StrUtil;
 @Component
 public class ConstantFactory implements IConstantFactory
 {
-	private RoleMapper roleMapper = ApplicationContextHelper.getBean(RoleMapper.class);
-	private DeptMapper deptMapper = ApplicationContextHelper.getBean(DeptMapper.class);
-	private DictMapper dictMapper = ApplicationContextHelper.getBean(DictMapper.class);
-	private UserMapper userMapper = ApplicationContextHelper.getBean(UserMapper.class);
-	private MenuMapper menuMapper = ApplicationContextHelper.getBean(MenuMapper.class);
-	private NoticeMapper noticeMapper = ApplicationContextHelper.getBean(NoticeMapper.class);
+	@Autowired
+	private RoleMapper roleMapper; // = ApplicationContextHelper.getBean(RoleMapper.class);
+	@Autowired
+	private DeptMapper deptMapper;// = ApplicationContextHelper.getBean(DeptMapper.class);
+	@Autowired
+	private DictMapper dictMapper;// = ApplicationContextHelper.getBean(DictMapper.class);
+	@Autowired
+	private UserMapper userMapper;// = ApplicationContextHelper.getBean(UserMapper.class);
+	@Autowired
+	private MenuMapper menuMapper;// = ApplicationContextHelper.getBean(MenuMapper.class);
+	@Autowired
+	private NoticeMapper noticeMapper;// = ApplicationContextHelper.getBean(NoticeMapper.class);
 	
 	
 	private static ConstantFactory instance = null;
@@ -54,7 +61,7 @@ public class ConstantFactory implements IConstantFactory
 	{
 		if(instance == null)
 		{
-			instance = ApplicationContextHelper.getBean("constantFactory");
+			instance = ApplicationContextHelper.getBean(ConstantFactory.class);
 		}
 		return instance;
 	}

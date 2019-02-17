@@ -31,7 +31,7 @@ import com.loris.common.constant.Constants;
 import com.loris.common.constant.state.Order;
 import com.loris.common.constant.tips.SuccessTip;
 import com.loris.common.web.util.CookieUtils;
-import com.loris.common.wrapper.BaseWrapper;
+import com.loris.common.web.wrapper.BaseWrapper;
 
 /**   
  * @ClassName:  BaseController    

@@ -19,7 +19,7 @@ import com.loris.common.constant.state.BizLogType;
 import com.loris.common.pagination.PageReq;
 import com.loris.common.support.BeanKit;
 import com.loris.common.web.BaseController;
-import com.loris.common.wrapper.PageWrapper;
+import com.loris.common.web.wrapper.PageWrapper;
 
 import javax.annotation.Resource;
 import java.util.List;

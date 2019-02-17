@@ -27,7 +27,7 @@ import java.util.Map;
  * @author fengshuonan
  * @date 2017-05-21 11:34
  */
-public class GunsErrorView implements View {
+public class SoccerErrorView implements View {
 
     @Override
     public String getContentType() {

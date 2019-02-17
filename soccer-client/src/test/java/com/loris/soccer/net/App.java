@@ -20,7 +20,7 @@ import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
-import com.loris.common.wrapper.TableRecords;
+import com.loris.common.model.TableRecords;
 
 /**
  * Hello world!

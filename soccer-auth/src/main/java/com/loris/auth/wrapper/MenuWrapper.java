@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.common.constant.tips.IsMenu;
-import com.loris.common.wrapper.BaseWrapper;
+import com.loris.common.web.wrapper.BaseWrapper;
 
 public class MenuWrapper extends BaseWrapper 
 {

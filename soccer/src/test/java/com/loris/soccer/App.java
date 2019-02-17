@@ -35,7 +35,7 @@ import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
-import com.loris.common.wrapper.TableRecords;
+import com.loris.common.model.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;

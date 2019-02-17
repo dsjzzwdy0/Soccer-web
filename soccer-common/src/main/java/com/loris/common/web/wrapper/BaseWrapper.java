@@ -1,4 +1,4 @@
-package com.loris.common.wrapper;
+package com.loris.common.web.wrapper;
 
 import java.util.List;
 import java.util.Map;

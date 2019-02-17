@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loris.common.dao.SqlHelper;
-import com.loris.common.wrapper.TableRecords;
+import com.loris.common.model.TableRecords;
 import com.loris.soccer.model.League;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.SoccerDataService;
@@ -49,7 +49,7 @@ public class SoccerServiceImpl implements SoccerDataService
 	/**
 	 * 保存数据页面解析得到的内容
 	 * 
-	 * @see com.loris.soccer.service.SoccerDataService#saveSoccerDataRecords(com.loris.common.wrapper.TableRecords)
+	 * @see com.loris.soccer.service.SoccerDataService#saveSoccerDataRecords(com.loris.common.model.TableRecords)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

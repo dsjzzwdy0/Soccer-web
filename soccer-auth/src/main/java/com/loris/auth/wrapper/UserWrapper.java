@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.loris.auth.factory.ConstantFactory;
-import com.loris.common.wrapper.BaseWrapper;
+import com.loris.common.web.wrapper.BaseWrapper;
 
 /**
  * 用户管理的包装类

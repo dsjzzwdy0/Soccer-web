@@ -25,7 +25,7 @@
     <link href="${ctxPath}/content/plugins/bootstrap-treetable/bootstrap-treetable.css" rel="stylesheet"/>
 
     <!-- 全局js -->
-    <script src="${ctxPath}/content/plugins/jquery/jquery.3.3.1.min.js?v=2.1.4"></script>
+    <script src="${ctxPath}/content/plugins/jquery/jquery.min.js?v=2.1.4"></script>
     <script src="${ctxPath}/content/plugins/bootstrap-4.3.0/js/bootstrap.min.js?v=3.3.6"></script>
     <script src="${ctxPath}/content/plugins/ztree/jquery.ztree.all.min.js"></script>
     <script src="${ctxPath}/content/plugins/bootstrap-table/bootstrap-table.min.js"></script>
@@ -39,12 +39,12 @@
     <script src="${ctxPath}/content/plugins/iCheck/icheck.min.js"></script>
     <script src="${ctxPath}/content/plugins/laydate/laydate.js"></script>
     <script src="${ctxPath}/content/plugins/webuploader/webuploader.min.js"></script>
-    <script src="${ctxPath}/content/common/ajax-object.js"></script>
-    <script src="${ctxPath}/content/js/common/bootstrap-table-object.js"></script>
-    <script src="${ctxPath}/content/js/common/tree-table-object.js"></script>
-    <script src="${ctxPath}/content/js/common/web-upload-object.js"></script>
-    <script src="${ctxPath}/content/js/common/ztree-object.js"></script>
-    <script src="${ctxPath}/content/js/common/Feng.js"></script>
+    <script src="${ctxPath}/content/scripts/common/ajax-object.js"></script>
+    <script src="${ctxPath}/content/scripts/common/bootstrap-table-object.js"></script>
+    <script src="${ctxPath}/content/scripts/common/tree-table-object.js"></script>
+    <script src="${ctxPath}/content/scripts/common/web-upload-object.js"></script>
+    <script src="${ctxPath}/content/scripts/common/ztree-object.js"></script>
+    <script src="${ctxPath}/content/scripts/common/Feng.js"></script>
 
     <style type="text/css">
         table{  
@@ -70,6 +70,6 @@
 <div class="wrapper wrapper-content">
 	<tiles:insertAttribute name="body" />
 </div>
-<script src="${ctxPath}/content/js/content.js?v=1.0.0"></script>
+<script src="${ctxPath}/content/scripts/content.js?v=1.0.0"></script>
 </body>
 </html>

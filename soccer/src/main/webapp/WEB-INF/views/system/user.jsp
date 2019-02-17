@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.tigis.geoqs.security.ShiroKit" %>
-<%@ page import="com.tigis.geoqs.util.ToolUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fns" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="qs" uri="/WEB-INF/taglib/function.tld"%>
@@ -80,4 +78,4 @@
 		</div>
 	</div>
 </div>
-<script src="${ctxPath}/content/modular/system/user/user.js"></script>
+<script src="${ctxPath}/content/scripts/system/user.js"></script>

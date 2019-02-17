@@ -13,7 +13,7 @@ package com.loris.common.constant;
 
 /**   
  * @ClassName:  Constants    
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 全局应用常量数据的定义  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     

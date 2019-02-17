@@ -11,7 +11,7 @@
  */
 package com.loris.soccer.service;
 
-import com.loris.common.wrapper.TableRecords;
+import com.loris.common.model.TableRecords;
 
 /**   
  * @ClassName:  League   

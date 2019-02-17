@@ -29,7 +29,7 @@ if (window.top !== window.self) {
         <div>
             <h1 class="logo-name">GS</h1>
         </div>
-        <h3>欢迎使用 Guns <qs:date/> </h3>
+        <h3>欢迎使用 东方足彩网 <qs:date/> </h3>
         <br/>
         <h4 style="color: red;">${tips}</h4>
         <form class="m-t" role="form" action="${ctxPath}/login" method="post">

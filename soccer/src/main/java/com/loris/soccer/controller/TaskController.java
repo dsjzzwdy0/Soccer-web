@@ -29,7 +29,7 @@ import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.common.pagination.PageInfo;
 import com.loris.common.web.BaseController;
-import com.loris.common.wrapper.Rest;
+import com.loris.common.web.wrapper.Rest;
 
 /**   
  * @ClassName:  League   

@@ -2,6 +2,8 @@ package com.loris.auth.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.google.code.kaptcha.Constants;
 import com.loris.auth.log.LogManager;
 import com.loris.auth.log.LogTaskFactory;
 import com.loris.auth.model.User;
@@ -20,6 +21,7 @@ import com.loris.auth.security.ShiroUser;
 import com.loris.auth.service.MenuService;
 import com.loris.auth.service.UserService;
 import com.loris.auth.util.KaptchaUtil;
+import com.loris.common.constant.Constants;
 import com.loris.common.exception.InvalidKaptchaException;
 import com.loris.common.util.ToolUtil;
 import com.loris.common.web.BaseController;
@@ -87,16 +89,12 @@ public class LoginController extends BaseController
 	 * 点击登录执行的动作
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginVali()
+	public String loginVali(String username, String password, String kaptcha, HttpServletRequest request)
 	{
-		String username = super.getPara("username").trim();
-		String password = super.getPara("password").trim();
-
 		// 验证验证码是否正确
 		if (KaptchaUtil.getKaptchaOnOff())
 		{
-			String kaptcha = super.getPara("kaptcha").trim();
-			String code = (String) super.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+			String code = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
 			if (ToolUtil.isEmpty(kaptcha) || !kaptcha.equals(code))
 			{
 				throw new InvalidKaptchaException();
