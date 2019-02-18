@@ -12,13 +12,16 @@
 package com.loris.client.scheduler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.model.service.SchedulerInfoService;
+import com.loris.common.context.ApplicationContextHelper;
 
 /**   
  * @ClassName:  SchedulerFactory    
@@ -36,7 +39,20 @@ public class SchedulerFactory
 	SchedulerInfoService schedulerInfoService;
 	
 	/** Scheduler 的列表 */
-	private List<SchedulerInfo> schedulers = new ArrayList<>();
+	List<SchedulerInfo> schedulerInfos = new ArrayList<>();
+	
+	/** 当前的处理任务 */
+	Map<SchedulerInfo, Scheduler> schedulers = new HashMap<>();
+	
+	/** */
+	private static SchedulerFactory instance = null;
+	
+	/**
+	 * Create a new instance of SchedulerFactory
+	 */
+	private SchedulerFactory()
+	{
+	}
 
 	/**
 	 * 获得数据列表
@@ -44,7 +60,7 @@ public class SchedulerFactory
 	 */
 	public List<SchedulerInfo> getSchedulers()
 	{
-		return schedulers;
+		return schedulerInfos;
 	}
 
 	/**
@@ -53,7 +69,7 @@ public class SchedulerFactory
 	 */
 	public void setSchedulers(List<SchedulerInfo> schedulers)
 	{
-		this.schedulers = schedulers;
+		this.schedulerInfos = schedulers;
 	}
 	
 	/**
@@ -63,11 +79,38 @@ public class SchedulerFactory
 	 */
 	public SchedulerInfo getInitSchedulerInfo(String sid)
 	{
-		for (SchedulerInfo schedulerInfo : schedulers)
+		for (SchedulerInfo schedulerInfo : schedulerInfos)
 		{
 			if(sid.equals(schedulerInfo.getSid()))
 			{
 				return schedulerInfo;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 获得任务执行列表
+	 * @param info
+	 * @return
+	 */
+	public Scheduler getScheduler(SchedulerInfo info)
+	{
+		return schedulers.get(info);
+	}
+	
+	/**
+	 * 通过SID值获得任务的列表
+	 * @param sid 任务唯一标识
+	 * @return 处理的任务
+	 */
+	public Scheduler getScheduler(String sid)
+	{
+		for (SchedulerInfo schedulerInfo : schedulers.keySet())
+		{
+			if(sid.equals(schedulerInfo.getSid()))
+			{
+				return schedulers.get(schedulerInfo);
 			}
 		}
 		return null;
@@ -100,5 +143,18 @@ public class SchedulerFactory
 	public static Scheduler createTaskScheduler(SchedulerInfo schedulerInfo)
 	{
 		return null;
+	}
+	
+	/**
+	 * Get the SchedulerFactory instance
+	 * @return
+	 */
+	public static SchedulerFactory me()
+	{
+		if(instance == null)
+		{
+			instance = ApplicationContextHelper.getBean(SchedulerFactory.class);
+		}
+		return instance;
 	}
 }

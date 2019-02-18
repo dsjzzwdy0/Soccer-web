@@ -11,9 +11,6 @@
  */
 package com.loris.soccer.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.client.model.SchedulerInfo;
-import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.common.pagination.PageInfo;
 import com.loris.common.web.BaseController;
@@ -47,10 +43,7 @@ public class TaskController extends BaseController
 	private static Logger logger = Logger.getLogger(TaskController.class);
 	
 	@Autowired
-	SchedulerFactory schedulerFactory;
-	
-	/** 当前的处理任务 */
-	Map<SchedulerInfo, Scheduler> schedulers = new HashMap<>();
+	SchedulerFactory schedulerFactory;	
 	
 	@ResponseBody
 	@RequestMapping("/listSchedulers")
