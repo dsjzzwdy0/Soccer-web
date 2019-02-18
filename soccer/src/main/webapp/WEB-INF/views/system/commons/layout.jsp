@@ -44,7 +44,7 @@
     <script src="${ctxPath}/content/scripts/common/tree-table-object.js"></script>
     <script src="${ctxPath}/content/scripts/common/web-upload-object.js"></script>
     <script src="${ctxPath}/content/scripts/common/ztree-object.js"></script>
-    <script src="${ctxPath}/content/scripts/common/Feng.js"></script>
+    <script src="${ctxPath}/content/scripts/common/SoccerUtil.js"></script>
 
     <style type="text/css">
         table{  
@@ -61,8 +61,8 @@
     </style>
 
     <script type="text/javascript">
-        Feng.addCtx("${ctxPath}");
-        Feng.sessionTimeoutRegistry();
+        Soccer.addCtx("${ctxPath}");
+        Soccer.sessionTimeoutRegistry();
     </script>
 </head>
 

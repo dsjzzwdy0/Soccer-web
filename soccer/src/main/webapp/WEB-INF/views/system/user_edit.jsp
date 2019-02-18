@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.tigis.geoqs.security.ShiroKit" %>
-<%@ page import="com.tigis.geoqs.util.ToolUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fns" tagdir="/WEB-INF/tags" %>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}"/>

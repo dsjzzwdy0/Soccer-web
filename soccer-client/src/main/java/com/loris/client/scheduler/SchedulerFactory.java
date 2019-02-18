@@ -92,6 +92,11 @@ public class SchedulerFactory
 		thread.start();
 	}
 	
+	/**
+	 * 创建任务调度管理器
+	 * @param schedulerInfo 任务信息类型
+	 * @return 任务调度管理器
+	 */
 	public static Scheduler createTaskScheduler(SchedulerInfo schedulerInfo)
 	{
 		return null;

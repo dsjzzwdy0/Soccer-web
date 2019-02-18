@@ -1,4 +1,4 @@
-var Feng = {
+var Soccer = {
     ctxPath: "",
     addCtx: function (ctx) {
         if (this.ctxPath == "") {
@@ -24,13 +24,13 @@ var Feng = {
         });
     },
     info: function (info) {
-        Feng.alert(info, 0);
+        Soccer.alert(info, 0);
     },
     success: function (info) {
-        Feng.alert(info, 1);
+        Soccer.alert(info, 1);
     },
     error: function (info) {
-        Feng.alert(info, 2);
+        Soccer.alert(info, 2);
     },
     infoDetail: function (title, info) {
         var display = "";
@@ -89,15 +89,15 @@ var Feng = {
         $("body").bind("mousedown", onBodyDown);
     },
     baseAjax: function (url, tip) {
-        var ajax = new $ax(Feng.ctxPath + url, function (data) {
-            Feng.success(tip + "成功!");
+        var ajax = new $ax(Soccer.ctxPath + url, function (data) {
+            Soccer.success(tip + "成功!");
         }, function (data) {
-            Feng.error(tip + "失败!" + data.responseJSON.message + "!");
+            Soccer.error(tip + "失败!" + data.responseJSON.message + "!");
         });
         return ajax;
     },
     changeAjax: function (url) {
-        return Feng.baseAjax(url, "修改");
+        return Soccer.baseAjax(url, "修改");
     },
     zTreeCheckedNodes: function (zTreeId) {
         var zTree = $.fn.zTree.getZTreeObj(zTreeId);
@@ -121,7 +121,7 @@ var Feng = {
                 var sessionstatus = XMLHttpRequest.getResponseHeader("sessionstatus");
                 if (sessionstatus == "timeout") {
                     //如果超时就处理 ，指定要跳转的页面
-                    window.location = Feng.ctxPath + "/global/sessionError";
+                    window.location = Soccer.ctxPath + "/global/sessionError";
                 }
             }
         });
@@ -188,7 +188,7 @@ var Feng = {
             parent.$('.J_menuTab').removeClass('active');
             parent.$('.J_menuTabs .page-tabs-content').append(tabLink);
 
-            var iframeContent = '<iframe class="J_iframe" name="iframe' + Feng.randomNum(100,999) + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
+            var iframeContent = '<iframe class="J_iframe" name="iframe' + Soccer.randomNum(100,999) + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
             parent.$('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(iframeContent);
             parent.MyCrontab.scrollToTab($('.J_menuTab.active'));
         }

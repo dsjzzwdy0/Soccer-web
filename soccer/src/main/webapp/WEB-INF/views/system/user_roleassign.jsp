@@ -13,13 +13,13 @@
         });
 
         $("#btn_save").bind("click", function () {
-            var ids = Feng.zTreeCheckedNodes("zTree");
-            var ajax = new $ax(Feng.ctxPath + "/mgr/setRole", function (data) {
-                Feng.success("分配角色成功!");
+            var ids = Soccer.zTreeCheckedNodes("zTree");
+            var ajax = new $ax(Soccer.ctxPath + "/mgr/setRole", function (data) {
+                Soccer.success("分配角色成功!");
                 window.parent.MgrUser.table.refresh();
                 parent.layer.close(index);
             }, function (data) {
-                Feng.error("分配角色失败!" + data.responseJSON.message + "!");
+                Soccer.error("分配角色失败!" + data.responseJSON.message + "!");
             });
             ajax.set("roleIds", ids);
             ajax.set("userId", "${userId}");
