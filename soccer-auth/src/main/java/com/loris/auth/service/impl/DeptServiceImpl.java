@@ -15,6 +15,7 @@
  */
 package com.loris.auth.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +25,10 @@ import com.loris.auth.dao.DeptMapper;
 import com.loris.auth.model.Dept;
 import com.loris.auth.node.ZTreeNode;
 import com.loris.auth.service.DeptService;
-
+import com.loris.common.util.ToolUtil;
 import javax.annotation.Resource;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,12 +60,31 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     }
 
     @Override
-    public List<ZTreeNode> tree() {
-        return this.baseMapper.tree();
+    public List<ZTreeNode> tree() 
+    {
+    	List<Dept> depts = this.baseMapper.selectList(new QueryWrapper<>());
+    	List<ZTreeNode> tree = new ArrayList<>();
+    	for (Dept dept : depts)
+		{
+			ZTreeNode node = new ZTreeNode();
+			node.setId((long)dept.getId());
+			node.setName(dept.getSimplename());
+			node.setpId((long)dept.getPid());
+			node.setIsOpen(ToolUtil.isEmpty(dept.getPid()) || dept.getPid() == 0);
+			tree.add(node);
+		}
+        return tree;
     }
 
     @Override
     public List<Map<String, Object>> list(String condition) {
-        return this.baseMapper.list(condition);
+    	QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
+    	if(StringUtils.isNotBlank(condition))
+    	{
+    		queryWrapper.like("simplename", condition).or().like("fullname", condition);
+    	}
+    	queryWrapper.orderByAsc("num");
+    	
+    	return baseMapper.selectMaps(queryWrapper);
     }
 }

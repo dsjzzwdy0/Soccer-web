@@ -55,7 +55,7 @@
 		<!-- 注入realm -->
 		<property name="realm" ref="authShiroRealm"/>
 		
-		<!-- 使用下面配置的缓存管理器 -->
+		<!-- 使用下面配置的缓存管理器-->
 	    <property name="cacheManager" ref="shiroCacheManager"/>
 	    <property name="sessionManager" ref="sessionManager" />
 	    <property name="rememberMeManager" ref="rememberMeManager"/>

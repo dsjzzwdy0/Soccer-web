@@ -59,7 +59,6 @@
 			<list>
 			    <value>classpath*:com/loris/client/*/dao/mapper/*Mapper.xml</value>
 				<value>classpath*:com/loris/soccer/dao/mapper/*Mapper.xml</value>
-				<value>classpath*:com/loris/auth/dao/mapper0/*Mapper.xml</value>
 			</list>
 		</property>
 		<property name="configLocation" value="classpath:/conf/mybatis-config.xml" />
@@ -94,6 +93,16 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<!--启用缓存注解-->
+    <cache:annotation-driven cache-manager="cacheManager"/>
+    
+    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
+    </bean>
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="cacheManagerFactory"/>
+    </bean>
 	
 	<!-- 验证码数据配置 -->
     <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">

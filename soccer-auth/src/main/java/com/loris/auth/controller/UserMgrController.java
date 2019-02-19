@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.loris.auth.SoccerProperties;
 import com.loris.auth.annotation.BussinessLog;
 import com.loris.auth.annotation.Permission;
-import com.loris.auth.dao.UserMapper;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.factory.UserFactory;
@@ -17,6 +16,7 @@ import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.User;
 import com.loris.auth.security.ShiroKit;
 import com.loris.auth.security.ShiroUser;
+import com.loris.auth.service.UserService;
 import com.loris.auth.transfer.UserDto;
 import com.loris.auth.wrapper.UserWrapper;
 import com.loris.common.constant.Constants;
@@ -51,7 +51,7 @@ public class UserMgrController extends BaseController
 	SoccerProperties soccerProperties;
 	
 	@Resource
-	private UserMapper userMapper;
+	private UserService userService;
 
 	/**
 	 * 跳转到查看管理员列表的页面
@@ -83,7 +83,7 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
 		
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		model.addAttribute("userId", userId);
 		model.addAttribute("userAccount", user.getAccount());
 		return "user_roleassign.system";
@@ -101,7 +101,7 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
 		assertAuth(userId);
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		model.addAttribute(user);
 		model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
 		model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
@@ -120,7 +120,7 @@ public class UserMgrController extends BaseController
 		{
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		model.addAttribute(user);
 		model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
 		model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
@@ -149,13 +149,13 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.TWO_PWD_NOT_MATCH);
 		}
 		Integer userId = ShiroKit.getUser().getId();
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		String oldMd5 = ShiroKit.md5(oldPwd, user.getSalt());
 		if (user.getPassword().equals(oldMd5))
 		{
 			String newMd5 = ShiroKit.md5(newPwd, user.getSalt());
 			user.setPassword(newMd5);
-			userMapper.updateById(user);
+			userService.updateById(user);
 			return SUCCESS_TIP;
 		}
 		else
@@ -174,9 +174,9 @@ public class UserMgrController extends BaseController
 			@RequestParam(required = false) String endTime, @RequestParam(required = false) Integer deptid)
 	{
 		Integer userId = ShiroKit.getUser().getId();
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope(user));
-		List<Map<String, Object>> users = userMapper.selectUsers(dataScope, name, beginTime, endTime, deptid);
+		List<Map<String, Object>> users = userService.selectUsers(dataScope, name, beginTime, endTime, deptid);
 		return new UserWrapper(users).warp();
 	}
 
@@ -195,7 +195,7 @@ public class UserMgrController extends BaseController
 		}
 
 		// 判断账号是否重复
-		User theUser = userMapper.getByAccount(user.getAccount());
+		User theUser = userService.getByAccount(user.getAccount());
 		if (theUser != null)
 		{
 			throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
@@ -207,7 +207,7 @@ public class UserMgrController extends BaseController
 		user.setStatus(ManagerStatus.OK.getCode());
 		user.setCreatetime(new Date());
 
-		userMapper.insert(UserFactory.createUser(user));
+		userService.save(UserFactory.createUser(user));
 		return SUCCESS_TIP;
 	}
 
@@ -228,7 +228,7 @@ public class UserMgrController extends BaseController
 		if (ShiroKit.hasRole(Constants.ADMIN_NAME))
 		{
 			// userMapper.updateByPrimaryKeySelective(UserFactory.createUser(user));
-			userMapper.updateById(UserFactory.createUser(user));
+			userService.updateById(UserFactory.createUser(user));
 			return SUCCESS_TIP;
 		}
 		else
@@ -238,7 +238,7 @@ public class UserMgrController extends BaseController
 			if (shiroUser.getId().equals(user.getId()))
 			{
 				// userMapper.updateByPrimaryKeySelective(UserFactory.createUser(user));
-				userMapper.updateById(UserFactory.createUser(user));
+				userService.updateById(UserFactory.createUser(user));
 				return SUCCESS_TIP;
 			}
 			else
@@ -267,7 +267,10 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.CANT_DELETE_ADMIN);
 		}
 		assertAuth(userId);
-		userMapper.setStatus(userId, ManagerStatus.DELETED.getCode());
+		userService.setStatus(userId, ManagerStatus.DELETED.getCode());
+		
+		
+		
 		return SUCCESS_TIP;
 	}
 
@@ -283,7 +286,7 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
 		assertAuth(userId);
-		return userMapper.selectById(userId);
+		return userService.getById(userId);
 	}
 
 	/**
@@ -300,11 +303,11 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
 		assertAuth(userId);
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		user.setSalt(ShiroKit.getRandomSalt(5));
 		user.setPassword(ShiroKit.md5(Constants.DEFAULT_PWD, user.getSalt()));
 		// userMapper.updateByPrimaryKey(user);
-		userMapper.updateById(user);
+		userService.updateById(user);
 		return SUCCESS_TIP;
 	}
 
@@ -327,7 +330,7 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.CANT_FREEZE_ADMIN);
 		}
 		assertAuth(userId);
-		userMapper.setStatus(userId, ManagerStatus.FREEZED.getCode());
+		userService.setStatus(userId, ManagerStatus.FREEZED.getCode());
 		return SUCCESS_TIP;
 	}
 
@@ -345,7 +348,7 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
 		assertAuth(userId);
-		userMapper.setStatus(userId, ManagerStatus.OK.getCode());
+		userService.setStatus(userId, ManagerStatus.OK.getCode());
 		return SUCCESS_TIP;
 	}
 
@@ -368,7 +371,7 @@ public class UserMgrController extends BaseController
 			throw new BussinessException(BizExceptionEnum.CANT_CHANGE_ADMIN);
 		}
 		assertAuth(userId);
-		userMapper.setRoles(userId, roleIds);
+		userService.setRoles(userId, roleIds);
 		return SUCCESS_TIP;
 	}
 
@@ -397,7 +400,7 @@ public class UserMgrController extends BaseController
 	 */
 	private void assertAuth(Integer userId)
 	{
-		User user = userMapper.selectById(userId);
+		User user = userService.getById(userId);
 		List<Integer> deptDataScope = ShiroKit.getDeptDataScope(user);
 		Integer deptid = user.getDeptid();
 		if (deptDataScope.contains(deptid))

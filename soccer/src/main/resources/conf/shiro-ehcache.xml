@@ -21,7 +21,7 @@
 		timeToLiveSeconds="0" />
 
 	<cache
-		name="authenticationCache"
+		name="authorizationCache"
 		maxElementsInMemory="2000"
 		eternal="false"
 		overflowToDisk="false"

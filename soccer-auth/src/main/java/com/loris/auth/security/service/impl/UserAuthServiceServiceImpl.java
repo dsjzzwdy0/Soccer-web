@@ -26,11 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loris.auth.dao.MenuMapper;
-import com.loris.auth.dao.UserMapper;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.model.User;
 import com.loris.auth.security.ShiroUser;
 import com.loris.auth.security.service.UserAuthService;
+import com.loris.auth.service.UserService;
 import com.loris.common.constant.state.ManagerStatus;
 import com.loris.common.context.ApplicationContextHelper;
 
@@ -42,7 +42,7 @@ import java.util.List;
 public class UserAuthServiceServiceImpl implements UserAuthService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Autowired
     private MenuMapper menuMapper;
@@ -54,7 +54,7 @@ public class UserAuthServiceServiceImpl implements UserAuthService {
     @Override
     public User user(String account) {
 
-        User user = userMapper.getByAccount(account);
+        User user = userService.getByAccount(account);
 
         // 账号不存在
         if (null == user) {

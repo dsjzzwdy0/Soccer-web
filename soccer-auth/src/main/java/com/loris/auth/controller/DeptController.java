@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.auth.annotation.BussinessLog;
 import com.loris.auth.annotation.Permission;
-import com.loris.auth.dao.DeptMapper;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
@@ -34,10 +33,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/dept")
-public class DeptController extends BaseController {
-
-    @Resource
-    DeptMapper deptMapper;
+public class DeptController extends BaseController 
+{
     @Resource
     DeptService deptService;
 
@@ -63,7 +60,7 @@ public class DeptController extends BaseController {
     @Permission
     @RequestMapping("/dept_update/{deptId}")
     public String deptUpdate(@PathVariable Integer deptId, Model model) {
-        Dept dept = deptMapper.selectById(deptId);
+        Dept dept = deptService.getById(deptId);
         model.addAttribute(dept);
         model.addAttribute("pName", ConstantFactory.me().getDeptName(dept.getPid()));
         LogObjectHolder.me().set(dept);
@@ -76,7 +73,7 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/tree")
     @ResponseBody
     public List<ZTreeNode> tree() {
-        List<ZTreeNode> tree = deptMapper.tree();
+        List<ZTreeNode> tree = deptService.tree();
         tree.add(ZTreeNode.createParent());
         return tree;
     }
@@ -94,7 +91,7 @@ public class DeptController extends BaseController {
         }
         //完善pids,根据pid拿到pid的pids
         deptSetPids(dept);
-        return deptMapper.insert(dept);
+        return deptService.save(dept);
     }
 
     /**
@@ -104,7 +101,7 @@ public class DeptController extends BaseController {
     @Permission
     @ResponseBody
     public Object list(String condition) {
-        List<Map<String, Object>> list = deptMapper.list(condition);
+        List<Map<String, Object>> list = deptService.list(condition);
         return super.warpObject(new DeptWrapper(list));
     }
 
@@ -115,7 +112,7 @@ public class DeptController extends BaseController {
     @Permission
     @ResponseBody
     public Object detail(@PathVariable("deptId") Integer deptId) {
-        return deptMapper.selectById(deptId);
+        return deptService.getById(deptId);
     }
 
     /**
@@ -130,7 +127,7 @@ public class DeptController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         deptSetPids(dept);
-        deptMapper.updateById(dept);
+        deptService.updateById(dept);
         return BaseController.SUCCESS_TIP;
     }
 
@@ -145,9 +142,7 @@ public class DeptController extends BaseController {
 
         //缓存被删除的部门名称
         LogObjectHolder.me().set(ConstantFactory.me().getDeptName(deptId));
-
         deptService.deleteDept(deptId);
-
         return SUCCESS_TIP;
     }
 
@@ -157,7 +152,7 @@ public class DeptController extends BaseController {
             dept.setPids("[0],");
         } else {
             int pid = dept.getPid();
-            Dept temp = deptMapper.selectById(pid);
+            Dept temp = deptService.getById(pid);
             String pids = temp.getPids();
             dept.setPid(pid);
             dept.setPids(pids + "[" + pid + "],");
