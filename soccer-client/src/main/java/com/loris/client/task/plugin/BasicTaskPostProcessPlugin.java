@@ -14,7 +14,7 @@ package com.loris.client.task.plugin;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
@@ -32,7 +32,7 @@ import com.loris.client.task.event.TaskEvent.TaskEventType;
  */
 public class BasicTaskPostProcessPlugin extends BasicTaskPlugin implements TaskPostProcessPlugin
 {
-	private static Logger logger = Logger.getLogger(BasicTaskPostProcessPlugin.class);
+	//private static Logger logger = Logger.getLogger(BasicTaskPostProcessPlugin.class);
 
 	/* (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskPostProcessPlugin#isFit(com.loris.client.task.Task)
@@ -50,7 +50,7 @@ public class BasicTaskPostProcessPlugin extends BasicTaskPlugin implements TaskP
 	@Override
 	public boolean execute(TaskPluginContext context, Task task) throws IOException, SQLException
 	{
-		logger.info("Post Process " + task.getName());
+		//logger.info("Post Process " + task.getName());
 		notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));
 		return true;
 	}

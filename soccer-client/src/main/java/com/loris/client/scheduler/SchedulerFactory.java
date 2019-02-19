@@ -46,13 +46,6 @@ public class SchedulerFactory
 	
 	/** */
 	private static SchedulerFactory instance = null;
-	
-	/**
-	 * Create a new instance of SchedulerFactory
-	 */
-	private SchedulerFactory()
-	{
-	}
 
 	/**
 	 * 获得数据列表

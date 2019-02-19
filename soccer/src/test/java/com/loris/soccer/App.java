@@ -76,7 +76,7 @@ public class App
 		{
 			getApplicationContext();
 			// testSetting();
-			// testQueue();			
+			testQueue();			
 			//testAutowired();
 			//testZgzcwWebPage();			
 			//testZgzcwOpWebPage();
@@ -86,7 +86,7 @@ public class App
 			
 			//testJcWebPage();
 
-			testMainThreadScheduler();
+			//testMainThreadScheduler();
 			// testContext();
 		}
 		catch (Exception e)
@@ -361,7 +361,9 @@ public class App
 		scheduler.addTaskPlugin(new BasicTaskPostProcessPlugin());
 
 		SchedulerFactory.startTaskScheduler(scheduler);
-
+		
+		//Thread thread = new Thread(scheduler);
+		//thread.start();
 	}
 
 	/**

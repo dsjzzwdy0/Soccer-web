@@ -22,7 +22,6 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@DependsOn("applicationContext")
 @Transactional(readOnly = true)
 public class UserAuthServiceServiceImpl implements UserAuthService {
 

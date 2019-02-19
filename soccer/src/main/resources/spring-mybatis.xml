@@ -14,9 +14,9 @@
        					http://www.springframework.org/schema/cache/spring-cache.xsd">
 	
 	<!-- 自动扫描该包，将注解类的Bean实体扫描到Spring-mvc控制容器中 -->
-	<!--  context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />-->
+	<!--  context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer, com.loris.auth" />-->
 	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
-	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer, com.loris.auth" />
+	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer" />
 	
 	<!-- 引入Spring -->
     <import resource="classpath:/conf/spring-plugins.xml"/>    
@@ -59,7 +59,7 @@
 			<list>
 			    <value>classpath*:com/loris/client/*/dao/mapper/*Mapper.xml</value>
 				<value>classpath*:com/loris/soccer/dao/mapper/*Mapper.xml</value>
-				<value>classpath*:com/loris/auth/dao/mapper/*Mapper.xml</value>
+				<value>classpath*:com/loris/auth/dao/mapper0/*Mapper.xml</value>
 			</list>
 		</property>
 		<property name="configLocation" value="classpath:/conf/mybatis-config.xml" />
@@ -95,17 +95,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	
-	<!--启用缓存注解-->
-    <cache:annotation-driven cache-manager="cacheManager"/>
-    
-    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
-    </bean>
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-        <property name="cacheManager" ref="cacheManagerFactory"/>
-    </bean>
-    
+	<!-- 验证码数据配置 -->
     <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
         <property name="config">
             <bean class="com.google.code.kaptcha.util.Config">

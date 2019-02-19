@@ -73,16 +73,16 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	TaskQueue taskQueue = new TaskQueue();
 
 	/** 任务生成器 */
-	private TaskProducer taskProducer;
+	TaskProducer taskProducer;
 
 	/** 任务处理工具类 */
-	private TaskExecutor taskExecutor;
+	TaskExecutor taskExecutor;
 
 	/** 任务后处理工具 */
-	private TaskPostProcessor taskPostProcessor;
+	TaskPostProcessor taskPostProcessor;
 
 	/** 运行中的线程 */
-	private List<Task> runningTaskThreads = new ArrayList<>();
+	List<Task> runningTaskThreads = new ArrayList<>();
 	
 	/**
 	 * Create a new instance of TaskScheduler.
@@ -253,6 +253,10 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 				removeRunningTask(task);
 			}					
 		}
+		else if(taskType == TaskEventType.PostProcessed)
+		{
+			logger.info("Finished to post excute " + task.getName());
+		}
 	}
 
 	/**
@@ -309,6 +313,8 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 			e.printStackTrace();
 			logger.info("Error occured when process TaskProcuder " + taskProducer.getName() + ", exit now.");
 		}
+		
+		//logger.info("Thread has been stopped, exit.");
 	}
 
 	/**

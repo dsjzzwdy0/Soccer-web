@@ -15,7 +15,6 @@
  */
 package com.loris.auth.security.check;
 
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
  * 权限自定义检查
  */
 @Service
-@DependsOn("applicationContext")
 @Transactional(readOnly = true)
 public class PermissionCheckFactory implements ICheck
 {
