@@ -32,5 +32,7 @@ create table soccer_scheduler_info(
 	total int(11),
 	leftsize int(11),
 	state smallint,
+	createtime timestamp,
+	finishtime timestamp,
 	PRIMARY KEY (`id`)
 )

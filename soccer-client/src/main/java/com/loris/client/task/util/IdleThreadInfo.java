@@ -13,7 +13,7 @@ package com.loris.client.task.util;
 
 import org.apache.log4j.Logger;
 
-import com.loris.client.scheduler.MainTaskScheduler;
+import com.loris.client.scheduler.TaskScheduler;
 
 /**   
  * @ClassName:  BusyInfo  
@@ -31,7 +31,7 @@ public class IdleThreadInfo
 	int currentBusyTimes = 0;
 	int maxActiveThreadNum;
 	
-	MainTaskScheduler scheduler;
+	TaskScheduler scheduler;
 	
 	/** 最大的繁忙线程处理器 */
 	int maxBusyTimes = 10;
@@ -40,7 +40,7 @@ public class IdleThreadInfo
 	 * 创建一个线程信息处理器
 	 * @param maxActiveThreadNum
 	 */
-	public IdleThreadInfo(MainTaskScheduler scheduler, int maxActiveThreadNum)
+	public IdleThreadInfo(TaskScheduler scheduler, int maxActiveThreadNum)
 	{
 		this.scheduler = scheduler;
 		this.maxActiveThreadNum = maxActiveThreadNum;
@@ -65,7 +65,7 @@ public class IdleThreadInfo
 			if(currentBusyTimes % maxBusyTimes == 0)
 			{
 				//信息输出，等待太长时间之后需要告诉用户的基本信息
-				logger.info("The TaskScheduler[" + scheduler.getName() + "] running theads number is " 
+				logger.info("The TaskScheduler[" + scheduler.getSchedulerStatus().getName() + "] running theads number is " 
 						+ currentActiveThread + " and is upto max thread number "
 						+ maxActiveThreadNum + ", waiting for next idle thread.");
 			}

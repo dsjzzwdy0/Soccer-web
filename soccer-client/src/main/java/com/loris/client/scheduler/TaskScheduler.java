@@ -49,29 +49,14 @@ import java.util.ArrayList;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, TaskVector, Scheduler
+public class TaskScheduler implements TaskPluginContext, TaskEventListener, TaskVector, Scheduler
 {
 	/** */
-	private static Logger logger = Logger.getLogger(MainTaskScheduler.class);
+	private static Logger logger = Logger.getLogger(TaskScheduler.class);
 	
-	/** The MainTaskScheduler id value. */
-	private String sid;
-
-	/** 任务调度管理器的名称 */
-	private String name;
-
-	/** 最大的在运行状态的线程数 */
-	private int maxActiveTaskThread = 5;
-
-	/** The thread number. */
-	protected int threadIndex = 1;
-
-	/** 两次任务处理过程中的间隔时间 */
-	private int intervaltime = 200;
-
-	/** 随机时间的种子值 */
-	private int randTimeSeed;
-
+	/** 状态 */
+	private SchedulerStatus status;
+	
 	/** 是否停止 */
 	private boolean isStopped = false;
 	
@@ -100,12 +85,20 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	private List<Task> runningTaskThreads = new ArrayList<>();
 	
 	/**
+	 * Create a new instance of TaskScheduler.
+	 */
+	public TaskScheduler()
+	{
+		this(new SchedulerStatus());
+	}
+	
+	/**
 	 * Create a new instance of AbstractTaskScheduler
 	 */
-	public MainTaskScheduler()
+	public TaskScheduler(SchedulerStatus status)
 	{
-		randTimeSeed = -100;
-		idleThreadInfo = new IdleThreadInfo(this, maxActiveTaskThread);
+		this.status = status;
+		idleThreadInfo = new IdleThreadInfo(this, status.getMaxActiveTaskThread());
 		taskProducer = new TaskProducer(this);
 		taskProducer.addTaskEventListener(this);
 		taskExecutor = new TaskExecutor(this);
@@ -164,7 +157,7 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	 */
 	public int getMaxActiveTaskThread()
 	{
-		return maxActiveTaskThread;
+		return status.getMaxActiveTaskThread();
 	}
 
 	/**
@@ -174,7 +167,7 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	 */
 	public void setMaxActiveTaskThread(int maxActiveTaskThread)
 	{
-		this.maxActiveTaskThread = maxActiveTaskThread;
+		status.setMaxActiveTaskThread(maxActiveTaskThread);
 		idleThreadInfo.setMaxActiveThreadNum(maxActiveTaskThread);
 	}
 
@@ -275,14 +268,14 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 		}
 		catch (Exception e)
 		{
-			logger.info("Error occured when initialize the " + getName() + " scheduler, exit.");
+			logger.info("Error occured when initialize the " + status.getName() + " scheduler, exit.");
 			return;		
 		}
 		
 		try
 		{
 			// 输出任务总的信息
-			logger.info("MainTaskScheduler " + getName() + " has " + taskQueue.total() + " task and left "
+			logger.info("MainTaskScheduler " + status.getName() + " has " + taskQueue.total() + " task and left "
 					+ taskQueue.left() + " to be processed.");
 
 			// 处理任务
@@ -299,11 +292,12 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 				}
 
 				// 线程等待时间
-				ThreadUtil.sleep(intervaltime, randTimeSeed);
+				ThreadUtil.sleep(status.getIntervaltime(), status.getRandTimeSeed());
 
 				// 如果设置停止标志，则中断执行线程
 				if (isStopped())
 				{
+					status.setStoptime();
 					logger.info("The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interrupted now.");
 					return;
 				}
@@ -323,7 +317,8 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	protected void finish()
 	{
 		isFinished = true;
-		logger.info("MainTashScheduler[" + getName() + "] has been finished, exit now");
+		status.setFinishtime();
+		logger.info("MainTashScheduler[" + status.getName() + "] has been finished, exit now");
 	}
 
 	/**
@@ -352,7 +347,7 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	 * @see com.loris.client.task.context.TaskPluginContext#getMainTaskScheduler()
 	 */
 	@Override
-	public MainTaskScheduler getMainTaskScheduler()
+	public TaskScheduler getMainTaskScheduler()
 	{
 		return this;
 	}
@@ -435,19 +430,14 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	/**********************************/
 	/** Getter and Setter methods. */
 	/**********************************/
+	public String getName()
+	{
+		return status.getName();
+	}
 	
 	public TaskProducer getTaskProducer()
 	{
 		return taskProducer;
-	}
-	public String getSid()
-	{
-		return sid;
-	}
-
-	public void setSid(String sid)
-	{
-		this.sid = sid;
 	}
 
 	public void setTaskProducer(TaskProducer tasksProducer)
@@ -478,26 +468,6 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 		this.taskPostProcessor = taskPostProcessor;
 	}
 
-	public int getIntervaltime()
-	{
-		return intervaltime;
-	}
-
-	public void setIntervaltime(int interval)
-	{
-		this.intervaltime = interval;
-	}
-
-	public int getRandTimeSeed()
-	{
-		return randTimeSeed;
-	}
-
-	public void setRandTimeSeed(int randTimeSeed)
-	{
-		this.randTimeSeed = randTimeSeed;
-	}
-
 	public int total()
 	{
 		return taskQueue.total();
@@ -516,16 +486,6 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	public void setStopped(boolean isStopped)
 	{
 		this.isStopped = isStopped;
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 
 	/**
@@ -575,7 +535,15 @@ public class MainTaskScheduler implements TaskPluginContext, TaskEventListener, 
 	@Override
 	public SchedulerStatus getSchedulerStatus()
 	{
+		
+		return status;
+	}
+	
+	protected void updateStatus()
+	{
 		int state = isFinished ? STATUS_FINISHED : isStopped ? STATUS_FINISHED : STATUS_INIT;
-		return new SchedulerStatus(sid, name, taskQueue.total(), taskQueue.left(), state);
+		status.setState(state);
+		status.setLeftsize(taskQueue.left());
+		status.setTotal(taskQueue.total());
 	}
 }

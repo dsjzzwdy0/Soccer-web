@@ -12,6 +12,7 @@
 package com.loris.client.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -46,10 +47,12 @@ public class SchedulerInfo extends AutoIdEntity
 	private int total;			//总数
 	private int leftsize;		//剩余数
 	private int state;			//1表示处理完成、0表示创建、2表示暂停
+	private Date createtime;	//创建时间
+	private Date finishtime;	//完成时间
 	
 	/** 插件数据 */
 	@TableField(exist=false)
-	private List<String> pluginClasses = new ArrayList<>();
+	private List<String> plugins = new ArrayList<>();
 	
 	public String getSid()
 	{
@@ -137,17 +140,32 @@ public class SchedulerInfo extends AutoIdEntity
 		this.total = status.getTotal();
 	}
 	
-	public List<String> getPluginClasses()
+	public List<String> getPlugins()
 	{
-		return pluginClasses;
+		return plugins;
 	}
-	public void setPluginClasses(List<String> pluginClasses)
+	public void setPlugins(List<String> plugins)
 	{
-		this.pluginClasses = pluginClasses;
+		this.plugins = plugins;
 	}
-	
-	public void addPluginClass(String className)
+	public void addPlugin(String className)
 	{
-		pluginClasses.add(className);
+		plugins.add(className);
+	}
+	public Date getCreatetime()
+	{
+		return createtime;
+	}
+	public void setCreatetime(Date createtime)
+	{
+		this.createtime = createtime;
+	}
+	public Date getFinishtime()
+	{
+		return finishtime;
+	}
+	public void setFinishtime(Date finishtime)
+	{
+		this.finishtime = finishtime;
 	}
 }

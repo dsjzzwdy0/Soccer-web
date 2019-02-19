@@ -11,7 +11,7 @@
  */
 package com.loris.client.task.context;
 
-import com.loris.client.scheduler.MainTaskScheduler;
+import com.loris.client.scheduler.TaskScheduler;
 import com.loris.client.task.TaskVector;
 import com.loris.client.task.event.TaskEventListener;
 
@@ -30,7 +30,7 @@ public interface TaskPluginContext
 	 * 获得任务的主运行环境参数
 	 * @return 主运行环境
 	 */
-	MainTaskScheduler getMainTaskScheduler();
+	TaskScheduler getMainTaskScheduler();
 	
 	/**
 	 * 获得事件监听处理程序

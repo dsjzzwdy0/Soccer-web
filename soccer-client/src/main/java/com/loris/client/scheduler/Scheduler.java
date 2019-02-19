@@ -28,10 +28,10 @@ import com.loris.client.task.plugin.TaskPlugin;
 public interface Scheduler extends Runnable, Closeable
 {
 	/**
-	 * 获得Scheduler的SID编号
+	 * 任务的名称
 	 * @return
 	 */
-	String getSid();
+	String getName();	
 	
 	/**
 	 * 加入任务处理插件工具
@@ -44,10 +44,4 @@ public interface Scheduler extends Runnable, Closeable
 	 * @return 状态信息
 	 */
 	SchedulerStatus getSchedulerStatus();
-	
-	/**
-	 * 获得名称
-	 * @return
-	 */
-	String getName();
 }

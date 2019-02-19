@@ -13,7 +13,7 @@ import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
-import com.loris.client.scheduler.MainTaskScheduler;
+import com.loris.client.scheduler.TaskScheduler;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
@@ -61,9 +61,8 @@ public class App
 	 */
 	public static void testMailThreadScheduler() throws Exception
 	{
-		MainTaskScheduler scheduler = new MainTaskScheduler();
+		TaskScheduler scheduler = new TaskScheduler();
 		scheduler.setMaxActiveTaskThread(1);
-		scheduler.setName("即时任务下载器");
 
 		scheduler.getTaskProducer().addTaskProducePlugin(new BasicTaskProducePlugin());
 		scheduler.getTaskProcessor().addTaskProcessPlugin(new BasicTaskProcessPlugin());
