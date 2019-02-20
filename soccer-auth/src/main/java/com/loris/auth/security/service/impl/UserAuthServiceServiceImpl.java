@@ -25,11 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.loris.auth.dao.MenuMapper;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.model.User;
 import com.loris.auth.security.ShiroUser;
 import com.loris.auth.security.service.UserAuthService;
+import com.loris.auth.service.MenuService;
 import com.loris.auth.service.UserService;
 import com.loris.common.constant.state.ManagerStatus;
 import com.loris.common.context.ApplicationContextHelper;
@@ -45,7 +45,7 @@ public class UserAuthServiceServiceImpl implements UserAuthService {
     private UserService userService;
 
     @Autowired
-    private MenuMapper menuMapper;
+    private MenuService menuService;
 
     public static UserAuthService me() {
         return ApplicationContextHelper.getBean(UserAuthService.class);
@@ -92,7 +92,7 @@ public class UserAuthServiceServiceImpl implements UserAuthService {
 
     @Override
     public List<String> findPermissionsByRoleId(Integer roleId) {
-        return menuMapper.getResUrlsByRoleId(roleId);
+        return menuService.getResUrlsByRoleId(roleId);
     }
 
     @Override

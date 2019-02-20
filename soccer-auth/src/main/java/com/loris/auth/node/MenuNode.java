@@ -17,6 +17,7 @@ package com.loris.auth.node;
 
 import java.util.*;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.loris.common.util.enums.YesOrNotEnum;
 
 /**
@@ -70,11 +71,13 @@ public class MenuNode implements Comparable<Object>
 	/**
 	 * 子节点的集合
 	 */
+	@TableField(exist=false)
 	private List<MenuNode> children;
 
 	/**
 	 * 查询子节点时候的临时集合
 	 */
+	@TableField(exist=false)
 	private List<MenuNode> linkedList = new ArrayList<MenuNode>();
 
 	public MenuNode()

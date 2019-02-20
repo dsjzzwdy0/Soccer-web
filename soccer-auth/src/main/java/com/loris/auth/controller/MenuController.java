@@ -1,6 +1,5 @@
 package com.loris.auth.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.loris.auth.annotation.BussinessLog;
 import com.loris.auth.annotation.Permission;
-import com.loris.auth.dao.MenuMapper;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
@@ -45,9 +43,6 @@ import java.util.Map;
 public class MenuController extends BaseController 
 {
     @Resource
-    MenuMapper menuMapper;
-
-    @Resource
     MenuService menuService;
 
     /**
@@ -75,12 +70,12 @@ public class MenuController extends BaseController
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        Menu menu = menuMapper.selectById(menuId);
+        Menu menu = menuService.getById(menuId);
 
         //获取父级菜单的id
         Menu temp = new Menu();
         temp.setCode(menu.getPcode());
-        Menu pMenu = menuMapper.selectOne(new QueryWrapper<Menu>(temp));
+        Menu pMenu = menuService.getOne(new QueryWrapper<Menu>(temp));
 
         //如果父级是顶级菜单
         if (pMenu == null) {
@@ -110,7 +105,7 @@ public class MenuController extends BaseController
         }
         //设置父级菜单编号
         menuSetPcode(menu);
-        menuMapper.updateById(menu);
+        menuService.updateById(menu);
         return SUCCESS_TIP;
     }
 
@@ -121,7 +116,7 @@ public class MenuController extends BaseController
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(@RequestParam(required = false) String menuName, @RequestParam(required = false) String level) {
-        List<Map<String, Object>> menus = menuMapper.selectMenus(menuName, level);
+        List<Map<String, Object>> menus = menuService.selectMenus(menuName, level);
         return super.warpObject(new MenuWrapper(menus));
     }
 
@@ -147,7 +142,7 @@ public class MenuController extends BaseController
         menuSetPcode(menu);
 
         menu.setStatus(MenuStatus.ENABLE.getCode());
-        menuMapper.insert(menu);
+        menuService.save(menu);
         return SUCCESS_TIP;
     }
 
@@ -179,7 +174,7 @@ public class MenuController extends BaseController
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        menuMapper.selectById(menuId);
+        menuService.getById(menuId);
         return SUCCESS_TIP;
     }
 
@@ -189,7 +184,7 @@ public class MenuController extends BaseController
     @RequestMapping(value = "/menuTreeList")
     @ResponseBody
     public List<ZTreeNode> menuTreeList() {
-        List<ZTreeNode> roleTreeList = menuMapper.menuTreeList();
+        List<ZTreeNode> roleTreeList = menuService.menuTreeList();
         return roleTreeList;
     }
 
@@ -199,7 +194,7 @@ public class MenuController extends BaseController
     @RequestMapping(value = "/selectMenuTreeList")
     @ResponseBody
     public List<ZTreeNode> selectMenuTreeList() {
-        List<ZTreeNode> roleTreeList = menuMapper.menuTreeList();
+        List<ZTreeNode> roleTreeList = menuService.menuTreeList();
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }
@@ -210,12 +205,12 @@ public class MenuController extends BaseController
     @RequestMapping(value = "/menuTreeListByRoleId/{roleId}")
     @ResponseBody
     public List<ZTreeNode> menuTreeListByRoleId(@PathVariable Integer roleId) {
-        List<Long> menuIds = menuMapper.getMenuIdsByRoleId(roleId);
+        List<Long> menuIds = menuService.getMenuIdsByRoleId(roleId);
         if (ToolUtil.isEmpty(menuIds)) {
-            List<ZTreeNode> roleTreeList = menuMapper.menuTreeList();
+            List<ZTreeNode> roleTreeList = menuService.menuTreeList();
             return roleTreeList;
         } else {
-            List<ZTreeNode> roleTreeListByUserId = menuMapper.menuTreeListByMenuIds(menuIds);
+            List<ZTreeNode> roleTreeListByUserId = menuService.menuTreeListByMenuIds(menuIds);
             return roleTreeListByUserId;
         }
     }
@@ -230,7 +225,7 @@ public class MenuController extends BaseController
             menu.setLevels(1);
         } else {
             int code = Integer.parseInt(menu.getPcode());
-            Menu pMenu = menuMapper.selectById(code);
+            Menu pMenu = menuService.getById(code);
             Integer pLevels = pMenu.getLevels();
             menu.setPcode(pMenu.getCode());
 
