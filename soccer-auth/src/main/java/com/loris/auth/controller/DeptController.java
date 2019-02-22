@@ -85,7 +85,8 @@ public class DeptController extends BaseController
     @RequestMapping(value = "/add")
     @Permission
     @ResponseBody
-    public Object add(Dept dept) {
+    public Object add(Dept dept)
+    {
         if (ToolUtil.isOneEmpty(dept, dept.getSimplename())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }

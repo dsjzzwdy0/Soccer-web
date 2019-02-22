@@ -15,8 +15,10 @@
  */
 package com.loris.auth.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.auth.dao.NoticeMapper;
 import com.loris.auth.model.Notice;
@@ -34,10 +36,16 @@ import java.util.Map;
  * @since 2018-02-22
  */
 @Service
-public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {
-
+public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService 
+{
     @Override
-    public List<Map<String, Object>> list(String condition) {
-        return this.baseMapper.list(condition);
+    public List<Map<String, Object>> list(String condition)
+    {
+    	QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
+    	if(StringUtils.isNotBlank(condition))
+    	{
+    		queryWrapper.like("title", condition).or().like("content", condition);
+    	}
+        return this.baseMapper.selectMaps(queryWrapper);
     }
 }

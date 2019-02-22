@@ -14,7 +14,7 @@
     <link href="${ctxPath}/content/fonts/css/font-awesome.css?v=4.4.0" rel="stylesheet">
     <link href="${ctxPath}/content/css/animate.css" rel="stylesheet">
     <link href="${ctxPath}/content/css/style.css?v=4.1.0" rel="stylesheet">
-    <script src="${ctxPath}/content/plugins/jquery/jquery-3.3.1.min.js?v=2.1.4"></script>
+    <script src="${ctxPath}/content/plugins/jquery/jquery.min.js?v=2.1.4"></script>
     <script src="${ctxPath}/content/plugins/bootstrap-4.3.0/js/bootstrap.min.js?v=3.3.6"></script>
 </head>
 
@@ -67,7 +67,5 @@ if (window.top !== window.self) {
         });
     });
 </script>
-
 </body>
-
 </html>

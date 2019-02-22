@@ -34,10 +34,10 @@ public class User extends Model<User>
 	 * 头像
 	 */
 	private String avatar;
+	
 	/**
 	 * 账号
-	 */
-	
+	 */	
 	@NotBlank(message="不为空")
 	private String account;
 	/**

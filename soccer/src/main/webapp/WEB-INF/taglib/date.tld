@@ -11,5 +11,4 @@
 		<tag-class>com.loris.common.tag.DateTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
-
 </taglib>

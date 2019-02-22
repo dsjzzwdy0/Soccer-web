@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.auth.annotation.BussinessLog;
-import com.loris.auth.dao.NoticeMapper;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.Notice;
 import com.loris.auth.security.ShiroKit;
+import com.loris.auth.service.NoticeService;
 import com.loris.auth.wrapper.NoticeWrapper;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.enums.BizExceptionEnum;
@@ -38,7 +38,7 @@ public class NoticeController extends BaseController {
     private String PREFIX = "/system/notice/";
 
     @Resource
-    private NoticeMapper noticeMapper;
+    private NoticeService noticeService;
 
     /**
      * 跳转到通知列表首页
@@ -61,7 +61,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("/notice_update/{noticeId}")
     public String noticeUpdate(@PathVariable Integer noticeId, Model model) {
-        Notice notice = noticeMapper.selectById(noticeId);
+        Notice notice = noticeService.getById(noticeId);
         model.addAttribute("notice",notice);
         LogObjectHolder.me().set(notice);
         return PREFIX + "notice_edit.html";
@@ -72,7 +72,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("/hello")
     public String hello() {
-        List<Map<String, Object>> notices = noticeMapper.list(null);
+        List<Map<String, Object>> notices = noticeService.list((String)null);
         super.setAttr("noticeList",notices);
         return "/blackboard.html";
     }
@@ -83,7 +83,7 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(String condition) {
-        List<Map<String, Object>> list = noticeMapper.list(condition);
+        List<Map<String, Object>> list = noticeService.list(condition);
         return super.warpObject(new NoticeWrapper(list));
     }
 
@@ -99,7 +99,7 @@ public class NoticeController extends BaseController {
         }
         notice.setCreater(ShiroKit.getUser().getId());
         notice.setCreatetime(new Date());
-        noticeMapper.insert(notice);
+        noticeService.save(notice);
         return BaseController.SUCCESS_TIP;
     }
 
@@ -112,7 +112,7 @@ public class NoticeController extends BaseController {
     public Object delete(@RequestParam Integer noticeId) {
         //缓存通知名称
         LogObjectHolder.me().set(ConstantFactory.me().getNoticeTitle(noticeId));
-        noticeMapper.deleteById(noticeId);
+        noticeService.removeById(noticeId);
         return SUCCESS_TIP;
     }
 
@@ -126,10 +126,10 @@ public class NoticeController extends BaseController {
         if (ToolUtil.isOneEmpty(notice, notice.getId(), notice.getTitle(), notice.getContent())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        Notice old = noticeMapper.selectById(notice.getId());
+        Notice old = noticeService.getById(notice.getId());
         old.setTitle(notice.getTitle());
         old.setContent(notice.getContent());
-        noticeMapper.updateById(old);
+        noticeService.updateById(old);
         return BaseController.SUCCESS_TIP;
     }
 

@@ -42,4 +42,4 @@
         </div>
     </div>
 </div>
-<script src="${ctxPath}/content/modular/system/role/role.js"></script>
+<script src="${ctxPath}/content/scripts/system/role/role.js"></script>
