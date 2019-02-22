@@ -34,7 +34,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/blackboard")
-public class BlackboardController extends BaseController {
+public class BlackboardController extends BaseController 
+{
 
     @Autowired
     private NoticeService noticeService;
@@ -43,9 +44,10 @@ public class BlackboardController extends BaseController {
      * 跳转到黑板
      */
     @RequestMapping("")
-    public String blackboard(Model model) {
+    public String blackboard(Model model)
+    {
         List<Map<String, Object>> notices = noticeService.list((String)null);
         model.addAttribute("noticeList", notices);
-        return "/blackboard.html";
+        return "/user/blackboard";
     }
 }

@@ -64,7 +64,7 @@
 		<property name="order" value="1" />
 	</bean>
 	
-	<bean name="beetlConfig" class="org.beetl.ext.spring.BeetlGroupUtilConfiguration" init-method="init">
+	<bean name="beetlConfig" class="com.loris.auth.beetl.BeetlConfiguration" init-method="init">
     	<property name="configFileResource" value="classpath:/conf/beetl.properties" />
     </bean> 
     

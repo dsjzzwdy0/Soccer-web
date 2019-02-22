@@ -112,6 +112,12 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
+		<!--beetl模板引擎 -->
+		<dependency>
+			<groupId>com.ibeetl</groupId>
+			<artifactId>beetl</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.google.code.kaptcha/kaptcha -->
 		<dependency>
 			<groupId>com.google.code.kaptcha</groupId>

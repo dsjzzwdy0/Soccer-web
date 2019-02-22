@@ -35,7 +35,7 @@ import java.util.Map;
 @RequestMapping("/notice")
 public class NoticeController extends BaseController {
 
-    private String PREFIX = "/system/notice/";
+    private String PREFIX = "/user/notice/";
 
     @Resource
     private NoticeService noticeService;
@@ -45,7 +45,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("")
     public String index() {
-        return PREFIX + "notice.html";
+        return PREFIX + "notice";
     }
 
     /**
@@ -53,7 +53,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("/notice_add")
     public String noticeAdd() {
-        return PREFIX + "notice_add.html";
+        return PREFIX + "notice_add";
     }
 
     /**
@@ -64,7 +64,7 @@ public class NoticeController extends BaseController {
         Notice notice = noticeService.getById(noticeId);
         model.addAttribute("notice",notice);
         LogObjectHolder.me().set(notice);
-        return PREFIX + "notice_edit.html";
+        return PREFIX + "notice_edit";
     }
 
     /**
@@ -74,7 +74,7 @@ public class NoticeController extends BaseController {
     public String hello() {
         List<Map<String, Object>> notices = noticeService.list((String)null);
         super.setAttr("noticeList",notices);
-        return "/blackboard.html";
+        return "/blackboard";
     }
 
     /**
