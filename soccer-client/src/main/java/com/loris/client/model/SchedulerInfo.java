@@ -36,23 +36,35 @@ public class SchedulerInfo extends AutoIdEntity
 {
 	/** */
 	private static final long serialVersionUID = 1L;
+	
+	final public static int STATUS_FINISHED = 1;
+	final public static int STATUS_INIT = 0;
+	final public static int STATUS_STOP = 2;
 
 	@NotBlank
-	private String sid;
-	private String name;
-	private int maxActiveTaskThread;
-	private int intervaltime;
-	private int randTimeSeed;
-	private String type;
-	private int total;			//总数
-	private int leftsize;		//剩余数
-	private int state;			//1表示处理完成、0表示创建、2表示暂停
-	private Date createtime;	//创建时间
-	private Date finishtime;	//完成时间
+	protected String sid;
+	protected String name;
+	protected int maxActiveTaskThread;
+	protected int intervaltime;
+	protected int randTimeSeed;
+	protected String type;
+	protected int total;		//总数
+	protected int leftsize;		//剩余数
+	protected int state;		//1表示处理完成、0表示创建、2表示暂停
+	protected Date createtime;	//创建时间
+	protected Date stoptime;	//停止时间
+	protected Date finishtime;	//完成时间
 	
 	/** 插件数据 */
 	@TableField(exist=false)
 	private List<String> plugins = new ArrayList<>();
+	
+	public SchedulerInfo()
+	{
+		this.intervaltime = 200;
+		this.randTimeSeed = -100;
+		this.maxActiveTaskThread = 5;
+	}
 	
 	public String getSid()
 	{
@@ -158,6 +170,7 @@ public class SchedulerInfo extends AutoIdEntity
 	}
 	public void setCreatetime(Date createtime)
 	{
+		this.stoptime = null;
 		this.createtime = createtime;
 	}
 	public Date getFinishtime()
@@ -166,6 +179,27 @@ public class SchedulerInfo extends AutoIdEntity
 	}
 	public void setFinishtime(Date finishtime)
 	{
+		this.stoptime = null;
 		this.finishtime = finishtime;
+	}
+	
+	public void setFinishtime()
+	{
+		setFinishtime(new Date());
+	}
+	
+	public void setStoptime()
+	{
+		setStoptime(new Date());
+	}
+
+	public Date getStoptime()
+	{
+		return stoptime;
+	}
+
+	public void setStoptime(Date stoptime)
+	{
+		this.stoptime = stoptime;
 	}
 }

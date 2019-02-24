@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.model.dao;
+package com.loris.client.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.loris.client.model.WebPage;

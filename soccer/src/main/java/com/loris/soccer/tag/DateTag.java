@@ -1,4 +1,4 @@
-package com.loris.common.tag;
+package com.loris.soccer.tag;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

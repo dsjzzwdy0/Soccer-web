@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.model.SchedulerInfo;
-import com.loris.client.model.service.SchedulerInfoService;
+import com.loris.client.service.SchedulerInfoService;
 import com.loris.common.context.ApplicationContextHelper;
 
 /**   

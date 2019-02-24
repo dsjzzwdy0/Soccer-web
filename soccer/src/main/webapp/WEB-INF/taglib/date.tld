@@ -8,7 +8,7 @@
 	
 	<tag>
 		<name>date</name>
-		<tag-class>com.loris.common.tag.DateTag</tag-class>
+		<tag-class>com.loris.soccer.tag.DateTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 </taglib>

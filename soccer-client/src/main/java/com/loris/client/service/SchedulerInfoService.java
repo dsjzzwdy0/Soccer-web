@@ -1,7 +1,7 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  SchedulerInfoServiceImpl.java   
- * @Package com.loris.client.model.service.impl   
+ * @Title:  SchedulerInfoService.java   
+ * @Package com.loris.client.model.service   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
  * @date:   2019年1月28日 下午8:59:32   
@@ -9,26 +9,21 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.model.service.impl;
+package com.loris.client.service;
 
-import org.springframework.stereotype.Service;
-
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.client.model.SchedulerInfo;
-import com.loris.client.model.dao.SchedulerInfoMapper;
-import com.loris.client.model.service.SchedulerInfoService;
 
 /**   
- * @ClassName:  SchedulerInfoServiceImpl    
- * @Description: 调度管理器服务实现类  
+ * @ClassName:  SchedulerInfoService    
+ * @Description: TODO(这里用一句话描述这个类的作用)   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@Service("schedulerInfoService")
-public class SchedulerInfoServiceImpl extends ServiceImpl<SchedulerInfoMapper, SchedulerInfo> implements SchedulerInfoService
+public interface SchedulerInfoService extends IService<SchedulerInfo>
 {
 
 }
