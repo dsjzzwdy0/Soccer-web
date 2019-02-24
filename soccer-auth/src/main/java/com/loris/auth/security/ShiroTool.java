@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.auth.beetl;
+package com.loris.auth.security;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
-import com.loris.auth.security.ShiroUser;
-
-public class ShiroExt {
+public class ShiroTool {
     private static final String NAMES_DELIMETER = ",";
 
     /**

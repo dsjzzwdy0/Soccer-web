@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.auth.beetl;
+package com.loris.soccer.conf;
 
 import org.beetl.core.Context;
 import org.beetl.core.Function;
@@ -21,6 +21,7 @@ import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+import com.loris.auth.security.ShiroTool;
 import com.loris.auth.util.KaptchaUtil;
 import com.loris.common.util.ToolUtil;
 
@@ -44,7 +45,7 @@ public class BeetlConfiguration extends BeetlGroupUtilConfiguration {
     @Override
     public void initOther() 
     {
-        groupTemplate.registerFunctionPackage("shiro", new ShiroExt());
+        groupTemplate.registerFunctionPackage("shiro", new ShiroTool());
         groupTemplate.registerFunctionPackage("tool", new ToolUtil());
         groupTemplate.registerFunctionPackage("kaptcha", new KaptchaUtil());
         //groupTemplate.registerTagFactory("dictSelector", () -> dictSelectorTag);
