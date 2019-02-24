@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loris.auth.SoccerProperties;
-import com.loris.auth.annotation.BussinessLog;
-import com.loris.auth.annotation.Permission;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.factory.UserFactory;
@@ -19,6 +17,8 @@ import com.loris.auth.security.ShiroUser;
 import com.loris.auth.service.UserService;
 import com.loris.auth.transfer.UserDto;
 import com.loris.auth.wrapper.UserWrapper;
+import com.loris.common.annotation.BussinessLog;
+import com.loris.common.annotation.Permission;
 import com.loris.common.constant.Constants;
 import com.loris.common.constant.state.ManagerStatus;
 import com.loris.common.constant.tips.Tip;

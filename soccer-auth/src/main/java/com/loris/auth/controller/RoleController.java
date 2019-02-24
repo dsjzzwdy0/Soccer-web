@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loris.auth.annotation.BussinessLog;
-import com.loris.auth.annotation.Permission;
 import com.loris.auth.dao.RoleMapper;
 import com.loris.auth.dao.UserMapper;
 import com.loris.auth.dictmap.base.Dict;
@@ -20,6 +18,8 @@ import com.loris.auth.model.User;
 import com.loris.auth.node.ZTreeNode;
 import com.loris.auth.service.RoleService;
 import com.loris.auth.wrapper.RoleWrapper;
+import com.loris.common.annotation.BussinessLog;
+import com.loris.common.annotation.Permission;
 import com.loris.common.cache.CacheKit;
 import com.loris.common.constant.Constants;
 import com.loris.common.constant.cache.Cache;

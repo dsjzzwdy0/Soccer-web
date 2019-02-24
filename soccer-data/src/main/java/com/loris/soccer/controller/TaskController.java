@@ -13,7 +13,6 @@ package com.loris.soccer.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.scheduler.SchedulerFactory;
+import com.loris.common.exception.ParamsException;
 import com.loris.common.pagination.PageInfo;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
@@ -40,7 +40,7 @@ import com.loris.common.web.wrapper.Rest;
 @RequestMapping("/task")
 public class TaskController extends BaseController
 {
-	private static Logger logger = Logger.getLogger(TaskController.class);
+	//private static Logger logger = Logger.getLogger(TaskController.class);
 	
 	@Autowired
 	SchedulerFactory schedulerFactory;	
@@ -49,7 +49,7 @@ public class TaskController extends BaseController
 	@RequestMapping("/listSchedulers")
 	public Rest getSchedulerInfoList(HttpServletRequest request)
 	{
-		logger.info(getCurrentIp(request));
+		//logger.info(getCurrentIp(request));
 		return Rest.okData(schedulerFactory.getSchedulers());
 	}
 	
@@ -60,7 +60,8 @@ public class TaskController extends BaseController
 		//logger.info("index=" + pageInfo.getIndex() + ", pernum=" + pageInfo.getPernum());
 		if(bindingResult.hasErrors())
 		{
-			return Rest.failureData(errorInfos(bindingResult));
+			//return Rest.failureData(errorInfos(bindingResult));
+			throw new ParamsException(errorInfos(bindingResult));
 		}		
 		return Rest.okData(pageInfo);
 	}

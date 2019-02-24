@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
-import com.loris.auth.annotation.BussinessLog;
-import com.loris.auth.annotation.Permission;
 import com.loris.auth.dao.LoginLogMapper;
 import com.loris.auth.dao.OperationLogMapper;
 import com.loris.auth.model.OperationLog;
 import com.loris.auth.wrapper.LogWrapper;
+import com.loris.common.annotation.BussinessLog;
+import com.loris.common.annotation.Permission;
 import com.loris.common.constant.Constants;
 import com.loris.common.constant.state.BizLogType;
 import com.loris.common.pagination.PageReq;

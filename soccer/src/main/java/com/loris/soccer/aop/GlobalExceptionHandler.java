@@ -1,4 +1,4 @@
-package com.loris.auth.aop;
+package com.loris.soccer.aop;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,6 +19,7 @@ import com.loris.auth.security.ShiroKit;
 import com.loris.common.constant.tips.ErrorTip;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.InvalidKaptchaException;
+import com.loris.common.exception.ParamsException;
 import com.loris.common.exception.enums.BizExceptionEnum;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +37,7 @@ import static com.loris.common.support.HttpKit.*;
 @ControllerAdvice
 public class GlobalExceptionHandler
 {
-
-	private Logger log = Logger.getLogger(this.getClass());
+	private static Logger log = Logger.getLogger(GlobalExceptionHandler.class);
 
 	/**
 	 * 拦截业务异常
@@ -173,6 +173,13 @@ public class GlobalExceptionHandler
 	{
 		model.addAttribute("tips", "session超时");
 		assertAjax(request, response);
+		return "/login";
+	}
+	
+	@ExceptionHandler(ParamsException.class)
+	public String paramsError(ParamsException e, Model model)
+	{
+		model.addAttribute("tips", e.getMessage());
 		return "/login";
 	}
 

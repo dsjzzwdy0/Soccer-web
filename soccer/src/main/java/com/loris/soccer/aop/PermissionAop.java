@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.auth.aop;
+package com.loris.soccer.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -22,8 +22,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import com.loris.auth.annotation.Permission;
 import com.loris.auth.security.check.PermissionCheckManager;
+import com.loris.common.annotation.Permission;
 
 import javax.naming.NoPermissionException;
 import java.lang.reflect.Method;
@@ -35,8 +35,7 @@ import java.lang.reflect.Method;
 @Component
 public class PermissionAop
 {
-
-	@Pointcut(value = "@annotation(com.loris.auth.annotation.Permission)")
+	@Pointcut(value = "@annotation(com.loris.common.annotation.Permission)")
 	private void cutPermission()
 	{
 	}

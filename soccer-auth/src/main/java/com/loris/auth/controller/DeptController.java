@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loris.auth.annotation.BussinessLog;
-import com.loris.auth.annotation.Permission;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
@@ -16,6 +14,8 @@ import com.loris.auth.model.Dept;
 import com.loris.auth.node.ZTreeNode;
 import com.loris.auth.service.DeptService;
 import com.loris.auth.wrapper.DeptWrapper;
+import com.loris.common.annotation.BussinessLog;
+import com.loris.common.annotation.Permission;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.enums.BizExceptionEnum;
 import com.loris.common.util.ToolUtil;

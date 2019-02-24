@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.loris.auth.annotation.BussinessLog;
-import com.loris.auth.annotation.Permission;
 import com.loris.auth.dictmap.base.Dict;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
@@ -18,6 +16,8 @@ import com.loris.auth.model.Menu;
 import com.loris.auth.node.ZTreeNode;
 import com.loris.auth.service.MenuService;
 import com.loris.auth.wrapper.MenuWrapper;
+import com.loris.common.annotation.BussinessLog;
+import com.loris.common.annotation.Permission;
 import com.loris.common.constant.Constants;
 import com.loris.common.constant.state.MenuStatus;
 import com.loris.common.constant.tips.Tip;
