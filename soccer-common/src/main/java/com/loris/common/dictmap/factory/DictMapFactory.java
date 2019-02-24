@@ -1,7 +1,7 @@
-package com.loris.auth.dictmap.factory;
+package com.loris.common.dictmap.factory;
 
-import com.loris.auth.dictmap.base.AbstractDictMap;
-import com.loris.auth.dictmap.base.SystemDict;
+import com.loris.common.dictmap.AbstractDictMap;
+import com.loris.common.dictmap.SystemDict;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.enums.BizExceptionEnum;
 
@@ -13,15 +13,12 @@ import com.loris.common.exception.enums.BizExceptionEnum;
  */
 public class DictMapFactory
 {
-
-	private static final String basePath = "com.tigis.geoqs.common.constant.dictmap.";
-
 	/**
 	 * 通过类名创建具体的字典类
 	 */
 	public static AbstractDictMap createDictMap(String className)
 	{
-		if ("SystemDict".equals(className))
+		if ("com.loris.common.dicmap.SystemDict".equals(className))
 		{
 			return new SystemDict();
 		}
@@ -30,7 +27,7 @@ public class DictMapFactory
 			try
 			{
 				@SuppressWarnings("unchecked")
-				Class<AbstractDictMap> clazz = (Class<AbstractDictMap>) Class.forName(basePath + className);
+				Class<AbstractDictMap> clazz = (Class<AbstractDictMap>) Class.forName(className);
 				return clazz.newInstance();
 			}
 			catch (Exception e)

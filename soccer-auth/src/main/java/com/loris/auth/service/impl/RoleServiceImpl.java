@@ -22,7 +22,7 @@ import com.loris.auth.dao.RelationMapper;
 import com.loris.auth.dao.RoleMapper;
 import com.loris.auth.model.Relation;
 import com.loris.auth.model.Role;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.ZTreeNode;
 import com.loris.auth.service.RoleService;
 
 import org.springframework.stereotype.Service;

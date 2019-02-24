@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loris.auth.SoccerProperties;
-import com.loris.auth.dictmap.base.Dict;
+import com.loris.auth.dictmap.factory.AuthDictMapNames;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.factory.UserFactory;
 import com.loris.auth.log.LogObjectHolder;
@@ -184,7 +184,7 @@ public class UserMgrController extends BaseController
 	 * 添加管理员
 	 */
 	@RequestMapping("/add")
-	@BussinessLog(value = "添加管理员", key = "account", dict = Dict.UserDict)
+	@BussinessLog(value = "添加管理员", key = "account", dict = AuthDictMapNames.UserDict)
 	@Permission(Constants.ADMIN_NAME)
 	@ResponseBody
 	public Tip add(@Valid UserDto user, BindingResult result)
@@ -217,7 +217,7 @@ public class UserMgrController extends BaseController
 	 * @throws NoPermissionException
 	 */
 	@RequestMapping("/edit")
-	@BussinessLog(value = "修改管理员", key = "account", dict = Dict.UserDict)
+	@BussinessLog(value = "修改管理员", key = "account", dict = AuthDictMapNames.UserDict)
 	@ResponseBody
 	public Tip edit(@Valid UserDto user, BindingResult result) throws NoPermissionException
 	{
@@ -252,7 +252,7 @@ public class UserMgrController extends BaseController
 	 * 删除管理员（逻辑删除）
 	 */
 	@RequestMapping("/delete")
-	@BussinessLog(value = "删除管理员", key = "userId", dict = Dict.UserDict)
+	@BussinessLog(value = "删除管理员", key = "userId", dict = AuthDictMapNames.UserDict)
 	@Permission
 	@ResponseBody
 	public Tip delete(@RequestParam Integer userId)
@@ -293,7 +293,7 @@ public class UserMgrController extends BaseController
 	 * 重置管理员的密码
 	 */
 	@RequestMapping("/reset")
-	@BussinessLog(value = "重置管理员密码", key = "userId", dict = Dict.UserDict)
+	@BussinessLog(value = "重置管理员密码", key = "userId", dict = AuthDictMapNames.UserDict)
 	@Permission(Constants.ADMIN_NAME)
 	@ResponseBody
 	public Tip reset(@RequestParam Integer userId)
@@ -315,7 +315,7 @@ public class UserMgrController extends BaseController
 	 * 冻结用户
 	 */
 	@RequestMapping("/freeze")
-	@BussinessLog(value = "冻结用户", key = "userId", dict = Dict.UserDict)
+	@BussinessLog(value = "冻结用户", key = "userId", dict = AuthDictMapNames.UserDict)
 	@Permission(Constants.ADMIN_NAME)
 	@ResponseBody
 	public Tip freeze(@RequestParam Integer userId)
@@ -338,7 +338,7 @@ public class UserMgrController extends BaseController
 	 * 解除冻结用户
 	 */
 	@RequestMapping("/unfreeze")
-	@BussinessLog(value = "解除冻结用户", key = "userId", dict = Dict.UserDict)
+	@BussinessLog(value = "解除冻结用户", key = "userId", dict = AuthDictMapNames.UserDict)
 	@Permission(Constants.ADMIN_NAME)
 	@ResponseBody
 	public Tip unfreeze(@RequestParam Integer userId)
@@ -356,7 +356,7 @@ public class UserMgrController extends BaseController
 	 * 分配角色
 	 */
 	@RequestMapping("/setRole")
-	@BussinessLog(value = "分配角色", key = "userId,roleIds", dict = Dict.UserDict)
+	@BussinessLog(value = "分配角色", key = "userId,roleIds", dict = AuthDictMapNames.UserDict)
 	@Permission(Constants.ADMIN_NAME)
 	@ResponseBody
 	public Tip setRole(@RequestParam("userId") Integer userId, @RequestParam("roleIds") String roleIds)

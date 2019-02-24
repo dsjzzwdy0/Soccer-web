@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.loris.auth.node;
+package com.loris.auth.model.node;
 
 /**
  * jquery ztree 插件的节点

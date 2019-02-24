@@ -12,7 +12,7 @@
 package com.loris.auth.model.view;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.ZTreeNode;
 
 /**   
  * @ClassName:  MenuTreeEntity    

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loris.auth.dictmap.base.Dict;
+import com.loris.auth.dictmap.factory.AuthDictMapNames;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.Notice;
@@ -92,7 +92,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    @BussinessLog(value = "新增通知",key = "title",dict = Dict.NoticeMap)
+    @BussinessLog(value = "新增通知",key = "title",dict = AuthDictMapNames.NoticeMap)
     public Object add(Notice notice) {
         if (ToolUtil.isOneEmpty(notice, notice.getTitle(), notice.getContent())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -108,7 +108,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping(value = "/delete")
     @ResponseBody
-    @BussinessLog(value = "删除通知",key = "noticeId",dict = Dict.DeleteDict)
+    @BussinessLog(value = "删除通知",key = "noticeId",dict = AuthDictMapNames.DeleteDict)
     public Object delete(@RequestParam Integer noticeId) {
         //缓存通知名称
         LogObjectHolder.me().set(ConstantFactory.me().getNoticeTitle(noticeId));
@@ -121,7 +121,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping(value = "/update")
     @ResponseBody
-    @BussinessLog(value = "修改通知",key = "title",dict = Dict.NoticeMap)
+    @BussinessLog(value = "修改通知",key = "title",dict = AuthDictMapNames.NoticeMap)
     public Object update(Notice notice) {
         if (ToolUtil.isOneEmpty(notice, notice.getId(), notice.getTitle(), notice.getContent())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);

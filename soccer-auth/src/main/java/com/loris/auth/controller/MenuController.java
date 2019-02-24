@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.loris.auth.dictmap.base.Dict;
+import com.loris.auth.dictmap.factory.AuthDictMapNames;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.Menu;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.ZTreeNode;
 import com.loris.auth.service.MenuService;
 import com.loris.auth.wrapper.MenuWrapper;
 import com.loris.common.annotation.BussinessLog;
@@ -97,7 +97,7 @@ public class MenuController extends BaseController
      */
     @Permission(Constants.ADMIN_NAME)
     @RequestMapping(value = "/edit")
-    @BussinessLog(value = "修改菜单", key = "name", dict = Dict.MenuDict)
+    @BussinessLog(value = "修改菜单", key = "name", dict = AuthDictMapNames.MenuDict)
     @ResponseBody
     public Tip edit(@Valid Menu menu, BindingResult result) {
         if (result.hasErrors()) {
@@ -125,7 +125,7 @@ public class MenuController extends BaseController
      */
     @Permission(Constants.ADMIN_NAME)
     @RequestMapping(value = "/add")
-    @BussinessLog(value = "菜单新增", key = "name", dict = Dict.MenuDict)
+    @BussinessLog(value = "菜单新增", key = "name", dict = AuthDictMapNames.MenuDict)
     @ResponseBody
     public Tip add(@Valid Menu menu, BindingResult result) {
         if (result.hasErrors()) {
@@ -151,7 +151,7 @@ public class MenuController extends BaseController
      */
     @Permission(Constants.ADMIN_NAME)
     @RequestMapping(value = "/remove")
-    @BussinessLog(value = "删除菜单", key = "menuId", dict = Dict.DeleteDict)
+    @BussinessLog(value = "删除菜单", key = "menuId", dict = AuthDictMapNames.DeleteDict)
     @ResponseBody
     public Tip remove(@RequestParam Integer menuId) {
         if (ToolUtil.isEmpty(menuId)) {

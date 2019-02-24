@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.auth.dao.DeptMapper;
 import com.loris.auth.model.Dept;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.ZTreeNode;
 import com.loris.auth.service.DeptService;
 import com.loris.common.util.ToolUtil;
 import javax.annotation.Resource;

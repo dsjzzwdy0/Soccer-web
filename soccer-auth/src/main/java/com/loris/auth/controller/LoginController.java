@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.loris.auth.log.LogManager;
 import com.loris.auth.log.LogTaskFactory;
 import com.loris.auth.model.User;
-import com.loris.auth.node.MenuNode;
+import com.loris.auth.model.node.MenuNode;
 import com.loris.auth.security.ShiroKit;
 import com.loris.auth.security.ShiroUser;
 import com.loris.auth.service.MenuService;

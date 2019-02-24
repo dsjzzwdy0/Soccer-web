@@ -27,11 +27,11 @@ import com.loris.auth.dao.view.MenuTreeNodeMapper;
 import com.loris.auth.dao.view.RoleResMapper;
 import com.loris.auth.model.Menu;
 import com.loris.auth.model.Relation;
+import com.loris.auth.model.node.MenuNode;
+import com.loris.auth.model.node.RoleRes;
+import com.loris.auth.model.node.ZTreeNode;
 import com.loris.auth.model.view.MenuNodeEntity;
 import com.loris.auth.model.view.MenuTreeNode;
-import com.loris.auth.model.view.RoleRes;
-import com.loris.auth.node.MenuNode;
-import com.loris.auth.node.ZTreeNode;
 import com.loris.auth.service.MenuService;
 
 import javax.annotation.Resource;

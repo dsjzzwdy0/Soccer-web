@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.auth.dao.RoleMapper;
 import com.loris.auth.dao.UserMapper;
-import com.loris.auth.dictmap.base.Dict;
+import com.loris.auth.dictmap.factory.AuthDictMapNames;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.Role;
 import com.loris.auth.model.User;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.ZTreeNode;
 import com.loris.auth.service.RoleService;
 import com.loris.auth.wrapper.RoleWrapper;
 import com.loris.common.annotation.BussinessLog;
@@ -116,7 +116,7 @@ public class RoleController extends BaseController
      * 角色新增
      */
     @RequestMapping(value = "/add")
-    @BussinessLog(value = "添加角色", key = "name", dict = Dict.RoleDict)
+    @BussinessLog(value = "添加角色", key = "name", dict = AuthDictMapNames.RoleDict)
     @Permission(Constants.ADMIN_NAME)
     @ResponseBody
     public Tip add(@Valid Role role, BindingResult result) {
@@ -132,7 +132,7 @@ public class RoleController extends BaseController
      * 角色修改
      */
     @RequestMapping(value = "/edit")
-    @BussinessLog(value = "修改角色", key = "name", dict = Dict.RoleDict)
+    @BussinessLog(value = "修改角色", key = "name", dict = AuthDictMapNames.RoleDict)
     @Permission(Constants.ADMIN_NAME)
     @ResponseBody
     public Tip edit(@Valid Role role, BindingResult result) {
@@ -150,7 +150,7 @@ public class RoleController extends BaseController
      * 删除角色
      */
     @RequestMapping(value = "/remove")
-    @BussinessLog(value = "删除角色", key = "roleId", dict = Dict.DeleteDict)
+    @BussinessLog(value = "删除角色", key = "roleId", dict = AuthDictMapNames.DeleteDict)
     @Permission(Constants.ADMIN_NAME)
     @ResponseBody
     public Tip remove(@RequestParam Integer roleId) {
@@ -190,7 +190,7 @@ public class RoleController extends BaseController
      * 配置权限
      */
     @RequestMapping("/setAuthority")
-    @BussinessLog(value = "配置权限", key = "roleId,ids", dict = Dict.RoleDict)
+    @BussinessLog(value = "配置权限", key = "roleId,ids", dict = AuthDictMapNames.RoleDict)
     @Permission(Constants.ADMIN_NAME)
     @ResponseBody
     public Tip setAuthority(@RequestParam("roleId") Integer roleId, @RequestParam("ids") String ids) {

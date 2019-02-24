@@ -19,8 +19,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.auth.model.Menu;
-import com.loris.auth.node.MenuNode;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.MenuNode;
+import com.loris.auth.model.node.ZTreeNode;
 
 import java.util.List;
 import java.util.Map;

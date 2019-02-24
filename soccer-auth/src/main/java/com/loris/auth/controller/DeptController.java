@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loris.auth.dictmap.base.Dict;
+import com.loris.auth.dictmap.factory.AuthDictMapNames;
 import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.Dept;
-import com.loris.auth.node.ZTreeNode;
+import com.loris.auth.model.node.ZTreeNode;
 import com.loris.auth.service.DeptService;
 import com.loris.auth.wrapper.DeptWrapper;
 import com.loris.common.annotation.BussinessLog;
@@ -81,7 +81,7 @@ public class DeptController extends BaseController
     /**
      * 新增部门
      */
-    @BussinessLog(value = "添加部门", key = "simplename", dict = Dict.DeptDict)
+    @BussinessLog(value = "添加部门", key = "simplename", dict = AuthDictMapNames.DeptDict)
     @RequestMapping(value = "/add")
     @Permission
     @ResponseBody
@@ -119,7 +119,7 @@ public class DeptController extends BaseController
     /**
      * 修改部门
      */
-    @BussinessLog(value = "修改部门", key = "simplename", dict = Dict.DeptDict)
+    @BussinessLog(value = "修改部门", key = "simplename", dict = AuthDictMapNames.DeptDict)
     @RequestMapping(value = "/update")
     @Permission
     @ResponseBody
@@ -135,7 +135,7 @@ public class DeptController extends BaseController
     /**
      * 删除部门
      */
-    @BussinessLog(value = "删除部门", key = "deptId", dict = Dict.DeleteDict)
+    @BussinessLog(value = "删除部门", key = "deptId", dict = AuthDictMapNames.DeleteDict)
     @RequestMapping(value = "/delete")
     @Permission
     @ResponseBody

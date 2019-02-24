@@ -15,7 +15,7 @@
  */
 package com.loris.auth.dictmap;
 
-import com.loris.auth.dictmap.base.AbstractDictMap;
+import com.loris.common.dictmap.AbstractDictMap;
 
 /**
  * 通知的映射

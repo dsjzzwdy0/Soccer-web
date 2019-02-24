@@ -12,7 +12,7 @@
 package com.loris.auth.dao.view;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.loris.auth.model.view.RoleRes;
+import com.loris.auth.model.node.RoleRes;
 
 /**   
  * @ClassName:  RoleResMapper    
