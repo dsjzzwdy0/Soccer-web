@@ -12,14 +12,13 @@
 package com.loris.client.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.client.scheduler.status.SchedulerStatus;
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -37,9 +36,10 @@ public class SchedulerInfo extends AutoIdEntity
 	/** */
 	private static final long serialVersionUID = 1L;
 	
-	final public static int STATUS_FINISHED = 1;
-	final public static int STATUS_INIT = 0;
-	final public static int STATUS_STOP = 2;
+	public static final String PLUGIN_BEAN = "bean";
+	public static final String PLUGIN_CLASS = "class";
+	
+	private static final String separator = ";";
 
 	@NotBlank
 	protected String sid;
@@ -48,16 +48,7 @@ public class SchedulerInfo extends AutoIdEntity
 	protected int intervaltime;
 	protected int randTimeSeed;
 	protected String type;
-	protected int total;		//总数
-	protected int leftsize;		//剩余数
-	protected int state;		//1表示处理完成、0表示创建、2表示暂停
-	protected Date createtime;	//创建时间
-	protected Date stoptime;	//停止时间
-	protected Date finishtime;	//完成时间
-	
-	/** 插件数据 */
-	@TableField(exist=false)
-	private List<String> plugins = new ArrayList<>();
+	protected String plugins;
 	
 	public SchedulerInfo()
 	{
@@ -115,91 +106,58 @@ public class SchedulerInfo extends AutoIdEntity
 	{
 		this.type = type;
 	}
-	public int getTotal()
-	{
-		return total;
-	}
-	public void setTotal(int total)
-	{
-		this.total = total;
-	}
-	public int getLeftsize()
-	{
-		return leftsize;
-	}
-	public void setLeftsize(int leftsize)
-	{
-		this.leftsize = leftsize;
-	}
-	public int getState()
-	{
-		return state;
-	}
-	public void setState(int state)
-	{
-		this.state = state;
-	}
-	
-	public void setStatus(int total, int leftsize, int state)
-	{
-		this.total = total;
-		this.leftsize = leftsize;
-		this.state = state;
-	}
-	
-	public void setStatus(SchedulerStatus status)
-	{
-		this.total = status.getTotal();
-	}
-	
-	public List<String> getPlugins()
+
+	public String getPlugins()
 	{
 		return plugins;
 	}
-	public void setPlugins(List<String> plugins)
+
+	public void setPlugins(String plugins)
 	{
 		this.plugins = plugins;
 	}
-	public void addPlugin(String className)
+	public void addPlugin(String name)
 	{
-		plugins.add(className);
+		addPlugin("", name);
 	}
-	public Date getCreatetime()
+	public void addPlugin(String type, String name)
 	{
-		return createtime;
-	}
-	public void setCreatetime(Date createtime)
-	{
-		this.stoptime = null;
-		this.createtime = createtime;
-	}
-	public Date getFinishtime()
-	{
-		return finishtime;
-	}
-	public void setFinishtime(Date finishtime)
-	{
-		this.stoptime = null;
-		this.finishtime = finishtime;
+		if(StringUtils.isBlank(plugins))
+		{
+			plugins = "";
+		}
+		else
+		{
+			plugins += separator;
+		}
+		if(type.equalsIgnoreCase(PLUGIN_BEAN))
+		{
+			plugins += PLUGIN_BEAN + ":" + name;
+		}
+		else if(type.equalsIgnoreCase(PLUGIN_CLASS))
+		{
+			plugins += PLUGIN_CLASS + ":" + name;
+		}
+		else {
+			plugins += name;
+		}
 	}
 	
-	public void setFinishtime()
+	/**
+	 * 分解插件信息
+	 * @return 插件列表
+	 */
+	public List<String> getPluginInfos()
 	{
-		setFinishtime(new Date());
-	}
-	
-	public void setStoptime()
-	{
-		setStoptime(new Date());
-	}
-
-	public Date getStoptime()
-	{
-		return stoptime;
-	}
-
-	public void setStoptime(Date stoptime)
-	{
-		this.stoptime = stoptime;
+		List<String> list = new ArrayList<>();
+		String[] strings = plugins.split(separator);
+		for (String string : strings)
+		{
+			if(StringUtils.isNotBlank(string))
+			{
+				list.add(string);
+			}
+		}
+		return list;
 	}
 }

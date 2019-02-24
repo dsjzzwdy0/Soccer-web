@@ -46,9 +46,6 @@
 	<aop:config proxy-target-class="true" />
 	<aop:config>  <!--定义切面--> </aop:config>
 	
-	<!-- 基础数据所需的运行环境类 -->
-	<bean id="applicationContext" class="com.loris.common.context.ApplicationContextHelper"/>
-	
 	<!--以下视图配置根据需要任选一种即可 -->
 	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" >
 		<property name="definitions">
@@ -98,4 +95,14 @@
 		<!-- 内存中的最大值 -->
 		<property name="maxInMemorySize" value="40960" />
 	</bean>
+	
+	<!--启用缓存注解-->
+    <cache:annotation-driven cache-manager="cacheManager"/>
+    
+    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
+    </bean>
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="cacheManagerFactory"/>
+    </bean>
 </beans>

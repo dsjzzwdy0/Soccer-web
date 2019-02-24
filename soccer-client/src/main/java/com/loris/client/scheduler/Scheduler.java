@@ -13,7 +13,7 @@ package com.loris.client.scheduler;
 
 import java.io.Closeable;
 
-import com.loris.client.scheduler.status.SchedulerStatus;
+import com.loris.client.model.SchedulerStatus;
 import com.loris.client.task.plugin.TaskPlugin;
 
 /**   

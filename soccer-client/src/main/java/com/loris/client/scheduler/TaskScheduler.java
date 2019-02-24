@@ -17,7 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.loris.client.exception.HostForbiddenException;
-import com.loris.client.scheduler.status.SchedulerStatus;
+import com.loris.client.exception.NoProcessPluginException;
+import com.loris.client.model.SchedulerStatus;
 import com.loris.client.task.Task;
 import com.loris.client.task.TaskExecutor;
 import com.loris.client.task.TaskPostProcessor;
@@ -35,7 +36,7 @@ import com.loris.client.task.util.IdleThreadInfo;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.client.task.util.ThreadUtil;
 
-import static com.loris.client.scheduler.status.SchedulerStatus.*;
+import static com.loris.client.model.SchedulerStatus.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -236,6 +237,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		}
 		else if (taskType == TaskEventType.Error)
 		{
+			removeRunningTask(task);
 			Throwable throwable = event.getError();
 			if(throwable instanceof HostForbiddenException)      //如果是被禁止，则停止当前的类型的数据
 			{
@@ -246,11 +248,14 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 					taskQueue.removeByType(type);
 				}
 			}
+			else if(throwable instanceof NoProcessPluginException)
+			{
+				logger.info(throwable.getMessage());
+			}
 			else
 			{
-				logger.info("Error occured when excuting " + task.getName() + ", push back to TaskQueue.");				
+				logger.info("Error occured '" + throwable.getMessage() + "' when excuting " + task.getName() + ", push back to TaskQueue.");				
 				taskQueue.pushBack(task);
-				removeRunningTask(task);
 			}					
 		}
 		else if(taskType == TaskEventType.PostProcessed)

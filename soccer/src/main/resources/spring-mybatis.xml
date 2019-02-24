@@ -12,6 +12,9 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
                         http://www.springframework.org/schema/cache
        					http://www.springframework.org/schema/cache/spring-cache.xsd">
+       					
+	<!-- 基础数据所需的运行环境类 -->
+	<bean id="applicationContext" class="com.loris.common.context.ApplicationContextHelper"/>
 	
 	<!-- 自动扫描该包，将注解类的Bean实体扫描到Spring-mvc控制容器中 -->
 	<!--  context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer, com.loris.auth" />-->
@@ -57,8 +60,7 @@
 		<!-- 自动扫描Mapping.xml文件 -->
 		<property name="mapperLocations">
 			<list>
-			    <value>classpath*:com/loris/client/*/dao/mapper/*Mapper.xml</value>
-				<value>classpath*:com/loris/soccer/dao/mapper/*Mapper.xml</value>
+			    <value>classpath*:com/loris/auth/dao/mapper/*Mapper.xml</value>
 			</list>
 		</property>
 		<property name="configLocation" value="classpath:/conf/mybatis-config.xml" />
@@ -82,7 +84,7 @@
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
 	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="
-		    com.loris.client.*.dao,
+		    com.loris.client.dao,
 		    com.loris.auth.dao,
 		    com.loris.soccer.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
@@ -93,16 +95,6 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
-	<!--启用缓存注解-->
-    <cache:annotation-driven cache-manager="cacheManager"/>
-    
-    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
-    </bean>
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-        <property name="cacheManager" ref="cacheManagerFactory"/>
-    </bean>
 	
 	<!-- 验证码数据配置 -->
     <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">

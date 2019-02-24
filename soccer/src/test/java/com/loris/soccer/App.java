@@ -24,9 +24,11 @@ import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
+import com.loris.client.model.SchedulerInfo;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.TaskScheduler;
+import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
@@ -76,7 +78,7 @@ public class App
 		{
 			getApplicationContext();
 			// testSetting();
-			testQueue();			
+			// testQueue();			
 			//testAutowired();
 			//testZgzcwWebPage();			
 			//testZgzcwOpWebPage();
@@ -85,6 +87,8 @@ public class App
 			//testBdWebPage();
 			
 			//testJcWebPage();
+			
+			testSchedulerInfo();
 
 			//testMainThreadScheduler();
 			// testContext();
@@ -95,8 +99,26 @@ public class App
 		}
 		finally
 		{
+			
 			context = null;
 		}
+	}
+	
+	public static void testSchedulerInfo() throws Exception
+	{
+		SchedulerInfo info = new SchedulerInfo();
+		info.setSid("101-190");
+		info.setName("数据下载的信息");
+		info.setIntervaltime(4000);
+		info.setMaxActiveTaskThread(3);
+		info.setRandTimeSeed(200);
+		info.setType("zgzcw.downloader");
+		//info.addPlugin("bean:httpCommonPlugin");
+		info.addPlugin(SchedulerInfo.PLUGIN_CLASS, ZgzcwIssueProducePlugin.class.getName());
+		
+		Scheduler scheduler = SchedulerFactory.createTaskScheduler(info);
+		logger.info(scheduler.getName());
+		SchedulerFactory.startTaskScheduler(scheduler);
 	}
 	
 	/**

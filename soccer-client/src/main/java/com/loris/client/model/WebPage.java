@@ -12,6 +12,7 @@
 package com.loris.client.model;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -111,6 +112,7 @@ public class WebPage extends AutoIdEntity
 	{
 		this.url = url;
 		pageid = url;
+		decodeHostInfo(url);
 	}
 	public String getMethod()
 	{
@@ -276,5 +278,22 @@ public class WebPage extends AutoIdEntity
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return "" + calendar.get(Calendar.YEAR) + File.separator + calendar.get(Calendar.MONTH) + File.separator;		
+	}
+	
+	/**
+	 * 解析服务器地址基本信息
+	 * @param url 远程URL地址
+	 */
+	private void decodeHostInfo(String url)
+	{
+		try
+		{
+			URL url2 = new URL(url);
+			host = url2.getHost();
+			port = url2.getPort() + "";
+			protocol = url2.getProtocol();
+		}
+		catch (Exception e) {
+		}
 	}
 }

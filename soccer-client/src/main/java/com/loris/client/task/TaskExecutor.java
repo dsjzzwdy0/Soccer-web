@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.loris.client.exception.NoProcessPluginException;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
@@ -111,7 +112,7 @@ public class TaskExecutor extends TaskEventProducer implements Closeable
 			TaskProcessPlugin plugin = getTaskProcessPlugin(task);
 			if (plugin == null)
 			{
-				throw new Exception("There are no TaskProcessPlugin to process the task[" + task.getName() + "]");
+				throw new NoProcessPluginException("There are no TaskProcessPlugin to process the task[" + task.getName() + "]");
 			}
 			notifyTaskEvent(new TaskEvent(task, TaskEventType.Excute));
 			if(plugin.execute(context, task))

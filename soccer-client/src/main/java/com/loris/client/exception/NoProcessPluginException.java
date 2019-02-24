@@ -1,7 +1,7 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  League.java   
- * @Package com.loris.soccer.model   
+ * @Title:  NoProcessPluginException.java   
+ * @Package com.loris.client.exception   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
  * @date:   2019年1月28日 下午8:59:32   
@@ -9,41 +9,29 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.task.basic;
-
-import com.loris.client.model.WebPage;
+package com.loris.client.exception;
 
 /**   
- * @ClassName:  League   
- * @Description: 网络页面处理的任务 
+ * @ClassName: NoProcessPluginException   
+ * @Description: 没有插件对任务进行处理
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
- *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class WebPageTask extends AbstractTask
+public class NoProcessPluginException extends Exception
 {
-	/** 网页下载任务 */
-	WebPage page = null;
-	
 	/**
-	 * Create a new instance of WebPageTask.
-	 * @param page The WebPage.
+	 * 
 	 */
-	public WebPageTask(WebPage page)
+	private static final long serialVersionUID = 1L;
+	
+	public NoProcessPluginException()
 	{
-		this.page = page;
-		setName(page.getUrl());
 	}
-
-	public WebPage getPage()
+	
+	public NoProcessPluginException(String info)
 	{
-		return page;
-	}
-
-	public void setPage(WebPage page)
-	{
-		this.page = page;
+		super(info);
 	}
 }
