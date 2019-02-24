@@ -9,18 +9,18 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.service.impl;
+package com.loris.soccer.service;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.loris.common.dao.SqlHelper;
 import com.loris.common.model.TableRecords;
+import com.loris.common.service.DataService;
+import com.loris.common.service.SqlHelper;
 import com.loris.soccer.model.League;
 import com.loris.soccer.service.LeagueService;
-import com.loris.soccer.service.SoccerDataService;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
 
@@ -35,10 +35,10 @@ import java.util.List;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-@Service("webPageResultsService")
-public class SoccerServiceImpl implements SoccerDataService
+@Service("soccerDataService")
+public class SoccerDataServiceImpl implements DataService
 {
-	private static Logger logger = Logger.getLogger(SoccerServiceImpl.class);
+	private static Logger logger = Logger.getLogger(SoccerDataServiceImpl.class);
 
 	@Autowired
 	protected LeagueService leagueService;
@@ -49,7 +49,7 @@ public class SoccerServiceImpl implements SoccerDataService
 	/**
 	 * 保存数据页面解析得到的内容
 	 * 
-	 * @see com.loris.soccer.service.SoccerDataService#saveSoccerDataRecords(com.loris.common.model.TableRecords)
+	 * @see com.loris.common.service.DataService#saveSoccerDataRecords(com.loris.common.model.TableRecords)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

@@ -3,7 +3,6 @@ package com.loris.auth.dictmap.factory;
 import java.lang.reflect.Method;
 
 import com.loris.auth.factory.ConstantFactory;
-import com.loris.auth.factory.IConstantFactory;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.enums.BizExceptionEnum;
 
@@ -16,14 +15,14 @@ import com.loris.common.exception.enums.BizExceptionEnum;
 public class DictFieldWarpperFactory {
 
     public static Object createFieldWarpper(Object field, String methodName) {
-        IConstantFactory me = ConstantFactory.me();
+        ConstantFactory me = ConstantFactory.me();
         try {
-            Method method = IConstantFactory.class.getMethod(methodName, field.getClass());
+            Method method = ConstantFactory.class.getMethod(methodName, field.getClass());
             Object result = method.invoke(me, field);
             return result;
         } catch (Exception e) {
             try {
-                Method method = IConstantFactory.class.getMethod(methodName, Integer.class);
+                Method method = ConstantFactory.class.getMethod(methodName, Integer.class);
                 Object result = method.invoke(me, Integer.parseInt(field.toString()));
                 return result;
             } catch (Exception e1) {

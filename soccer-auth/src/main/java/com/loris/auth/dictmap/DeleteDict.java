@@ -25,7 +25,6 @@ import com.loris.common.dictmap.AbstractDictMap;
  */
 public class DeleteDict extends AbstractDictMap
 {
-
 	@Override
 	public void init()
 	{
