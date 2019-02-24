@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.zgzcw;
+package com.loris.soccer.plugin.zgzcw;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.soccer.data.zgzcw.plugin.AbstractProducePlugin;
+import com.loris.soccer.plugin.zgzcw.base.AbstractProducePlugin;
 
 /**   
  * @ClassName:  League   

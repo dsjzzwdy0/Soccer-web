@@ -1,6 +1,6 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  LotteryScoreWebPageParser.java   
+ * @Title:  LotteryJcScoreWebPageParser.java   
  * @Package com.loris.soccer.model   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
@@ -9,29 +9,28 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.zgzcw.parser;
+package com.loris.soccer.plugin.zgzcw.parser;
 
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
-import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryScoreWebPageParser;
+import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
+import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryScoreWebPageParser;
 
 /**   
- * @ClassName:  LotteryScoreWebPageParser  
- * @Description: 比分数据的解析器 
+ * @ClassName:  LotteryJcScoreWebPageParser  
+ * @Description: 竞彩比赛比分数据的解析类 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LotteryBdScoreWebPageParser extends AbstractLotteryScoreWebPageParser
+public class LotteryJcScoreWebPageParser extends AbstractLotteryScoreWebPageParser
 {
-
 	/**
-	 * Create a new instance of LotteryScoreWebPageParser.
+	 * Create a new instance of LotteryJcScoreWebPageParser.
 	 */
-	public LotteryBdScoreWebPageParser()
+	public LotteryJcScoreWebPageParser()
 	{
-		super(ZgzcwConstants.PAGE_SCORE_BD, SoccerConstants.LOTTERY_BD);
+		super(ZgzcwConstants.PAGE_SCORE_JC, SoccerConstants.LOTTERY_JC);
 	}
 }
