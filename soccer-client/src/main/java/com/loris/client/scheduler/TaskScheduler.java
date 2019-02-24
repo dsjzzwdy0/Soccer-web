@@ -117,8 +117,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	{
 		try
 		{
-			taskProducer.initialize(this);
-			
+			taskProducer.initialize(this);			
 			taskProducer.run();
 		}
 		catch(Exception e)
@@ -138,7 +137,13 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	 */
 	public void addRunningTask(Task task)
 	{
-		runningTaskThreads.add(task);
+		removeRunningTask(task);
+		try
+		{
+			runningTaskThreads.add(task);
+		}
+		catch (Exception e) {
+		}
 	}
 
 	/**
@@ -148,7 +153,12 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	 */
 	public void removeRunningTask(Task task)
 	{
-		runningTaskThreads.remove(task);
+		try
+		{
+			runningTaskThreads.remove(task);
+		}
+		catch (Exception e) {
+		}
 	}
 
 	/**
@@ -202,7 +212,8 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.info(e.getMessage());
 		}
 	}
 
@@ -273,11 +284,13 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		try
 		{
 			if(!initialized)
+			{
 				initialize();
+			}
 		}
 		catch (Exception e)
 		{
-			logger.info("Error occured when initialize the " + status.getName() + " scheduler, exit.");
+			logger.info("Error occured when initialize the " + getName() + " scheduler, exit.");
 			return;		
 		}
 		

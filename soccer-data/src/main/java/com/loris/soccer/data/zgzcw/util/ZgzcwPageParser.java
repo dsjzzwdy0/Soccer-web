@@ -11,16 +11,28 @@
  */
 package com.loris.soccer.data.zgzcw.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
+import com.loris.client.parser.WebPageParser;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.data.zgzcw.constant.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
+import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LotteryBdScoreWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
-import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LotteryJcScoreWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.OddsYpWebPageParser;
 
 /**   
  * @ClassName: ZgzcwPageParser   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 数据解析器的应用类  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
@@ -28,28 +40,35 @@ import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser;
  */
 public class ZgzcwPageParser
 {
+	/** 数据解析器列有 */
+	private static Map<String, WebPageParser> parsers = new HashMap<>();
+	
+	static
+	{
+		parsers.put(ZgzcwConstants.PAGE_CENTER, new CenterPageParser());
+		parsers.put(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, new LeagueWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_LEAGUE_CUP, new CupWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_LOTTERY_JC, new LotteryJcWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_SCORE_JC, new LotteryJcScoreWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_LOTTERY_BD, new LotteryBdWebPageParser());		
+		parsers.put(ZgzcwConstants.PAGE_SCORE_BD, new LotteryBdScoreWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_ODDS_OP, new OddsOpWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_ODDS_YP, new OddsYpWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_ODDS_NUM, new OddsNumWebPageParser());		
+	}
+	
 	/**
-	 * 解析数据
-	 * @param page
-	 * @return
+	 * 解析页面数据，返回数据结果列有
+	 * @param page 页面数据
+	 * @return 数据结果
 	 */
 	public static TableRecords parseWebPage(WebPage page) throws WebParserException
 	{
-		AbstractZgzcwWebPageParser pageParser = null;
-		switch (page.getType())
-		{
-		case ZgzcwConstants.PAGE_LOTTERY_BD:
-			pageParser = new LotteryBdWebPageParser();
-			break;
-		
-		default:
-			break;
-		}
-				
-		if(pageParser == null)
+		WebPageParser parser = parsers.get(page.getType());
+		if(parser == null)
 		{
 			throw new WebParserException("There are no parser can parse the '" + page.getType() + "'.");
-		}		
-		return pageParser.parse(page);
+		}	
+		return parser.parse(page);
 	}
 }

@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
+import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
@@ -31,7 +33,7 @@ import com.loris.client.task.event.TaskEventListener;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProducePlugin
+public class BasicWebPageTaskProducePlugin extends BasicTaskPlugin implements TaskProducePlugin
 {
 	/**
 	 *  (non-Javadoc)
@@ -99,5 +101,31 @@ public class BasicTaskProducePlugin extends BasicTaskPlugin implements TaskProdu
 	public boolean execute(TaskPluginContext context, Task task)
 	{
 		throw new UnsupportedOperationException("This will not be called.");
+	}
+	
+	/**
+	 * 创建任务
+	 * @param page 数据页面
+	 * @param quiet 是否不通知插件环境
+	 * @return 待处理的任务
+	 */
+	protected WebPageTask createWebPageTask(WebPage page, boolean quiet)
+	{
+		WebPageTask task = new WebPageTask(page);
+		if(!quiet)
+		{
+			notifyTaskEvent(new TaskEvent(task, TaskEventType.Created));
+		}
+		return task;
+	}
+	
+	/**
+	 * 创建任务，该任务创建之后，将会通知插件运行环境
+	 * @param page 数据页面
+	 * @return 待处理的任务
+	 */
+	protected WebPageTask createWebPageTask(WebPage page)
+	{
+		return createWebPageTask(page, false);
 	}
 }

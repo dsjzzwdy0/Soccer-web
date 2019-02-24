@@ -128,7 +128,7 @@ public class WebPage extends AutoIdEntity
 	}
 	public void setHeaders(Map<String, String> headers)
 	{
-		this.headers = headers;
+		this.headers.putAll(headers);
 	}
 	public Map<String, String> getParams()
 	{
@@ -136,7 +136,7 @@ public class WebPage extends AutoIdEntity
 	}
 	public void setParams(Map<String, String> params)
 	{
-		this.params = params;
+		this.params.putAll(params);
 	}
 	public String getParam(String key)
 	{

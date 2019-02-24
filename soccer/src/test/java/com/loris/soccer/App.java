@@ -35,7 +35,7 @@ import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
-import com.loris.client.task.plugin.BasicTaskProducePlugin;
+import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
@@ -378,7 +378,7 @@ public class App
 		scheduler.setMaxActiveTaskThread(1);
 		//scheduler.setName("即时任务下载器");
 
-		scheduler.addTaskPlugin(new BasicTaskProducePlugin());
+		scheduler.addTaskPlugin(new BasicWebPageTaskProducePlugin());
 		scheduler.addTaskPlugin(new BasicTaskProcessPlugin());
 		scheduler.addTaskPlugin(new BasicTaskPostProcessPlugin());
 

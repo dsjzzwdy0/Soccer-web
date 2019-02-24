@@ -176,9 +176,9 @@ public class SchedulerFactory
 	 */
 	public static Scheduler createTaskScheduler(SchedulerStatus status)
 	{
-		List<String> plugins = status.getPluginInfos();
 		TaskScheduler scheduler = new TaskScheduler(status);
 		
+		List<String> plugins = status.getPluginInfos();
 		for (String pluginName : plugins)
 		{
 			logger.info(status.getName() + " add plugin: " + pluginName);
