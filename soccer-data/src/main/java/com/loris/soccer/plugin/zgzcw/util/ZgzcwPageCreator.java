@@ -14,6 +14,7 @@ package com.loris.soccer.plugin.zgzcw.util;
 import static com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.loris.client.fetcher.util.HttpUtil;
@@ -36,7 +37,7 @@ public class ZgzcwPageCreator
 	/** 通用的页面编码 */
 	protected static String encoding = EncodingUtil.ENCODING_UTF8;
 
-	/** 页面的类型与基础网址的对应关系表. */
+	/** 页面的类型与基础网址的对应关系表. 
 	public static final String[][] PAGE_TYPES =
 	{
 		{PAGE_CENTER, 				"http://saishi.zgzcw.com/soccer/"}, 	// 数据主页面
@@ -60,7 +61,39 @@ public class ZgzcwPageCreator
 		{"history",                 "http://fenxi.zgzcw.com/"}, 			// 2282960/bsls	
 		{"leaguem",                 "http://saishi.zgzcw.com/soccer/"}, 	// 数据主页面
 		{"live",  					"http://live.zgzcw.com/"}				// 实时数据页面 //ls/AllData.action
-	};
+	};*/
+	
+	public static Map<String, Double> PAGE_PRIORITIES = new HashMap<>();
+	public static Map<String, String> PAGE_BASE_URLS = new HashMap<>();
+	
+	static
+	{
+		PAGE_PRIORITIES.put(PAGE_CENTER, 100.0);
+		PAGE_PRIORITIES.put(PAGE_LEAGUE_LEAGUE, 20.0);
+		PAGE_PRIORITIES.put(PAGE_LEAGUE_CUP, 20.0);
+		PAGE_PRIORITIES.put(PAGE_LEAGUE_LEAGUE_ROUND, 19.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_BD, 10.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_JC, 10.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_ZC, 10.0);
+		PAGE_PRIORITIES.put(PAGE_SCORE_BD, 10.0);
+		PAGE_PRIORITIES.put(PAGE_SCORE_JC, 10.0);
+		PAGE_PRIORITIES.put(PAGE_ODDS_OP, 1.0);
+		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1.0);
+		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1.0);		
+		
+		PAGE_BASE_URLS.put(PAGE_CENTER, 			"http://saishi.zgzcw.com/soccer/");	// 数据主页面
+		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE,    	"http://saishi.zgzcw.com/soccer/league/");  // "cup/51/2017-2018/" 杯赛类型的数据
+		PAGE_BASE_URLS.put(PAGE_LEAGUE_CUP,    		"http://saishi.zgzcw.com/soccer/cup/");  	// "cup/51/2017-2018/" 杯赛类型的数据
+		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE_ROUND, 	"http://saishi.zgzcw.com/summary/liansaiAjax.action" ); // ?source_league_id=8&currentRound=3&season=2017-2018&seasonType=";//联赛类型的数据
+		PAGE_BASE_URLS.put(PAGE_LOTTERY_BD,        	"http://cp.zgzcw.com/lottery/bdplayvsforJsp.action?lotteryId=200"); // &issue=80401 // 北单足彩
+		PAGE_BASE_URLS.put(PAGE_LOTTERY_JC,        	"http://cp.zgzcw.com/lottery/jchtplayvsForJsp.action?lotteryId=47&type=jcmini"); // &issue=2018-03-25 // 竞彩足球
+		PAGE_BASE_URLS.put(PAGE_LOTTERY_ZC,       	"http://cp.zgzcw.com/lottery/zcplayvs.action?lotteryId=13"); // &issue=300&v=2018-02-22" 足彩足球
+		PAGE_BASE_URLS.put(PAGE_SCORE_BD, 			"http://cp.zgzcw.com/lottery/bdplayvsforJsp.action?lotteryId=250");    //&issue=
+		PAGE_BASE_URLS.put(PAGE_SCORE_JC, 			"http://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=23");
+		PAGE_BASE_URLS.put(PAGE_ODDS_OP,      		"http://fenxi.zgzcw.com/"); 			// 2249815/bjop /mid/bjop
+		PAGE_BASE_URLS.put(PAGE_ODDS_YP,      		"http://fenxi.zgzcw.com/"); 			// 2249815/ypdb /mid/ypdb
+		PAGE_BASE_URLS.put(PAGE_ODDS_NUM,      		"http://fenxi.zgzcw.com/"); 
+	}
 	
 	/**
 	 * 创建数据下载页面
@@ -71,7 +104,7 @@ public class ZgzcwPageCreator
 	 */
 	public static WebPage createZgzcwWebPage(String type) throws IllegalArgumentException
 	{
-		return createZgzcwWebPage(getPageTypeIndex(type), null);
+		return createZgzcwWebPage(type, null);
 	}
 	
 	/**
@@ -83,7 +116,7 @@ public class ZgzcwPageCreator
 	 */
 	public static WebPage createZgzcwWebPage(String type, Map<String, String> params) throws IllegalArgumentException
 	{
-		return createZgzcwWebPage(getPageTypeIndex(type), params);
+		return createZgzcwWebPage(type, HttpUtil.HTTP_METHOD_GET, encoding, params);
 	}
 	
 	/**
@@ -93,46 +126,52 @@ public class ZgzcwPageCreator
 	 * @return 数据页面
 	 * @throws IllegalArgumentException 如果type没有定义或参数错误，则抛出异常值
 	 */
-	public static WebPage createZgzcwWebPage(String type, String method, Map<String, String> params) throws IllegalArgumentException
+	public static WebPage createZgzcwWebPage(String type, String method, String encoding, Map<String, String> params) throws IllegalArgumentException
 	{
-		return createZgzcwWebPage(getPageTypeIndex(type), method, params);
-	}
-	
-
-	/**
-	 * 基本信息，共同具有的特征
-	 * 
-	 * @param page
-	 */
-	public static WebPage createZgzcwWebPage(int typeIndex, Map<String, String> params) throws IllegalArgumentException
-	{
-		return createZgzcwWebPage(typeIndex, HttpUtil.HTTP_METHOD_GET, params);
-	}
-	
-	/**
-	 * 基本信息，共同具有的特征
-	 * 
-	 * @param page
-	 */
-	public static WebPage createZgzcwWebPage(int typeIndex, String method, Map<String, String> params) throws IllegalArgumentException
-	{
-		if(typeIndex >= PAGE_TYPES.length)
+		if(!PAGE_BASE_URLS.containsKey(type))
 		{
-			throw new IllegalArgumentException("The type index '" + typeIndex + "' is overflowed the Page types defined in this PageCreator.");
+			throw new IllegalArgumentException("The type '" + type + "' is not defined in this PageCreator.");
 		}
+		
 		WebPage page = new WebPage();
 		page.setEncoding(encoding);
-		page.setType(PAGE_TYPES[typeIndex][0]);
+		page.setType(type);
 		page.setCreatetime(new Date());
 		page.setSource(SOURCE_ZGZCW);
 		page.setMethod(method);
+		page.setUrl(createURL(type, params));
+		page.setPriority(getDefaultPriority(type));
 		if (params != null)
 		{
 			page.setParams(params);
 		}
-
-		String type = PAGE_TYPES[typeIndex][0];
-		String basicUrl = PAGE_TYPES[typeIndex][1];
+		return page;
+	}
+	
+	/**
+	 * 获得页面的优先等级值
+	 * @param type 页面类型
+	 * @return 页面优先等级值
+	 */
+	protected static Double getDefaultPriority(String type)
+	{
+		if(PAGE_PRIORITIES.containsKey(type))
+		{
+			return PAGE_PRIORITIES.get(type);
+		}
+		else
+			return 1.0;
+	}
+	
+	/**
+	 * 创建页面访问地址
+	 * @param type
+	 * @param params
+	 * @return
+	 */
+	protected static String createURL(String type, Map<String, String> params)
+	{
+		String basicUrl = PAGE_BASE_URLS.get(type);
 		switch (type)
 		{
 		case PAGE_LEAGUE_LEAGUE:
@@ -152,30 +191,7 @@ public class ZgzcwPageCreator
 			basicUrl = URLBuilder.makeDefaultUrl(basicUrl, params);
 			break;
 		}
-		page.setUrl(basicUrl);
-		return page;
-	}
-	
-
-	/**
-	 * 获得页面的类型
-	 * 
-	 * @param type
-	 *            页面类型
-	 * @return 序号
-	 * @throws IllegalArgumentException
-	 *             错误的参数
-	 */
-	protected static int getPageTypeIndex(String type) throws IllegalArgumentException
-	{
-		for (int i = 0; i < PAGE_TYPES.length; i++)
-		{
-			if (PAGE_TYPES[i][0].equalsIgnoreCase(type))
-			{
-				return i;
-			}
-		}
-		throw new IllegalArgumentException("There are no type of '" + type + "' defined in this PageCreator.");
+		return basicUrl;
 	}
 
 	/**
@@ -183,7 +199,7 @@ public class ZgzcwPageCreator
 	 * 
 	 * @return 编码类型
 	 */
-	public static String getEncoding()
+	public static String getDefaultEncoding()
 	{
 		return encoding;
 	}
@@ -194,8 +210,28 @@ public class ZgzcwPageCreator
 	 * @param encoding
 	 *            编码
 	 */
-	public static void setEncoding(String encoding1)
+	public static void setDefaultEncoding(String encoding1)
 	{
 		encoding = encoding1;
+	}
+	
+	/**
+	 * 设置页面类型的优先等级值
+	 * @param type 类型
+	 * @param priority 优先等级值
+	 */
+	public static void setDefaultPriority(String type, Double priority)
+	{
+		PAGE_PRIORITIES.put(type, priority);
+	}
+	
+	/**
+	 * 设置页面类型默认的网页地址
+	 * @param type 类型
+	 * @param url 基础地址
+	 */
+	public static void setDefaultBasicUrl(String type, String url)
+	{
+		PAGE_BASE_URLS.put(type, url);
 	}
 }

@@ -60,7 +60,7 @@ public class WebPage extends AutoIdEntity implements Task
 	
 	/** 优先级*/
 	@TableField(exist=false)
-	protected double priority;
+	protected double priority = 1.0;
 	
 	/** 任务优先等级的精度表示 */
 	@TableField(exist=false)

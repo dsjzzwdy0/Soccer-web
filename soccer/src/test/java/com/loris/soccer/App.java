@@ -26,6 +26,7 @@ import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
+import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
@@ -89,8 +90,8 @@ public class App
 			
 			//testJcWebPage();
 			
-			testSchedulerInfo();
-			//testMapEqual();
+			//testSchedulerInfo();
+			testMapEqual();
 			//testMainThreadScheduler();
 			// testContext();
 		}
@@ -128,6 +129,34 @@ public class App
 		map2.put("3", "105");
 		logger.info(map1.equals(map2));
 		logger.info("Map1: " + map1.hashCode() + ", Map2: " + map2.hashCode());
+		
+		Map<String, String> params1 = new HashMap<>();
+		params1.put(SoccerConstants.NAME_FIELD_MID, "201002");
+		WebPage page1 = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params1);
+		
+		Map<String, String> params2 = new HashMap<>();
+		params2.put(SoccerConstants.NAME_FIELD_MID, "201002");
+		WebPage page2 = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params2);
+		
+		logger.info(page1.hashCode());
+		logger.info(page2.hashCode());
+		
+		logger.info(page1.equals(page2));
+		
+		page2.setPriority(20);
+		
+		TaskQueue queue = new TaskQueue();
+		queue.add(page1);
+		queue.add(page2);
+		
+		logger.info(queue.size());
+		
+		page2.setMethod(HttpUtil.HTTP_METHOD_POST);
+		queue.add(page2);
+		logger.info(queue.size());
+		
+		logger.info(queue.poll().getPriority());
+		logger.info(queue.poll().getPriority());
 	}
 	
 	public static void testSchedulerInfo() throws Exception
