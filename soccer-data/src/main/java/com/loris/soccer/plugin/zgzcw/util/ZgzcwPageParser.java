@@ -18,7 +18,6 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.WebPageParser;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LeagueWebPageParser;

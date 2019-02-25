@@ -26,8 +26,8 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.MatchJc;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**
  * @ClassName: LotteryJcWebPageParser

@@ -48,7 +48,6 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
@@ -57,6 +56,7 @@ import com.loris.soccer.plugin.zgzcw.parser.LotteryJcScoreWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.OddsOpWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.processor.HttpTaskProcessor;
 

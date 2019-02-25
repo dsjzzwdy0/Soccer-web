@@ -12,8 +12,8 @@
 package com.loris.soccer.plugin.zgzcw.parser;
 
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryScoreWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  LotteryScoreWebPageParser  

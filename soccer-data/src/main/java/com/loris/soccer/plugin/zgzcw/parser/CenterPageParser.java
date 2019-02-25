@@ -27,8 +27,8 @@ import static com.loris.soccer.constant.SoccerConstants.*;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractZgzcwWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  LeagueCenterPageParser   

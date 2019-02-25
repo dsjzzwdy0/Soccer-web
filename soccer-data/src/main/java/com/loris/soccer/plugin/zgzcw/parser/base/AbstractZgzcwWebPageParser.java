@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.AbstractWebPageParser;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  AbstractZgzcwWebPageParser  

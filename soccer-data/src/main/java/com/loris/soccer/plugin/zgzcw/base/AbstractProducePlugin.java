@@ -31,7 +31,7 @@ import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.base.IssueMatch;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageParser;
 import com.loris.soccer.processor.HttpTaskProcessor;

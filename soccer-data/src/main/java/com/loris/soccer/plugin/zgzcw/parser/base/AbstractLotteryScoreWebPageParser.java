@@ -24,7 +24,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsScore;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  AbstractLotteryScoreWebPageParser  

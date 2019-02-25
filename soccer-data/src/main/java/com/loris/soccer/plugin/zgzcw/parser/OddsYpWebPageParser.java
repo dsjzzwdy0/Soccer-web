@@ -28,8 +28,8 @@ import com.loris.common.util.NumberUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dict.HandicapDict;
 import com.loris.soccer.model.OddsYp;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**
  * @ClassName: League

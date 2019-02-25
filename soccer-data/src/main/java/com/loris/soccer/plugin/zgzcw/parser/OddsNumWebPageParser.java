@@ -25,7 +25,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsNum;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  League   

@@ -29,8 +29,8 @@ import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLeagueWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  CupWebPageParser  

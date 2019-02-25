@@ -11,7 +11,7 @@
  */
 package com.loris.soccer.plugin.zgzcw.util;
 
-import static com.loris.soccer.plugin.zgzcw.ZgzcwConstants.*;
+import static com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants.*;
 
 import java.util.Date;
 import java.util.Map;

@@ -27,8 +27,8 @@ import com.loris.common.util.NumberUtil;
 import com.loris.common.util.URLParser;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsOp;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  League   

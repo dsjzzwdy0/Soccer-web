@@ -27,8 +27,8 @@ import com.loris.common.util.DateUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.IssueMatch;
-import com.loris.soccer.plugin.zgzcw.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryWebPageParser;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.util.LotteryUtil;
 
 /**   
