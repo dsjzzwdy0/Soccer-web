@@ -25,16 +25,16 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
-import com.loris.client.task.basic.WebPageTask;
+import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.base.IssueMatch;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageParser;
-import com.loris.soccer.processor.HttpTaskProcessor;
 
 /**   
  * @ClassName: AbstractProducePlugin   
@@ -49,7 +49,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	private static Logger logger = Logger.getLogger(AbstractProducePlugin.class);
 	
 	@Autowired
-	protected HttpTaskProcessor httpCommonPlugin;
+	protected HttpCommonWebPageExecutor httpCommonPlugin;
 	
 	/**
 	 * 产生任务程序
@@ -84,7 +84,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	protected boolean createFromBdMainPage(TaskPluginContext context) throws IOException, SQLException, HostForbiddenException, UrlFetchException, WebParserException
 	{
 		WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
-		WebPageTask task = this.createWebPageTask(bdMainPage, true);
+		Task task = this.createWebPageTask(bdMainPage, true);
 		
 		String errorinfo = "";
 		try

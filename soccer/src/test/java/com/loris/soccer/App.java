@@ -34,13 +34,13 @@ import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
-import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
@@ -60,7 +60,6 @@ import com.loris.soccer.plugin.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
-import com.loris.soccer.processor.HttpTaskProcessor;
 
 
 /**
@@ -90,8 +89,8 @@ public class App
 			
 			//testJcWebPage();
 			
-			//testSchedulerInfo();
-			testMapEqual();
+			testSchedulerInfo();
+			//testMapEqual();
 			//testMainThreadScheduler();
 			// testContext();
 		}
@@ -140,7 +139,7 @@ public class App
 		info.setMaxActiveTaskThread(3);
 		info.setRandTimeSeed(200);
 		info.setType("zgzcw.downloader");
-		//info.addPlugin("bean:httpCommonPlugin");
+		info.addPlugin("bean:httpCommonPlugin");
 		info.addPlugin(SchedulerInfo.PLUGIN_CLASS, ZgzcwIssueProducePlugin.class.getName());
 		
 		Scheduler scheduler = SchedulerFactory.createTaskScheduler(info);
@@ -498,14 +497,14 @@ public class App
 	
 	private static boolean getWebPage(WebPage page) throws Exception
 	{
-		try(HttpTaskProcessor client = (HttpTaskProcessor)context.getBean("httpCommonPlugin"))
+		try(HttpCommonWebPageExecutor client = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin"))
 		{
 			if(!client.isInitialized())
 			{
 				client.initialize(null);
 			}
 			
-			if(!client.execute(null, new WebPageTask(page)))
+			if(!client.execute(null, page))
 			{
 				logger.info("Error when downloading: " + page.getUrl());
 				return false;

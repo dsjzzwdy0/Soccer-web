@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.processor;
+package com.loris.soccer.executor;
 
 import java.io.IOException;
 
@@ -19,7 +19,6 @@ import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
-import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 
@@ -32,7 +31,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class HttpTaskProcessor extends BasicTaskProcessPlugin
+public class HttpCommonWebPageExecutor extends BasicTaskProcessPlugin
 {
 	/** 页面下载 客户端 */
 	private HttpCommonFetcher client = null;
@@ -41,7 +40,7 @@ public class HttpTaskProcessor extends BasicTaskProcessPlugin
 	 * Create a new HttpTaskProcessPlugin
 	 * @param setting
 	 */
-	public HttpTaskProcessor(FetcherSetting setting)
+	public HttpCommonWebPageExecutor(FetcherSetting setting)
 	{
 		client = new HttpCommonFetcher(setting);
 	}
@@ -57,10 +56,9 @@ public class HttpTaskProcessor extends BasicTaskProcessPlugin
 	@Override
 	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, IOException, HostForbiddenException
 	{
-		if(!(task.getClass().isInstance(WebPageTask.class)))
+		if(!(task.getClass().isInstance(WebPage.class)))
 		{
-			WebPage page = ((WebPageTask)task).getPage();
-			return client.download(page);
+			return client.download((WebPage)task);
 		}
 		else
 		{			

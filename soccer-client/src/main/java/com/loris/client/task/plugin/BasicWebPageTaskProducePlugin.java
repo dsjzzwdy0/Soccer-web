@@ -18,7 +18,6 @@ import java.util.List;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
-import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
@@ -109,14 +108,13 @@ public class BasicWebPageTaskProducePlugin extends BasicTaskPlugin implements Ta
 	 * @param quiet 是否不通知插件环境
 	 * @return 待处理的任务
 	 */
-	protected WebPageTask createWebPageTask(WebPage page, boolean quiet)
+	protected WebPage createWebPageTask(WebPage page, boolean quiet)
 	{
-		WebPageTask task = new WebPageTask(page);
 		if(!quiet)
 		{
-			notifyTaskEvent(new TaskEvent(task, TaskEventType.Created));
+			notifyTaskEvent(new TaskEvent(page, TaskEventType.Created));
 		}
-		return task;
+		return page;
 	}
 	
 	/**
@@ -124,7 +122,7 @@ public class BasicWebPageTaskProducePlugin extends BasicTaskPlugin implements Ta
 	 * @param page 数据页面
 	 * @return 待处理的任务
 	 */
-	protected WebPageTask createWebPageTask(WebPage page)
+	protected WebPage createWebPageTask(WebPage page)
 	{
 		return createWebPageTask(page, false);
 	}

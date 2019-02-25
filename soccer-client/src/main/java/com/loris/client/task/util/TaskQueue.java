@@ -52,17 +52,22 @@ public class TaskQueue extends PriorityQueue<Task>
 	@Override
 	public boolean add(Task task)
 	{
-		if(super.add(task))
+		synchronized(this)
 		{
-			total ++;
-			if(minPriority > task.getPriority())
+			if(contains(task))
 			{
-				minPriority = task.getPriority();
+				return false;
 			}
-			return true;
-		}
-		else
-		{
+			
+			if(super.add(task))
+			{
+				total ++;
+				if(minPriority > task.getPriority())
+				{
+					minPriority = task.getPriority();
+				}
+				return true;
+			}
 			return false;
 		}
 	}

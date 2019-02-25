@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.processor;
+package com.loris.soccer.executor;
 
 import java.io.IOException;
 
@@ -19,7 +19,6 @@ import com.loris.client.fetcher.impl.HtmlUnitFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
-import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 
@@ -32,7 +31,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class HtmlUnitTaskProcessor extends BasicTaskProcessPlugin
+public class HtmlUnitWebPageExecutor extends BasicTaskProcessPlugin
 {
 	/** HtmlUnitFetcher Client. */
 	private HtmlUnitFetcher client = null;
@@ -42,7 +41,7 @@ public class HtmlUnitTaskProcessor extends BasicTaskProcessPlugin
 	 * @param setting
 	 * @param initPage
 	 */
-	public HtmlUnitTaskProcessor(FetcherSetting setting, WebPage initPage)
+	public HtmlUnitWebPageExecutor(FetcherSetting setting, WebPage initPage)
 	{
 		client = new HtmlUnitFetcher(setting, initPage);
 	}
@@ -58,9 +57,9 @@ public class HtmlUnitTaskProcessor extends BasicTaskProcessPlugin
 	@Override
 	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, IOException, HostForbiddenException
 	{
-		if(!(task.getClass().isInstance(WebPageTask.class)))
+		if(!(task.getClass().isInstance(WebPage.class)))
 		{
-			WebPage page = ((WebPageTask)task).getPage();
+			WebPage page = (WebPage)task;
 			return client.download(page);
 		}
 		else

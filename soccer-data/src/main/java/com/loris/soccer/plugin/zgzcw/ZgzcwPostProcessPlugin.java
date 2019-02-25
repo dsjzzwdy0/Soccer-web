@@ -13,8 +13,8 @@ package com.loris.soccer.plugin.zgzcw;
 
 import org.apache.log4j.Logger;
 
+import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
-import com.loris.client.task.basic.WebPageTask;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 
@@ -41,9 +41,9 @@ public class ZgzcwPostProcessPlugin extends BasicTaskPostProcessPlugin
 	@Override
 	public boolean execute(TaskPluginContext context, Task task)
 	{
-		if(task instanceof WebPageTask)
+		if(task instanceof WebPage)
 		{
-			return execute(context, (WebPageTask)task);
+			return execute(context, task);
 		}
 		return false;
 	}
@@ -54,9 +54,9 @@ public class ZgzcwPostProcessPlugin extends BasicTaskPostProcessPlugin
 	 * @param task 任务
 	 * @return 任务执行成功与否的标志
 	 */
-	protected boolean execute(TaskPluginContext context, WebPageTask task)
+	protected boolean execute(TaskPluginContext context, WebPage task)
 	{
-		logger.info("Post Execute WebPageTask: " + task.getPage().getUrl());
+		logger.info("Post Execute WebPageTask: " + task.getUrl());
 		return false;
 	}
 }

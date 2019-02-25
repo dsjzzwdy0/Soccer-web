@@ -11,12 +11,12 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
         
-    <bean id="httpCommonPlugin" class="com.loris.soccer.processor.HttpTaskProcessor">
+    <bean id="httpCommonPlugin" class="com.loris.soccer.executor.HttpCommonWebPageExecutor">
     	<constructor-arg ref="defaultSetting" />
     	<property name="name" value="HttpCommonClient Plugin"></property>
     </bean>
     
-    <bean id="okoooHtmlUnitClient" class="com.loris.soccer.processor.HtmlUnitTaskProcessor">
+    <bean id="okoooHtmlUnitClient" class="com.loris.soccer.executor.HtmlUnitWebPageExecutor">
     	<constructor-arg ref="defaultSetting" />
     	<constructor-arg ref="okoooWebPage" />
     	<property name="name" value="HttpUint Plugin"></property>
@@ -69,7 +69,7 @@
 	</bean>
 	
 	<bean id="okoooWebPage" class="com.loris.client.model.WebPage">
-		<property name="pageid" value="okoooMainPage"></property>
+		<property name="name" value="okoooMainPage"></property>
 		<property name="url" value="http://www.okooo.com/danchang/"></property>
 		<property name="encoding" value="gb2312"></property>
 	</bean>
