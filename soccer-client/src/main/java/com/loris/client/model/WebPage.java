@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.client.fetcher.util.HttpUtil;
@@ -296,4 +298,53 @@ public class WebPage extends AutoIdEntity
 		catch (Exception e) {
 		}
 	}
+	
+	/**
+	 * 判断两个网页对象是否相等，用于进行重复数据的检测
+	 * 
+	 * @param obj 被判断的对象
+	 * @return 两个对象相等，则返回是；如果不相等，则返回否
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		if(obj == null)
+		{
+			return false;
+		}
+		if(getClass() != obj.getClass())
+		{
+			return false;
+		}		
+		WebPage other = (WebPage)obj;		
+		return StringUtils.equals(type, other.getType()) &&
+				StringUtils.equals(url, other.getUrl()) &&
+				StringUtils.equals(method, other.getMethod()) &&
+				((params == null && other.getParams() == null) || 
+				 (params != null && params.equals(other.getParams())));
+	}
+	
+	/**
+	 * 计算WebPage的HashCode值
+	 * @return 返回HashCode的值
+	 */
+	@Override
+	public int hashCode()
+	{
+		int result = 17;
+		if(StringUtils.isNotBlank(type))
+			result += 31 * result + type.hashCode();
+		if(StringUtils.isNotBlank(method))
+			result += 31 * result + method.hashCode();
+		if(StringUtils.isNotBlank(url))
+			result += 31 * result + url.hashCode();
+		if(params != null && params.size() > 0)
+			result += 31 * result + params.hashCode();
+		return result;
+	}
+
 }

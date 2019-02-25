@@ -11,6 +11,8 @@
  */
 package com.loris.soccer;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,8 +90,8 @@ public class App
 			
 			//testJcWebPage();
 			
-			testSchedulerInfo();
-
+			//testSchedulerInfo();
+			testMapEqual();
 			//testMainThreadScheduler();
 			// testContext();
 		}
@@ -102,6 +104,31 @@ public class App
 			
 			context = null;
 		}
+	}
+	
+	
+	public static void testMapEqual() throws Exception
+	{
+		Map<String, String> map1 = new HashMap<>();
+		Map<String, String> map2 = new Hashtable<>();
+		
+		map1.put("1", "200");
+		map2.put("1", "200");
+		
+		
+		logger.info(map1.equals(map2));
+		logger.info("Map1: " + map1.hashCode() + ", Map2: " + map2.hashCode());
+		
+		map2.put("2", "100");
+		map1.put("2", "100");
+		logger.info("Map1: " + map1.hashCode() + ", Map2: " + map2.hashCode());
+		
+		logger.info(map1.equals(map2));
+		
+		map1.put("3", "50");
+		map2.put("3", "105");
+		logger.info(map1.equals(map2));
+		logger.info("Map1: " + map1.hashCode() + ", Map2: " + map2.hashCode());
 	}
 	
 	public static void testSchedulerInfo() throws Exception
