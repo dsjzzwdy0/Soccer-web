@@ -90,8 +90,8 @@ public class App
 			
 			//testJcWebPage();
 			
-			//testSchedulerInfo();
-			testMapEqual();
+			testSchedulerInfo();
+			//testMapEqual();
 			//testMainThreadScheduler();
 			// testContext();
 		}

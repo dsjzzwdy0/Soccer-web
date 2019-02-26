@@ -11,9 +11,7 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -24,6 +22,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryWebPageParser;
@@ -63,7 +62,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 			issue = parseIssueElement(document);
 		}
 
-		List<MatchJc> matchJcs = new ArrayList<MatchJc>();
+		MatchItemList matchJcs = new MatchItemList();
 		parseJcMatchList(document, issue, matchJcs);
 
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST, matchJcs);
@@ -81,7 +80,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 	 * @param matchJcs
 	 *            数据表
 	 */
-	protected void parseJcMatchList(Document document, String issue, List<MatchJc> matchJcs)
+	protected void parseJcMatchList(Document document, String issue, MatchItemList matchJcs)
 	{
 		Elements elements = document.select(".tz-wap .tz-body table tbody tr");
 		for (Element element : elements)
@@ -92,16 +91,6 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 
 			match.setClosetime(closeTime);
 			match.setIssue(issue);
-			// String id = element.attr("id");
-			// String expire = element.attr("expire");
-			// match.setClosed("0".equals(expire));
-
-			// String ltype = element.attr("m");
-			// match.setMatchtime(opentime);
-			// String i = getIssue(opentime);
-			// i = StringUtils.isEmpty(i) ? issue : i;
-			// match.setIssue(i);
-
 			parseJcMatch(element, match);
 			
 			matchJcs.add(match);

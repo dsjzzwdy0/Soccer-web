@@ -855,4 +855,19 @@ public class DateUtil
 
 		return dateStr;
 	}
+	
+	/**
+	 * 获得某一天的xxxx-xx-xx 00:00:00的日期值
+	 * @param d 时间
+	 * @return 零时刻的日期
+	 */
+	public static Date getDateZero(Date d)
+	{
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+	}
 }

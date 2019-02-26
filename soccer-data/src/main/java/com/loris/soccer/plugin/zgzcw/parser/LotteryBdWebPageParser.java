@@ -11,9 +11,7 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -24,6 +22,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.IssueMatch;
@@ -63,7 +62,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 		{
 			issue = parseIssueElement(document);
 		}
-		List<MatchBd> matchBds = new ArrayList<>();
+		MatchItemList matchBds = new MatchItemList();
 		parseBdMatchList(document, issue, matchBds);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, matchBds);
 		
@@ -76,7 +75,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 	 * @param document
 	 * @param matchBds
 	 */
-	protected void parseBdMatchList(Document document, String issue, List<MatchBd> matchBds)
+	protected void parseBdMatchList(Document document, String issue, MatchItemList matchBds)
 	{
 		Element element = document.selectFirst("#tw #dcc");
 
@@ -109,7 +108,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 	 * @param element
 	 * @param date
 	 */
-	protected void parseBdMatchList(Element element, String issue, List<MatchBd> matchBds)
+	protected void parseBdMatchList(Element element, String issue, MatchItemList matchBds)
 	{
 		Elements elements = element.select("tbody tr");
 		for (Element el : elements)
@@ -149,43 +148,16 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 		{
 			if (element.hasClass("wh-1"))
 			{
-
 			}
 			else if (element.hasClass("wh-2"))
 			{
-				// Element e = element.select("a").first();
-				// if (e != null)
-				// {
-				// String url = e.attr("href");
-				// String lid = getLastIdValue(url);
-				// match.setLid(lid);
-				// }
 			}
 			else if (element.hasClass("wh-3"))
 			{
-				//Element el2 = element.select("span").get(1);
-				//String endtime = el2.text();
-				//match.setClosetime(LotteryUtil.parseCloseTime(matchTime, endtime));
+				
 			}
 			else if (element.hasClass("wh-4"))
 			{
-				// String tn = element.attr("tn");
-				// match.setHomename(tn);
-				// Element e = element.selectFirst("a");
-				// if (e != null)
-				// {
-				// String url = e.attr("href");
-				// String tid = getLastIdValue(url);
-				// match.setHomeid(tid);
-				// }
-				//
-				// e = element.selectFirst(".pm");
-				// if (e != null)
-				// {
-				// String pm = e.text();
-				// pm = NumberUtil.parseFirstIntegerString(pm);
-				// match.setHomerank(pm);
-				// }
 			}
 			else if (element.hasClass("wh-5"))
 			{
@@ -193,23 +165,6 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			}
 			else if (element.hasClass("wh-6"))
 			{
-				// String tn = element.attr("tn");
-				// match.setClientname(tn);
-				// Element e = element.selectFirst("a");
-				// if (e != null)
-				// {
-				// String url = e.attr("href");
-				// String tid = getLastIdValue(url);
-				// match.setClientid(tid);
-				// }
-				//
-				// e = element.selectFirst(".pm");
-				// if (e != null)
-				// {
-				// String pm = e.text();
-				// pm = NumberUtil.parseFirstIntegerString(pm);
-				// match.setClientrank(pm);
-				// }
 			}
 			else if (element.hasClass("wh-8"))
 			{

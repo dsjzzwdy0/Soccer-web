@@ -14,16 +14,18 @@ package com.loris.soccer.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.loris.common.filter.Filter;
+import com.loris.common.filter.StringFilter;
 import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.dao.LeagueMapper;
 import com.loris.soccer.model.League;
 import com.loris.soccer.service.LeagueService;
-import com.loris.soccer.service.util.LeagueChecker;
 
 /**
  * @ClassName: League
@@ -48,13 +50,21 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	{
 		List<String> lids = ArraysUtil.getObjectFieldValue(leagues, League.class, "lid");
 		List<League> existLeagues = baseMapper.selectList(new QueryWrapper<League>().in("lid", lids));
-		LeagueChecker checker = new LeagueChecker();
+		StringFilter filter = new StringFilter();
 
 		List<League> newLeagues = new ArrayList<>();
 		for (League l : leagues)
 		{
-			checker.setLeague(l);
-			if (!ArraysUtil.hasSameObject(existLeagues, checker))
+			filter.setValue(l.getLid());
+			if (!ArraysUtil.hasSameObject(existLeagues, new Filter<League>()
+			{
+				@Override
+				public boolean accept(League obj)
+				{
+					return StringUtils.equals(l.getLid(), obj.getLid());					
+				}
+
+			}))
 			{
 				newLeagues.add(l);
 			}

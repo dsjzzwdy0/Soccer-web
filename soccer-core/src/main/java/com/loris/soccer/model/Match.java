@@ -11,8 +11,6 @@
  */
 package com.loris.soccer.model;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.model.base.MatchItem;
 
@@ -36,17 +34,14 @@ public class Match extends MatchItem
 	protected String season;			//比赛赛季
 	protected String homeid;			//主场球队编号
 	protected String clientid;			//客场球队编号
-	protected Date matchtime;			//比赛时间
 	
 	public Match()
 	{
 	}
-	
 	public Match(String mid)
 	{
-		this.mid = mid;
+		super(mid);
 	}
-	
 	
 	public String getLid()
 	{
@@ -89,15 +84,5 @@ public class Match extends MatchItem
 	public void setClientid(String clientid)
 	{
 		this.clientid = clientid;
-	}
-
-	public Date getMatchtime()
-	{
-		return matchtime;
-	}
-
-	public void setMatchtime(Date matchtime)
-	{
-		this.matchtime = matchtime;
 	}
 }

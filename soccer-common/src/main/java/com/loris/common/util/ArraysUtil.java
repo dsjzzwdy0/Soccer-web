@@ -6,35 +6,26 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import com.loris.common.filter.Filter;
+
 /**
  * 数据列表的使用类
  * @author jiean
  *
  */
 public class ArraysUtil
-{
-	/**
-	 * 数据检测器
-	 * @author jiean
-	 *
-	 * @param <T>
-	 */
-	public interface EqualChecker<T>
-	{
-		boolean isSameObject(T obj);
-	}
-	
+{	
 	/**
 	 * 检测列表中是否存在相同的记录
 	 * @param list 数据列表
 	 * @param checker 数据检测器
 	 * @return 是否有相同的记录
 	 */
-	public static<T> boolean hasSameObject(Collection<? extends T> list, EqualChecker<T> checker)
+	public static<T> boolean hasSameObject(Collection<? extends T> list, Filter<T> checker)
 	{
 		for (T t : list)
 		{
-			if(checker.isSameObject(t))
+			if(checker.accept(t))
 			{
 				return true;
 			}
@@ -48,11 +39,11 @@ public class ArraysUtil
 	 * @param checker 检测器
 	 * @return 检测的记录
 	 */
-	public static<T> T getSameObject(Collection<? extends T> list, EqualChecker<T> checker)
+	public static<T> T getSameObject(Collection<? extends T> list, Filter<T> checker)
 	{
 		for (T t : list)
 		{
-			if(checker.isSameObject(t))
+			if(checker.accept(t))
 			{
 				return t;
 			}
@@ -68,14 +59,14 @@ public class ArraysUtil
 	 * @param comparator 比较器
 	 * @return 返回最大的记录，如果不存在，则返回空值
 	 */
-	public static<T> T getLastObject(Collection<? extends T> list, EqualChecker<T> checker, Comparator<T> comparator)
+	public static<T> T getLastObject(Collection<? extends T> list, Filter<T> checker, Comparator<T> comparator)
 	{
 		T last = null;
 
 		int r;		
 		for (T tmp : list)
 		{
-			if(!checker.isSameObject(tmp))
+			if(!checker.accept(tmp))
 			{
 				continue;
 			}
@@ -140,11 +131,11 @@ public class ArraysUtil
 	 * @param dests 目标数据
 	 * @param checker 数据检测器
 	 */
-	public static<T> int getListValues(Collection<? extends T> sources, List<T> dests, EqualChecker<T> checker)
+	public static<T> int getListValues(Collection<? extends T> sources, List<T> dests, Filter<T> checker)
 	{
 		for (T t : sources)
 		{
-			if(checker.isSameObject(t))
+			if(checker.accept(t))
 			{
 				dests.add(t);
 			}

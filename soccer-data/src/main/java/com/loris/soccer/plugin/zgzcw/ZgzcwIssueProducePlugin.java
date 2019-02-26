@@ -14,15 +14,11 @@ package com.loris.soccer.plugin.zgzcw;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-
-import com.loris.client.exception.HostForbiddenException;
-import com.loris.client.exception.UrlFetchException;
-import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.common.filter.DateFilter;
 import com.loris.soccer.plugin.zgzcw.base.AbstractProducePlugin;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
@@ -41,6 +37,14 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
 	
+	/** 日期过滤器 */
+	private DateFilter dateFiter; 
+	
+	/**
+	 * 初始化任务产生器
+	 * @param context 插件任务运行环境
+	 * @throws IOException 在任务产生过程中出现异常
+	 */
 	@Override
 	public void initialize(TaskPluginContext context) throws IOException
 	{
@@ -54,32 +58,26 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
-		String errorinfo = "";
 		try
 		{
-			WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);		
-			if(!initializeFromWebPage(context, bdMainPage))
+			WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
+			if (!initializeFromWebPage(context, bdMainPage, dateFiter))
 			{
 				logger.info("No task produce from BDMainPage.");
-			}
+			}	
 		}
-		catch(HostForbiddenException exception)
+		catch (Exception e) 
 		{
-			errorinfo = exception.getMessage() + ", no task will be produced.";
+			logger.info(e.getMessage());
 		}
-		catch (UrlFetchException exception)
-		{
-			errorinfo = "Fetch " + exception.getMessage() + " error, no task will be produced.";
-		}
-		catch(WebParserException exception)
-		{
-			errorinfo = "Fetch " + exception.getMessage() + " error, no task will be produced.";
-		}
-		
-		//输入信息
-		if(StringUtils.isNotBlank(errorinfo))
-		{
-			logger.info(errorinfo);
-		}
+	}
+
+	/**
+	 * 设置日期过滤器
+	 * @param dateFiter 日期过滤器
+	 */
+	public void setDateFiter(DateFilter dateFiter)
+	{
+		this.dateFiter = dateFiter;
 	}
 }
