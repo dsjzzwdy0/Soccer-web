@@ -25,7 +25,6 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
-import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.common.model.TableRecords;
@@ -62,48 +61,54 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	 * 建立比赛的数据下载任务
 	 * @param match 比赛
 	 */
-	protected void createMatchDataTask(String mid)
+	protected void createMatchDataTask(String mid, boolean hasOp, boolean hasYp, boolean hasNum)
 	{
 		Map<String, String> params = new HashMap<>();
 		params.put(SoccerConstants.NAME_FIELD_MID, mid);
 		
 		//欧赔数据下载
-		createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params));
+		if(hasOp)
+		{
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params));
+		}
 		
 		//亚盘数据下载
-		createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params));
+		if(hasYp)
+		{
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params));
+		}
 		
 		//大小球数据下载
-		createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params));
+		if(hasNum)
+		{
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params));
+		}
 	}
 	
 	/**
 	 * 通过北单首页创建任务下载列表
 	 * @return 下载数据量
 	 */
-	protected boolean createFromBdMainPage(TaskPluginContext context) throws IOException, SQLException, HostForbiddenException, UrlFetchException, WebParserException
+	protected boolean initializeFromWebPage(TaskPluginContext context, WebPage page) throws IOException, SQLException, HostForbiddenException, UrlFetchException, WebParserException
 	{
-		WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
-		Task task = this.createWebPageTask(bdMainPage, true);
-		
 		String errorinfo = "";
 		try
 		{
-			logger.info("Starting preparing the data from : " + bdMainPage.getUrl());
-			if(!httpCommonPlugin.execute(context, task))
+			logger.info("Starting preparing the data from : " + page.getUrl());
+			if(!httpCommonPlugin.execute(context, page))
 			{
-				errorinfo = "Failed to execute the webpage task: " + bdMainPage.getUrl() + " exit.";
+				errorinfo = "Failed to execute the webpage task: " + page.getUrl() + ", no task produced.";
 			}
 			else
 			{
-				TableRecords records = ZgzcwPageParser.parseWebPage(bdMainPage);
+				TableRecords records = ZgzcwPageParser.parseWebPage(page);
 				@SuppressWarnings("unchecked")
 				List<? extends IssueMatch> matchItems = (List<? extends IssueMatch>)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
 				
 				logger.info("There are " + matchItems.size() + " matches in the list.");				
 				for (IssueMatch match : matchItems)
 				{
-					this.createMatchDataTask(match.getMid());
+					this.createMatchDataTask(match.getMid(), true, true, true);
 				}
 				
 				if(matchItems.size() > 0)
@@ -114,15 +119,15 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 		}
 		catch(HostForbiddenException exception)
 		{
-			errorinfo = "The host: " + bdMainPage.getHost() + " forbid the client to download data, no task will be produced.";
+			errorinfo = "The host: " + page.getHost() + " forbid the client to download data, no task will be produced.";
 		}
 		catch (UrlFetchException e)
 		{
-			errorinfo = "Fetch " + bdMainPage.getHost() + " error, no task will be produced.";
+			errorinfo = "Fetch " + page.getHost() + " error, no task will be produced.";
 		}
 		catch(WebParserException e)
 		{
-			errorinfo = "Fetch " + bdMainPage.getHost() + " error, no task will be produced.";
+			errorinfo = "Fetch " + page.getHost() + " error, no task will be produced.";
 		}
 		
 		if(StringUtils.isNotBlank(errorinfo))

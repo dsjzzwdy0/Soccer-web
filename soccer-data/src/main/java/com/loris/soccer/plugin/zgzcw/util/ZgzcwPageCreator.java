@@ -63,6 +63,7 @@ public class ZgzcwPageCreator
 		{"live",  					"http://live.zgzcw.com/"}				// 实时数据页面 //ls/AllData.action
 	};*/
 	
+	/** 数据类型与基础页面的对应工具 */
 	public static Map<String, Double> PAGE_PRIORITIES = new HashMap<>();
 	public static Map<String, String> PAGE_BASE_URLS = new HashMap<>();
 	

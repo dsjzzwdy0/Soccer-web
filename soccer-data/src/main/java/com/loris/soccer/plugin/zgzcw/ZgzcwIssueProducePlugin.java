@@ -21,8 +21,11 @@ import org.springframework.stereotype.Component;
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
+import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.soccer.plugin.zgzcw.base.AbstractProducePlugin;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
+import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 
 /**   
  * @ClassName:  League   
@@ -54,7 +57,8 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 		String errorinfo = "";
 		try
 		{
-			if(!createFromBdMainPage(context))
+			WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);		
+			if(!initializeFromWebPage(context, bdMainPage))
 			{
 				logger.info("No task produce from BDMainPage.");
 			}
