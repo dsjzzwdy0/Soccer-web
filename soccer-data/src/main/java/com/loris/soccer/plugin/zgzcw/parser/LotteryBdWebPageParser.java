@@ -116,8 +116,6 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			String ord = el.attr("i");
 			String t = el.attr("t");
 			Date closeTime = DateUtil.tryToParseDate(t);
-			//String lname = el.attr("m");			
-			//String expired = el.attr("expire");
 
 			MatchBd match = new MatchBd();
 			match.setBdno(issue);
@@ -125,10 +123,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			match.setIssue(LotteryUtil.getLotteryIssue(closeTime));
 			match.setRqopened(true);
 			match.setClosetime(closeTime);
-			//match.setClosed("0".equals(expired));
-			//match.setDate(date);
-			//match.setLeaguename(lname);
-			//match.setMatchtime(t);			
+
 			parseMatchInfo(element, match);
 
 			matchBds.add(match);
@@ -146,20 +141,19 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 		Elements els = el.select("td");
 		for (Element element : els)
 		{
-			if (element.hasClass("wh-1"))
+			if (element.hasClass("wh-1"))		//序号
 			{
 			}
-			else if (element.hasClass("wh-2"))
+			else if (element.hasClass("wh-2"))	//联赛名称及编号，当比赛已经截止之后，只有联赛名称
 			{
 			}
-			else if (element.hasClass("wh-3"))
-			{
-				
+			else if (element.hasClass("wh-3"))	//截止时间和比赛时间，当比赛已经截止之后，没有比赛时间
+			{				
 			}
-			else if (element.hasClass("wh-4"))
+			else if (element.hasClass("wh-4"))	//主队名称、球队编号
 			{
 			}
-			else if (element.hasClass("wh-5"))
+			else if (element.hasClass("wh-5"))	//比分：或“VS.”
 			{
 
 			}
@@ -191,7 +185,6 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			}
 			else if (element.hasClass("wh-12"))
 			{
-
 			}
 		}
 	}
