@@ -13,7 +13,7 @@
 		overflowToDisk="false" />
 
 	<cache
-		name="oddscache"
+		name="SoccerCache1"
 		eternal="false" 
 		maxElementsInMemory="10000"
 		overflowToDisk="false" 

@@ -45,7 +45,10 @@ public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageP
 	{
 		super(acceptType);
 		LeagueService leagueService = ApplicationContextHelper.getBean(LeagueService.class);
-		leagues.addAll(leagueService.list());
+		if(leagueService != null)
+		{
+			leagues.addAll(leagueService.list());
+		}
 	}
 	
 	/**

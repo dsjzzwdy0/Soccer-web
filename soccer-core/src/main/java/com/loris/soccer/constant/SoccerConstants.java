@@ -23,7 +23,7 @@ package com.loris.soccer.constant;
 public interface SoccerConstants
 {	
 	/** 缓存的名称 */
-	final static public String CAHE_ODDS_NAME = "oddscache";
+	final static public String CAHE_ODDS_NAME = "SoccerCache";
 	
 	/** 数据SoccerData TableRecords关键字定义 */
 	final static public String SOCCER_DATA_LEAGUE = "league";
