@@ -37,6 +37,7 @@ import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageParser;
+import com.loris.soccer.service.LeagueService;
 
 /**
  * @ClassName: AbstractProducePlugin
@@ -52,6 +53,9 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 
 	@Autowired
 	protected HttpCommonWebPageExecutor httpCommonExecutor;
+	
+	@Autowired
+	protected LeagueService leagueService;
 
 	/**
 	 * 产生任务程序

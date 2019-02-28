@@ -197,7 +197,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 */
 	protected long getOpenTime(Date matchTime, String time)
 	{
-		int[] ts = NumberUtil.parseAllIntegerFromString(time);
+		Integer[] ts = NumberUtil.parseAllIntegerFromString(time);
 		long t = 0;
 		if (ts == null)
 		{

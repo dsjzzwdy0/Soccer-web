@@ -61,7 +61,7 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 				@Override
 				public boolean accept(League obj)
 				{
-					return StringUtils.equals(l.getLid(), obj.getLid());					
+					return StringUtils.equals(l.getLid(), obj.getLid());
 				}
 
 			}))
@@ -72,4 +72,18 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 		return saveBatch(newLeagues);
 	}
 
+	/**
+	 * 查询联赛数据
+	 * 
+	 * @param name
+	 *            联赛名称或联赛编号
+	 * @return 联赛数据
+	 */
+	@Override
+	public League getLeague(String name)
+	{
+		QueryWrapper<League> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("name", name).or().eq("lid", name);
+		return baseMapper.selectOne(queryWrapper);
+	}
 }

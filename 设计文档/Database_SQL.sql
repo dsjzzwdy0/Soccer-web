@@ -36,3 +36,16 @@ create table soccer_scheduler_info(
 	finishtime timestamp,
 	PRIMARY KEY (`id`)
 )
+
+create table soccer_league(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	lid varchar(10),
+	name varchar(30),
+	type varchar(10),
+	country varchar(30),
+	continent varchar(10),
+	introduction text,
+	PRIMARY KEY (`id`),
+	INDEX `index_lid` (`lid`) USING BTREE ,
+	INDEX `index_name` (`name`) USING BTREE ,
+)

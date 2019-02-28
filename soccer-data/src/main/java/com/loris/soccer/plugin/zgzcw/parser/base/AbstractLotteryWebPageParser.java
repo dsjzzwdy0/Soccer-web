@@ -15,6 +15,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.loris.common.context.ApplicationContextHelper;
+import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.model.League;
+import com.loris.soccer.service.LeagueService;
+
 /**   
  * @ClassName:  AbstractLotteryWebPageParser  
  * @Description: 开盘数据的解析类 
@@ -29,6 +34,8 @@ public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageP
 	/** 日期格式数据 */
 	protected String dataFormat = "\\d{4}[-]\\d{2}[-]\\d{2}";
 	
+	/**  */
+	protected LeagueList leagues = new LeagueList();
 	
 	/**
 	 * Create a new instance of AbstractLotteryWebPageParser
@@ -37,6 +44,8 @@ public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageP
 	public AbstractLotteryWebPageParser(String acceptType)
 	{
 		super(acceptType);
+		LeagueService leagueService = ApplicationContextHelper.getBean(LeagueService.class);
+		leagues.addAll(leagueService.list());
 	}
 	
 	/**
@@ -58,5 +67,15 @@ public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageP
 			}
 		}
 		return "";
+	}
+	
+	/**
+	 *  查询联赛数据
+	 * @param name 名称或者编号
+	 * @return 联赛数据
+	 */
+	protected League getLeague(String name)
+	{
+		return leagues.getLeague(name);
 	}
 }

@@ -22,8 +22,12 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
+import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.model.League;
+import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.IssueMatch;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryWebPageParser;
@@ -40,7 +44,7 @@ import com.loris.soccer.util.LotteryUtil;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
-{	
+{		
 	/**
 	 * Create a new instance of LotteryWebPageParser.
 	 */
@@ -63,9 +67,11 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			issue = parseIssueElement(document);
 		}
 		MatchItemList matchBds = new MatchItemList();
-		parseBdMatchList(document, issue, matchBds);
-		results.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, matchBds);
+		MatchList baseMatchs = new MatchList();		
+		parseBdMatchList(document, issue, baseMatchs, matchBds);
 		
+		if(matchBds.size() > 0)	results.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, matchBds);
+		if(baseMatchs.size() >0) results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, baseMatchs);		
 		return results;
 	}
 	
@@ -75,10 +81,9 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 	 * @param document
 	 * @param matchBds
 	 */
-	protected void parseBdMatchList(Document document, String issue, MatchItemList matchBds)
+	protected void parseBdMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchBds)
 	{
 		Element element = document.selectFirst("#tw #dcc");
-
 		Elements childElements = element.children();
 		int childnum = childElements.size() / 2;
 
@@ -99,44 +104,37 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 				dataStr = DateUtil.findDateFromString(dataStr, dataFormat);
 			}
 			
-			parseBdMatchList(el1, issue, matchBds);
-		}
-	}
-	
-	/**
-	 * 解析比赛数据列表
-	 * @param element
-	 * @param date
-	 */
-	protected void parseBdMatchList(Element element, String issue, MatchItemList matchBds)
-	{
-		Elements elements = element.select("tbody tr");
-		for (Element el : elements)
-		{
-			String ord = el.attr("i");
-			String t = el.attr("t");
-			Date closeTime = DateUtil.tryToParseDate(t);
+			Elements elements = element.select("tbody tr");
+			for (Element el : elements)
+			{
+				String ord = el.attr("i");
+				String t = el.attr("t");
+				Date closeTime = DateUtil.tryToParseDate(t);
 
-			MatchBd match = new MatchBd();
-			match.setBdno(issue);
-			match.setOrdinary(ord);
-			match.setIssue(LotteryUtil.getLotteryIssue(closeTime));
-			match.setRqopened(true);
-			match.setClosetime(closeTime);
+				MatchBd match = new MatchBd();
+				Match baseMatch = new Match();
+				
+				match.setBdno(issue);
+				match.setOrdinary(ord);
+				match.setIssue(LotteryUtil.getLotteryIssue(closeTime));
+				match.setRqopened(true);
+				match.setClosetime(closeTime);
 
-			parseMatchInfo(element, match);
-
-			matchBds.add(match);
+				parseMatchInfo(element, baseMatch, match);
+				matchBds.add(match);
+				baseMatchs.add(baseMatch);
+			}
 		}
 	}
 	
 	/**
 	 * 解析比赛信息数据
 	 * 
-	 * @param match
-	 * @param els
+	 * @param match 北单比赛数据
+	 * @param baseMatch 基础比赛数据
+	 * @param el 数据元素
 	 */
-	protected void parseMatchInfo(Element el, IssueMatch match)
+	protected void parseMatchInfo(Element el, Match baseMatch, IssueMatch match)
 	{
 		Elements els = el.select("td");
 		for (Element element : els)
@@ -146,16 +144,39 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			}
 			else if (element.hasClass("wh-2"))	//联赛名称及编号，当比赛已经截止之后，只有联赛名称
 			{
+				Element el0 = element.child(0);
+				if("a".equalsIgnoreCase(el0.nodeName()))
+				{
+					String lid = NumberUtil.parseLastIntegerString(el0.attr("href"));
+					baseMatch.setLid(lid);
+				}
+				else
+				{
+					League league = getLeague(el0.text().trim());
+					if(league != null)
+					{
+						baseMatch.setLid(league.getLid());
+					}
+				}
 			}
 			else if (element.hasClass("wh-3"))	//截止时间和比赛时间，当比赛已经截止之后，没有比赛时间
-			{				
+			{
+				Elements spans = element.children();
+				if(spans != null && spans.size() >= 3)
+				{
+					Date matchTime = DateUtil.tryToParseDate(spans.get(2).text());
+					if(matchTime != null)
+					{
+						match.setMatchtime(matchTime);
+						baseMatch.setMatchtime(matchTime);
+					}
+				}
 			}
 			else if (element.hasClass("wh-4"))	//主队名称、球队编号
 			{
 			}
 			else if (element.hasClass("wh-5"))	//比分：或“VS.”
 			{
-
 			}
 			else if (element.hasClass("wh-6"))
 			{
@@ -178,10 +199,10 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			{
 				String mid = element.attr("newplayid");
 				match.setMid(mid);
+				baseMatch.setMid(mid);
 			}
 			else if (element.hasClass("wh-11"))
 			{
-
 			}
 			else if (element.hasClass("wh-12"))
 			{

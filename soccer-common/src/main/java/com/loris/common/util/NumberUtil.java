@@ -85,7 +85,7 @@ public interface NumberUtil
 	 * @param string 含有浮点数值的字符串
 	 * @return 第一个符合的值
 	 */
-	public static double parseDoubleFromString(String string)
+	public static Double parseDoubleFromString(String string)
 	{
 		Pattern p = Pattern.compile("\\d+(\\.\\d+)?");
 		Matcher m = p.matcher(string);
@@ -95,7 +95,7 @@ public interface NumberUtil
 			//System.out.println("" + m.group());
 			return parseDouble(m.group());
 		}
-		return 0.0;
+		return null;
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public interface NumberUtil
 	 * @param string 含有整型数字的字符串
 	 * @return
 	 */
-	public static int parseIntegerFromString(String string)
+	public static Integer parseIntegerFromString(String string)
 	{
 		Pattern p = Pattern.compile(REGULAR_INTEGER_POSITIVE);
 		Matcher m = p.matcher(string);
@@ -114,7 +114,7 @@ public interface NumberUtil
 			//System.out.println("" + m.group());
 			return parseInt(m.group());
 		}
-		return 0;
+		return null;
 	}
 	
 	/**
@@ -124,15 +124,19 @@ public interface NumberUtil
 	 */
 	public static String parseFirstIntegerString(String string)
 	{
-		Pattern p = Pattern.compile(REGULAR_INTEGER_POSITIVE);
-		Matcher m = p.matcher(string);
-		//System.out.println("是否匹配：" + m.matches());
-		if(m.find())
-		{
-			//System.out.println("" + m.group());
-			return m.group();
-		}
-		return "";
+		Integer value = parseIntegerFromString(string);
+		return value == null ? "" :  value.toString();
+	}
+	
+	/**
+	 * 解析字符串最后一个整数值
+	 * @param string 字符串值
+	 * @return 字符串的值
+	 */
+	public static String parseLastIntegerString(String string)
+	{
+		Integer[] values = parseAllIntegerFromString(string);
+		return (values == null || values.length == 0) ? "" : values[values.length - 1].toString();
 	}
 	
 	/**
@@ -141,7 +145,7 @@ public interface NumberUtil
 	 * @param string 含有多个整数值的字符串
 	 * @return 整数值数组
 	 */
-	public static int[] parseAllIntegerFromString(String string)
+	public static Integer[] parseAllIntegerFromString(String string)
 	{
 		Pattern p = Pattern.compile(REGULAR_INTEGER_POSITIVE);
 		Matcher m = p.matcher(string);
@@ -156,7 +160,7 @@ public interface NumberUtil
 		{
 			return null;
 		}
-		int[] rs = new int[size];
+		Integer[] rs = new Integer[size];
 		for(int i = 0; i < size;i ++)
 		{
 			rs[i] = values.get(i);
