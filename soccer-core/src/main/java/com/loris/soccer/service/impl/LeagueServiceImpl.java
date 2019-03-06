@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.common.filter.Filter;
 import com.loris.common.filter.StringFilter;
 import com.loris.common.util.ArraysUtil;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.LeagueMapper;
 import com.loris.soccer.model.League;
 import com.loris.soccer.service.LeagueService;
@@ -61,7 +63,7 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 				@Override
 				public boolean accept(League obj)
 				{
-					return StringUtils.equals(l.getLid(), obj.getLid());					
+					return StringUtils.equals(l.getLid(), obj.getLid());
 				}
 
 			}))
@@ -72,4 +74,29 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 		return saveBatch(newLeagues);
 	}
 
+	/**
+	 * 查询联赛数据
+	 * 
+	 * @param name
+	 *            联赛名称或联赛编号
+	 * @return 联赛数据
+	 */
+	@Override
+	public League getLeague(String name)
+	{
+		QueryWrapper<League> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("name", name).or().eq("lid", name);
+		return baseMapper.selectOne(queryWrapper);
+	}
+	
+	/**
+	 * 获得联赛数据的名称列表
+	 * @return 联赛数据列表
+	 */
+	@Override
+	@Cacheable(value=SoccerConstants.CAHE_ODDS_NAME, key="leagues")
+	public List<League> list()
+	{
+		return baseMapper.selectList(new QueryWrapper<League>());
+	}
 }

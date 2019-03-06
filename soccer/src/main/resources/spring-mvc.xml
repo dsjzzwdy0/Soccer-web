@@ -98,11 +98,20 @@
 	
 	<!--启用缓存注解-->
     <cache:annotation-driven cache-manager="cacheManager"/>
-    
+    <!-- 
     <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    	<property name="shared" value="true"/>
         <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
     </bean>
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
         <property name="cacheManager" ref="cacheManagerFactory"/>
     </bean>
+     -->
+     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="cacheManagerFactory"/>
+    </bean>
+	<bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    	<property name="shared" value="true"/>
+        <property name="configLocation" value="classpath:/conf/ehcache.xml"/>
+    </bean>  
 </beans>

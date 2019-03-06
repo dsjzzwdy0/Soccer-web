@@ -40,17 +40,18 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
+import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
@@ -86,11 +87,11 @@ public class App
 			//testZgzcwOpWebPage();
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
-			//testBdWebPage();
+			testBdWebPage();
 			
 			//testJcWebPage();
 			
-			testSchedulerInfo();
+			//testSchedulerInfo();
 			//testMapEqual();
 			//testMainThreadScheduler();
 			// testContext();
@@ -100,8 +101,7 @@ public class App
 			e.printStackTrace();
 		}
 		finally
-		{
-			
+		{			
 			context = null;
 		}
 	}
@@ -239,7 +239,6 @@ public class App
 	 * 测试北单页面
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public static void testBdWebPage() throws Exception
 	{		
 		Map<String, String> params = new LinkedHashMap<>();
@@ -250,20 +249,27 @@ public class App
 			return;
 		}
 		
+		long st = System.currentTimeMillis();
+
 		LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
 		TableRecords records = parser.parse(page);
 		if(records == null)
 		{
 			logger.info("Parser error.");
+			return;
 		}
 		
-		List<MatchBd> matchBds = (List<MatchBd>)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
+		long en = System.currentTimeMillis();
+		
+		MatchItemList matchBds = (MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
 		
 		int i = 1;
-		for (MatchBd matchBd : matchBds)
+		for (MatchItem matchBd : matchBds)
 		{
 			logger.info(i +++ ": " + matchBd);
 		}
+		
+		logger.info("Total spend time is " + (en - st) + " ms.");
 	}
 	
 	/**

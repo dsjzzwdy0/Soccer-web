@@ -451,7 +451,7 @@ public class DateUtil
 	 */
 	public static Date tryToParseDate(String dateString)
 	{
-		if(StringUtils.isEmpty(dateString))
+		if(StringUtils.isBlank(dateString))
 		{
 			return null;
 		}
