@@ -71,7 +71,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 		parseBdMatchList(document, issue, baseMatchs, matchBds);
 		
 		if(matchBds.size() > 0)	results.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, matchBds);
-		if(baseMatchs.size() >0) results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, baseMatchs);		
+		if(baseMatchs.size() >0) results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, baseMatchs);
 		return results;
 	}
 	
