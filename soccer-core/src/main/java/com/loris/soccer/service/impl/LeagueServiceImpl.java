@@ -50,8 +50,8 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	@Transactional
 	public boolean insertLeagues(List<League> leagues)
 	{
-		List<String> lids = ArraysUtil.getObjectFieldValue(leagues, League.class, "lid");
-		List<League> existLeagues = baseMapper.selectList(new QueryWrapper<League>().in("lid", lids));
+		List<String> lids = ArraysUtil.getObjectFieldValue(leagues, League.class, SoccerConstants.NAME_FIELD_LID);
+		List<League> existLeagues = baseMapper.selectList(new QueryWrapper<League>().in(SoccerConstants.NAME_FIELD_LID, lids));
 		StringFilter filter = new StringFilter();
 
 		List<League> newLeagues = new ArrayList<>();

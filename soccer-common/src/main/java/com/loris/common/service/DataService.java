@@ -29,5 +29,5 @@ public interface DataService
 	 * @param results 网页解析结果
 	 * @return 是否成功的标志
 	 */
-	public boolean saveSoccerDataRecords(TableRecords results);
+	public boolean saveTableRecords(TableRecords results);
 }

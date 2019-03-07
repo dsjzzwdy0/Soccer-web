@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.common.service.SqlHelper;
-import com.loris.soccer.model.League;
+import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.service.LeagueService;
+import com.loris.soccer.service.MatchService;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
-
-import java.util.List;
 
 /**
  * @ClassName: League
@@ -42,6 +42,9 @@ public class SoccerDataServiceImpl implements DataService
 
 	@Autowired
 	protected LeagueService leagueService;
+	
+	@Autowired
+	protected MatchService matchService;
 
 	@Autowired
 	protected SqlHelper sqlHelper;
@@ -49,20 +52,23 @@ public class SoccerDataServiceImpl implements DataService
 	/**
 	 * 保存数据页面解析得到的内容
 	 * 
-	 * @see com.loris.common.service.DataService#saveSoccerDataRecords(com.loris.common.model.TableRecords)
+	 * @see com.loris.common.service.DataService#saveTableRecords(com.loris.common.model.TableRecords)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public boolean saveSoccerDataRecords(TableRecords results)
+	public boolean saveTableRecords(TableRecords results)
 	{
 		for (String key : results.keySet())
 		{
 			switch (key)
 			{
 			case SOCCER_DATA_LEAGUE_LIST:
-				List<League> leagues = (List<League>) results.get(key);
+				LeagueList leagues = (LeagueList) results.get(key);
 				leagueService.insertLeagues(leagues);
+				break;
+			case SOCCER_DATA_MATCH_LIST:
+				MatchList matchList = (MatchList) results.get(key);
+				matchService.insertMatchs(matchList);
 				break;
 			default:
 				// No nothing.
