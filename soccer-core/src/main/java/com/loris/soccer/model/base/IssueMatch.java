@@ -35,7 +35,7 @@ public class IssueMatch extends MatchItem
 	protected Float loseodds;				//负赔率
 	protected Integer rqnum;				//让球数
 	protected boolean rqopened;				//让球是否受注
-	protected boolean delayed;				//是否延期
+	protected boolean isdelayed;				//是否延期
 	protected Date delaytime;				//延期时间
 	
 	public String getIssue()
@@ -102,13 +102,13 @@ public class IssueMatch extends MatchItem
 	{
 		this.rqopened = rqopened;
 	}
-	public boolean isDelayed()
+	public boolean isIsdelayed()
 	{
-		return delayed;
+		return isdelayed;
 	}
-	public void setDelayed(boolean delayed)
+	public void setIsdelayed(boolean isdelayed)
 	{
-		this.delayed = delayed;
+		this.isdelayed = isdelayed;
 	}
 	public Date getDelaytime()
 	{

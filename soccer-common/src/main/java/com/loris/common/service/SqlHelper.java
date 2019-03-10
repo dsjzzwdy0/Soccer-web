@@ -16,7 +16,9 @@ import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -29,20 +31,20 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.Entity;
 import com.loris.common.util.ReflectUtil;
 
-/**   
- * @ClassName:  League   
- * @Description: 基本的SQL操作类，主要用于批量进行数据插入和更新  
+/**
+ * @ClassName: League
+ * @Description: 基本的SQL操作类，主要用于批量进行数据插入和更新
  * @author: 东方足彩
- * @date:   2019年1月28日 下午8:59:32   
- *     
- * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
- * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
+ * @date: 2019年1月28日 下午8:59:32
+ * 
+ * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
+ *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 @Component
 public class SqlHelper
 {
 	private static Logger logger = Logger.getLogger(SqlHelper.class);
-	
+
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
@@ -59,11 +61,11 @@ public class SqlHelper
 	{
 		Class<? extends Entity> clazz = entities.get(0).getClass();
 		TableName tableName = clazz.getAnnotation(TableName.class);
-		if(tableName == null)
+		if (tableName == null)
 		{
 			throw new SQLException("The " + clazz.getName() + " has no table name defined.");
 		}
-		
+
 		List<Field> fields = new ArrayList<>();
 		getEntitySQLFields(clazz, fields);
 		if (fields.size() <= 0)
@@ -88,7 +90,7 @@ public class SqlHelper
 			{
 				try
 				{
-					if(setFieldValue(entity, fields, ps))
+					if (setFieldValue(entity, fields, ps))
 					{
 						ps.addBatch();
 					}
@@ -113,7 +115,7 @@ public class SqlHelper
 		}
 		catch (SQLException e)
 		{
-			//e.printStackTrace();
+			// e.printStackTrace();
 			try
 			{
 				if (connection != null)
@@ -146,79 +148,102 @@ public class SqlHelper
 	 * @param fields
 	 * @param ps
 	 */
-	protected boolean setFieldValue(Entity entity, List<Field> fields, PreparedStatement ps) throws IllegalAccessException, SQLException
+	protected boolean setFieldValue(Entity entity, List<Field> fields, PreparedStatement ps)
+			throws IllegalAccessException, SQLException
 	{
 		int index = 1;
 
 		for (Field field : fields)
-		{			
-			String typeName = field.getType().getName(); 
-			try { 
-				switch (typeName) {
-				case "java.lang.Boolean": 
-				case "boolean": 
-					Boolean b = field.getBoolean(entity);
-					ps.setBoolean(index, b);
-					break;
-				case "bytes":
-					byte[] bytes = (byte[])field.get(entity);
-					ps.setBytes(index, bytes);
-					break;
-				case "java.lang.Character": 
-				case "char": 
-					break; 
-				case "java.lang.Byte": 
-				case "byte": 
-					Byte b2 = field.getByte(entity); 
-					ps.setByte(index, b2);
-					break; 
-				case "java.lang.Short": 
-				case "short": 
-					Short readShort = field.getShort(entity); 
-					ps.setShort(index, readShort);
-					break; 
-				case "java.lang.Integer": 
-				case "int": 
-					Integer readInt = field.getInt(entity); 
-					ps.setInt(index, readInt);
-					break; 
-				case "java.lang.Long": 
-				case "long": 
-					long l = field.getLong(entity);
-					ps.setLong(index, l);
-					break; 
-				case "java.lang.Float": 
-				case "float": 
-					Float readFloat = field.getFloat(entity);
-					ps.setFloat(index, readFloat);
-					break;
-				case "java.lang.Double": 
-				case "double": 
-					Double readDouble = field.getDouble(entity); 
-					ps.setDouble(index, readDouble);
-					break; 
-				case "java.lang.String": 
-					Object object = field.get(entity);
-					String string = null;
-					if(object != null)
-					{
-						string = object.toString();
-					}
-					ps.setString(index, string);
-					break; 
-				default: 
-					throw new RuntimeException(typeName + "不支持，bug"); }
+		{
+			String typeName = field.getType().getName();
+			switch (typeName)
+			{
+			case "java.lang.Boolean":
+			case "boolean":
+				// Boolean b = field.getBoolean(entity);
+				Boolean b = getObject(field, entity);
+				ps.setBoolean(index, b);
+				break;
+			case "bytes":
+				byte[] bytes = (byte[]) field.get(entity);
+				ps.setBytes(index, bytes);
+				break;
+			case "java.lang.Character":
+			case "char":
+				break;
+			case "java.lang.Byte":
+			case "byte":
+				Byte b2 = getObject(field, entity);
+				ps.setByte(index, b2);
+				break;
+			case "java.lang.Short":
+			case "short":
+				Short readShort = getObject(field, entity);
+				ps.setShort(index, readShort);
+				break;
+			case "java.lang.Integer":
+			case "int":
+				Integer readInt = getObject(field, entity);
+				ps.setInt(index, readInt);
+				break;
+			case "java.lang.Long":
+			case "long":
+				long l = getObject(field, entity);
+				ps.setLong(index, l);
+				break;
+			case "java.lang.Float":
+			case "float":
+				Float readFloat = getObject(field, entity);
+				ps.setFloat(index, readFloat);
+				break;
+			case "java.lang.Double":
+			case "double":
+				Double readDouble = getObject(field, entity);
+				ps.setDouble(index, readDouble);
+				break;
+			case "java.lang.String":
+				Object object = getObject(field, entity);
+				String string = null;
+				if (object != null)
+				{
+					string = object.toString();
+				}
+				ps.setString(index, string);
+				break;
+			case "java.util.Date":
+				Date date = getObject(field, entity);
+				if (date != null)
+					ps.setTimestamp(index, new Timestamp(date.getTime()));
+				else
+				{
+					ps.setDate(index, null);
+				}
+				break;
+			default:
+				throw new RuntimeException(typeName + "不支持，bug");
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			index ++;
+			index++;
 		}
 		return true;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	protected <T> T getObject(Field field, Entity entity)
+	{
+		try
+		{
+			return (T) field.get(entity);
+		}
+		catch (Exception e)
+		{
+			//e.printStackTrace();
+			return null;
+		}
+	}
+
 	/**
 	 * 创建拼接插入数据的SQL语句
+	 * 
 	 * @param tableName
 	 * @param fields
 	 * @return
@@ -227,21 +252,21 @@ public class SqlHelper
 	{
 		String sql = "insert into " + tableName.value() + " (";
 		String values = " values(";
-		
+
 		int fieldIndex = 0;
 		for (Field field : fields)
 		{
-			fieldIndex ++;
+			fieldIndex++;
 			sql += field.getName();
 			values += "?";
-			
-			if(fieldIndex != fields.size())
+
+			if (fieldIndex != fields.size())
 			{
 				sql += ", ";
 				values += ", ";
-			}			
-		}		
-		sql += ") " + values + ")";		
+			}
+		}
+		sql += ") " + values + ")";
 		return sql;
 	}
 
@@ -256,7 +281,7 @@ public class SqlHelper
 		List<Field> allFields = ReflectUtil.getAllFields(clazz, false);
 		for (Field field : allFields)
 		{
-			if(Modifier.isStatic(field.getModifiers()))
+			if (Modifier.isStatic(field.getModifiers()))
 			{
 				continue;
 			}

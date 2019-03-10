@@ -11,11 +11,16 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser.base;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.loris.common.context.ApplicationContextHelper;
+import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.model.League;
 import com.loris.soccer.service.LeagueService;
@@ -32,7 +37,10 @@ import com.loris.soccer.service.LeagueService;
 public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageParser
 {
 	/** 日期格式数据 */
-	protected String dataFormat = "\\d{4}[-]\\d{2}[-]\\d{2}";
+	protected static String dateFormat = "\\d{4}[-]\\d{2}[-]\\d{2}";
+	
+	/** 日期格式 */
+	protected static Pattern pattern = Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}[ ][0-9]{1,2}[:][0-9]{1,2}");
 	
 	/**  */
 	protected LeagueList leagues = new LeagueList();
@@ -81,4 +89,42 @@ public abstract class AbstractLotteryWebPageParser extends AbstractZgzcwWebPageP
 	{
 		return leagues.getLeague(name);
 	}
+	
+	/**
+	 * 从一个字符串中解析日期数据
+	 * @param str 含有日期的数据
+	 * @return 解析的数据
+	 */
+	public static String parseFirstDateString(String str)
+	{
+		Matcher matcher = pattern.matcher(str);
+		if(matcher.find())
+		{
+			return matcher.group();
+		}
+		return null;
+	}
+	
+
+	/**
+	 * 解析球队数据
+	 * @param el
+	 * @return
+	 */
+	protected String parseTeamId(Element el)
+	{
+		Element element = el.selectFirst("a");
+		if(element == null)
+		{
+			return null;
+		}
+		String url = element.attr("href");
+		if(StringUtils.isNotBlank(url))
+		{
+			return NumberUtil.parseLastIntegerString(url);
+		}
+		return null;
+	}
 }
+
+

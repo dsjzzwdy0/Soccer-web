@@ -16,6 +16,8 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -40,7 +42,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.common.service.DataService;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
@@ -51,7 +53,6 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
-import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
@@ -89,6 +90,7 @@ public class App
 			//testZgzcwLeagueWebPage();
 			testBdWebPage();
 			
+			//testDateString();			
 			//testJcWebPage();
 			
 			//testSchedulerInfo();
@@ -105,6 +107,26 @@ public class App
 			context = null;
 		}
 	}
+	
+	public static void testCenterPage() throws Exception
+	{
+		
+	}
+	
+	public static void testDateString()
+	{
+        Pattern pattern = Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}[ ][0-9]{1,2}[:][0-9]{1,2}");
+        Matcher matcher = pattern.matcher("2、开标时间：2018-08-02 14:00。2、开标时间：2018-08-02 16:00:00。2、开标时间：2018-08-02 15:00:00。");
+        while(matcher.find())
+        {
+            System.out.println(matcher.group());
+        }
+        Matcher matcher2 = pattern.matcher("比赛时间:2019-03-12 06:00");
+        while(matcher2.find())
+        {
+            System.out.println(matcher2.group());
+        }
+    }
 	
 	
 	public static void testMapEqual() throws Exception
@@ -243,13 +265,14 @@ public class App
 	{		
 		Map<String, String> params = new LinkedHashMap<>();
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD, params);
-		
+
+		long st = System.currentTimeMillis();
 		if(!getWebPage(page))
 		{
 			return;
 		}
-		
-		long st = System.currentTimeMillis();
+		long en = System.currentTimeMillis();
+		logger.info("Get web page spend time is " + (en - st) + " ms.");
 
 		LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
 		TableRecords records = parser.parse(page);
@@ -259,16 +282,18 @@ public class App
 			return;
 		}
 		
-		long en = System.currentTimeMillis();
-		
-		MatchItemList matchBds = (MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
+		/*MatchItemList matchBds = (MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
 		
 		int i = 1;
 		for (MatchItem matchBd : matchBds)
 		{
 			logger.info(i +++ ": " + matchBd);
-		}
+		}*/
 		
+		st = System.currentTimeMillis();
+		DataService dataService = (DataService)context.getBean("soccerDataService");
+		dataService.saveTableRecords(records);
+		en = System.currentTimeMillis();
 		logger.info("Total spend time is " + (en - st) + " ms.");
 	}
 	
