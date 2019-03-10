@@ -31,7 +31,6 @@ public class MatchItemFilter<T extends MatchItem> implements Filter<T>
 	 */
 	public MatchItemFilter()
 	{
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

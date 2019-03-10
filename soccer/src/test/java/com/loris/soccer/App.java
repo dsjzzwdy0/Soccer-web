@@ -87,7 +87,9 @@ public class App
 			//testZgzcwOpWebPage();
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
-			testBdWebPage();
+			//testBdWebPage();
+			
+			testMariaDB();
 			
 			//testJcWebPage();
 			
@@ -547,6 +549,24 @@ public class App
 			return true;
 		}		
 	}
+	
+	/**
+	 * 测试MariaDB数据库的操作
+	 * @throws Exception
+	 */
+	public static void testMariaDB() throws Exception
+	{
+		/*String driver = "com.mysql.cj.jdbc.Driver";
+		String url = "jdbc:mysql://127.0.0.1:3307/ams?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true";
+		String user = "sdDtVp72zPE=";
+		String password = "dzsM5hZNilfcvIJWL2/TXg==";
+		Class.forName(driver);
+		
+		try(Connection connection = DriverManager.getConnection(url, user, password))
+		{
+			logger.info("Success to connect: " + url);
+		}*/
+	}
 
 	/**
 	 * 获得Spring的运行与配置环境
@@ -556,7 +576,8 @@ public class App
 	public static ApplicationContext getApplicationContext()
 	{
 		/** The Application Context. */
-		context = new ClassPathXmlApplicationContext("classpath*:spring-mybatis.xml");
+		//context = new ClassPathXmlApplicationContext("classpath*:spring-mybatis.xml");
+		context = new ClassPathXmlApplicationContext("classpath*:spring-test.xml");
 		return context;
 	}
 }
