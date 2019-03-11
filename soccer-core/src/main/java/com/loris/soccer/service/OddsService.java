@@ -12,8 +12,6 @@
 package com.loris.soccer.service;
 
 import java.util.List;
-
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.OddsOp;
 
 /**   
@@ -25,8 +23,15 @@ import com.loris.soccer.model.OddsOp;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface OddsOpService extends IService<OddsOp>
+public interface OddsService
 {
+	/**
+	 * 保存欧赔数据
+	 * @param op 欧赔数据
+	 * @return 保存成功的标志
+	 */
+	boolean save(OddsOp op);
+	
 	/**
 	 * 通过比赛编号获得欧赔数据列表
 	 * @param mid 比赛编号

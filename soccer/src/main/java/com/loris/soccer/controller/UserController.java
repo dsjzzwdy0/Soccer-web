@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.model.OddsOp;
-import com.loris.soccer.service.OddsOpService;
+import com.loris.soccer.service.OddsService;
 
 
 /**   
@@ -40,7 +40,7 @@ import com.loris.soccer.service.OddsOpService;
 public class UserController extends BaseController
 {
 	@Autowired
-	private OddsOpService oddsOpService;
+	private OddsService oddsService;
 	
 	/**
 	 * 主页登录
@@ -71,7 +71,7 @@ public class UserController extends BaseController
 		op.setDrawodds(2.3f);
 		op.setLoseodds(1.4f);
 		
-		oddsOpService.save(op);
+		oddsService.save(op);
 		return Rest.okData(op);
 	}
 	
@@ -79,7 +79,7 @@ public class UserController extends BaseController
 	@RequestMapping("/users")
 	public Rest getAllUsers()
 	{
-		List<OddsOp> ops = oddsOpService.selectOddsOp("10");
+		List<OddsOp> ops = oddsService.selectOddsOp("10");
 		return Rest.okData(ops);
 	}
 	
@@ -87,7 +87,7 @@ public class UserController extends BaseController
 	@RequestMapping("/update")
 	public Rest updateUsers()
 	{
-		oddsOpService.updateOpList();
+		oddsService.updateOpList();
 		return Rest.ok();
 	}
 }
