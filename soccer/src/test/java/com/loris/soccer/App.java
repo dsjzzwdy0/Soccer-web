@@ -43,6 +43,7 @@ import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
+import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
@@ -88,7 +89,9 @@ public class App
 			//testZgzcwOpWebPage();
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
-			testBdWebPage();
+			//testBdWebPage();
+			
+			testCenterPage();
 			
 			//testMariaDB();
 			
@@ -112,7 +115,29 @@ public class App
 	
 	public static void testCenterPage() throws Exception
 	{
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER);
+
+		long st = System.currentTimeMillis();
+		if(!getWebPage(page))
+		{
+			return;
+		}
+		long en = System.currentTimeMillis();
+		logger.info("Get web page spend time is " + (en - st) + " ms.");
 		
+		CenterPageParser parser = new CenterPageParser();
+		TableRecords records = parser.parse(page);
+		if(records == null)
+		{
+			logger.info("Parser error.");
+		}
+		
+		LeagueList leagues = (LeagueList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST);
+		int i = 1;
+		for (League league : leagues)
+		{
+			logger.info(i +++ ": " + league);
+		}
 	}
 	
 	public static void testDateString()
@@ -264,9 +289,8 @@ public class App
 	 * @throws Exception
 	 */
 	public static void testBdWebPage() throws Exception
-	{		
-		Map<String, String> params = new LinkedHashMap<>();
-		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD, params);
+	{
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
 
 		long st = System.currentTimeMillis();
 		if(!getWebPage(page))
@@ -601,8 +625,8 @@ public class App
 	public static ApplicationContext getApplicationContext()
 	{
 		/** The Application Context. */
-		//context = new ClassPathXmlApplicationContext("classpath*:spring-mybatis.xml");
-		context = new ClassPathXmlApplicationContext("classpath*:spring-test.xml");
+		context = new ClassPathXmlApplicationContext("classpath*:spring-mybatis.xml");
+		//context = new ClassPathXmlApplicationContext("classpath*:spring-test.xml");
 		return context;
 	}
 }

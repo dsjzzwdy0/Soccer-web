@@ -24,6 +24,7 @@ import com.loris.common.model.TableRecords;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
 
+import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
@@ -60,7 +61,7 @@ public class CenterPageParser extends AbstractZgzcwWebPageParser
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
 		Elements gamesContentMatcheses = document.select(".liansai .wrapper .mainbottom .gamesContent");
-		List<League> leagues = new ArrayList<>();
+		LeagueList leagues = new LeagueList();
 		List<Logo> logos = new ArrayList<>();
 		
 		for (Element element : gamesContentMatcheses)
@@ -135,23 +136,42 @@ public class CenterPageParser extends AbstractZgzcwWebPageParser
 			url = element.attr("href");
 			name = element.text();
 			
-			League league = createLeague(continent, "", name, url);
-			if(league != null)
+			League league = createLeague(continent, country, name, url);			
+			if(league == null)
 			{
-				leagues.add(league);
-				
-				Element element2 = element.selectFirst("img");
-				if(element2 != null)
-				{			
-					Logo logo = new Logo();
-					logo.setPid(league.getLid());
-					logo.setType(SoccerConstants.LOGO_TYPE_LEAGUE);
-					logo.setUrl(element2.attr("src"));
-					logos.add(logo);
-				}
-			}			
+				continue;
+			}
+			
+			leagues.add(league);
+			Logo logo = parseLogo(element, league.getLid(), SoccerConstants.LOGO_TYPE_LEAGUE);
+			if(logo != null)
+			{
+				logos.add(logo);
+			}
 		}
 	}
+	
+	/**
+	 * 解析数据的LOGO值
+	 * @param element
+	 * @param lid
+	 * @param leagueType
+	 * @return
+	 */
+	protected Logo parseLogo(Element element, String lid, String leagueType)
+	{
+		Element element2 = element.selectFirst("img");
+		if(element2 != null)
+		{			
+			Logo logo = new Logo();
+			logo.setPid(lid);
+			logo.setType(SoccerConstants.LOGO_TYPE_LEAGUE);
+			logo.setUrl(element2.attr("src"));
+			return logo;
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * 创建联赛数据内容
