@@ -89,4 +89,14 @@ public class DateFilter implements Filter<Date>
 		return false;
 	}
 
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.common.filter.Filter#setValue(java.lang.Object)
+	 */
+	@Override
+	public void setValue(Date value)
+	{
+		this.date = value;
+	}
+
 }

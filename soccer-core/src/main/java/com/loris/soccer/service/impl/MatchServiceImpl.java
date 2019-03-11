@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,8 @@ import com.loris.soccer.service.MatchService;
 @Service("matchService")
 public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements MatchService
 {
+	private static Logger logger = Logger.getLogger(MatchServiceImpl.class);
+
 	@Autowired
 	SqlHelper helper;
 
@@ -78,7 +81,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 			MatchItemFilter<Match> filter = new MatchItemFilter<>();
 			for (Match match : matchs)
 			{
-				filter.setMatchItem(match);
+				filter.setValue(match);
 				if (!ArraysUtil.hasSameObject(existMatchs, filter))
 				{
 					destMatchs.add(match);
@@ -87,7 +90,8 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 
 			if (destMatchs.size() == 0)
 			{
-				return false;
+				logger.warn("No match need to be updated.");
+				return true;
 			}
 			matchs = destMatchs;
 		}

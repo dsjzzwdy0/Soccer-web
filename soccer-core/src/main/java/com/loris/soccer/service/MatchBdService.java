@@ -11,12 +11,14 @@
  */
 package com.loris.soccer.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.MatchBd;
 
 /**   
- * @ClassName:  League   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @ClassName:  MatchBdService   
+ * @Description: 北单比赛数据的服务类  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -25,5 +27,18 @@ import com.loris.soccer.model.MatchBd;
  */
 public interface MatchBdService extends IService<MatchBd>
 {
-
+	/**
+	 * 添加北单比赛的数据
+	 * @param matchBds
+	 * @return
+	 */
+	boolean insert(List<MatchBd> matchBds);
+	
+	/**
+	 * 插入北单数据
+	 * @param matchBds
+	 * @param overwrite
+	 * @return
+	 */
+	boolean insert(List<MatchBd> matchBds, boolean overwrite);
 }

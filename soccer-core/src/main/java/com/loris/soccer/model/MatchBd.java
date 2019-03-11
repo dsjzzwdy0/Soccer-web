@@ -54,7 +54,7 @@ public class MatchBd extends IssueMatch
 	{
 		return "MatchBd [bdno=" + bdno + ", issue=" + issue + ", ordinary=" + ordinary + ", closetime=" + closetime
 				+ ", winodds=" + winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum
-				+ ", rqopened=" + rqopened + ", delayed=" + delayed + ", delaytime=" + delaytime + ", mid=" + mid
-				+ ", id=" + id + "]";
+				+ ", rqopened=" + rqopened + ", isdelayed=" + isdelayed + ", delaytime=" + delaytime + ", mid=" + mid
+				+ ", matchtime=" + matchtime + "]";
 	}
 }

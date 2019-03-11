@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.model.WebPage;
 import com.loris.common.util.EncodingUtil;
@@ -177,15 +179,19 @@ public class ZgzcwPageCreator
 		{
 		case PAGE_LEAGUE_LEAGUE:
 		case PAGE_LEAGUE_CUP:
+			checkParams(params, SoccerConstants.NAME_FIELD_LID);
 			basicUrl += params.get(SoccerConstants.NAME_FIELD_LID);
 			break;
 		case PAGE_ODDS_OP:				//百家OP页面
+			checkParams(params, SoccerConstants.NAME_FIELD_MID);
 			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID) + "/bjop";
 			break;
-		case PAGE_ODDS_YP:				//百家OP页面
+		case PAGE_ODDS_YP:		
+			checkParams(params, SoccerConstants.NAME_FIELD_MID);//百家OP页面
 			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ybdb";
 			break;
 		case PAGE_ODDS_NUM:
+			checkParams(params, SoccerConstants.NAME_FIELD_MID);
 			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID) + "/dxdb";
 			break;
 		default:
@@ -234,5 +240,18 @@ public class ZgzcwPageCreator
 	public static void setDefaultBasicUrl(String type, String url)
 	{
 		PAGE_BASE_URLS.put(type, url);
+	}
+	
+	/**
+	 * 检测数据参数
+	 * @param params 参数
+	 * @param key 数据内容
+	 */
+	public static void checkParams(Map<String, String> params, String key)
+	{
+		if(params == null || StringUtils.isBlank(params.get(key)))
+		{
+			throw new IllegalArgumentException("The params is null or the key '" + key + "' value is not set.");
+		}
 	}
 }

@@ -32,7 +32,6 @@ import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.IssueMatch;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLotteryWebPageParser;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
-import com.loris.soccer.util.LotteryUtil;
 
 /**   
  * @ClassName:  LotteryBdWebPageParser  
@@ -97,32 +96,38 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 				continue;
 			}
 			Element dateEl = el0.selectFirst(".fl strong");
-			String dataStr = "";
+			String dateStr = "";
 			if (dateEl != null)
 			{
-				dataStr = dateEl.text();
-				dataStr = DateUtil.findDateFromString(dataStr, dataFormat);
+				dateStr = dateEl.text();
+				dateStr = DateUtil.findDateFromString(dateStr, dateFormat);
 			}
 			
-			Elements elements = element.select("tbody tr");
+			Elements elements = el1.select("tbody tr");
 			for (Element el : elements)
 			{
 				String ord = el.attr("i");
 				String t = el.attr("t");
 				Date closeTime = DateUtil.tryToParseDate(t);
+				
+				//System.out.println(closeTime);
 
 				MatchBd match = new MatchBd();
 				Match baseMatch = new Match();
 				
 				match.setBdno(issue);
 				match.setOrdinary(ord);
-				match.setIssue(LotteryUtil.getLotteryIssue(closeTime));
+				match.setIssue(dateStr);
 				match.setRqopened(true);
 				match.setClosetime(closeTime);
 
-				parseMatchInfo(element, baseMatch, match);
-				matchBds.add(match);
-				baseMatchs.add(baseMatch);
+				parseMatchInfo(el, baseMatch, match);
+				
+				if(StringUtils.isNotBlank(match.getMid()) && !"0".equals(match.getMid()))
+				{
+					matchBds.add(match);
+					baseMatchs.add(baseMatch);
+				}
 			}
 		}
 	}
@@ -150,7 +155,8 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 					String lid = NumberUtil.parseLastIntegerString(el0.attr("href"));
 					baseMatch.setLid(lid);
 				}
-				else
+				
+				if(StringUtils.isBlank(baseMatch.getLid()))
 				{
 					League league = getLeague(el0.text().trim());
 					if(league != null)
@@ -164,22 +170,29 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 				Elements spans = element.children();
 				if(spans != null && spans.size() >= 3)
 				{
-					Date matchTime = DateUtil.tryToParseDate(spans.get(2).text());
-					if(matchTime != null)
+					String string = parseFirstDateString(spans.get(2).attr("title"));
+					//System.out.println("MatchTime: " + string);
+					if(StringUtils.isNotBlank(string))
 					{
-						match.setMatchtime(matchTime);
-						baseMatch.setMatchtime(matchTime);
+						Date matchTime = DateUtil.tryToParseDate(string);
+						if(matchTime != null)
+						{
+							match.setMatchtime(matchTime);
+							baseMatch.setMatchtime(matchTime);
+						}
 					}
 				}
 			}
 			else if (element.hasClass("wh-4"))	//主队名称、球队编号
 			{
+				baseMatch.setHomeid(parseTeamId(element));				
 			}
 			else if (element.hasClass("wh-5"))	//比分：或“VS.”
 			{
 			}
 			else if (element.hasClass("wh-6"))
 			{
+				baseMatch.setClientid(parseTeamId(element));	
 			}
 			else if (element.hasClass("wh-8"))
 			{
@@ -209,4 +222,5 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 			}
 		}
 	}
+	
 }

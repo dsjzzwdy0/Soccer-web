@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
@@ -84,6 +86,25 @@ public class League extends AutoIdEntity
 	{
 		this.introduction = introduction;
 	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		if(obj == null || !(obj instanceof League))
+		{
+			return false;
+		}
+		return StringUtils.isNotBlank(lid) && lid.equalsIgnoreCase(((League)obj).getLid());
+	}
+	
 	@Override
 	public String toString()
 	{

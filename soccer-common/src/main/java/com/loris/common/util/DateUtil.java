@@ -23,6 +23,9 @@ public class DateUtil
 {
 	private static final Map<Integer, Character> charMap = new HashMap<Integer, Character>();
 	private static final Pattern p = Pattern.compile("^(\\d+)\\D*(\\d*)\\D*(\\d*)\\D*(\\d*)\\D*(\\d*)\\D*(\\d*)");
+	
+	/** 日期格式串 */
+	final static Pattern DATE_FORMAT = Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}[ ][0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2}");
 
 	/** The DateFormat. */
 	final public static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -440,6 +443,38 @@ public class DateUtil
 		{
 			return "";
 		}
+	}
+	
+	/**
+	 * 从一个字符串中解析日期数据
+	 * @param str 含有日期的数据
+	 *j 
+	 *u @return 解析的数据
+	 */
+	public static String parseFirstDateString(String str)
+	{
+		Matcher matcher = DATE_FORMAT.matcher(str);
+		if(matcher.find())
+		{
+			return matcher.group();
+		}
+		return null;
+	}
+	
+	/**
+	 * 解析所有的日期格式字符串
+	 * @param str 含有日期的字符串
+	 * @return 字符串列表
+	 */
+	public static List<String> parseAllDateString(String str)
+	{
+		List<String> dates = new ArrayList<>();
+		Matcher matcher = DATE_FORMAT.matcher(str);
+		while(matcher.find())
+		{
+			dates.add(matcher.group());
+		}
+		return dates;
 	}
 
 	/**

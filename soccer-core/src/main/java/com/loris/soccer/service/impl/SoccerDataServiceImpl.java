@@ -11,7 +11,6 @@
  */
 package com.loris.soccer.service.impl;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +19,18 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
+import com.loris.soccer.service.MatchBdService;
 import com.loris.soccer.service.MatchService;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName: League
@@ -38,13 +44,16 @@ import static com.loris.soccer.constant.SoccerConstants.*;
 @Service("soccerDataService")
 public class SoccerDataServiceImpl implements DataService
 {
-	private static Logger logger = Logger.getLogger(SoccerDataServiceImpl.class);
+	//private static Logger logger = Logger.getLogger(SoccerDataServiceImpl.class);
 
 	@Autowired
 	protected LeagueService leagueService;
 	
 	@Autowired
 	protected MatchService matchService;
+	
+	@Autowired
+	protected MatchBdService matchBdService;
 
 	@Autowired
 	protected SqlHelper sqlHelper;
@@ -66,15 +75,26 @@ public class SoccerDataServiceImpl implements DataService
 				LeagueList leagues = (LeagueList) results.get(key);
 				leagueService.insertLeagues(leagues);
 				break;
+			case SOCCER_DATA_LOGO_LIST:
+				break;
 			case SOCCER_DATA_MATCH_LIST:
 				MatchList matchList = (MatchList) results.get(key);
 				matchService.insertMatchs(matchList);
+				break;
+			case SOCCER_DATA_MATCH_BD_LIST:
+				MatchItemList matchItemList = (MatchItemList) results.get(key);
+				List<MatchBd> matchBds = new ArrayList<>();
+				for (MatchItem matchBd : matchItemList)
+				{
+					matchBds.add((MatchBd)matchBd);
+				}
+				matchBdService.insert(matchBds);
 				break;
 			default:
 				// No nothing.
 				break;
 			}
-			logger.info(key);
+			//logger.info(key);
 		}
 		return false;
 	}
