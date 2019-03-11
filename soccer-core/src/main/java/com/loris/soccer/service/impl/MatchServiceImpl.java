@@ -26,10 +26,12 @@ import com.loris.common.service.SqlHelper;
 import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.MatchBdMapper;
+import com.loris.soccer.dao.MatchJcMapper;
 import com.loris.soccer.dao.MatchMapper;
 import com.loris.soccer.filter.MatchItemFilter;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.service.MatchService;
 
 /**
@@ -51,6 +53,9 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	
 	@Autowired
 	private MatchBdMapper matchBdMapper;
+	
+	@Autowired
+	private MatchJcMapper matchJcMapper;
 
 	/**
 	 * (non-Javadoc)
@@ -73,6 +78,10 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Transactional
 	public boolean insertMatchs(List<Match> matchs, boolean overwrite)
 	{
+		if(matchs == null || matchs.size() == 0)
+		{
+			return false;
+		}
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchs, Match.class, SoccerConstants.NAME_FIELD_MID);
 		if (overwrite)
 		{
@@ -106,28 +115,32 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 			return false;
 		}
 	}
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchBdService#insert(java.util.List)
+	 * @see com.loris.soccer.service.MatchBdService#insertMatchBds(java.util.List)
 	 */
 	@Override
-	public boolean insert(List<MatchBd> matchBds)
+	public boolean insertMatchBds(List<MatchBd> matchBds)
 	{
-		return insert(matchBds, false);
+		return insertMatchBds(matchBds, false);
 	}
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchBdService#insert(java.util.List, boolean)
+	 * @see com.loris.soccer.service.MatchBdService#insertMatchBds(java.util.List, boolean)
 	 */
 	@Override
-	public boolean insert(List<MatchBd> matchBds, boolean overwrite)
+	public boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite)
 	{
+		if(matchBds == null || matchBds.size() == 0)
+		{
+			return false;
+		}
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchBds, MatchBd.class, SoccerConstants.NAME_FIELD_MID);
 		if (overwrite)
 		{
@@ -158,6 +171,65 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		try
 		{
 			return helper.insertBatch(matchBds);
+		}
+		catch (SQLException e)
+		{
+			//e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#insertMatchJcs(java.util.List)
+	 */
+	@Override
+	public boolean insertMatchJcs(List<MatchJc> matchJcs)
+	{
+		return insertMatchJcs(matchJcs, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#insertMatchJcs(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite)
+	{
+		if(matchJcs == null || matchJcs.size() == 0)
+		{
+			return false;
+		}
+		List<String> mids = ArraysUtil.getObjectFieldValue(matchJcs, MatchJc.class, SoccerConstants.NAME_FIELD_MID);
+		if (overwrite)
+		{
+			matchJcMapper.delete(new QueryWrapper<MatchJc>().in(SoccerConstants.NAME_FIELD_MID, mids));
+		}
+		else
+		{
+			List<MatchJc> existMatchs = matchJcMapper.selectList(new QueryWrapper<MatchJc>().in(SoccerConstants.NAME_FIELD_MID, mids));
+			List<MatchJc> destMatchs = new ArrayList<>();
+
+			MatchItemFilter<MatchJc> filter = new MatchItemFilter<>();
+			for (MatchJc match : matchJcs)
+			{
+				filter.setValue(match);
+				if (!ArraysUtil.hasSameObject(existMatchs, filter))
+				{
+					destMatchs.add(match);
+				}
+			}
+
+			if (destMatchs.size() == 0)
+			{
+				logger.warn("No match need to be updated.");
+				return true;
+			}
+			matchJcs = destMatchs;
+		}
+		try
+		{
+			return helper.insertBatch(matchJcs);
 		}
 		catch (SQLException e)
 		{

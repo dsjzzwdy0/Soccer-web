@@ -16,6 +16,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.MatchJc;
 
 /**   
  * @ClassName:  League   
@@ -46,16 +47,31 @@ public interface MatchService extends IService<Match>
 	
 	/**
 	 * 添加北单比赛的数据
-	 * @param matchBds
-	 * @return
+	 * @param matchBds 北单比赛数据
+	 * @return 是否更新成功的标志
 	 */
-	boolean insert(List<MatchBd> matchBds);
+	boolean insertMatchBds(List<MatchBd> matchBds);
 	
 	/**
 	 * 插入北单数据
-	 * @param matchBds
+	 * @param matchBds 北单比赛数据
+	 * @param overwrite 是否覆盖已经有的比赛
+	 * @return 是否更新成功的标识
+	 */
+	boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite);
+	
+	/**
+	 * 插入竞彩比赛数据
+	 * @param matchJcs 竞彩数据
+	 * @return 是否插入成功的标志
+	 */
+	boolean insertMatchJcs(List<MatchJc> matchJcs);
+	
+	/**
+	 * 插入竞彩数据
+	 * @param matchJcs 
 	 * @param overwrite
 	 * @return
 	 */
-	boolean insert(List<MatchBd> matchBds, boolean overwrite);
+	boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite);
 }

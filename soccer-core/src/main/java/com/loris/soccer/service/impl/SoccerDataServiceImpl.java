@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
-import com.loris.common.service.SqlHelper;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
@@ -46,13 +45,10 @@ public class SoccerDataServiceImpl implements DataService
 	//private static Logger logger = Logger.getLogger(SoccerDataServiceImpl.class);
 
 	@Autowired
-	protected LeagueService leagueService;
+	private LeagueService leagueService;
 	
 	@Autowired
-	protected MatchService matchService;
-
-	@Autowired
-	protected SqlHelper sqlHelper;
+	private MatchService matchService;
 
 	/**
 	 * 保存数据页面解析得到的内容
@@ -84,7 +80,7 @@ public class SoccerDataServiceImpl implements DataService
 				{
 					matchBds.add((MatchBd)matchBd);
 				}
-				matchService.insert(matchBds);
+				matchService.insertMatchBds(matchBds);
 				break;
 			default:
 				// No nothing.
