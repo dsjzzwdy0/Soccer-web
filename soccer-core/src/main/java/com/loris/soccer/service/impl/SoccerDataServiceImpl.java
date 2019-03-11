@@ -24,7 +24,6 @@ import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
-import com.loris.soccer.service.MatchBdService;
 import com.loris.soccer.service.MatchService;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
@@ -51,9 +50,6 @@ public class SoccerDataServiceImpl implements DataService
 	
 	@Autowired
 	protected MatchService matchService;
-	
-	@Autowired
-	protected MatchBdService matchBdService;
 
 	@Autowired
 	protected SqlHelper sqlHelper;
@@ -88,7 +84,7 @@ public class SoccerDataServiceImpl implements DataService
 				{
 					matchBds.add((MatchBd)matchBd);
 				}
-				matchBdService.insert(matchBds);
+				matchService.insert(matchBds);
 				break;
 			default:
 				// No nothing.

@@ -39,5 +39,4 @@ public class StringFilter extends AbstractFilter<String> implements Filter<Strin
 	{
 		return StringUtils.equals(value, obj);
 	}
-
 }

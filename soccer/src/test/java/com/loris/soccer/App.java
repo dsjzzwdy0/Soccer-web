@@ -88,9 +88,9 @@ public class App
 			//testZgzcwOpWebPage();
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
-			//testBdWebPage();
+			testBdWebPage();
 			
-			testMariaDB();
+			//testMariaDB();
 			
 			//testDateString();			
 			//testJcWebPage();

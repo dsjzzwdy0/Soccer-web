@@ -32,6 +32,10 @@ public class LeagueFilter extends AbstractFilter<League> implements Filter<Leagu
 	{
 	}
 	
+	/**
+	 * Create a new instance of LeagueFilter
+	 * @param league
+	 */
 	public LeagueFilter(League league)
 	{
 		this.value = league;

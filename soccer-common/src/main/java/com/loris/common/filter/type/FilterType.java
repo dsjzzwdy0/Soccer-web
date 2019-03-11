@@ -44,5 +44,10 @@ public enum FilterType
 	/**
 	 * 不小于
 	 */
-	NotLt
+	NotLt,
+	
+	/**
+	 * 日期相等
+	 */
+	EqualDay
 }

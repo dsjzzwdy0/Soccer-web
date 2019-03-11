@@ -11,6 +11,7 @@
  */
 package com.loris.common.filter;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import com.loris.common.filter.type.FilterType;
@@ -54,18 +55,32 @@ public class DateFilter extends AbstractFilter<Date> implements Filter<Date>
 		this.type = type;
 	}
 
+
 	/**
-	 *  (non-Javadoc)
-	 * @see cn.hutool.core.lang.Filter#accept(java.lang.Object)
+	 * 过滤函数
+	 * @param t 时间数据
+	 * @return 返回可能过滤的结果
 	 */
 	@Override
 	public boolean accept(Date t)
 	{
-		if(t == null) return false;
-		if(value == null) return true;
+		//如果两个值均为空值时，则判断相等
+		if(value == t) return true;
+		if(value == null && t == null) return true;
+		if(value == null || t == null) return false;
+		
 		if(type == FilterType.Equal)
 		{
 			return value.equals(t);
+		}
+		else if(type == FilterType.EqualDay)
+		{
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(value);
+			int year = calendar.get(Calendar.YEAR);
+			int day = calendar.get(Calendar.DAY_OF_YEAR);			
+			calendar.setTime(t);
+			return year == calendar.get(Calendar.YEAR) && day == calendar.get(Calendar.DAY_OF_YEAR);
 		}
 		else if(type == FilterType.GT)
 		{

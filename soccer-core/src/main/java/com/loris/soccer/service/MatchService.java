@@ -15,10 +15,12 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.Match;
+import com.loris.soccer.model.MatchBd;
 
 /**   
  * @ClassName:  League   
- * @Description: 比赛数据服务接口
+ * @Description: 比赛数据服务接口，包含有比赛基本数据服务接口、北单比赛数据接口、
+ * 竞彩比赛数据接口、足彩比赛数据接口
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -41,4 +43,19 @@ public interface MatchService extends IService<Match>
 	 * @return 是否插入数据记录成功的标志
 	 */
 	boolean insertMatchs(List<Match> matchs, boolean overwrite);
+	
+	/**
+	 * 添加北单比赛的数据
+	 * @param matchBds
+	 * @return
+	 */
+	boolean insert(List<MatchBd> matchBds);
+	
+	/**
+	 * 插入北单数据
+	 * @param matchBds
+	 * @param overwrite
+	 * @return
+	 */
+	boolean insert(List<MatchBd> matchBds, boolean overwrite);
 }

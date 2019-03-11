@@ -29,7 +29,7 @@ import com.loris.soccer.service.LeagueService;
 
 /**
  * @ClassName: League
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description: 联赛数据服务接口，包括联赛数据服务、球队数据服务、赛季数据服务、排名数据服务等
  * @author: 东方足彩
  * @date: 2019年1月28日 下午8:59:32
  * 
