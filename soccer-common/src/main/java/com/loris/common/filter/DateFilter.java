@@ -23,14 +23,11 @@ import com.loris.common.filter.type.FilterType;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class DateFilter implements Filter<Date>
+public class DateFilter extends AbstractFilter<Date> implements Filter<Date>
 {
 	/** 过滤的类型 */
 	FilterType type;
-	
-	/** 基准日期 */
-	Date date;
-	
+		
 	public DateFilter()
 	{
 		this(null);
@@ -43,7 +40,7 @@ public class DateFilter implements Filter<Date>
 	
 	public DateFilter(Date date, FilterType type)
 	{
-		this.date = date;
+		this.value = date;
 		this.type = type;
 	}
 	
@@ -65,38 +62,27 @@ public class DateFilter implements Filter<Date>
 	public boolean accept(Date t)
 	{
 		if(t == null) return false;
-		if(date == null) return true;
+		if(value == null) return true;
 		if(type == FilterType.Equal)
 		{
-			return date.equals(t);
+			return value.equals(t);
 		}
 		else if(type == FilterType.GT)
 		{
-			return t.getTime() > date.getTime();
+			return t.getTime() > value.getTime();
 		}
 		else if(type == FilterType.LT)
 		{
-			return t.getTime() < date.getTime();
+			return t.getTime() < value.getTime();
 		}
 		else if(type == FilterType.NotGt)
 		{
-			return t.getTime() <= date.getTime();
+			return t.getTime() <= value.getTime();
 		}
 		else if(type == FilterType.NotLt)
 		{
-			return t.getTime() >= date.getTime();
+			return t.getTime() >= value.getTime();
 		}		
 		return false;
 	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.common.filter.Filter#setValue(java.lang.Object)
-	 */
-	@Override
-	public void setValue(Date value)
-	{
-		this.date = value;
-	}
-
 }

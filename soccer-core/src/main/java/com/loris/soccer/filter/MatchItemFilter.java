@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.filter;
 
+import com.loris.common.filter.AbstractFilter;
 import com.loris.common.filter.Filter;
 import com.loris.soccer.model.base.MatchItem;
 
@@ -22,12 +23,10 @@ import com.loris.soccer.model.base.MatchItem;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class MatchItemFilter<T extends MatchItem> implements Filter<T>
-{
-	T matchItem;
-	
+public class MatchItemFilter<T extends MatchItem> extends AbstractFilter<T> implements Filter<T>
+{	
 	/**
-	 * 
+	 * Create a new instance of MatchItemFilter
 	 */
 	public MatchItemFilter()
 	{
@@ -39,15 +38,7 @@ public class MatchItemFilter<T extends MatchItem> implements Filter<T>
 	 */
 	public MatchItemFilter(T item)
 	{
-		this.matchItem = item;
-	}
-	
-	/**
-	 * @param matchItem the matchItem to set
-	 */
-	public void setValue(T matchItem)
-	{
-		this.matchItem = matchItem;
+		this.value = item;
 	}
 
 	/**
@@ -57,6 +48,6 @@ public class MatchItemFilter<T extends MatchItem> implements Filter<T>
 	@Override
 	public boolean accept(T t)
 	{
-		return t != null && matchItem != null && t.getMid().equals(matchItem.getMid());
+		return t != null && value != null && t.getMid().equals(value.getMid());
 	}
 }

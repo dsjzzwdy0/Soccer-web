@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.filter;
 
+import com.loris.common.filter.AbstractFilter;
 import com.loris.common.filter.Filter;
 import com.loris.soccer.model.League;
 
@@ -22,10 +23,8 @@ import com.loris.soccer.model.League;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LeagueFilter implements Filter<League>
+public class LeagueFilter extends AbstractFilter<League> implements Filter<League>
 {
-	protected League league;
-	
 	/**
 	 * Create a new instance of LeagueFilter
 	 */
@@ -35,15 +34,7 @@ public class LeagueFilter implements Filter<League>
 	
 	public LeagueFilter(League league)
 	{
-		this.league = league;
-	}
-	
-	/**
-	 * @param league the league to set
-	 */
-	public void setValue(League league)
-	{
-		this.league = league;
+		this.value = league;
 	}
 
 	/**
@@ -53,10 +44,10 @@ public class LeagueFilter implements Filter<League>
 	@Override
 	public boolean accept(League obj)
 	{
-		if(this.league == null)
+		if(this.value == null)
 		{
 			return false;
 		}
-		return league.equals(obj);
+		return value.equals(obj);
 	}
 }

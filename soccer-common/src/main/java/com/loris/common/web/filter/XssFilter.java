@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.common.filter;
+package com.loris.common.web.filter;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-import com.loris.common.filter.wrapper.XsslHttpServletRequestWrapper;
+import com.loris.common.web.filter.wrapper.XsslHttpServletRequestWrapper;
 
 /**
  * @ClassName: XssFilter
