@@ -50,13 +50,14 @@ public class WebPage extends AutoIdEntity implements Task
 	protected String port;
 	protected String method;
 	protected String type;
-	protected String source; // 页面来源
-	protected int httpstatus; // 页面下载状态信息
-	protected Date createtime; // 创建时间
-	protected Date loadtime; // 下载时间
+	protected String source; 		// 页面来源
+	protected int httpstatus; 		// 页面下载状态信息
+	protected Date createtime; 		// 创建时间
+	protected Date loadtime; 		// 下载时间
 	protected String ziptype;
-	protected boolean completed; // 是否已经下载完成
+	protected boolean completed; 	// 是否已经下载完成
 	protected boolean plaintext;
+	protected String paramstext;	
 	
 	/** 优先级*/
 	@TableField(exist=false)
@@ -150,6 +151,13 @@ public class WebPage extends AutoIdEntity implements Task
 	public void setParams(Map<String, String> params)
 	{
 		this.params.putAll(params);
+		setParamsTextByMap();
+	}
+	
+	public void addParams(String key, String value)
+	{
+		params.put(key, value);
+		setParamsTextByMap();
 	}
 
 	public String getParam(String key)
@@ -447,4 +455,44 @@ public class WebPage extends AutoIdEntity implements Task
 		this.priorityAccuracy = priorityAccuracy;
 	}
 
+	public String getParamstext()
+	{
+		return paramstext;
+	}
+
+	public void setParamstext(String paramstext)
+	{
+		this.paramstext = paramstext;
+		decodeParamsTextToMap();
+	}
+	
+	protected void setParamsTextByMap()
+	{
+		String paramStr = "";
+		int i = 0;
+		for (String key : params.keySet())
+		{
+			if (i != 0)
+			{
+				paramStr += "&";
+			}
+			paramStr += key + "=" + params.get(key);
+			i++;
+		}
+		this.paramstext = paramStr;
+	}
+	
+	protected void decodeParamsTextToMap()
+	{
+		String[] pvalues = paramstext.split("&");
+		this.params.clear();
+		for (String p : pvalues)
+		{
+			String[] kv = p.split("=");
+			if (kv.length == 2)
+			{
+				params.put(kv[0], kv[1]);
+			}
+		}
+	}
 }

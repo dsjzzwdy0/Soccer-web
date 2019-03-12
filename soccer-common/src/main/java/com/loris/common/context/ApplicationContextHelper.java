@@ -80,6 +80,6 @@ public class ApplicationContextHelper implements ApplicationContextAware
 	private static void assertContextInjected()
 	{
 		Validate.validState(applicationContext != null,
-				"applicaitonContext属性未注入, 请在applicationContext.xml中定义ApplicationContextHelper.");
+				"applicatonContext属性未注入, 请在applicationContext.xml中定义ApplicationContextHelper.");
 	}
 }

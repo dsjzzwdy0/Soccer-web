@@ -11,19 +11,14 @@
  */
 package com.loris.soccer.service.impl;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.common.service.SqlHelper;
-import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.MatchBdMapper;
 import com.loris.soccer.dao.MatchJcMapper;
@@ -46,10 +41,8 @@ import com.loris.soccer.service.MatchService;
 @Service("matchService")
 public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements MatchService
 {
-	private static Logger logger = Logger.getLogger(MatchServiceImpl.class);
-
 	@Autowired
-	SqlHelper helper;
+	SqlHelper sqlHelper;
 	
 	@Autowired
 	private MatchBdMapper matchBdMapper;
@@ -78,47 +71,9 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Transactional
 	public boolean insertMatchs(List<Match> matchs, boolean overwrite)
 	{
-		if(matchs == null || matchs.size() == 0)
-		{
-			logger.warn("Warn: No match need to be updated.");
-			return false;
-		}
-		List<String> mids = ArraysUtil.getObjectFieldValue(matchs, Match.class, SoccerConstants.NAME_FIELD_MID);
-		if (overwrite)
-		{
-			baseMapper.delete(new QueryWrapper<Match>().in(SoccerConstants.NAME_FIELD_MID, mids));
-		}
-		else
-		{
-			List<Match> existMatchs = list(new QueryWrapper<Match>().in(SoccerConstants.NAME_FIELD_MID, mids));
-			List<Match> destMatchs = new ArrayList<>();
-
-			MatchItemFilter<Match> filter = new MatchItemFilter<>();
-			for (Match match : matchs)
-			{
-				filter.setValue(match);
-				if (!ArraysUtil.hasSameObject(existMatchs, filter))
-				{
-					destMatchs.add(match);
-				}
-			}
-
-			if (destMatchs.size() == 0)
-			{
-				logger.warn("Warn: No match need to be updated.");
-				return true;
-			}
-			matchs = destMatchs;
-		}
-		try
-		{
-			return helper.insertBatch(matchs);
-		}
-		catch (SQLException e)
-		{
-			//e.printStackTrace();
-			return false;
-		}
+		MatchItemFilter<Match> filter = new MatchItemFilter<>();
+		return SqlHelper.insertList(matchs, Match.class, baseMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
 	
 	/**
@@ -138,47 +93,9 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite)
 	{
-		if(matchBds == null || matchBds.size() == 0)
-		{
-			logger.warn("Warn: No match need to be updated.");
-			return false;
-		}
-		List<String> mids = ArraysUtil.getObjectFieldValue(matchBds, MatchBd.class, SoccerConstants.NAME_FIELD_MID);
-		if (overwrite)
-		{
-			matchBdMapper.delete(new QueryWrapper<MatchBd>().in(SoccerConstants.NAME_FIELD_MID, mids));
-		}
-		else
-		{
-			List<MatchBd> existMatchs = matchBdMapper.selectList(new QueryWrapper<MatchBd>().in(SoccerConstants.NAME_FIELD_MID, mids));
-			List<MatchBd> destMatchs = new ArrayList<>();
-
-			MatchItemFilter<MatchBd> filter = new MatchItemFilter<>();
-			for (MatchBd match : matchBds)
-			{
-				filter.setValue(match);
-				if (!ArraysUtil.hasSameObject(existMatchs, filter))
-				{
-					destMatchs.add(match);
-				}
-			}
-
-			if (destMatchs.size() == 0)
-			{
-				logger.warn("Warn: No match need to be updated.");
-				return true;
-			}
-			matchBds = destMatchs;
-		}
-		try
-		{
-			return helper.insertBatch(matchBds);
-		}
-		catch (SQLException e)
-		{
-			//e.printStackTrace();
-			return false;
-		}
+		MatchItemFilter<MatchBd> filter = new MatchItemFilter<>();		
+		return SqlHelper.insertList(matchBds, MatchBd.class, matchBdMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
 
 	/**
@@ -198,46 +115,8 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite)
 	{
-		if(matchJcs == null || matchJcs.size() == 0)
-		{
-			logger.warn("Warn: No match need to be updated.");
-			return false;
-		}
-		List<String> mids = ArraysUtil.getObjectFieldValue(matchJcs, MatchJc.class, SoccerConstants.NAME_FIELD_MID);
-		if (overwrite)
-		{
-			matchJcMapper.delete(new QueryWrapper<MatchJc>().in(SoccerConstants.NAME_FIELD_MID, mids));
-		}
-		else
-		{
-			List<MatchJc> existMatchs = matchJcMapper.selectList(new QueryWrapper<MatchJc>().in(SoccerConstants.NAME_FIELD_MID, mids));
-			List<MatchJc> destMatchs = new ArrayList<>();
-
-			MatchItemFilter<MatchJc> filter = new MatchItemFilter<>();
-			for (MatchJc match : matchJcs)
-			{
-				filter.setValue(match);
-				if (!ArraysUtil.hasSameObject(existMatchs, filter))
-				{
-					destMatchs.add(match);
-				}
-			}
-
-			if (destMatchs.size() == 0)
-			{
-				logger.warn("Warn: No match need to be updated.");
-				return true;
-			}
-			matchJcs = destMatchs;
-		}
-		try
-		{
-			return helper.insertBatch(matchJcs);
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
+		MatchItemFilter<MatchJc> filter = new MatchItemFilter<>();
+		return SqlHelper.insertList(matchJcs, MatchJc.class, matchJcMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
 }

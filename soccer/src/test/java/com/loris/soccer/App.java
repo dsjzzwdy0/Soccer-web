@@ -20,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.loris.client.fetcher.WebFetcher;
@@ -75,7 +74,7 @@ public class App
 	private static Logger logger = Logger.getLogger(App.class);
 
 	/** Spring环境 */
-	private static ApplicationContext context;
+	private static ClassPathXmlApplicationContext context;
 
 	public static void main(String[] args)
 	{
@@ -108,7 +107,14 @@ public class App
 			e.printStackTrace();
 		}
 		finally
-		{			
+		{
+			try
+			{
+				context.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 			context = null;
 		}
 	}
@@ -622,11 +628,10 @@ public class App
 	 * 
 	 * @return
 	 */
-	public static ApplicationContext getApplicationContext()
+	public static void getApplicationContext()
 	{
 		/** The Application Context. */
 		context = new ClassPathXmlApplicationContext("classpath*:spring-mybatis.xml");
 		//context = new ClassPathXmlApplicationContext("classpath*:spring-test.xml");
-		return context;
 	}
 }

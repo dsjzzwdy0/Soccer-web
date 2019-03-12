@@ -28,7 +28,11 @@ import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.loris.common.bean.Entity;
+import com.loris.common.filter.Filter;
+import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.ReflectUtil;
 
 /**
@@ -292,6 +296,60 @@ public class SqlHelper
 				field.setAccessible(true);
 				fields.add(field);
 			}
+		}
+	}
+	
+	/**
+	 * 插入数据列表
+	 * @param values 列表值
+	 * @param key 关键字段
+	 * @param mapper 数据接口
+	 * @param helper 数据通用接口
+	 * @return 是否成功的标志
+	 */
+	public static<T extends Entity> boolean insertList(List<T> values, Class<T> clazz, BaseMapper<T> mapper,
+			Filter<T> filter, String key,  SqlHelper helper, boolean overwrite)
+	{
+		if(values == null || values.size() == 0)
+		{
+			logger.warn("Warn: No " + clazz.getName() + " need to be updated.");
+			return false;
+		}
+		List<String> tids = ArraysUtil.getObjectFieldValue(values, clazz, key);
+		QueryWrapper<T> queryWrapper = new QueryWrapper<T>().in(key, tids);
+		if(overwrite)
+		{
+			mapper.delete(queryWrapper);
+		}
+		else
+		{
+			List<T> existValues = mapper.selectList(queryWrapper);
+			List<T> newValues = new ArrayList<>();
+			
+			for (T team : values)
+			{
+				filter.setValue(team);
+				if (!ArraysUtil.hasSameObject(existValues, filter))
+				{
+					newValues.add(team);
+				}
+			}
+			
+			if (newValues.size() == 0)
+			{
+				logger.warn("Warn: No " + clazz.getName() + " need to be updated.");
+				return true;
+			}
+			values = newValues;			
+		}
+		try
+		{
+			return helper.insertBatch(values);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return false;
 		}
 	}
 }

@@ -13,11 +13,14 @@ package com.loris.soccer.executor;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.fetcher.impl.HtmlUnitFetcher;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.model.WebPage;
+import com.loris.client.service.WebPageService;
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
@@ -35,6 +38,9 @@ public class HtmlUnitWebPageExecutor extends BasicTaskProcessPlugin
 {
 	/** HtmlUnitFetcher Client. */
 	private HtmlUnitFetcher client = null;
+	
+	@Autowired
+	private WebPageService pageService;
 		
 	/**
 	 * Create a new instance of HtmlUnitTaskProcessPlugin
@@ -60,12 +66,13 @@ public class HtmlUnitWebPageExecutor extends BasicTaskProcessPlugin
 		if(!(task.getClass().isInstance(WebPage.class)))
 		{
 			WebPage page = (WebPage)task;
-			return client.download(page);
+			if(client.download(page))
+			{
+				if(pageService != null) pageService.save(page);
+				return true;
+			}
 		}
-		else
-		{			
-			return false;
-		}
+		return false;
 	}
 	
 	/**

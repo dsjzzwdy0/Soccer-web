@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class ConfigListener implements ServletContextListener
 {
-
+	/** 配置路径信息 */
 	private static Map<String, String> conf = new HashMap<>();
 
 	public static Map<String, String> getConf()

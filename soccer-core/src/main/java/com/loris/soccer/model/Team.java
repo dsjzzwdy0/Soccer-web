@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
@@ -57,5 +59,19 @@ public class Team extends AutoIdEntity
 	public void setCountry(String country)
 	{
 		this.country = country;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		if(obj == null || !(obj instanceof Team))
+		{
+			return false;
+		}
+		return StringUtils.isNotBlank(tid) && tid.equalsIgnoreCase(((Team)obj).getTid());
 	}
 }

@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.League;
+import com.loris.soccer.model.Team;
 
 /**
  * @ClassName: League
@@ -48,7 +49,22 @@ public interface LeagueService extends IService<League>
 	 * 联赛名称
 	 * 
 	 * @param name
-	 * @return
+	 * @return 是否成功的标志
 	 */
 	League getLeague(String name);
+	
+	/**
+	 * 保存球队数据
+	 * @param teams 球队数据列表
+	 * @return 是否成功的标志
+	 */
+	boolean insertTeams(List<Team> teams);
+	
+	/**
+	 * 保存球队数据
+	 * @param teams 球队数据列表
+	 * @param overwrite 是否覆盖原有数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertTeams(List<Team> teams, boolean overwrite);
 }

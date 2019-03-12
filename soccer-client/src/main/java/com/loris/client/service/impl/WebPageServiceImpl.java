@@ -23,7 +23,7 @@ import com.loris.client.service.WebPageService;
 
 /**   
  * @ClassName:  WebPageServiceImpl   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 数据页面的服务类 
  * @author: 东方足彩
  * @date:   2019年1月31日 下午8:55:23   
  *     
@@ -38,10 +38,11 @@ public class WebPageServiceImpl extends ServiceImpl<WebPageMapper, WebPage> impl
 	 * @param pageid 网页唯一标识
 	 * @return 网页数据
 	 */
+	@Override
 	public List<WebPage> selectWebPage(String pageid)
 	{
 		QueryWrapper<WebPage> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("PAGEID", pageid);
+		queryWrapper.eq("pageid", pageid);
 		return baseMapper.selectList(queryWrapper);
 	}
 }

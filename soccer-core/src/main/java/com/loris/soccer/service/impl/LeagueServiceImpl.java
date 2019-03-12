@@ -11,10 +11,8 @@
  */
 package com.loris.soccer.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -23,11 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.common.service.SqlHelper;
-import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.LeagueMapper;
+import com.loris.soccer.dao.TeamMapper;
 import com.loris.soccer.filter.LeagueFilter;
+import com.loris.soccer.filter.TeamFilter;
 import com.loris.soccer.model.League;
+import com.loris.soccer.model.Team;
 import com.loris.soccer.service.LeagueService;
 
 /**
@@ -41,12 +41,12 @@ import com.loris.soccer.service.LeagueService;
  */
 @Service("leagueService")
 public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> implements LeagueService
-{
-	private static Logger logger = Logger.getLogger(LeagueServiceImpl.class);
-	
+{	
 	@Autowired
 	private SqlHelper sqlHelper;
 	
+	@Autowired
+	private TeamMapper teamMapper;
 
 	/**
 	 *  (non-Javadoc)
@@ -55,47 +55,8 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	@Override
 	public boolean insertLeagues(List<League> leagues, boolean overwrite)
 	{
-		if(leagues == null || leagues.size() == 0)
-		{
-			logger.warn("Warn: No league need to be updated.");
-			return false;
-		}
-		List<String> lids = ArraysUtil.getObjectFieldValue(leagues, League.class, SoccerConstants.NAME_FIELD_LID);
-		if(overwrite)
-		{
-			baseMapper.delete(new QueryWrapper<League>().in(SoccerConstants.NAME_FIELD_LID, lids));
-		}
-		else
-		{
-			List<League> existLeagues = baseMapper.selectList(new QueryWrapper<League>().in(SoccerConstants.NAME_FIELD_LID, lids));
-
-			LeagueFilter filter = new LeagueFilter();
-			List<League> newLeagues = new ArrayList<>();
-			for (League l : leagues)
-			{
-				filter.setValue(l);
-				if (!ArraysUtil.hasSameObject(existLeagues, filter))
-				{
-					newLeagues.add(l);
-				}
-			}
-			
-			if (newLeagues.size() == 0)
-			{
-				logger.warn("Warn: No league need to be updated.");
-				return true;
-			}
-			leagues = newLeagues;
-		}		
-		try
-		{
-			return sqlHelper.insertBatch(leagues);
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-			return false;
-		}
+		LeagueFilter filter = new LeagueFilter();
+		return SqlHelper.insertList(leagues, League.class, baseMapper, filter, SoccerConstants.NAME_FIELD_LID, sqlHelper, overwrite);
 	}
 	
 	/**
@@ -134,5 +95,26 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	public List<League> list()
 	{
 		return baseMapper.selectList(new QueryWrapper<League>());
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertTeams(java.util.List)
+	 */
+	@Override
+	public boolean insertTeams(List<Team> teams)
+	{
+		return insertTeams(teams, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertTeams(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertTeams(List<Team> teams, boolean overwrite)
+	{
+		TeamFilter filter = new TeamFilter();		
+		return SqlHelper.insertList(teams, Team.class, teamMapper, filter, SoccerConstants.NAME_FIELD_TID, sqlHelper, overwrite);
 	}
 }
