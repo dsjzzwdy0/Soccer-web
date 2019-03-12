@@ -19,7 +19,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.auth.model.User;
-import com.loris.common.model.DataScope;
+import com.loris.auth.model.scope.DataScope;
 
 import java.util.List;
 import java.util.Map;

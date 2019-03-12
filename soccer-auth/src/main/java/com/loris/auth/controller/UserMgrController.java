@@ -12,6 +12,7 @@ import com.loris.auth.factory.ConstantFactory;
 import com.loris.auth.factory.UserFactory;
 import com.loris.auth.log.LogObjectHolder;
 import com.loris.auth.model.User;
+import com.loris.auth.model.scope.DataScope;
 import com.loris.auth.security.ShiroKit;
 import com.loris.auth.security.ShiroUser;
 import com.loris.auth.service.UserService;
@@ -24,7 +25,6 @@ import com.loris.common.constant.state.ManagerStatus;
 import com.loris.common.constant.tips.Tip;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.enums.BizExceptionEnum;
-import com.loris.common.model.DataScope;
 import com.loris.common.util.ToolUtil;
 import com.loris.common.web.BaseController;
 

@@ -12,6 +12,7 @@
 package com.loris.common.model;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**   
  * @ClassName:  ParserResults  
@@ -86,5 +87,22 @@ public class TableRecords extends HashMap<String, Object>
 	public static TableRecords failure()
 	{
 		return new TableRecords(false, "Error result.");
+	}
+
+	@Override
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (String key : keySet())
+		{
+			Object object = get(key);
+			sb.append(key + ": " + object.getClass().getName());
+			if(object instanceof List)
+			{
+				sb.append("[" + ((List<?>)object).size() + "]");
+			}
+			sb.append("; ");
+		};
+		return sb.toString();
 	}
 }

@@ -35,6 +35,14 @@ public interface LeagueService extends IService<League>
 	 * @return 是否成功的标志
 	 */
 	boolean insertLeagues(List<League> leagues);
+	
+	/**
+	 * 插入联赛数据
+	 * @param leagues 联赛数据
+	 * @param overwrite 是否覆盖数据
+	 * @return 插入成功的标志
+	 */
+	boolean insertLeagues(List<League> leagues, boolean overwrite);
 
 	/**
 	 * 联赛名称

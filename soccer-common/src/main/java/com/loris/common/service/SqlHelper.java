@@ -74,7 +74,7 @@ public class SqlHelper
 		}
 
 		String sql = createSQL(tableName, fields);
-		logger.info(sql);
+		//logger.info(sql);
 
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -116,6 +116,7 @@ public class SqlHelper
 		catch (SQLException e)
 		{
 			// e.printStackTrace();
+			logger.warn(e.toString());
 			try
 			{
 				if (connection != null)

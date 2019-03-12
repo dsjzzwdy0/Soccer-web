@@ -22,8 +22,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.auth.dao.UserMapper;
 import com.loris.auth.model.User;
+import com.loris.auth.model.scope.DataScope;
 import com.loris.auth.service.UserService;
-import com.loris.common.model.DataScope;
 import com.loris.common.util.ToolUtil;
 
 import java.util.List;

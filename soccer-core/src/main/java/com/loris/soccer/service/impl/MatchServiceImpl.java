@@ -80,6 +80,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	{
 		if(matchs == null || matchs.size() == 0)
 		{
+			logger.warn("Warn: No match need to be updated.");
 			return false;
 		}
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchs, Match.class, SoccerConstants.NAME_FIELD_MID);
@@ -104,7 +105,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 
 			if (destMatchs.size() == 0)
 			{
-				logger.warn("No match need to be updated.");
+				logger.warn("Warn: No match need to be updated.");
 				return true;
 			}
 			matchs = destMatchs;
@@ -139,6 +140,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	{
 		if(matchBds == null || matchBds.size() == 0)
 		{
+			logger.warn("Warn: No match need to be updated.");
 			return false;
 		}
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchBds, MatchBd.class, SoccerConstants.NAME_FIELD_MID);
@@ -163,7 +165,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 
 			if (destMatchs.size() == 0)
 			{
-				logger.warn("No match need to be updated.");
+				logger.warn("Warn: No match need to be updated.");
 				return true;
 			}
 			matchBds = destMatchs;
@@ -198,6 +200,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	{
 		if(matchJcs == null || matchJcs.size() == 0)
 		{
+			logger.warn("Warn: No match need to be updated.");
 			return false;
 		}
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchJcs, MatchJc.class, SoccerConstants.NAME_FIELD_MID);
@@ -222,7 +225,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 
 			if (destMatchs.size() == 0)
 			{
-				logger.warn("No match need to be updated.");
+				logger.warn("Warn: No match need to be updated.");
 				return true;
 			}
 			matchJcs = destMatchs;

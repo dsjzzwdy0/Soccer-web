@@ -1,4 +1,4 @@
-package com.loris.common.model;
+package com.loris.auth.model.scope;
 
 import java.util.List;
 

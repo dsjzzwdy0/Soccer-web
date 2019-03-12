@@ -116,14 +116,10 @@ public class App
 	public static void testCenterPage() throws Exception
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER);
-
-		long st = System.currentTimeMillis();
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
-		long en = System.currentTimeMillis();
-		logger.info("Get web page spend time is " + (en - st) + " ms.");
 		
 		CenterPageParser parser = new CenterPageParser();
 		TableRecords records = parser.parse(page);
@@ -138,6 +134,8 @@ public class App
 		{
 			logger.info(i +++ ": " + league);
 		}
+		
+		saveTableRecords(records);
 	}
 	
 	public static void testDateString()
@@ -233,7 +231,7 @@ public class App
 	public static void testScoreWebPage() throws Exception
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_SCORE_JC);
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
@@ -263,7 +261,7 @@ public class App
 		params.put(SoccerConstants.NAME_FIELD_ISSUE, "2019-02-02");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC, params);
 		
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
@@ -292,13 +290,10 @@ public class App
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
 
-		long st = System.currentTimeMillis();
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
-		long en = System.currentTimeMillis();
-		logger.info("Get web page spend time is " + (en - st) + " ms.");
 
 		LotteryBdWebPageParser parser = new LotteryBdWebPageParser();
 		TableRecords records = parser.parse(page);
@@ -306,21 +301,8 @@ public class App
 		{
 			logger.info("Parser error.");
 			return;
-		}
-		
-		/*MatchItemList matchBds = (MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
-		
-		int i = 1;
-		for (MatchItem matchBd : matchBds)
-		{
-			logger.info(i +++ ": " + matchBd);
-		}*/
-		
-		st = System.currentTimeMillis();
-		DataService dataService = (DataService)context.getBean("soccerDataService");
-		dataService.saveTableRecords(records);
-		en = System.currentTimeMillis();
-		logger.info("Total spend time is " + (en - st) + " ms.");
+		}		
+		saveTableRecords(records);
 	}
 	
 	/**
@@ -334,7 +316,7 @@ public class App
 		params.put("lid", "83");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_CUP, params);	
 
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
@@ -373,7 +355,7 @@ public class App
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_CENTER, null);	
 
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
@@ -409,7 +391,7 @@ public class App
 		params.put("mid", "2432303");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params);	
 
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
@@ -444,7 +426,7 @@ public class App
 		params.put("matchtime", "2019-02-02 14:35:00");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params);	
 
-		if(!getWebPage(page))
+		if(!downloadWebPage(page))
 		{
 			return;
 		}
@@ -581,10 +563,11 @@ public class App
 		logger.info(DashBoard.print());
 	}
 	
-	private static boolean getWebPage(WebPage page) throws Exception
+	private static boolean downloadWebPage(WebPage page) throws Exception
 	{
 		try(HttpCommonWebPageExecutor client = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin"))
 		{
+			long st = System.currentTimeMillis();
 			if(!client.isInitialized())
 			{
 				client.initialize(null);
@@ -595,8 +578,25 @@ public class App
 				logger.info("Error when downloading: " + page.getUrl());
 				return false;
 			}
+
+			long en = System.currentTimeMillis();
+			logger.info("Get web page spend time is " + (en - st) + " ms.");
 			return true;
 		}		
+	}
+	
+	/**
+	 * 存储数据
+	 * @param records
+	 * @throws Exception
+	 */
+	private static void saveTableRecords(TableRecords records) throws Exception
+	{
+		long st = System.currentTimeMillis();
+		DataService dataService = (DataService)context.getBean("soccerDataService");
+		dataService.saveTableRecords(records);
+		long en = System.currentTimeMillis();
+		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
 	}
 	
 	/**
