@@ -55,6 +55,14 @@ public interface OddsService
 	boolean insertOddsOp(List<OddsOp> ops);
 	
 	/**
+	 * 插入欧赔数据列表
+	 * @param ops 欧赔数据
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功的标志
+	 */
+	boolean insertOddsOp(List<OddsOp> ops, boolean overwrite);
+	
+	/**
 	 * 更新数据列表
 	 */
 	void updateOpList();

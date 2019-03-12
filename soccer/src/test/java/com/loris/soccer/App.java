@@ -42,7 +42,9 @@ import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
+import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
@@ -90,7 +92,9 @@ public class App
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
 			
-			testCenterPage();
+			//testCenterPage();
+			
+			testOddsOpPage();
 			
 			//testMariaDB();
 			
@@ -112,11 +116,47 @@ public class App
 			{
 				context.close();
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				e.printStackTrace();
 			}
 			context = null;
 		}
+	}
+	
+	public static void testLeagueCenterPage() throws Exception
+	{
+		
+	}
+	
+	public static void testOddsOpPage() throws Exception
+	{
+		String mid = "2402789";
+		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, mid);
+		
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params);
+		if(!downloadWebPage(page))
+		{
+			return;
+		}
+		
+		OddsOpWebPageParser parser = new OddsOpWebPageParser();
+		TableRecords records = parser.parse(page);
+		
+		if(records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		
+		OddsOpList list = (OddsOpList) records.get(SoccerConstants.SOCCER_DATA_OP_LIST);
+		if(list == null)
+		{
+			logger.info("No oplist, error.");
+			return;
+		}
+		logger.info("Total OddsOp size is " + list.size());		
+		saveTableRecords(records);
 	}
 	
 	public static void testCenterPage() throws Exception

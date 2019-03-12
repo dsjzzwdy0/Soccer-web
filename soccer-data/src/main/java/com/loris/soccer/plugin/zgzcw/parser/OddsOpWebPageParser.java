@@ -11,10 +11,7 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -25,6 +22,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.common.util.URLParser;
+import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
@@ -63,7 +61,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 		
 		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
-		List<OddsOp> ops = new ArrayList<>();		
+		OddsOpList ops = new OddsOpList();		
 		for (Element element2 : elements)
 		{
 			parseOdds(element2, mid, ops);
@@ -78,7 +76,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param element
 	 * @throws DateParseException 
 	 */
-	protected void parseOdds(Element element, String mid, List<OddsOp> ops)
+	protected void parseOdds(Element element, String mid, OddsOpList ops)
 	{
 		OddsOp firstOdds = new OddsOp(mid);
 		OddsOp odds = new OddsOp(mid);

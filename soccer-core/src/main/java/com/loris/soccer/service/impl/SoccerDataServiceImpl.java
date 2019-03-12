@@ -20,10 +20,12 @@ import com.loris.common.service.DataService;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
+import com.loris.soccer.service.OddsService;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
 
@@ -49,6 +51,9 @@ public class SoccerDataServiceImpl implements DataService
 	
 	@Autowired
 	private MatchService matchService;
+	
+	@Autowired
+	private OddsService oddsService;
 
 	/**
 	 * 保存数据页面解析得到的内容
@@ -65,14 +70,12 @@ public class SoccerDataServiceImpl implements DataService
 			{
 			case SOCCER_DATA_LEAGUE_LIST:
 				LeagueList leagues = (LeagueList) results.get(key);
-				leagueService.insertLeagues(leagues);
-				break;
+				return leagueService.insertLeagues(leagues);
 			case SOCCER_DATA_LOGO_LIST:
 				break;
 			case SOCCER_DATA_MATCH_LIST:
 				MatchList matchList = (MatchList) results.get(key);
-				matchService.insertMatchs(matchList);
-				break;
+				return matchService.insertMatchs(matchList);
 			case SOCCER_DATA_MATCH_BD_LIST:
 				MatchItemList matchItemList = (MatchItemList) results.get(key);
 				List<MatchBd> matchBds = new ArrayList<>();
@@ -80,8 +83,10 @@ public class SoccerDataServiceImpl implements DataService
 				{
 					matchBds.add((MatchBd)matchBd);
 				}
-				matchService.insertMatchBds(matchBds);
-				break;
+				return matchService.insertMatchBds(matchBds);
+			case SOCCER_DATA_OP_LIST:
+				OddsOpList ops = (OddsOpList) results.get(key);
+				return oddsService.insertOddsOp(ops);
 			default:
 				// No nothing.
 				break;

@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model.base;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -135,5 +137,17 @@ public class OddsValue extends AutoIdEntity
 	public void setSource(String source)
 	{
 		this.source = source;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(obj.getClass() != this.getClass()) return false;
+		OddsValue value = (OddsValue) obj;
+		return StringUtils.equals(mid, value.mid) 
+				&& StringUtils.equals(corpid, value.corpid)
+				&& opentime == value.getOpentime();
 	}
 }
