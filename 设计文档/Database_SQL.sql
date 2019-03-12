@@ -90,11 +90,13 @@ create table soccer_match(
 	INDEX `index_clientid` (`clientid`) USING BTREE
 );
 
+
+
 create table soccer_odds_op(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10),
 	corpid varchar(10),
-	corpname varchar(20),
+	corpname varchar(30),
 	opentime long,
 	winodds float,
 	drawodds float,
@@ -107,13 +109,13 @@ create table soccer_odds_op(
 	loseprob float,
 	lossratio float,
 	source varchar(10),
+	PRIMARY KEY (`id`),	
 	INDEX `index_mid` (`mid`) USING BTREE,
 	INDEX `index_corpid` (`corpid`) USING BTREE,
-	INDEX `index_opentime` (`opentime`) USING BTREE,
 	INDEX `index_soruce` (`source`) USING BTREE
 );
 
-CREATE 
+CREATE
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
