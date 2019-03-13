@@ -58,4 +58,9 @@ public class Round extends AutoIdEntity
 	{
 		this.round = round;
 	}
+	@Override
+	public String toString()
+	{
+		return "Round [lid=" + lid + ", season=" + season + ", round=" + round + "]";
+	}
 }

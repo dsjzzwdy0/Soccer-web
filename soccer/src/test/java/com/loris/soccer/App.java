@@ -46,6 +46,7 @@ import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.OddsOpList;
+import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
@@ -55,6 +56,7 @@ import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
+import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
@@ -157,6 +159,13 @@ public class App
 			return;
 		}
 		logger.info("Total Match size is " + list.size());
+		
+		RoundList rounds = (RoundList) records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
+		int i = 1;
+		for (Round round : rounds)
+		{
+			logger.info(i +++ ": " + round);
+		}
 		
 		saveTableRecords(records);
 	}
@@ -681,7 +690,7 @@ public class App
 	private static void saveTableRecords(TableRecords records) throws Exception
 	{
 		long st = System.currentTimeMillis();
-		DataService dataService = (DataService)context.getBean("soccerDataService");
+		DataService dataService = (DataService)context.getBean(com.loris.soccer.service.impl.SoccerDataService.class);
 		dataService.saveTableRecords(records);
 		long en = System.currentTimeMillis();
 		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
