@@ -86,6 +86,21 @@ public class OddsServiceImpl implements OddsService
 	@CacheEvict(value=SoccerConstants.CAHE_ODDS_NAME, allEntries=true, beforeInvocation=true)
 	public void updateOpList()
 	{
+		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq(SoccerConstants.NAME_FIELD_MID, "2402789");
+		
+		List<OddsOp> list = oddsOpMapper.selectList(queryWrapper);
+		for (OddsOp oddsOp : list)
+		{
+			oddsOp.setLossratio(0.58f);
+		}
+		try
+		{
+			sqlHelper.updateBatch(list, OddsOp.class);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -121,11 +136,11 @@ public class OddsServiceImpl implements OddsService
 		}
 		
 		List<String> mids = ArraysUtil.getObjectFieldValue(ops, OddsOp.class, SoccerConstants.NAME_FIELD_MID);		
-		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<OddsOp>().in(SoccerConstants.NAME_FIELD_MID, mids);
-		List<OddsOp> existOps = oddsOpMapper.selectList(queryWrapper);		
-		List<OddsOp> newOps = new ArrayList<>();
 		if(overwrite)
 		{
+			QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<OddsOp>().in(SoccerConstants.NAME_FIELD_MID, mids);
+			List<OddsOp> existOps = oddsOpMapper.selectList(queryWrapper);		
+			List<OddsOp> newOps = new ArrayList<>();
 			OddsValueFilter<OddsOp> filter = new OddsValueFilter<>();
 			for (OddsOp oddsOp : ops)
 			{
@@ -145,7 +160,7 @@ public class OddsServiceImpl implements OddsService
 		
 		try
 		{
-			return sqlHelper.insertBatch(ops);
+			return sqlHelper.insertBatch(ops, OddsOp.class);
 		}
 		catch (Exception e) 
 		{

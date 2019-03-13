@@ -18,14 +18,14 @@ public class ArraysUtil
 	/**
 	 * 检测列表中是否存在相同的记录
 	 * @param list 数据列表
-	 * @param checker 数据检测器
+	 * @param filter 数据检测器
 	 * @return 是否有相同的记录
 	 */
-	public static<T> boolean hasSameObject(Collection<? extends T> list, Filter<T> checker)
+	public static<T> boolean hasSameObject(Collection<? extends T> list, Filter<T> filter)
 	{
 		for (T t : list)
 		{
-			if(checker.accept(t))
+			if(filter.accept(t))
 			{
 				return true;
 			}
@@ -36,14 +36,14 @@ public class ArraysUtil
 	/**
 	 * 获得相同记录的数据
 	 * @param list 数据列表
-	 * @param checker 检测器
+	 * @param filter 检测器
 	 * @return 检测的记录
 	 */
-	public static<T> T getSameObject(Collection<? extends T> list, Filter<T> checker)
+	public static<T> T getSameObject(Collection<? extends T> list, Filter<T> filter)
 	{
 		for (T t : list)
 		{
-			if(checker.accept(t))
+			if(filter.accept(t))
 			{
 				return t;
 			}

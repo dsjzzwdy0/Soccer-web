@@ -44,6 +44,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
@@ -58,6 +59,7 @@ import com.loris.soccer.model.Team;
 import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
+import com.loris.soccer.plugin.zgzcw.parser.LeagueWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryJcScoreWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryJcWebPageParser;
@@ -65,6 +67,7 @@ import com.loris.soccer.plugin.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
+import com.loris.soccer.service.OddsService;
 
 
 /**
@@ -92,9 +95,12 @@ public class App
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
 			
-			//testCenterPage();
+			//testCenterPage();	
+			//testOddsOpPage();
 			
-			testOddsOpPage();
+			//testUpdate();
+			
+			testLeagueCenterPage();
 			
 			//testMariaDB();
 			
@@ -126,7 +132,43 @@ public class App
 	
 	public static void testLeagueCenterPage() throws Exception
 	{
+		String lid = "36";
+		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, lid);
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, params);
 		
+		if(!downloadWebPage(page))
+		{
+			return;
+		}
+		
+		LeagueWebPageParser parser = new LeagueWebPageParser();
+		TableRecords records = parser.parse(page);
+		
+		if(records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		
+		MatchList list = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		if(list == null)
+		{
+			logger.info("No Match list, error.");
+			return;
+		}
+		logger.info("Total Match size is " + list.size());
+		
+		saveTableRecords(records);
+	}
+	
+	public static void testUpdate() throws Exception
+	{
+		OddsService service = context.getBean(OddsService.class);
+		long st = System.currentTimeMillis();
+		service.updateOpList();
+		long en = System.currentTimeMillis();
+		
+		logger.info("Total spend time is " + (en - st) + " ms.");
 	}
 	
 	public static void testOddsOpPage() throws Exception

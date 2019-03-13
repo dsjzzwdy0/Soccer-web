@@ -23,6 +23,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
@@ -72,7 +73,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		List<Team> teams = new ArrayList<>();
 		List<TeamRfSeason> teamRfSeasons = new ArrayList<>();
 		List<Round> rounds = new ArrayList<>();
-		List<Match> matchs = new ArrayList<>();
+		MatchList matchs = new MatchList();
 		List<MatchResult> matchResults = new ArrayList<>();
 		List<Logo> logos = new ArrayList<>();
 		List<Rank> ranks = new ArrayList<>();
@@ -227,6 +228,4 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		}
 		return curRound;
 	}
-	
-	
 }
