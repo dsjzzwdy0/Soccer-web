@@ -50,6 +50,26 @@ create table soccer_league(
 	INDEX `index_name` (`name`) USING BTREE
 );
 
+create table soccer_league_round(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	lid varchar(10),
+	season varchar(20),
+	round varchar(20),
+	PRIMARY KEY (`id`),
+	INDEX `index_lid` (`lid`) USING BTREE ,
+	INDEX `index_season` (`season`) USING BTREE
+);
+
+create table soccer_league_team(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	tid varchar(10),
+	name varchar(30),
+	country varchar(20),
+	PRIMARY KEY (`id`),
+	INDEX `index_lid` (`tid`) USING BTREE ,
+	INDEX `index_name` (`name`) USING BTREE
+);
+
 create table soccer_match_bd(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10) NOT NULL,

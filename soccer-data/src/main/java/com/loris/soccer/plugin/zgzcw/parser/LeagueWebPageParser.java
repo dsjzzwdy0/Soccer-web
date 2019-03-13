@@ -24,15 +24,16 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.RankList;
 import com.loris.soccer.collection.RoundList;
+import com.loris.soccer.collection.TeamList;
+import com.loris.soccer.collection.TeamRfSeasonList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.Rank;
 import com.loris.soccer.model.Round;
-import com.loris.soccer.model.Team;
-import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractLeagueWebPageParser;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
@@ -71,13 +72,13 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 			season = parseFirstSeasonInfo(document);
 		}
 		
-		List<Team> teams = new ArrayList<>();
-		List<TeamRfSeason> teamRfSeasons = new ArrayList<>();
+		TeamList teams = new TeamList();
+		TeamRfSeasonList teamRfSeasons = new TeamRfSeasonList();
 		RoundList rounds = new RoundList();
 		MatchList matchs = new MatchList();
 		List<MatchResult> matchResults = new ArrayList<>();
 		List<Logo> logos = new ArrayList<>();
-		List<Rank> ranks = new ArrayList<>();
+		RankList ranks = new RankList();
 
 		//解析球队列表情况
 		parseTeams(document, lid, season, teams, teamRfSeasons);

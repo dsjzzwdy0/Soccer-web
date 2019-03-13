@@ -25,7 +25,7 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_team")
+@TableName("soccer_league_team")
 public class Team extends AutoIdEntity
 {
 	/**
@@ -64,14 +64,8 @@ public class Team extends AutoIdEntity
 	@Override
 	public boolean equals(Object obj)
 	{
-		if(obj == this)
-		{
-			return true;
-		}
-		if(obj == null || !(obj instanceof Team))
-		{
-			return false;
-		}
-		return StringUtils.isNotBlank(tid) && tid.equalsIgnoreCase(((Team)obj).getTid());
+		if(obj == this) return true;
+		if(obj == null || !(obj instanceof Team)) return false;
+		return StringUtils.equals(tid, ((Team)obj).getTid());
 	}
 }

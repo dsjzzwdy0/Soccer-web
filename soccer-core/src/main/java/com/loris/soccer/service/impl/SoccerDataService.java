@@ -21,6 +21,8 @@ import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.OddsOpList;
+import com.loris.soccer.collection.RoundList;
+import com.loris.soccer.collection.TeamList;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
@@ -70,12 +72,14 @@ public class SoccerDataService implements DataService
 			{
 			case SOCCER_DATA_LEAGUE_LIST:
 				LeagueList leagues = (LeagueList) results.get(key);
-				return leagueService.insertLeagues(leagues);
+				leagueService.insertLeagues(leagues);
+				break;
 			case SOCCER_DATA_LOGO_LIST:
 				break;
 			case SOCCER_DATA_MATCH_LIST:
 				MatchList matchList = (MatchList) results.get(key);
-				return matchService.insertMatchs(matchList);
+				matchService.insertMatchs(matchList);
+				break;
 			case SOCCER_DATA_MATCH_BD_LIST:
 				MatchItemList matchItemList = (MatchItemList) results.get(key);
 				List<MatchBd> matchBds = new ArrayList<>();
@@ -83,16 +87,26 @@ public class SoccerDataService implements DataService
 				{
 					matchBds.add((MatchBd)matchBd);
 				}
-				return matchService.insertMatchBds(matchBds);
+				matchService.insertMatchBds(matchBds);
+				break;
 			case SOCCER_DATA_OP_LIST:
 				OddsOpList ops = (OddsOpList) results.get(key);
-				return oddsService.insertOddsOp(ops);
+				oddsService.insertOddsOp(ops);
+				break;
+			case SOCCER_DATA_ROUND_LIST:
+				RoundList rounds = (RoundList) results.get(key);
+				leagueService.insertRounds(rounds);
+				break;
+			case SOCCER_DATA_TEAM_LIST:
+				TeamList teams = (TeamList) results.get(key);
+				leagueService.insertTeams(teams);
+				break;
 			default:
 				// No nothing.
 				break;
 			}
 			//logger.info(key);
 		}
-		return false;
+		return true;
 	}
 }

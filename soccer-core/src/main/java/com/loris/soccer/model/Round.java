@@ -11,12 +11,14 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  League   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 轮次比赛的过滤器   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -58,6 +60,18 @@ public class Round extends AutoIdEntity
 	{
 		this.round = round;
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !(obj instanceof Round)) return false;
+		Round other = (Round) obj;
+		return StringUtils.equals(lid, other.lid)
+				&& StringUtils.equals(season, other.season)
+				&& StringUtils.equals(round, other.round);
+	}
+	
 	@Override
 	public String toString()
 	{
