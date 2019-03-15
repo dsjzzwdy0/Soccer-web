@@ -11,7 +11,7 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +23,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.LogoList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.RankList;
@@ -78,7 +79,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		RoundList rounds = new RoundList();
 		MatchList matchs = new MatchList();
 		MatchResultList matchResults = new MatchResultList();
-		List<Logo> logos = new ArrayList<>();
+		LogoList logos = new LogoList();
 		RankList ranks = new RankList();
 
 		//解析球队列表情况
@@ -154,9 +155,10 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 			
 			Rank rank = new Rank();
 			rank.setType(type);
-			rank.setTeamid(tid);
+			rank.setTid(tid);
 			rank.setLid(lid);
 			rank.setSeason(season);
+			rank.setRound(round);
 			rank.setRank(NumberUtil.parseInt(no));
 			rank.setGamenum(NumberUtil.parseInt(num));
 			rank.setWinnum(NumberUtil.parseInt(winnum));
@@ -165,7 +167,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 			rank.setWingoal(NumberUtil.parseInt(goal));
 			rank.setLosegoal(NumberUtil.parseInt(losegoal));
 			rank.setScore(NumberUtil.parseInt(score));
-			
+			rank.setRanktime(new Date());			
 			ranks.add(rank);
 		}
 	}

@@ -44,15 +44,18 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
+import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.collection.OddsOpList;
+import com.loris.soccer.collection.OddsScoreList;
+import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
@@ -62,11 +65,13 @@ import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LeagueWebPageParser;
+import com.loris.soccer.plugin.zgzcw.parser.LotteryBdScoreWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryJcScoreWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.plugin.zgzcw.parser.OddsOpWebPageParser;
+import com.loris.soccer.plugin.zgzcw.parser.OddsYpWebPageParser;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.service.OddsService;
@@ -96,16 +101,16 @@ public class App
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
+			testJcWebPage();
 			
 			//testCenterPage();	
 			//testOddsOpPage();
-			
-			//testUpdate();
-			
-			testLeagueCenterPage();
-			
-			//testMariaDB();
-			
+			//testOddsYpPage();
+			//testOddsNumPage();
+			//testJcScoreWebPage();
+			//testUpdate();			
+			//testLeagueCenterPage();			
+			//testMariaDB();			
 			//testDateString();			
 			//testJcWebPage();
 			
@@ -130,6 +135,60 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testJcScoreWebPage() throws Exception
+	{		
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_SCORE_JC);
+		if(!downloadWebPage(page))
+		{
+			return;
+		}
+		
+		LotteryJcScoreWebPageParser parser = new LotteryJcScoreWebPageParser();
+		TableRecords records = parser.parse(page);
+		
+		if(records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		
+		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_SCORE_LIST);
+		if(list == null)
+		{
+			logger.info("No OddsScore List, error.");
+			return;
+		}
+		logger.info("Total OddsScore size is " + list.size());		
+		saveTableRecords(records);
+	}
+	
+	public static void testBdScoreWebPage() throws Exception
+	{		
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_SCORE_BD);
+		if(!downloadWebPage(page))
+		{
+			return;
+		}
+		
+		LotteryBdScoreWebPageParser parser = new LotteryBdScoreWebPageParser();
+		TableRecords records = parser.parse(page);
+		
+		if(records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		
+		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_SCORE_LIST);
+		if(list == null)
+		{
+			logger.info("No OddsScore List, error.");
+			return;
+		}
+		logger.info("Total OddsScore size is " + list.size());		
+		saveTableRecords(records);
 	}
 	
 	public static void testLeagueCenterPage() throws Exception
@@ -179,6 +238,68 @@ public class App
 		long en = System.currentTimeMillis();
 		
 		logger.info("Total spend time is " + (en - st) + " ms.");
+	}
+	
+	public static void testOddsNumPage() throws Exception
+	{
+		String mid = "2402907";
+		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, mid);
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-03-12 18:00");
+		
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params);
+		if(!downloadWebPage(page))
+		{
+			return;
+		}
+		
+		OddsNumWebPageParser parser = new OddsNumWebPageParser();
+		TableRecords records = parser.parse(page);
+		
+		if(records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		
+		OddsNumList list = (OddsNumList) records.get(SoccerConstants.SOCCER_DATA_NUM_LIST);
+		if(list == null)
+		{
+			logger.info("No NumList, error.");
+			return;
+		}
+		logger.info("Total OddsNum size is " + list.size());		
+		saveTableRecords(records);
+	}
+	
+	public static void testOddsYpPage() throws Exception
+	{
+		String mid = "2402907";
+		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, mid);
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-03-12 18:00");
+		
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params);
+		if(!downloadWebPage(page))
+		{
+			return;
+		}
+		
+		OddsYpWebPageParser parser = new OddsYpWebPageParser();
+		TableRecords records = parser.parse(page);
+		
+		if(records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		
+		OddsYpList list = (OddsYpList) records.get(SoccerConstants.SOCCER_DATA_YP_LIST);
+		if(list == null)
+		{
+			logger.info("No yplist, error.");
+			return;
+		}
+		logger.info("Total OddsYp size is " + list.size());		
+		saveTableRecords(records);
 	}
 	
 	public static void testOddsOpPage() throws Exception
@@ -352,7 +473,6 @@ public class App
 	 * 测试竞彩页面
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public static void testJcWebPage() throws Exception
 	{		
 		Map<String, String> params = new LinkedHashMap<>();
@@ -369,15 +489,16 @@ public class App
 		if(records == null)
 		{
 			logger.info("Parser error.");
+			return;
 		}
 		
-		List<MatchJc> matchJcs = (List<MatchJc>)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
-		
-		int i = 1;
-		for (MatchJc matchJc : matchJcs)
+		MatchItemList matchJcs = (MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		if(matchJcs == null)
 		{
-			logger.info(i +++ ": " + matchJc);
+			logger.info("Error: no Match JC data.");
 		}
+		logger.info("Match Jc data list size is " + matchJcs.size());		
+		saveTableRecords(records);
 	}
 	
 	/**

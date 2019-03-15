@@ -197,7 +197,7 @@ public class SqlHelper
 		}
 
 		String sql = createInsertSQL(tableName, fields);
-		// logger.info(sql);
+		logger.info(sql);
 
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -271,10 +271,12 @@ public class SqlHelper
 	}
 
 	/**
-	 * 
-	 * @param entity
-	 * @param fields
-	 * @param ps
+	 * 设置数据更新时的各字段的值
+	 * @param entity 实体
+	 * @param fields 字段列表
+	 * @param ps 数据状态
+	 * @throws IllegalAccessException
+	 * @throws SQLException
 	 */
 	protected boolean setFieldsValue(Entity entity, List<Field> fields, PreparedStatement ps)
 			throws IllegalAccessException, SQLException
@@ -316,6 +318,7 @@ public class SqlHelper
 			ps.setBoolean(index, b);
 			break;
 		case "bytes":
+		case "[B":
 			byte[] bytes = (byte[]) field.get(entity);
 			ps.setBytes(index, bytes);
 			break;
@@ -339,13 +342,19 @@ public class SqlHelper
 			break;
 		case "java.lang.Long":
 		case "long":
-			long l = getFieldValue(field, entity);
-			ps.setLong(index, l);
+			Long readLong = getFieldValue(field, entity);
+			ps.setLong(index, readLong);
 			break;
 		case "java.lang.Float":
 		case "float":
 			Float readFloat = getFieldValue(field, entity);
-			ps.setFloat(index, readFloat);
+			if(readFloat == null)
+			{
+				ps.setFloat(index, -10.0f);
+			}
+			else {
+				ps.setFloat(index, readFloat);
+			}
 			break;
 		case "java.lang.Double":
 		case "double":
@@ -371,7 +380,14 @@ public class SqlHelper
 			}
 			break;
 		default:
-			throw new RuntimeException(typeName + "不支持，bug");
+			Class<?> clazz = field.getType();
+			if(clazz.isEnum())
+			{
+				Enum<?> enumObj = getFieldValue(field, entity);
+				ps.setString(index, enumObj.name());;
+				break;
+			}			
+			throw new RuntimeException("Field: " + field.getName() + " [" + typeName + "] 不支持,出现BUG,请联系管理员。");
 		}
 	}
 

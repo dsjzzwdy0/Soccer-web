@@ -13,6 +13,8 @@ package com.loris.soccer.model;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.model.base.MatchItem;
 
@@ -94,5 +96,26 @@ public class OddsScore extends MatchItem
 	public void setOpentime(Date opentime)
 	{
 		this.opentime = opentime;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !(obj instanceof OddsScore)) return false;
+		OddsScore other = (OddsScore) obj;
+		return StringUtils.equals(mid, other.mid)
+				&& StringUtils.equals(ordinary, other.ordinary)
+				&& StringUtils.equals(type, other.type);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "OddsScore [ordinary=" + ordinary + ", type=" + type + ", oddsvalue=" + oddsvalue + ", opentime="
+				+ opentime + ", source=" + source + "]";
 	}
 }

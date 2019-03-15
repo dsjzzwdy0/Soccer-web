@@ -34,10 +34,12 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_MATCH_JC_LIST = "matchjcs";
 	final static public String SOCCER_DATA_MATCH_RESULT_LIST = "resultlist";
 	final static public String SOCCER_DATA_ODDS_NUM = "oddsnum";
+	final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
 	final static public String SOCCER_DATA_LOGO_LIST = "logolist";
 	final static public String SOCCER_DATA_OP_LIST = "oplist";
 	final static public String SOCCER_DATA_YP_LIST = "yplist";
 	final static public String SOCCER_DATA_NUM_LIST = "numlist";
+	final static public String SOCCER_DATA_SCORE_LIST = "scorelist";
 	final static public String SOCCER_DATA_TEAM_LIST = "teamlist";
 	final static public String SOCCER_DATA_TEAM_SEASON = "teamrfseason";
 	final static public String SOCCER_DATA_ROUND_LIST = "roundlist";

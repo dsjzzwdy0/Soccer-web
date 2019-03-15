@@ -11,10 +11,10 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser.base;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -22,6 +22,7 @@ import org.jsoup.select.Elements;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
+import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
@@ -56,9 +57,9 @@ public abstract class AbstractLotteryScoreWebPageParser extends AbstractLotteryW
 	@Override
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
-		List<OddsScore> oddsScores = new ArrayList<>();
+		OddsScoreList oddsScores = new OddsScoreList();
 		parseOddsScores(document, oddsScores);
-		results.put(SoccerConstants.SOCCER_DATA_ODDS_NUM, oddsScores);
+		results.put(SoccerConstants.SOCCER_DATA_SCORE_LIST, oddsScores);
 		return results;
 	}
 	
@@ -104,6 +105,11 @@ public abstract class AbstractLotteryScoreWebPageParser extends AbstractLotteryW
 			score.setType(type);
 			
 			parseIssueOddsScore(element2, score);
+			
+			if(StringUtils.isBlank(score.getMid()) || "0".equals(score.getMid()))
+			{
+				continue;
+			}
 			oddsScores.add(score);
 		}
 	}

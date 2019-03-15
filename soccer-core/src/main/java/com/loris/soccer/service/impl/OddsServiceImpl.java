@@ -11,10 +11,8 @@
  */
 package com.loris.soccer.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,11 +20,16 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.loris.common.service.SqlHelper;
-import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.dao.OddsNumMapper;
 import com.loris.soccer.dao.OddsOpMapper;
+import com.loris.soccer.dao.OddsScoreMapper;
+import com.loris.soccer.dao.OddsYpMapper;
 import com.loris.soccer.filter.SingleObjectFilter;
+import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsScore;
+import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.service.OddsService;
 
 /**   
@@ -40,14 +43,21 @@ import com.loris.soccer.service.OddsService;
  */
 @Service("oddsOpService")
 public class OddsServiceImpl implements OddsService
-{
-	private static Logger logger = Logger.getLogger(OddsServiceImpl.class);
-	
+{	
 	@Autowired
 	private SqlHelper sqlHelper;
 	
 	@Autowired
 	private OddsOpMapper oddsOpMapper;
+	
+	@Autowired
+	private OddsYpMapper oddsYpMapper;
+	
+	@Autowired
+	private OddsNumMapper oddsNumMapper;
+	
+	@Autowired
+	private OddsScoreMapper oddsScoreMapper;
 	
 	/**
 	 * 通过比赛编号获得欧赔数据列表
@@ -114,58 +124,87 @@ public class OddsServiceImpl implements OddsService
 
 	/**
 	 * 插入欧赔数据列表
-	 * @see com.loris.soccer.service.OddsService#insertOddsOp(java.util.List)
+	 * @see com.loris.soccer.service.OddsService#insertOddsOps(java.util.List)
 	 */
 	@Override
-	public boolean insertOddsOp(List<OddsOp> ops)
+	public boolean insertOddsOps(List<OddsOp> oddsOps)
 	{
-		return insertOddsOp(ops, true);
+		return insertOddsOps(oddsOps, true);
 	}
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.OddsService#insertOddsOp(java.util.List, boolean)
+	 * @see com.loris.soccer.service.OddsService#insertOddsOps(java.util.List, boolean)
 	 */
 	@Override
-	public boolean insertOddsOp(List<OddsOp> ops, boolean overwrite)
+	public boolean insertOddsOps(List<OddsOp> oddsOps, boolean overwrite)
 	{
-		if(ops == null || ops.size() == 0)
-		{
-			logger.warn("Warn: No " + OddsOp.class.getName() + " need to be updated.");
-			return false;
-		}
-		
-		List<String> mids = ArraysUtil.getObjectFieldValue(ops, OddsOp.class, SoccerConstants.NAME_FIELD_MID);		
-		if(overwrite)
-		{
-			QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<OddsOp>().in(SoccerConstants.NAME_FIELD_MID, mids);
-			List<OddsOp> existOps = oddsOpMapper.selectList(queryWrapper);		
-			List<OddsOp> newOps = new ArrayList<>();
-			SingleObjectFilter<OddsOp> filter = new SingleObjectFilter<>();
-			for (OddsOp oddsOp : ops)
-			{
-				filter.setValue(oddsOp);
-				if(!ArraysUtil.hasSameObject(existOps, filter))
-				{
-					newOps.add(oddsOp);
-				}
-			}			
-			if(newOps.size() == 0)
-			{
-				logger.warn("Warn: No " + OddsOp.class.getName() + " need to be updated.");
-				return true;
-			}			
-			ops = newOps;
-		}
-		
-		try
-		{
-			return sqlHelper.insertBatch(ops, OddsOp.class);
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-			return false;
-		}
+		SingleObjectFilter<OddsOp> filter = new SingleObjectFilter<>();	
+		return SqlHelper.insertList(oddsOps, OddsOp.class, oddsOpMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertOddsYps(java.util.List)
+	 */
+	@Override
+	public boolean insertOddsYps(List<OddsYp> oddsYps)
+	{
+		return insertOddsYps(oddsYps, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertOddsYps(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertOddsYps(List<OddsYp> oddsYps, boolean overwrite)
+	{
+		SingleObjectFilter<OddsYp> filter = new SingleObjectFilter<>();	
+		return SqlHelper.insertList(oddsYps, OddsYp.class, oddsYpMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertOddsNums(java.util.List)
+	 */
+	@Override
+	public boolean insertOddsNums(List<OddsNum> oddsNums)
+	{
+		return insertOddsNums(oddsNums, false);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertOddsNums(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertOddsNums(List<OddsNum> oddsNums, boolean overwrite)
+	{
+		SingleObjectFilter<OddsNum> filter = new SingleObjectFilter<>();	
+		return SqlHelper.insertList(oddsNums, OddsNum.class, oddsNumMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertOddsScores(java.util.List)
+	 */
+	@Override
+	public boolean insertOddsScores(List<OddsScore> oddsScores)
+	{
+		return insertOddsScores(oddsScores, false);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertOddsScore(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertOddsScores(List<OddsScore> oddsScores, boolean overwrite)
+	{
+		SingleObjectFilter<OddsScore> filter = new SingleObjectFilter<>();	
+		return SqlHelper.insertList(oddsScores, OddsScore.class, oddsScoreMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
 }

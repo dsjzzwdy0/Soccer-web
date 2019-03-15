@@ -24,13 +24,17 @@ import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.LeagueMapper;
 import com.loris.soccer.dao.LogoMapper;
+import com.loris.soccer.dao.RankMapper;
 import com.loris.soccer.dao.RoundMapper;
 import com.loris.soccer.dao.TeamMapper;
+import com.loris.soccer.dao.TeamRfSeasonMapper;
 import com.loris.soccer.filter.SingleObjectFilter;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.Rank;
 import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Team;
+import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.service.LeagueService;
 
 /**
@@ -56,6 +60,12 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	
 	@Autowired
 	private LogoMapper logoMapper;
+	
+	@Autowired
+	private TeamRfSeasonMapper teamRfMapper;
+	
+	@Autowired
+	private RankMapper rankMapper;
 
 	/**
 	 *  (non-Javadoc)
@@ -168,6 +178,49 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	{
 		SingleObjectFilter<Logo> filter = new SingleObjectFilter<>();	
 		return SqlHelper.insertList(logos, Logo.class, logoMapper, filter, "pid", 
+				sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertTeamRfSeasons(java.util.List)
+	 */
+	@Override
+	public boolean insertTeamRfSeasons(List<TeamRfSeason> teamRfSeasons)
+	{
+		return insertTeamRfSeasons(teamRfSeasons, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertTeamRfSeasons(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertTeamRfSeasons(List<TeamRfSeason> teamRfSeasons, boolean overwrite)
+	{
+		SingleObjectFilter<TeamRfSeason> filter = new SingleObjectFilter<>();	
+		return SqlHelper.insertList(teamRfSeasons, TeamRfSeason.class, teamRfMapper, filter, "tid", 
+				sqlHelper, overwrite);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertRanks(java.util.List)
+	 */
+	@Override
+	public boolean insertRanks(List<Rank> ranks)
+	{
+		return insertRanks(ranks, true);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertRanks(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertRanks(List<Rank> ranks, boolean overwrite)
+	{
+		SingleObjectFilter<Rank> filter = new SingleObjectFilter<>();
+		return SqlHelper.insertList(ranks, Rank.class, rankMapper, filter, SoccerConstants.NAME_FIELD_LID, 
 				sqlHelper, overwrite);
 	}
 }

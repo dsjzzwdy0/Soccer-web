@@ -12,11 +12,12 @@
 package com.loris.soccer.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.loris.soccer.dict.HandicapDict;
 import com.loris.soccer.model.base.OddsValue;
 
 /**   
  * @ClassName:  OddsYp   
- * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @Description: 亚盘数据 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:29:52   
  *     
@@ -34,19 +35,20 @@ public class OddsYp extends OddsValue
 	public OddsYp()
 	{
 	}
-	
 	public OddsYp(String mid)
 	{
 		this.mid = mid;
 	}
-
 	public Float getHandicap()
 	{
 		return handicap;
 	}
-
 	public void setHandicap(Float handicap)
 	{
 		this.handicap = handicap;
+	}
+	public String getHandicapName()
+	{
+		return HandicapDict.getHandicapName(handicap);
 	}
 }

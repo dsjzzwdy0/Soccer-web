@@ -11,7 +11,6 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
@@ -64,7 +64,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(mathTime);
 
-		List<OddsNum> nums = new ArrayList<>();
+		OddsNumList nums = new OddsNumList();
 		for (Element element2 : elements)
 		{
 			parseNum(element2, mid, time, nums);

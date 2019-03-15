@@ -11,7 +11,6 @@
  */
 package com.loris.soccer.plugin.zgzcw.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dict.HandicapDict;
 import com.loris.soccer.model.OddsYp;
@@ -72,7 +72,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 
 		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
-		if (StringUtils.isEmpty(mathTime))
+		if (StringUtils.isEmpty(mathTime) || DateUtil.tryToParseDate(mathTime) == null)
 		{
 			throw new WebParserException("Error occured, the Page hasn't set the 'matchtime' param.");
 		}
@@ -90,8 +90,9 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
 		Elements elements = document.select(".main #data-body table tbody tr");
-		if (elements == null || elements.size() <= 0)
+		if (elements == null || elements.size() == 0)
 		{
+			System.out.println(page.getUrl());
 			throw new WebParserException("The document is not a validate Soccer Match yp page.");
 		}
 
@@ -99,12 +100,12 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(mathTime);
 
-		List<OddsYp> yps = new ArrayList<>();
+		OddsYpList yps = new OddsYpList();
 		for (Element element2 : elements)
 		{
 			parseYp(element2, mid, time, yps);
 		}
-		results.put(SoccerConstants.SOCCER_DATA_OP_LIST, yps);
+		results.put(SoccerConstants.SOCCER_DATA_YP_LIST, yps);
 		return results;
 	}
 

@@ -11,7 +11,9 @@
  */
 package com.loris.soccer.model;
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
@@ -31,11 +33,11 @@ public class Rank extends AutoIdEntity
 	/***/
 	private static final long serialVersionUID = 1L;
 	
-	protected String type;				//类型
+	protected String tid;				//球队编号
 	protected String lid;				//联赛编号
+	protected String type;				//类型
 	protected String season;			//赛季
 	protected String round;				//轮次
-	protected String teamid;			//球队编号
 	protected Integer rank;				//排名
 	protected Integer gamenum;			//比赛场次
 	protected Integer winnum;			//胜场次
@@ -45,9 +47,22 @@ public class Rank extends AutoIdEntity
 	protected Integer wingoal;			//进球数
 	protected Integer losegoal;			//失球数
 	protected Date ranktime;			//排名时间
+
+	public String getTid()
+	{
+		return tid;
+	}
+	public void setTid(String tid)
+	{
+		this.tid = tid;
+	}
 	public String getLid()
 	{
 		return lid;
+	}
+	public void setLid(String lid)
+	{
+		this.lid = lid;
 	}
 	public String getType()
 	{
@@ -56,10 +71,6 @@ public class Rank extends AutoIdEntity
 	public void setType(String type)
 	{
 		this.type = type;
-	}
-	public void setLid(String lid)
-	{
-		this.lid = lid;
 	}
 	public String getSeason()
 	{
@@ -76,14 +87,6 @@ public class Rank extends AutoIdEntity
 	public void setRound(String round)
 	{
 		this.round = round;
-	}
-	public String getTeamid()
-	{
-		return teamid;
-	}
-	public void setTeamid(String teamid)
-	{
-		this.teamid = teamid;
 	}
 	public Integer getRank()
 	{
@@ -156,5 +159,17 @@ public class Rank extends AutoIdEntity
 	public void setLosenum(Integer losenum)
 	{
 		this.losenum = losenum;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj == this) return true;
+		if(obj == null || !(obj instanceof Rank)) return false;
+		Rank other = (Rank) obj;
+		return StringUtils.equals(tid, other.tid)
+				&& StringUtils.equals(lid, other.lid)
+				&& StringUtils.equals(season, other.season)
+				&& StringUtils.equals(round, other.round)
+				&& StringUtils.equals(type, other.type);
 	}
 }

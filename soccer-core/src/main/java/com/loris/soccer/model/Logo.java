@@ -13,6 +13,7 @@ package com.loris.soccer.model;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -24,16 +25,22 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@TableName("soccer_logo")
 public class Logo extends AutoIdEntity
 {
+	public static enum LogoType{
+		Team,
+		League
+	}
+	
 	/** */
 	private static final long serialVersionUID = 1L;
 	
 	protected String pid;			//实体的类型
-	protected String type;			//类型：如球队、联赛、国家等
 	protected String mimetype; 		//图像类型
 	protected byte[] images;		//图像数据
 	protected String url;
+	protected LogoType logotype;
 	
 	public String getPid()
 	{
@@ -42,14 +49,6 @@ public class Logo extends AutoIdEntity
 	public void setPid(String pid)
 	{
 		this.pid = pid;
-	}
-	public String getType()
-	{
-		return type;
-	}
-	public void setType(String type)
-	{
-		this.type = type;
 	}
 	public byte[] getImages()
 	{
@@ -75,6 +74,14 @@ public class Logo extends AutoIdEntity
 	{
 		this.url = url;
 	}
+	public LogoType getLogotype()
+	{
+		return logotype;
+	}
+	public void setLogotype(LogoType logotype)
+	{
+		this.logotype = logotype;
+	}
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -82,6 +89,6 @@ public class Logo extends AutoIdEntity
 		if(obj == null) return false;
 		Logo other = (Logo)obj;
 		return StringUtils.equals(pid, other.pid)
-				&& StringUtils.equals(type, other.type);
+				&& logotype == other.logotype;
 	}
 }

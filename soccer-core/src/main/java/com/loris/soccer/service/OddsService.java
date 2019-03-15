@@ -12,7 +12,11 @@
 package com.loris.soccer.service;
 
 import java.util.List;
+
+import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsScore;
+import com.loris.soccer.model.OddsYp;
 
 /**   
  * @ClassName:  OddsOpService   
@@ -52,7 +56,7 @@ public interface OddsService
 	 * @param ops 欧赔数据列表
 	 * @return 是否成功的标志
 	 */
-	boolean insertOddsOp(List<OddsOp> ops);
+	boolean insertOddsOps(List<OddsOp> ops);
 	
 	/**
 	 * 插入欧赔数据列表
@@ -60,7 +64,53 @@ public interface OddsService
 	 * @param overwrite 是否覆盖
 	 * @return 是否成功的标志
 	 */
-	boolean insertOddsOp(List<OddsOp> ops, boolean overwrite);
+	boolean insertOddsOps(List<OddsOp> ops, boolean overwrite);
+	
+	/**
+	 * 插入亚盘数据列表
+	 * @param oddsYps 亚盘数据列表
+	 * @return 是否成功
+	 */
+	boolean insertOddsYps(List<OddsYp> oddsYps);
+	
+	/**
+	 * 插入亚盘数据列表
+	 * @param oddsYps 亚盘数据列表
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功
+	 */
+	boolean insertOddsYps(List<OddsYp> oddsYps, boolean overwrite);
+	
+	
+	/**
+	 * 插入大小比分据列表
+	 * @param oddsYps 大小球数据列表
+	 * @return 是否成功
+	 */
+	boolean insertOddsNums(List<OddsNum> oddsNums);
+	
+	/**
+	 * 插入大小比分据列表
+	 * @param oddsYps 大小球数据列表
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功
+	 */
+	boolean insertOddsNums(List<OddsNum> oddsNums, boolean overwrite);
+	
+	/**
+	 * 插入比分数据
+	 * @param oddsScores 比分数据
+	 * @return 是否成功
+	 */
+	boolean insertOddsScores(List<OddsScore> oddsScores);
+	
+	/**
+	 * 插入比分数据
+	 * @param oddsScores 比分数据
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功
+	 */
+	boolean insertOddsScores(List<OddsScore> oddsScores, boolean overwrite);
 	
 	/**
 	 * 更新数据列表

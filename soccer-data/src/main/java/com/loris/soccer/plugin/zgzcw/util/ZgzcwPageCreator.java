@@ -148,6 +148,15 @@ public class ZgzcwPageCreator
 		{
 			page.setParams(params);
 		}
+		
+		/*switch (type)
+		{
+		case PAGE_ODDS_YP:
+			page.addHeader("Host", PAGE_BASE_URLS.get(type));
+			break;
+		default:
+			break;
+		}*/
 		return page;
 	}
 	
@@ -188,7 +197,7 @@ public class ZgzcwPageCreator
 			break;
 		case PAGE_ODDS_YP:		
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);//百家OP页面
-			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ybdb";
+			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ypdb";
 			break;
 		case PAGE_ODDS_NUM:
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);

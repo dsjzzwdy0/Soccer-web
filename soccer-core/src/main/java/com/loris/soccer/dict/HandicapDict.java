@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.loris.common.util.NumberUtil;
+
 /**
  * @ClassName: League
  * @Description: 让球字典数据, 主要用于解决让球数与中文名称的映射关系
@@ -28,6 +30,8 @@ import org.apache.commons.lang3.StringUtils;
 public class HandicapDict
 {
 	private static List<HandicapValue> values = new ArrayList<>();
+	
+	static String UNKONW_NAME = "undefined";
 
 	static
 	{
@@ -156,6 +160,23 @@ public class HandicapDict
 	}
 	
 	/**
+	 * 获得标准定义的让球名称
+	 * @param value 让球值
+	 * @return 名称
+	 */
+	public static String getHandicapName(float value)
+	{
+		for (HandicapValue v : values)
+		{
+			if(v.isSameValue(value))
+			{
+				return v.getName();
+			}
+		}
+		return UNKONW_NAME;
+	}
+	
+	/**
 	 * 通过名称获得让球值
 	 * @param name 名称,如球半、两球等
 	 * @return 让球值
@@ -223,5 +244,9 @@ class HandicapValue
 			return true;
 		}
 		return false;
+	}
+	public boolean isSameValue(float v)
+	{
+		return NumberUtil.isEqual(value, v, 0.0001f);
 	}
 }

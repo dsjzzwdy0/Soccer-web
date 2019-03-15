@@ -28,6 +28,7 @@ import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.Logo.LogoType;
 import com.loris.soccer.plugin.zgzcw.parser.base.AbstractZgzcwWebPageParser;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 
@@ -165,7 +166,7 @@ public class CenterPageParser extends AbstractZgzcwWebPageParser
 		{			
 			Logo logo = new Logo();
 			logo.setPid(lid);
-			logo.setType(SoccerConstants.LOGO_TYPE_LEAGUE);
+			logo.setLogotype(LogoType.League);
 			logo.setUrl(element2.attr("src"));
 			return logo;
 		}

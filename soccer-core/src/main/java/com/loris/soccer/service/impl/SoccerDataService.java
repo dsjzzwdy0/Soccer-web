@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.service.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.LogoList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
+import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.collection.OddsOpList;
+import com.loris.soccer.collection.OddsScoreList;
+import com.loris.soccer.collection.OddsYpList;
+import com.loris.soccer.collection.RankList;
 import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.TeamList;
+import com.loris.soccer.collection.TeamRfSeasonList;
 import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
@@ -47,7 +55,7 @@ import java.util.List;
 @Service("soccerDataService")
 public class SoccerDataService implements DataService
 {
-	//private static Logger logger = Logger.getLogger(SoccerDataServiceImpl.class);
+	private static Logger logger = Logger.getLogger(SoccerDataService.class);
 
 	@Autowired
 	private LeagueService leagueService;
@@ -76,23 +84,8 @@ public class SoccerDataService implements DataService
 				leagueService.insertLeagues(leagues);
 				break;
 			case SOCCER_DATA_LOGO_LIST:
-				break;
-			case SOCCER_DATA_MATCH_LIST:
-				MatchList matchList = (MatchList) results.get(key);
-				matchService.insertMatchs(matchList);
-				break;
-			case SOCCER_DATA_MATCH_BD_LIST:
-				MatchItemList matchItemList = (MatchItemList) results.get(key);
-				List<MatchBd> matchBds = new ArrayList<>();
-				for (MatchItem matchBd : matchItemList)
-				{
-					matchBds.add((MatchBd)matchBd);
-				}
-				matchService.insertMatchBds(matchBds);
-				break;
-			case SOCCER_DATA_OP_LIST:
-				OddsOpList ops = (OddsOpList) results.get(key);
-				oddsService.insertOddsOp(ops);
+				LogoList logos = (LogoList) results.get(key);
+				leagueService.insertLogos(logos);
 				break;
 			case SOCCER_DATA_ROUND_LIST:
 				RoundList rounds = (RoundList) results.get(key);
@@ -102,15 +95,61 @@ public class SoccerDataService implements DataService
 				TeamList teams = (TeamList) results.get(key);
 				leagueService.insertTeams(teams);
 				break;
+			case SOCCER_DATA_TEAM_SEASON:
+				TeamRfSeasonList rfSeasons = (TeamRfSeasonList) results.get(key);
+				leagueService.insertTeamRfSeasons(rfSeasons);
+				break;
+			case SOCCER_DATA_RANK_LIST:
+				RankList ranks = (RankList) results.get(key);
+				leagueService.insertRanks(ranks);
+				break;
+			case SOCCER_DATA_MATCH_LIST:
+				MatchList matchList = (MatchList) results.get(key);
+				matchService.insertMatchs(matchList);
+				break;
+			case SOCCER_DATA_MATCH_BD_LIST:
+				MatchItemList matchBdItemList = (MatchItemList) results.get(key);
+				List<MatchBd> matchBds = new ArrayList<>();
+				for (MatchItem matchBd : matchBdItemList)
+				{
+					matchBds.add((MatchBd)matchBd);
+				}
+				matchService.insertMatchBds(matchBds);
+				break;
+			case SOCCER_DATA_MATCH_JC_LIST:
+				MatchItemList matchJcItemList = (MatchItemList) results.get(key);
+				List<MatchJc> matchJcs = new ArrayList<>();
+				for (MatchItem matchJc : matchJcItemList)
+				{
+					matchJcs.add((MatchJc)matchJc);
+				}
+				matchService.insertMatchJcs(matchJcs);
+				break;
 			case SOCCER_DATA_MATCH_RESULT_LIST:
 				MatchResultList matchResults = (MatchResultList) results.get(key);
 				matchService.insertMatchResults(matchResults);
 				break;
+			case SOCCER_DATA_OP_LIST:
+				OddsOpList ops = (OddsOpList) results.get(key);
+				oddsService.insertOddsOps(ops);
+				break;
+			case SOCCER_DATA_YP_LIST:
+				OddsYpList yps = (OddsYpList) results.get(key);
+				oddsService.insertOddsYps(yps);
+				break;
+			case SOCCER_DATA_NUM_LIST:
+				OddsNumList nums = (OddsNumList) results.get(key);
+				oddsService.insertOddsNums(nums);
+				break;
+			case SOCCER_DATA_SCORE_LIST:
+				OddsScoreList scores = (OddsScoreList) results.get(key);
+				oddsService.insertOddsScores(scores);
+				break;
 			default:
 				// No nothing.
+				logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");
 				break;
 			}
-			//logger.info(key);
 		}
 		return true;
 	}

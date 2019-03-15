@@ -50,6 +50,18 @@ create table soccer_league(
 	INDEX `index_name` (`name`) USING BTREE
 );
 
+create table soccer_logo
+(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	pid varchar(10),
+	type varchar(10),
+	mimetype varchar(15),
+	images blob,
+	url varchar(100),
+	PRIMARY KEY (`id`),
+	INDEX `index_pid` (`pid`) USING BTREE
+);
+
 create table soccer_league_round(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	lid varchar(10),
@@ -66,8 +78,41 @@ create table soccer_league_team(
 	name varchar(30),
 	country varchar(20),
 	PRIMARY KEY (`id`),
-	INDEX `index_lid` (`tid`) USING BTREE ,
+	INDEX `index_tid` (`tid`) USING BTREE ,
 	INDEX `index_name` (`name`) USING BTREE
+);
+
+create table soccer_league_season_team(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	lid varchar(10),
+	tid varchar(10),
+	season varchar(20),
+	PRIMARY KEY (`id`),
+	INDEX `index_tid` (`tid`) USING BTREE ,
+	INDEX `index_lid` (`lid`) USING BTREE
+);
+
+create table soccer_league_rank(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	lid varchar(10),
+	tid varchar(10),
+	type varchar(8),
+	season varchar(20),
+	round varchar(20),
+	rank int,
+	gamenum int,
+	winnum int,
+	drawnum int,
+	losenum int,
+	score int,
+	wingoal int,
+	losegoal int,
+	ranktime timestamp,
+	PRIMARY KEY (`id`),
+	INDEX `index_tid` (`teamid`) USING BTREE ,
+	INDEX `index_lid` (`lid`) USING BTREE,
+	INDEX `index_season` (`season`) USING BTREE,
+	INDEX `index_round` (`round`) USING BTREE
 );
 
 create table soccer_match_bd(
@@ -88,6 +133,29 @@ create table soccer_match_bd(
 	PRIMARY KEY (`id`),	
 	INDEX `index_mid` (`mid`) USING BTREE,
 	INDEX `index_bdno` (`bdno`) USING BTREE,
+	INDEX `index_issue` (`issue`) USING BTREE
+);
+
+create table soccer_match_jc(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10) NOT NULL,
+	issue varchar(10),
+	ordinary varchar(5),
+	matchtime timestamp,
+	closetime timestamp,
+	winodds float,
+	drawodds float,
+	loseodds float,
+	opened tinyint(1),
+	rqnum int,
+	rqopened tinyint(1),
+	rqwinodds float,
+	rqdrawodds float,
+	rqloseodds float,
+	isdelayed tinyint(1),
+	delaytime timestamp,
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
 	INDEX `index_issue` (`issue`) USING BTREE
 );
 
@@ -142,6 +210,61 @@ create table soccer_odds_op(
 	INDEX `index_mid` (`mid`) USING BTREE,
 	INDEX `index_corpid` (`corpid`) USING BTREE,
 	INDEX `index_soruce` (`source`) USING BTREE
+);
+
+create table soccer_odds_yp(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10),
+	corpid varchar(10),
+	corpname varchar(30),
+	opentime long,
+	winodds float,
+	handicap float,
+	loseodds float,
+	winkelly float,
+	losekelly float,
+	winprob float,
+	loseprob float,
+	lossratio float,
+	source varchar(10),
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
+	INDEX `index_corpid` (`corpid`) USING BTREE,
+	INDEX `index_soruce` (`source`) USING BTREE
+);
+
+create table soccer_odds_num(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10),
+	corpid varchar(10),
+	corpname varchar(30),
+	opentime long,
+	winodds float,
+	goalnum varchar(15),
+	loseodds float,
+	winkelly float,
+	losekelly float,
+	winprob float,
+	loseprob float,
+	lossratio float,
+	source varchar(10),
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
+	INDEX `index_corpid` (`corpid`) USING BTREE,
+	INDEX `index_soruce` (`source`) USING BTREE
+);
+
+create table soccer_odds_score(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10),
+	ordinary varchar(10),
+	type varchar(5),
+	oddsvalue varchar(240),
+	opentime timestamp,
+	source varchar(10),
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
+	INDEX `index_type` (`type`) USING BTREE
 );
 
 CREATE

@@ -29,6 +29,7 @@ import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
+import com.loris.soccer.model.Logo.LogoType;
 
 /**   
  * @ClassName:  AbstractLeagueWebPageParser  
@@ -200,13 +201,15 @@ public abstract class AbstractLeagueWebPageParser extends AbstractZgzcwWebPagePa
 			String homeLogoUrl = elements.get(1).selectFirst("img").attr("src");
 			String clientLogoUrl = elements.get(3).selectFirst("img").attr("src");
 			Logo homeLogo = new Logo();
-			homeLogo.setType(SoccerConstants.LOGO_TYPE_TEAM);
+			//homeLogo.setType(SoccerConstants.LOGO_TYPE_TEAM);
+			homeLogo.setLogotype(LogoType.Team);
 			homeLogo.setPid(homeid);
 			homeLogo.setUrl(homeLogoUrl);
 			logos.add(homeLogo);
 			
 			Logo clientLogo = new Logo();
-			clientLogo.setType(SoccerConstants.LOGO_TYPE_TEAM);
+			//clientLogo.setType(SoccerConstants.LOGO_TYPE_TEAM);
+			clientLogo.setLogotype(LogoType.Team);
 			clientLogo.setPid(clientid);
 			clientLogo.setUrl(clientLogoUrl);
 			logos.add(clientLogo);

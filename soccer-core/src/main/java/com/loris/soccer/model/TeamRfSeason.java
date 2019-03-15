@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
@@ -23,7 +25,7 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_season_team")
+@TableName("soccer_league_season_team")
 public class TeamRfSeason extends AutoIdEntity
 {
 	/***/
@@ -56,6 +58,19 @@ public class TeamRfSeason extends AutoIdEntity
 	{
 		this.tid = tid;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !(obj instanceof TeamRfSeason)) return false;
+		TeamRfSeason other = (TeamRfSeason) obj;
+		return StringUtils.equals(tid, other.tid)
+				&& StringUtils.equals(lid, other.lid)
+				&& StringUtils.equals(season, other.season);
+	}	
 	@Override
 	public String toString()
 	{

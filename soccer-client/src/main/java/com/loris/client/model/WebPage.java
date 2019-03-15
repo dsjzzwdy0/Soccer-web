@@ -142,7 +142,10 @@ public class WebPage extends AutoIdEntity implements Task
 	{
 		this.headers.putAll(headers);
 	}
-
+	public void addHeader(String key, String value)
+	{
+		headers.put(key, value);
+	}
 	public Map<String, String> getParams()
 	{
 		return params;

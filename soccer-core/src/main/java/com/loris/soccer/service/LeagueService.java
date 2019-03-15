@@ -16,8 +16,10 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.Rank;
 import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Team;
+import com.loris.soccer.model.TeamRfSeason;
 
 /**
  * @ClassName: League
@@ -86,6 +88,21 @@ public interface LeagueService extends IService<League>
 	boolean insertRounds(List<Round> rounds, boolean overwrite);
 	
 	/**
+	 * 插入联赛数据的排名
+	 * @param ranks 排名列表
+	 * @return 是否成功
+	 */
+	boolean insertRanks(List<Rank> ranks);
+	
+	/**
+	 * 插入联赛数据的排名
+	 * @param ranks 排名列表
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功
+	 */
+	boolean insertRanks(List<Rank> ranks, boolean overwrite);
+	
+	/**
 	 * 插入图标数据
 	 * @param logos 图标数据
 	 * @return 是否成功的标志
@@ -99,4 +116,19 @@ public interface LeagueService extends IService<League>
 	 * @return 成功的标志
 	 */
 	boolean insertLogos(List<Logo> logos, boolean overwrite);
+	
+	/**
+	 * 插入球队与联赛比赛的数据关系
+	 * @param teamRfSeasons 
+	 * @return 是否成功
+	 */
+	boolean insertTeamRfSeasons(List<TeamRfSeason> teamRfSeasons);
+	
+	/**
+	 * 插入球队与联赛比赛的数据关系
+	 * @param teamRfSeasons 数据列表
+	 * @param overwrite 是否改写
+	 * @return 是否成功
+	 */
+	boolean insertTeamRfSeasons(List<TeamRfSeason> teamRfSeasons, boolean overwrite);
 }
