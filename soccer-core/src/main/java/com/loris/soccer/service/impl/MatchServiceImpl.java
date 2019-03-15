@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.MatchBdMapper;
 import com.loris.soccer.dao.MatchJcMapper;
 import com.loris.soccer.dao.MatchMapper;
 import com.loris.soccer.dao.MatchResultMapper;
-import com.loris.soccer.filter.SingleObjectFilter;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
@@ -76,7 +76,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Transactional
 	public boolean insertMatchs(List<Match> matchs, boolean overwrite)
 	{
-		SingleObjectFilter<Match> filter = new SingleObjectFilter<>();	
+		ObjectFilter<Match> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(matchs, Match.class, baseMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -98,7 +98,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite)
 	{
-		SingleObjectFilter<MatchBd> filter = new SingleObjectFilter<>();		
+		ObjectFilter<MatchBd> filter = new ObjectFilter<>();		
 		return SqlHelper.insertList(matchBds, MatchBd.class, matchBdMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -120,7 +120,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite)
 	{
-		SingleObjectFilter<MatchJc> filter = new SingleObjectFilter<>();	
+		ObjectFilter<MatchJc> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(matchJcs, MatchJc.class, matchJcMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -142,7 +142,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchResults(List<MatchResult> results, boolean overwrite)
 	{
-		SingleObjectFilter<MatchResult> filter = new SingleObjectFilter<>();	
+		ObjectFilter<MatchResult> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(results, MatchResult.class, matchResultMapper, filter, 
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}

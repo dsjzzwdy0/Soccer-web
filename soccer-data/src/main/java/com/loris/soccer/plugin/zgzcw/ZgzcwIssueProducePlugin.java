@@ -23,23 +23,23 @@ import com.loris.soccer.plugin.zgzcw.base.AbstractProducePlugin;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 
-/**   
- * @ClassName:  League   
+/**
+ * @ClassName: League
  * @Description: 今日足彩数据下载产生器
  * @author: 东方足彩
- * @date:   2019年1月28日 下午8:59:32   
- *     
- * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
- * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
+ * @date: 2019年1月28日 下午8:59:32
+ * 
+ * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
+ *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 @Component
 public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
-	
+
 	/** 日期过滤器 */
-	private DateFilter dateFiter; 
-	
+	private DateFilter dateFiter;
+
 	/**
 	 * 初始化任务产生器
 	 * @param context 插件任务运行环境
@@ -48,9 +48,9 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 	@Override
 	public void initialize(TaskPluginContext context) throws IOException
 	{
-		super.initialize(context);	
+		super.initialize(context);
 	}
-	
+
 	/**
 	 * 产生任务程序
 	 * @param context 插件运行环境
@@ -64,16 +64,16 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 			if (!initializeFromWebPage(context, bdMainPage, dateFiter))
 			{
 				logger.info("No task produce from BDMainPage.");
-			}	
+			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			logger.info(e.getMessage());
 		}
 	}
 
 	/**
-	 * 设置日期过滤器
+	 * 设置日期过滤器 
 	 * @param dateFiter 日期过滤器
 	 */
 	public void setDateFiter(DateFilter dateFiter)

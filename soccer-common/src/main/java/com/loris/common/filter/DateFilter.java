@@ -14,8 +14,6 @@ package com.loris.common.filter;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.loris.common.filter.type.FilterType;
-
 /**   
  * @ClassName: DateFilter   
  * @Description: 日期过滤器  
@@ -24,11 +22,47 @@ import com.loris.common.filter.type.FilterType;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class DateFilter extends AbstractFilter<Date> implements Filter<Date>
+public class DateFilter extends ObjectFilter<Date> implements Filter<Date>
 {
+	public enum FilterType
+	{
+		/**
+		 * 等于
+		 */
+		Equal,
+		
+		/**
+		 * 大于
+		 */
+		GT,
+		
+		/**
+		 * 小于
+		 */
+		LT,
+		
+		/**
+		 * 不大于
+		 */
+		NotGt,
+		
+		/**
+		 * 不小于
+		 */
+		NotLt,
+		
+		/**
+		 * 日期相等
+		 */
+		EqualDay
+	}
+	
 	/** 过滤的类型 */
 	FilterType type;
-		
+	
+	/**
+	 * Create a new instance of DateFilter.
+	 */
 	public DateFilter()
 	{
 		this(null);

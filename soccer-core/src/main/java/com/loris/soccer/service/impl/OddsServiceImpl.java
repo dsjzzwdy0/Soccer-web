@@ -19,13 +19,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.OddsNumMapper;
 import com.loris.soccer.dao.OddsOpMapper;
 import com.loris.soccer.dao.OddsScoreMapper;
 import com.loris.soccer.dao.OddsYpMapper;
-import com.loris.soccer.filter.SingleObjectFilter;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
@@ -139,7 +139,7 @@ public class OddsServiceImpl implements OddsService
 	@Override
 	public boolean insertOddsOps(List<OddsOp> oddsOps, boolean overwrite)
 	{
-		SingleObjectFilter<OddsOp> filter = new SingleObjectFilter<>();	
+		ObjectFilter<OddsOp> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(oddsOps, OddsOp.class, oddsOpMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -161,7 +161,7 @@ public class OddsServiceImpl implements OddsService
 	@Override
 	public boolean insertOddsYps(List<OddsYp> oddsYps, boolean overwrite)
 	{
-		SingleObjectFilter<OddsYp> filter = new SingleObjectFilter<>();	
+		ObjectFilter<OddsYp> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(oddsYps, OddsYp.class, oddsYpMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -182,7 +182,7 @@ public class OddsServiceImpl implements OddsService
 	@Override
 	public boolean insertOddsNums(List<OddsNum> oddsNums, boolean overwrite)
 	{
-		SingleObjectFilter<OddsNum> filter = new SingleObjectFilter<>();	
+		ObjectFilter<OddsNum> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(oddsNums, OddsNum.class, oddsNumMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -203,7 +203,7 @@ public class OddsServiceImpl implements OddsService
 	@Override
 	public boolean insertOddsScores(List<OddsScore> oddsScores, boolean overwrite)
 	{
-		SingleObjectFilter<OddsScore> filter = new SingleObjectFilter<>();	
+		ObjectFilter<OddsScore> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(oddsScores, OddsScore.class, oddsScoreMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
