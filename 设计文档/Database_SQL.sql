@@ -109,7 +109,7 @@ create table soccer_league_rank(
 	losegoal int,
 	ranktime timestamp,
 	PRIMARY KEY (`id`),
-	INDEX `index_tid` (`teamid`) USING BTREE ,
+	INDEX `index_tid` (`tid`) USING BTREE ,
 	INDEX `index_lid` (`lid`) USING BTREE,
 	INDEX `index_season` (`season`) USING BTREE,
 	INDEX `index_round` (`round`) USING BTREE
@@ -147,6 +147,7 @@ create table soccer_match_jc(
 	drawodds float,
 	loseodds float,
 	opened tinyint(1),
+	danguan tinyint(1),
 	rqnum int,
 	rqopened tinyint(1),
 	rqwinodds float,

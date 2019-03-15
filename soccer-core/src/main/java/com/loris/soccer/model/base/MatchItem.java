@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model.base;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -45,5 +47,13 @@ public class MatchItem extends AutoIdEntity
 	public void setMid(String mid)
 	{
 		this.mid = mid;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !StringUtils.equals(getClass().getName(), obj.getClass().getName())) return false;
+		MatchItem other = (MatchItem)obj;
+		return StringUtils.equals(mid, other.mid);
 	}
 }

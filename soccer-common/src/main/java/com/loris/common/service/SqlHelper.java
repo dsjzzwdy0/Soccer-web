@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -197,7 +198,7 @@ public class SqlHelper
 		}
 
 		String sql = createInsertSQL(tableName, fields);
-		logger.info(sql);
+		//logger.info(sql);
 
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -313,78 +314,71 @@ public class SqlHelper
 		{
 		case "java.lang.Boolean":
 		case "boolean":
-			// Boolean b = field.getBoolean(entity);
 			Boolean b = getFieldValue(field, entity);
-			ps.setBoolean(index, b);
+			if(b == null) ps.setNull(index, Types.BOOLEAN);
+			else ps.setBoolean(index, b);
 			break;
 		case "bytes":
 		case "[B":
 			byte[] bytes = (byte[]) field.get(entity);
 			ps.setBytes(index, bytes);
 			break;
-		case "java.lang.Character":
-		case "char":
-			break;
 		case "java.lang.Byte":
 		case "byte":
 			Byte b2 = getFieldValue(field, entity);
-			ps.setByte(index, b2);
+			if(b2 == null) ps.setNull(index, Types.BINARY);
+			else ps.setByte(index, b2);
 			break;
 		case "java.lang.Short":
 		case "short":
 			Short readShort = getFieldValue(field, entity);
-			ps.setShort(index, readShort);
+			if(readShort == null) ps.setNull(index,  Types.SMALLINT);
+			else ps.setShort(index, readShort);
 			break;
 		case "java.lang.Integer":
 		case "int":
 			Integer readInt = getFieldValue(field, entity);
-			ps.setInt(index, readInt);
+			if(readInt == null) ps.setNull(index, Types.INTEGER);
+			else ps.setInt(index, readInt);
 			break;
 		case "java.lang.Long":
 		case "long":
 			Long readLong = getFieldValue(field, entity);
-			ps.setLong(index, readLong);
+			if(readLong == null) ps.setNull(index, Types.BIGINT);
+			else ps.setLong(index, readLong);
 			break;
 		case "java.lang.Float":
 		case "float":
 			Float readFloat = getFieldValue(field, entity);
-			if(readFloat == null)
-			{
-				ps.setFloat(index, -10.0f);
-			}
-			else {
-				ps.setFloat(index, readFloat);
-			}
+			if(readFloat == null) ps.setNull(index, Types.FLOAT);
+			else ps.setFloat(index, readFloat);
 			break;
 		case "java.lang.Double":
 		case "double":
 			Double readDouble = getFieldValue(field, entity);
-			ps.setDouble(index, readDouble);
+			if(readDouble == null) ps.setNull(index, Types.DOUBLE);
+			else ps.setDouble(index, readDouble);
 			break;
 		case "java.lang.String":
-			Object object = getFieldValue(field, entity);
-			String string = null;
-			if (object != null)
-			{
-				string = object.toString();
-			}
-			ps.setString(index, string);
+			String object = getFieldValue(field, entity);
+			if (object == null) ps.setNull(index, Types.VARCHAR);
+			else ps.setString(index, object);
 			break;
 		case "java.util.Date":
 			Date date = getFieldValue(field, entity);
-			if (date != null)
-				ps.setTimestamp(index, new Timestamp(date.getTime()));
-			else
-			{
-				ps.setDate(index, null);
-			}
+			if (date == null) ps.setNull(index, Types.TIMESTAMP);
+			else ps.setTimestamp(index, new Timestamp(date.getTime()));
+			break;
+		case "java.lang.Character":
+		case "char":
 			break;
 		default:
 			Class<?> clazz = field.getType();
 			if(clazz.isEnum())
 			{
 				Enum<?> enumObj = getFieldValue(field, entity);
-				ps.setString(index, enumObj.name());;
+				if(enumObj == null) ps.setString(index, null);
+				else ps.setString(index, enumObj.name());;
 				break;
 			}			
 			throw new RuntimeException("Field: " + field.getName() + " [" + typeName + "] 不支持,出现BUG,请联系管理员。");

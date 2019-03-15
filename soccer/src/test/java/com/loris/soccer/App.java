@@ -476,7 +476,7 @@ public class App
 	public static void testJcWebPage() throws Exception
 	{		
 		Map<String, String> params = new LinkedHashMap<>();
-		params.put(SoccerConstants.NAME_FIELD_ISSUE, "2019-02-02");
+		//params.put(SoccerConstants.NAME_FIELD_ISSUE, "2019-02-02");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC, params);
 		
 		if(!downloadWebPage(page))
@@ -497,6 +497,12 @@ public class App
 		{
 			logger.info("Error: no Match JC data.");
 		}
+		/*
+		int i = 1;
+		for (MatchItem match : matchJcs)
+		{
+			logger.info(i +++ ": " + match);
+		}*/	
 		logger.info("Match Jc data list size is " + matchJcs.size());		
 		saveTableRecords(records);
 	}

@@ -118,6 +118,19 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 			}
 			else if (element.hasClass("wh-3")) // 比赛时间和截止时间
 			{
+				Elements spans = element.children();
+				if(spans != null && spans.size() >= 3)
+				{
+					String string = parseFirstDateString(spans.get(2).attr("title"));
+					if(StringUtils.isNotBlank(string))
+					{
+						Date matchTime = DateUtil.tryToParseDate(string);
+						if(matchTime != null)
+						{
+							match.setMatchtime(matchTime);
+						}
+					}
+				}
 			}
 			else if (element.hasClass("wh-4")) // 主队信息与排名
 			{
@@ -190,6 +203,8 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 
 		if (type == 0)
 		{
+			boolean danguan = (e2 != null) && e2.hasClass("dg");			
+			match.setDanguan(danguan);
 			match.setWinodds(Float.valueOf(win));
 			match.setDrawodds(Float.valueOf(draw));
 			match.setLoseodds(Float.valueOf(lose));

@@ -30,6 +30,7 @@ public class MatchJc extends IssueMatch
 	private static final long serialVersionUID = 1L;
 	
 	protected boolean opened;				//正常比分是否受注
+	protected boolean danguan;				//是否是单关比赛
 	protected Float rqwinodds;				//让球胜赔率
 	protected Float rqdrawodds;				//让球平赔率
 	protected Float rqloseodds;				//让球负赔率
@@ -50,6 +51,16 @@ public class MatchJc extends IssueMatch
 	{
 		this.opened = opened;
 	}
+	public boolean isDanguan()
+	{
+		return danguan;
+	}
+
+	public void setDanguan(boolean danguan)
+	{
+		this.danguan = danguan;
+	}
+
 	public Float getRqwinodds()
 	{
 		return rqwinodds;

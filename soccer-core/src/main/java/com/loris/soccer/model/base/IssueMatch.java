@@ -118,4 +118,11 @@ public class IssueMatch extends AbstractMatch
 	{
 		this.delaytime = delaytime;
 	}
+	@Override
+	public String toString()
+	{
+		return "IssueMatch [issue=" + issue + ", ordinary=" + ordinary + ", closetime=" + closetime + ", winodds="
+				+ winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum + ", rqopened="
+				+ rqopened + ", isdelayed=" + isdelayed + ", delaytime=" + delaytime + ", mid=" + mid + "]";
+	}
 }

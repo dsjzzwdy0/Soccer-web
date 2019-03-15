@@ -138,6 +138,16 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 		return SqlHelper.insertList(teams, Team.class, teamMapper, filter, SoccerConstants.NAME_FIELD_TID,
 				sqlHelper, overwrite);
 	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertRounds(java.util.List)
+	 */
+	@Override
+	public boolean insertRounds(List<Round> rounds)
+	{
+		return insertRounds(rounds, false);
+	}
 	
 	/**
 	 *  (non-Javadoc)
@@ -148,16 +158,6 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 		SingleObjectFilter<Round> filter = new SingleObjectFilter<>();	
 		return SqlHelper.insertList(rounds, Round.class, roundMapper, filter, SoccerConstants.NAME_FIELD_LID, 
 				sqlHelper, overwrite);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.LeagueService#insertRounds(java.util.List)
-	 */
-	@Override
-	public boolean insertRounds(List<Round> rounds)
-	{
-		return insertRounds(rounds, false);
 	}
 
 	/**
