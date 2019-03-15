@@ -20,6 +20,7 @@ import com.loris.common.service.DataService;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.TeamList;
@@ -100,6 +101,10 @@ public class SoccerDataService implements DataService
 			case SOCCER_DATA_TEAM_LIST:
 				TeamList teams = (TeamList) results.get(key);
 				leagueService.insertTeams(teams);
+				break;
+			case SOCCER_DATA_MATCH_RESULT_LIST:
+				MatchResultList matchResults = (MatchResultList) results.get(key);
+				matchService.insertMatchResults(matchResults);
 				break;
 			default:
 				// No nothing.

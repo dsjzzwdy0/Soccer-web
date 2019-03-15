@@ -23,10 +23,12 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.MatchBdMapper;
 import com.loris.soccer.dao.MatchJcMapper;
 import com.loris.soccer.dao.MatchMapper;
-import com.loris.soccer.filter.MatchItemFilter;
+import com.loris.soccer.dao.MatchResultMapper;
+import com.loris.soccer.filter.SingleObjectFilter;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
+import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.service.MatchService;
 
 /**
@@ -50,6 +52,9 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Autowired
 	private MatchJcMapper matchJcMapper;
 
+	@Autowired
+	private MatchResultMapper matchResultMapper;
+	
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -71,7 +76,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Transactional
 	public boolean insertMatchs(List<Match> matchs, boolean overwrite)
 	{
-		MatchItemFilter<Match> filter = new MatchItemFilter<>();
+		SingleObjectFilter<Match> filter = new SingleObjectFilter<>();	
 		return SqlHelper.insertList(matchs, Match.class, baseMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -93,7 +98,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite)
 	{
-		MatchItemFilter<MatchBd> filter = new MatchItemFilter<>();		
+		SingleObjectFilter<MatchBd> filter = new SingleObjectFilter<>();		
 		return SqlHelper.insertList(matchBds, MatchBd.class, matchBdMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
@@ -115,8 +120,30 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Override
 	public boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite)
 	{
-		MatchItemFilter<MatchJc> filter = new MatchItemFilter<>();
+		SingleObjectFilter<MatchJc> filter = new SingleObjectFilter<>();	
 		return SqlHelper.insertList(matchJcs, MatchJc.class, matchJcMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#insertMatchResults(java.util.List)
+	 */
+	@Override
+	public boolean insertMatchResults(List<MatchResult> results)
+	{
+		return insertMatchResults(results, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#insertMatchResults(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertMatchResults(List<MatchResult> results, boolean overwrite)
+	{
+		SingleObjectFilter<MatchResult> filter = new SingleObjectFilter<>();	
+		return SqlHelper.insertList(results, MatchResult.class, matchResultMapper, filter, 
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
 }

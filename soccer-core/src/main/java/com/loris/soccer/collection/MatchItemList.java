@@ -13,7 +13,7 @@ package com.loris.soccer.collection;
 
 import java.util.ArrayList;
 
-import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.model.base.AbstractMatch;
 
 /**   
  * @ClassName: MatchList   
@@ -23,7 +23,7 @@ import com.loris.soccer.model.base.MatchItem;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class MatchItemList extends ArrayList<MatchItem>
+public class MatchItemList extends ArrayList<AbstractMatch>
 {
 	/**
 	 * 

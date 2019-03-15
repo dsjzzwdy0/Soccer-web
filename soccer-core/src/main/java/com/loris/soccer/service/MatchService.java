@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
+import com.loris.soccer.model.MatchResult;
 
 /**   
  * @ClassName:  League   
@@ -74,4 +75,19 @@ public interface MatchService extends IService<Match>
 	 * @return
 	 */
 	boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite);
+	
+	/**
+	 * 插入比赛结果数据记录
+	 * @param results 比赛结果
+	 * @return 是否成功的标志
+	 */
+	boolean insertMatchResults(List<MatchResult> results);
+	
+	/**
+	 * 插入比赛结果数据记录
+	 * @param results 比赛结果
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功标志
+	 */
+	boolean insertMatchResults(List<MatchResult> results, boolean overwrite);
 }

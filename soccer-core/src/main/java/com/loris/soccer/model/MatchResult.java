@@ -12,7 +12,7 @@
 package com.loris.soccer.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.common.bean.AutoIdEntity;
+import com.loris.soccer.model.base.MatchItem;
 
 /**   
  * @ClassName:  League   
@@ -24,7 +24,7 @@ import com.loris.common.bean.AutoIdEntity;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_match_result")
-public class MatchResult extends AutoIdEntity
+public class MatchResult extends MatchItem
 {
 	public static enum ResultType{
 		WIN,      	//胜
@@ -34,7 +34,6 @@ public class MatchResult extends AutoIdEntity
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	protected String mid;				//比赛编号
 	protected ResultType result;		//比赛结果
 	protected Integer homegoal;			//主队进球数
 	protected Integer clientgoal;		//客队进球数
@@ -45,8 +44,14 @@ public class MatchResult extends AutoIdEntity
 	
 	public MatchResult(String mid, String score)
 	{
-		this.mid = mid;
+		super(mid);
 		setScore(score);
+	}
+	
+	public MatchResult(String mid, int homegoal, int clientgoal)
+	{
+		this.mid = mid;
+		setScore(homegoal, clientgoal);
 	}
 	
 	public String getMid()
@@ -82,6 +87,24 @@ public class MatchResult extends AutoIdEntity
 		this.clientgoal = clientgoal;
 	}
 	
+	public void setScore(Integer homegoal, Integer clientgoal)
+	{
+		this.homegoal = homegoal;
+		this.clientgoal = clientgoal;
+		if(homegoal > clientgoal)
+		{
+			result = ResultType.WIN;
+		}
+		else if(homegoal == clientgoal)
+		{
+			result = ResultType.DRAW;
+		}
+		else
+		{
+			result = ResultType.LOSE;
+		}
+	}
+	
 	public void setScore(String score)
 	{
 		String[] str = score.split(":");	
@@ -91,20 +114,9 @@ public class MatchResult extends AutoIdEntity
 		}
 		try
 		{
-			homegoal = Integer.parseInt(str[0]);
-			clientgoal = Integer.parseInt(str[1]);
-			if(homegoal > clientgoal)
-			{
-				result = ResultType.WIN;
-			}
-			else if(homegoal == clientgoal)
-			{
-				result = ResultType.DRAW;
-			}
-			else
-			{
-				result = ResultType.LOSE;
-			}
+			int homegoal = Integer.parseInt(str[0]);
+			int clientgoal = Integer.parseInt(str[1]);
+			setScore(homegoal, clientgoal);
 		}
 		catch(Exception e)
 		{

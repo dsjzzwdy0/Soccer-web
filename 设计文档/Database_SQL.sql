@@ -110,7 +110,16 @@ create table soccer_match(
 	INDEX `index_clientid` (`clientid`) USING BTREE
 );
 
-
+create table soccer_match_result
+(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10),
+	result smallint,
+	homegoal smallint,
+	clientgoal smallint,
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE
+);
 
 create table soccer_odds_op(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,

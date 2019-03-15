@@ -11,8 +11,6 @@
  */
 package com.loris.soccer.model.base;
 
-import java.util.Date;
-
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -30,7 +28,6 @@ public class MatchItem extends AutoIdEntity
 	private static final long serialVersionUID = 1L;
 	
 	protected String mid;				//比赛编号：唯一编号
-	protected Date matchtime;			//比赛时间
 	
 	public MatchItem()
 	{
@@ -48,13 +45,5 @@ public class MatchItem extends AutoIdEntity
 	public void setMid(String mid)
 	{
 		this.mid = mid;
-	}
-	public Date getMatchtime()
-	{
-		return matchtime;
-	}
-	public void setMatchtime(Date matchtime)
-	{
-		this.matchtime = matchtime;
 	}
 }

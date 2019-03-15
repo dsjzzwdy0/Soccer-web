@@ -25,7 +25,7 @@ import com.loris.common.service.SqlHelper;
 import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.OddsOpMapper;
-import com.loris.soccer.filter.OddsValueFilter;
+import com.loris.soccer.filter.SingleObjectFilter;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsService;
 
@@ -141,7 +141,7 @@ public class OddsServiceImpl implements OddsService
 			QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<OddsOp>().in(SoccerConstants.NAME_FIELD_MID, mids);
 			List<OddsOp> existOps = oddsOpMapper.selectList(queryWrapper);		
 			List<OddsOp> newOps = new ArrayList<>();
-			OddsValueFilter<OddsOp> filter = new OddsValueFilter<>();
+			SingleObjectFilter<OddsOp> filter = new SingleObjectFilter<>();
 			for (OddsOp oddsOp : ops)
 			{
 				filter.setValue(oddsOp);

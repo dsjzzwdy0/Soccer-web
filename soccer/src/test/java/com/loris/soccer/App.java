@@ -45,18 +45,18 @@ import com.loris.common.service.DataService;
 import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsOpList;
-import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchJc;
+import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
-import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
 import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
@@ -160,9 +160,10 @@ public class App
 		}
 		logger.info("Total Match size is " + list.size());
 		
-		RoundList rounds = (RoundList) records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
+		//RoundList rounds = (RoundList) records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
+		MatchResultList results = (MatchResultList) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
 		int i = 1;
-		for (Round round : rounds)
+		for (MatchResult round : results)
 		{
 			logger.info(i +++ ": " + round);
 		}

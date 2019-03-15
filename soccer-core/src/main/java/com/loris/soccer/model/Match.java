@@ -12,7 +12,7 @@
 package com.loris.soccer.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.model.base.AbstractMatch;
 
 /**   
  * @ClassName:  Match   
@@ -24,7 +24,7 @@ import com.loris.soccer.model.base.MatchItem;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_match")
-public class Match extends MatchItem
+public class Match extends AbstractMatch
 {
 	/***/
 	private static final long serialVersionUID = 1L;

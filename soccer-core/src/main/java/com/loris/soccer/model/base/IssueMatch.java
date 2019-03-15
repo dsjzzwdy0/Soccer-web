@@ -22,7 +22,7 @@ import java.util.Date;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class IssueMatch extends MatchItem
+public class IssueMatch extends AbstractMatch
 {
 	/***/
 	private static final long serialVersionUID = 1L;

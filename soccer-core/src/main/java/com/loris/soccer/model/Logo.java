@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
@@ -72,5 +74,14 @@ public class Logo extends AutoIdEntity
 	public void setUrl(String url)
 	{
 		this.url = url;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null) return false;
+		Logo other = (Logo)obj;
+		return StringUtils.equals(pid, other.pid)
+				&& StringUtils.equals(type, other.type);
 	}
 }

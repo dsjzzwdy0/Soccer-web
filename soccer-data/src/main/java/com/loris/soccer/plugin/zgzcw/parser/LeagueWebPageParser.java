@@ -24,6 +24,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.RankList;
 import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.TeamList;
@@ -76,7 +77,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		TeamRfSeasonList teamRfSeasons = new TeamRfSeasonList();
 		RoundList rounds = new RoundList();
 		MatchList matchs = new MatchList();
-		List<MatchResult> matchResults = new ArrayList<>();
+		MatchResultList matchResults = new MatchResultList();
 		List<Logo> logos = new ArrayList<>();
 		RankList ranks = new RankList();
 
