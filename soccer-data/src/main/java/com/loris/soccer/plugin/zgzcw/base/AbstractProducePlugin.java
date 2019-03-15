@@ -33,7 +33,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.executor.HttpCommonWebPageExecutor;
-import com.loris.soccer.model.base.AbstractMatch;
+import com.loris.soccer.model.base.BaseMatch;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
@@ -102,9 +102,9 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	 * 
 	 * @param matchItems
 	 */
-	protected void createMatchTasks(List<? extends AbstractMatch> matchItems, Filter<Date> filter)
+	protected void createMatchTasks(List<? extends BaseMatch> matchItems, Filter<Date> filter)
 	{
-		for (AbstractMatch matchItem : matchItems)
+		for (BaseMatch matchItem : matchItems)
 		{
 			if (filter == null || filter.accept(matchItem.getMatchtime()))
 			{

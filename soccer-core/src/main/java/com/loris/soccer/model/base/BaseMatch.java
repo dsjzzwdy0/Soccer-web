@@ -22,7 +22,7 @@ import java.util.Date;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public abstract class AbstractMatch extends MatchItem
+public abstract class BaseMatch extends MatchItem
 {
 	/**
 	 * 
@@ -31,11 +31,11 @@ public abstract class AbstractMatch extends MatchItem
 
 	protected Date matchtime;			//比赛时间
 	
-	public AbstractMatch()
+	public BaseMatch()
 	{
 	}
 	
-	public AbstractMatch(String mid)
+	public BaseMatch(String mid)
 	{
 		super(mid);
 	}
