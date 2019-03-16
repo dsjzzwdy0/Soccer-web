@@ -76,6 +76,13 @@ public class HttpCommonWebPageExecutor extends BasicTaskProcessPlugin
 	@Override
 	public void close()
 	{
+		try
+		{
+			client.close();
+		}
+		catch (Exception e)
+		{
+		}
 		client = null;
 		super.close();
 	}

@@ -11,8 +11,7 @@
  */
 package com.loris.soccer.collection;
 
-import java.util.ArrayList;
-
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.model.OddsOp;
 
 /**   
@@ -23,7 +22,7 @@ import com.loris.soccer.model.OddsOp;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class OddsOpList extends ArrayList<OddsOp>
+public class OddsOpList extends DataList<OddsOp>
 {
 	/**
 	 * 

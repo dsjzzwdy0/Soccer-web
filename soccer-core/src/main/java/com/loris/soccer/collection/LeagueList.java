@@ -11,11 +11,11 @@
  */
 package com.loris.soccer.collection;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.model.League;
 
 /**   
@@ -26,7 +26,7 @@ import com.loris.soccer.model.League;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LeagueList extends ArrayList<League>
+public class LeagueList extends DataList<League>
 {
 	/**
 	 * 

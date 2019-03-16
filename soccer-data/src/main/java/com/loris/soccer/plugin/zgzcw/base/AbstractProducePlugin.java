@@ -13,11 +13,11 @@ package com.loris.soccer.plugin.zgzcw.base;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,10 +25,10 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
+import com.loris.client.service.WebPageService;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.common.filter.DateFilter;
-import com.loris.common.filter.Filter;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
@@ -39,6 +39,7 @@ import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageParser;
 import com.loris.soccer.service.LeagueService;
+import com.loris.soccer.service.impl.SoccerDataService;
 
 /**
  * @ClassName: AbstractProducePlugin
@@ -56,7 +57,13 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	protected HttpCommonWebPageExecutor httpCommonExecutor;
 	
 	@Autowired
+	protected SoccerDataService soccerDataService;
+	
+	@Autowired
 	protected LeagueService leagueService;
+	
+	@Autowired
+	protected WebPageService pageService;
 
 	/**
 	 * 产生任务程序
@@ -69,9 +76,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 
 	/**
 	 * 建立比赛的数据下载任务
-	 * 
-	 * @param match
-	 *            比赛
+	 * @param match 比赛
 	 */
 	protected void createMatchDataTask(MatchItem matchItem, boolean hasOp, boolean hasYp, boolean hasNum)
 	{
@@ -102,7 +107,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	 * 
 	 * @param matchItems
 	 */
-	protected void createMatchTasks(List<? extends BaseMatch> matchItems, Filter<Date> filter)
+	protected void createMatchTasks(List<? extends BaseMatch> matchItems, DateFilter filter)
 	{
 		for (BaseMatch matchItem : matchItems)
 		{
@@ -111,6 +116,47 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 				createMatchDataTask(matchItem, true, true, true);
 			}
 		}
+	}
+	
+	/**
+	 * 存储数据
+	 * @param records
+	 * @throws Exception
+	 */
+	public void saveTableRecords(TableRecords records) throws IOException
+	{
+		long st = System.currentTimeMillis();
+		soccerDataService.saveTableRecords(records);
+		long en = System.currentTimeMillis();
+		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
+	}
+	
+	/**
+	 * 从远程获取数据内容
+	 * @param context
+	 * @param page
+	 * @return
+	 * @throws IOException
+	 * @throws WebParserException
+	 * @throws HostForbiddenException
+	 * @throws UrlFetchException
+	 */
+	protected TableRecords getDataFromWebPage(TaskPluginContext context, WebPage page) throws IOException, WebParserException, HostForbiddenException, UrlFetchException
+	{
+		logger.info("Starting get the data from : " + page.getUrl());
+		if (StringUtils.isBlank(page.getContent()) && !httpCommonExecutor.execute(context, page))
+		{
+			logger.info("Error when HttpCommonExecutor execute: " + page.getUrl());
+			return null;
+		}
+		
+		//解析数据结果
+		TableRecords records = ZgzcwPageParser.parseWebPage(page);
+		if(records != null)
+		{
+			saveTableRecords(records);
+		}
+		return records;
 	}
 
 	/**
@@ -124,21 +170,13 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	 * @throws HostForbiddenException
 	 * @throws UrlFetchException
 	 */
-	protected<T> boolean initializeFromWebPage(TaskPluginContext context, WebPage page, Filter<T> filter)
+	protected boolean initializeFromWebPage(TaskPluginContext context, WebPage page, DateFilter filter)
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
-		logger.info("Starting get the data from : " + page.getUrl());
-		if (!httpCommonExecutor.execute(context, page))
-		{
-			logger.info("Error when HttpCommonExecutor execute: " + page.getUrl());
-			return false;
-		}
-		
 		//解析数据结果
-		TableRecords records = ZgzcwPageParser.parseWebPage(page);
+		TableRecords records = getDataFromWebPage(context, page);
 		if(records == null)
 		{
-			logger.info("Error when parse the page: " + page.getUrl());
 			return false;
 		}
 		
@@ -147,13 +185,13 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 		{
 		case ZgzcwConstants.PAGE_LOTTERY_BD:
 			MatchItemList matchItems = (MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
-			if(matchItems == null || matchItems.size() <= 0)
+			if(matchItems == null || matchItems.size() == 0)
 			{
 				logger.info("There are no MatchItems in the page: " + page.getUrl());
 				return false;
 			}
 			logger.info("There are " + matchItems.size() + " matches in the list.");
-			this.createMatchTasks(matchItems, (DateFilter)filter);
+			this.createMatchTasks(matchItems, filter);
 			return true;
 		case ZgzcwConstants.PAGE_CENTER:
 			

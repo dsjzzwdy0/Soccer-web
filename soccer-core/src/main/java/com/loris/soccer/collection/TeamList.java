@@ -11,19 +11,18 @@
  */
 package com.loris.soccer.collection;
 
-import java.util.ArrayList;
-
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.model.Team;
 
 /**   
  * @ClassName: TeamList   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 数据列表
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class TeamList extends ArrayList<Team>
+public class TeamList extends DataList<Team>
 {
 	/**
 	 * 

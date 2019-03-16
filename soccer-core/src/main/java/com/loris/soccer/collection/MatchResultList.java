@@ -11,10 +11,8 @@
  */
 package com.loris.soccer.collection;
 
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.model.MatchResult;
-
-import java.util.ArrayList;
-
 /**   
  * @ClassName:  MatchResultList    
  * @Description: 比赛结果列表  
@@ -24,7 +22,7 @@ import java.util.ArrayList;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class MatchResultList extends ArrayList<MatchResult>
+public class MatchResultList extends DataList<MatchResult>
 {
 	/**
 	 * 

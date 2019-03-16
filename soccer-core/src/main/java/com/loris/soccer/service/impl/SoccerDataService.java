@@ -81,31 +81,31 @@ public class SoccerDataService implements DataService
 			{
 			case SOCCER_DATA_LEAGUE_LIST:
 				LeagueList leagues = (LeagueList) results.get(key);
-				leagueService.insertLeagues(leagues);
+				leagueService.insertLeagues(leagues, leagues.isOverwrite());
 				break;
 			case SOCCER_DATA_LOGO_LIST:
 				LogoList logos = (LogoList) results.get(key);
-				leagueService.insertLogos(logos);
+				leagueService.insertLogos(logos, logos.isOverwrite());
 				break;
 			case SOCCER_DATA_ROUND_LIST:
 				RoundList rounds = (RoundList) results.get(key);
-				leagueService.insertRounds(rounds);
+				leagueService.insertRounds(rounds, rounds.isOverwrite());
 				break;
 			case SOCCER_DATA_TEAM_LIST:
 				TeamList teams = (TeamList) results.get(key);
-				leagueService.insertTeams(teams);
+				leagueService.insertTeams(teams, teams.isOverwrite());
 				break;
 			case SOCCER_DATA_TEAM_SEASON:
 				TeamRfSeasonList rfSeasons = (TeamRfSeasonList) results.get(key);
-				leagueService.insertTeamRfSeasons(rfSeasons);
+				leagueService.insertTeamRfSeasons(rfSeasons, rfSeasons.isOverwrite());
 				break;
 			case SOCCER_DATA_RANK_LIST:
 				RankList ranks = (RankList) results.get(key);
-				leagueService.insertRanks(ranks);
+				leagueService.insertRanks(ranks, ranks.isOverwrite());
 				break;
 			case SOCCER_DATA_MATCH_LIST:
 				MatchList matchList = (MatchList) results.get(key);
-				matchService.insertMatchs(matchList);
+				matchService.insertMatchs(matchList, matchList.isOverwrite());
 				break;
 			case SOCCER_DATA_MATCH_BD_LIST:
 				MatchItemList matchBdItemList = (MatchItemList) results.get(key);
@@ -114,7 +114,7 @@ public class SoccerDataService implements DataService
 				{
 					matchBds.add((MatchBd)matchBd);
 				}
-				matchService.insertMatchBds(matchBds);
+				matchService.insertMatchBds(matchBds, matchBdItemList.isOverwrite());
 				break;
 			case SOCCER_DATA_MATCH_JC_LIST:
 				MatchItemList matchJcItemList = (MatchItemList) results.get(key);
@@ -123,27 +123,27 @@ public class SoccerDataService implements DataService
 				{
 					matchJcs.add((MatchJc)matchJc);
 				}
-				matchService.insertMatchJcs(matchJcs);
+				matchService.insertMatchJcs(matchJcs, matchJcItemList.isOverwrite());
 				break;
 			case SOCCER_DATA_MATCH_RESULT_LIST:
 				MatchResultList matchResults = (MatchResultList) results.get(key);
-				matchService.insertMatchResults(matchResults);
+				matchService.insertMatchResults(matchResults, matchResults.isOverwrite());
 				break;
 			case SOCCER_DATA_OP_LIST:
 				OddsOpList ops = (OddsOpList) results.get(key);
-				oddsService.insertOddsOps(ops);
+				oddsService.insertOddsOps(ops, ops.isOverwrite());
 				break;
 			case SOCCER_DATA_YP_LIST:
 				OddsYpList yps = (OddsYpList) results.get(key);
-				oddsService.insertOddsYps(yps);
+				oddsService.insertOddsYps(yps, yps.isOverwrite());
 				break;
 			case SOCCER_DATA_NUM_LIST:
 				OddsNumList nums = (OddsNumList) results.get(key);
-				oddsService.insertOddsNums(nums);
+				oddsService.insertOddsNums(nums, nums.isOverwrite());
 				break;
 			case SOCCER_DATA_SCORE_LIST:
 				OddsScoreList scores = (OddsScoreList) results.get(key);
-				oddsService.insertOddsScores(scores);
+				oddsService.insertOddsScores(scores, scores.isOverwrite());
 				break;
 			default:
 				// No nothing.
