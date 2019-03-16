@@ -43,7 +43,7 @@ public class BasicTaskProcessPlugin extends BasicTaskPlugin implements TaskProce
 	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, IOException, HostForbiddenException
 	{
 		logger.info("Execute " + task.getName());
-		notifyTaskEvent(new TaskEvent(task, TaskEventType.Finished));
+		notifyTaskEvent(new TaskEvent(task, TaskEventType.Executed));
 		return true;
 	}
 

@@ -92,7 +92,7 @@ public class TaskPostProcessor extends TaskEventProducer implements Closeable
 		try
 		{
 			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcess));
-			if(plugin.execute(context, task))
+			if(plugin.postProcess(context, task))
 			{
 				notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));
 			}
@@ -115,8 +115,7 @@ public class TaskPostProcessor extends TaskEventProducer implements Closeable
 		TaskPostProcessPlugin plugin = getBestFitProcessPlugin(task);
 		if(plugin == null)
 		{
-			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError, 
-					new Throwable("There are no plugin to process the task '" + task.getName() + "'")));
+			notifyTaskEvent(new TaskEvent(task, TaskEventType.PostError, new Throwable("There are no plugin to process the task '" + task.getName() + "'")));
 			return;
 		}
 		execute(plugin, task);

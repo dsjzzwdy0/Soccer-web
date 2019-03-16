@@ -48,9 +48,8 @@ public class BasicTaskPostProcessPlugin extends BasicTaskPlugin implements TaskP
 	 * @see com.loris.client.task.plugin.TaskPostProcessPlugin#execute(com.loris.client.task.Task)
 	 */
 	@Override
-	public boolean execute(TaskPluginContext context, Task task) throws IOException, SQLException
+	public boolean postProcess(TaskPluginContext context, Task task) throws IOException, SQLException
 	{
-		//logger.info("Post Process " + task.getName());
 		notifyTaskEvent(new TaskEvent(task, TaskEventType.PostProcessed));
 		return true;
 	}

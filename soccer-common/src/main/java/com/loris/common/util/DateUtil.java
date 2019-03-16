@@ -715,7 +715,7 @@ public class DateUtil
 	 *
 	 * @return
 	 */
-	public static String getTime(Date date) {
+	public static String formatDateTime(Date date) {
 		return formatDate(date, "yyyy-MM-dd HH:mm:ss");
 	}
 
@@ -724,7 +724,7 @@ public class DateUtil
 		if (StringUtils.isNotBlank(pattern)) {
 			formatDate = DateFormatUtils.format(date, pattern);
 		} else {
-			formatDate = DateFormatUtils.format(date, "yyyy-MM-dd");
+			formatDate = DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss");
 		}
 		return formatDate;
 	}

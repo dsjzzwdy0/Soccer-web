@@ -14,6 +14,7 @@ package com.loris.soccer.executor;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
@@ -34,6 +35,7 @@ import com.loris.client.task.plugin.BasicTaskProcessPlugin;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@Component
 public class HttpCommonWebPageExecutor extends BasicTaskProcessPlugin
 {
 	/** 页面下载 客户端 */
@@ -46,9 +48,9 @@ public class HttpCommonWebPageExecutor extends BasicTaskProcessPlugin
 	 * Create a new HttpTaskProcessPlugin
 	 * @param setting
 	 */
-	public HttpCommonWebPageExecutor(FetcherSetting setting)
+	public HttpCommonWebPageExecutor(FetcherSetting defaultSetting)
 	{
-		client = new HttpCommonFetcher(setting);
+		client = new HttpCommonFetcher(defaultSetting);
 	}
 	
 	/**
@@ -78,12 +80,12 @@ public class HttpCommonWebPageExecutor extends BasicTaskProcessPlugin
 	{
 		try
 		{
-			client.close();
+			//client.close();
 		}
 		catch (Exception e)
 		{
 		}
-		client = null;
+		//client = null;
 		super.close();
 	}
 }

@@ -55,10 +55,10 @@ public interface SoccerConstants
 	final static public String LOTTERY_ZC = "zc";
 
 	/** 赛事类型是杯赛 */
-	final static public String MATCH_TYPE_LEAGUE = "league";
+	final static public String LEAGUE_TYPE_LEAGUE = "league";
 
 	/** 赛事类型是杯赛 */
-	final static public String MATCH_TYPE_CUP = "cup";
+	final static public String LEAGUE_TYPE_CUP = "cup";
 
 	/** 数据亚盘 */
 	final static public String ODDS_TYPE_YP = "yp";

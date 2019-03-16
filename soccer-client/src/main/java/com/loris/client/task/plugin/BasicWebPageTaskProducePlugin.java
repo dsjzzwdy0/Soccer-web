@@ -91,16 +91,6 @@ public class BasicWebPageTaskProducePlugin extends BasicTaskPlugin implements Ta
 	{
 		throw new UnsupportedOperationException("This is not used for TaskProducePlugin.");
 	}
-
-	/**
-	 * 该方法将不会被执行
-	 * @param
-	 */
-	@Override
-	public boolean execute(TaskPluginContext context, Task task)
-	{
-		throw new UnsupportedOperationException("This will not be called.");
-	}
 	
 	/**
 	 * 创建任务

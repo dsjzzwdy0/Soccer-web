@@ -97,8 +97,7 @@ public class TaskProducer extends TaskEventProducer implements Runnable, Closeab
 			{
 				//Do nothing
 			}
-		}
-		
+		}		
 		setFinished(true);
 	}
 

@@ -29,6 +29,7 @@ import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerStatus;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.TaskScheduler;
@@ -101,7 +102,8 @@ public class App
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
-			testJcWebPage();
+			//testJcWebPage();
+			testZgzcwIssueScheduler();
 			
 			//testCenterPage();	
 			//testOddsOpPage();
@@ -127,7 +129,7 @@ public class App
 		{
 			try
 			{
-				context.close();
+				//context.close();
 			}
 			catch (Exception e)
 			{
@@ -135,6 +137,32 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	/**
+	 * 测试线程处理工具
+	 * 
+	 * @throws Exception
+	 */
+	public static void testZgzcwIssueScheduler() throws Exception
+	{
+		SchedulerStatus status = new SchedulerStatus();
+		status.setIntervaltime(4000);
+		status.setName("任务处理器");
+		status.setSid("100-100-100");
+		status.setMaxActiveTaskThread(3);
+		
+		TaskScheduler scheduler = new TaskScheduler(status);
+		scheduler.setMaxActiveTaskThread(3);
+		//scheduler.setName("即时任务下载器");
+		
+		ZgzcwIssueProducePlugin plugin = (ZgzcwIssueProducePlugin)context.getBean(ZgzcwIssueProducePlugin.class);
+		HttpCommonWebPageExecutor executor = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin");
+		
+		scheduler.addTaskPlugin(plugin);
+		scheduler.addTaskPlugin(executor);
+
+		SchedulerFactory.startTaskScheduler(scheduler);
 	}
 	
 	public static void testJcScoreWebPage() throws Exception

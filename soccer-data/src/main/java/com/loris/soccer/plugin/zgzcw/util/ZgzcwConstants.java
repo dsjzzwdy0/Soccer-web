@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.plugin.zgzcw.util;
 
+import static com.loris.soccer.constant.SoccerConstants.*;
 /**   
  * @ClassName:  League   
  * @Description: 中国足彩网的常量数据定义类 
@@ -26,9 +27,9 @@ public interface ZgzcwConstants
 	public static final String SOURCE_ZGZCW = "zgzcw";
 	
 	/** 数据页面名称定义 */
-	final static public String PAGE_LEAGUE_LEAGUE = "league";
 	final static public String PAGE_LEAGUE_LEAGUE_ROUND = "leagueround";
-	final static public String PAGE_LEAGUE_CUP = "cup";
+	final static public String PAGE_LEAGUE_LEAGUE = LEAGUE_TYPE_LEAGUE;
+	final static public String PAGE_LEAGUE_CUP = LEAGUE_TYPE_CUP;
 	final static public String PAGE_CENTER = "center";
 	final static public String PAGE_ODDS_OP = "op";
 	final static public String PAGE_ODDS_YP = "yp";

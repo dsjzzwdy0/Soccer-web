@@ -188,7 +188,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	 * @param task
 	 *            任务
 	 */
-	protected void startNewTaskThread(Task task)
+	protected void startNewTaskProcessThread(Task task)
 	{
 		// 设置监听器,将会启动一个新的线程来完成任务
 		if (taskExecutor != null)
@@ -197,14 +197,14 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		}
 		else
 		{
-			notify(new TaskEvent(task, TaskEventType.Error, new Exception("The TaskProcess is null.")));
+			notify(new TaskEvent(task, TaskEventType.Error, new IllegalArgumentException("The TaskProcess is null.")));
 		}
 	}
 
 	/**
 	 * 启动任务后处理线程
 	 */
-	protected void startTaskPostProcess(Task task)
+	protected void startTaskPostProcessThread(Task task)
 	{
 		try
 		{
@@ -212,7 +212,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		}
 		catch(Exception e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 			logger.info(e.getMessage());
 		}
 	}
@@ -237,13 +237,13 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 			logger.debug("Starting to excute " + task.getName());
 			addRunningTask(task);
 		}
-		else if (taskType == TaskEventType.Finished)
+		else if (taskType == TaskEventType.Executed)
 		{
 			removeRunningTask(task);
 			logger.info("Finished to excute " + task.getName());
 			if (taskPostProcessor != null)
 			{
-				startTaskPostProcess(task);
+				startTaskPostProcessThread(task);
 			}
 		}
 		else if (taskType == TaskEventType.Error)
@@ -261,7 +261,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 			}
 			else if(throwable instanceof NoProcessPluginException)
 			{
-				logger.info(throwable.getMessage());
+				logger.warn("Warn: " + throwable.getMessage());
 			}
 			else
 			{
@@ -272,6 +272,10 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		else if(taskType == TaskEventType.PostProcessed)
 		{
 			logger.info("Finished to post excute " + task.getName());
+		}
+		else if(taskType == TaskEventType.PostError)
+		{
+			logger.info("Error occured when post excute " + task.getName());
 		}
 	}
 
@@ -309,7 +313,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 					Task task = popup();
 					if (task != null)
 					{
-						startNewTaskThread(task);
+						startNewTaskProcessThread(task);
 					}
 				}
 
@@ -441,11 +445,11 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		{
 			taskProducer.addTaskProducePlugin((TaskProducePlugin)plugin);
 		}
-		else if(plugin instanceof TaskProcessPlugin)
+		if(plugin instanceof TaskProcessPlugin)
 		{
 			taskExecutor.addTaskProcessPlugin((TaskProcessPlugin)plugin);
 		}
-		else if(plugin instanceof TaskPostProcessPlugin)
+		if(plugin instanceof TaskPostProcessPlugin)
 		{
 			taskPostProcessor.addTaskPostProcessPlugin((TaskPostProcessPlugin)plugin);
 		}

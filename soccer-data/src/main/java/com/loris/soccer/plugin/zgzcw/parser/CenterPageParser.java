@@ -225,8 +225,8 @@ public class CenterPageParser extends AbstractZgzcwWebPageParser
 		
 		//不是杯赛数据、联赛数据，不需要这样的内容
 		if(league.getType() == null || 
-			(!league.getType().equalsIgnoreCase(MATCH_TYPE_CUP) &&
-			!league.getType().equalsIgnoreCase(MATCH_TYPE_LEAGUE)))
+			(!league.getType().equalsIgnoreCase(LEAGUE_TYPE_CUP) &&
+			!league.getType().equalsIgnoreCase(LEAGUE_TYPE_LEAGUE)))
 		{
 			return false;
 		}

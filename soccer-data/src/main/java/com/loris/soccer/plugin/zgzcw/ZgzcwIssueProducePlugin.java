@@ -18,10 +18,14 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.client.task.plugin.TaskPostProcessPlugin;
+import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.filter.DateFilter;
 import com.loris.soccer.plugin.zgzcw.base.AbstractProducePlugin;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
+
+import cn.hutool.core.thread.ThreadUtil;
 
 /**
  * @ClassName: League
@@ -33,7 +37,7 @@ import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 @Component
-public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
+public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements TaskPostProcessPlugin, TaskProducePlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
 
@@ -61,13 +65,21 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin
 		try
 		{
 			WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
-			if (!initializeFromWebPage(context, bdMainPage, dateFiter))
+			if (!createTaskFromWebPage(context, bdMainPage, dateFiter))
 			{
 				logger.info("No task produce from BDMainPage.");
 			}
+			
+			ThreadUtil.sleep(2000);
+			WebPage jcMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC);
+			if (!createTaskFromWebPage(context, jcMainPage, dateFiter))
+			{
+				logger.info("No task produce from JcMainPage.");
+			}			
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			logger.info(e.getMessage());
 		}
 	}

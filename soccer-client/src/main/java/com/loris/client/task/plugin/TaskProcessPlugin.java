@@ -11,6 +11,15 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
+import com.loris.client.exception.HostForbiddenException;
+import com.loris.client.exception.UrlFetchException;
+import com.loris.client.exception.WebParserException;
+import com.loris.client.task.Task;
+import com.loris.client.task.context.TaskPluginContext;
+
 /**   
  * @ClassName:  TaskProcessPlugin  
  * @Description: TODO(这里用一句话描述这个类的作用)   
@@ -22,5 +31,10 @@ package com.loris.client.task.plugin;
  */
 public interface TaskProcessPlugin extends TaskPlugin
 {
-	
+	/**
+	 * 执行任务
+	 * @param task
+	 */
+	boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, 
+		WebParserException, IOException, HostForbiddenException, SQLException;
 }

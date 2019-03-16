@@ -12,11 +12,6 @@
 package com.loris.client.task.plugin;
 
 import java.io.IOException;
-import java.sql.SQLException;
-
-import com.loris.client.exception.HostForbiddenException;
-import com.loris.client.exception.UrlFetchException;
-import com.loris.client.exception.WebParserException;
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEventProducer;
@@ -54,18 +49,6 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	public void setName(String name)
 	{
 		this.name = name;		
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.task.plugin.TaskPlugin#execute(com.loris.client.task.Task)
-	 */
-	@Override
-	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, 
-		WebParserException, IOException, HostForbiddenException, SQLException
-	{
-		//Do nothing.
-		return true;
 	}
 
 	/**

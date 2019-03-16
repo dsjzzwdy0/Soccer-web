@@ -13,7 +13,7 @@ public class TaskEvent
 	{
 		Created,			//创建
 		Excute,
-		Finished,		
+		Executed,		
 		Error,
 		PostProcess,
 		PostProcessed,

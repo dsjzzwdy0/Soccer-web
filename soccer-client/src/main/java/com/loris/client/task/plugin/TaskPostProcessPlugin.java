@@ -11,6 +11,11 @@
  */
 package com.loris.client.task.plugin;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
+import com.loris.client.task.Task;
+import com.loris.client.task.context.TaskPluginContext;
 
 /**   
  * @ClassName:  TaskPostProcessPlugin  
@@ -23,4 +28,13 @@ package com.loris.client.task.plugin;
  */
 public interface TaskPostProcessPlugin extends TaskPlugin
 {
+	/**
+	 * 任务后处理插件
+	 * @param context
+	 * @param task
+	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	boolean postProcess(TaskPluginContext context, Task task) throws IOException, SQLException;
 }
