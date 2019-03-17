@@ -161,6 +161,19 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	}
 	
 	/**
+	 * 存储数据
+	 * @param records
+	 * @throws Exception
+	 */
+	public void saveTableRecords(TableRecords records) throws IOException
+	{
+		long st = System.currentTimeMillis();
+		soccerDataService.saveTableRecords(records);
+		long en = System.currentTimeMillis();
+		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
+	}
+	
+	/**
 	 * 数据下载，在下载之后将进行数据的存储
 	 * @param page 网页页面
 	 * @return 是否下载成功的标志
@@ -192,6 +205,8 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	/**
 	 * 创建联赛数据下载页面
 	 * @param leagues 联赛列表
+	 * @param filter 数据过滤器
+	 * @return 是否创建成功
 	 */
 	protected boolean createLeagueCenterTasks(List<League> leagues, Filter<League> filter)
 	{
@@ -266,7 +281,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			{
 				if(ToolUtil.isEmpty(matchItem.getMatchtime()))
 				{
-					logger.info("Match has no matchtime: " + matchItem);
+					logger.info("Match has no matchtime property: " + matchItem);
 					continue;
 				}
 				createMatchDataTask(matchItem, true, true, true);
@@ -274,19 +289,6 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			}
 		}
 		return size > 0;
-	}
-	
-	/**
-	 * 存储数据
-	 * @param records
-	 * @throws Exception
-	 */
-	public void saveTableRecords(TableRecords records) throws IOException
-	{
-		long st = System.currentTimeMillis();
-		soccerDataService.saveTableRecords(records);
-		long en = System.currentTimeMillis();
-		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
 	}
 	
 	/**
