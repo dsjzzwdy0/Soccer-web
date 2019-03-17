@@ -25,7 +25,6 @@ import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.DateFilter;
-import com.loris.soccer.zgzcw.base.ZgzcwBasePlugin;
 import com.loris.soccer.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
 
