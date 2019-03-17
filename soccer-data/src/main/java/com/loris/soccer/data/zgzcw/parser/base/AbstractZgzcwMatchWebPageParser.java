@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.zgzcw.parser.base;
+package com.loris.soccer.data.zgzcw.parser.base;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,7 +43,7 @@ public abstract class AbstractZgzcwMatchWebPageParser extends AbstractZgzcwWebPa
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.zgzcw.parser.base.AbstractZgzcwWebPageParser#accept(com.loris.client.model.WebPage)
+	 * @see com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser#accept(com.loris.client.model.WebPage)
 	 */
 	@Override
 	protected boolean accept(WebPage page) throws WebParserException

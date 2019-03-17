@@ -9,9 +9,9 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.zgzcw.util;
+package com.loris.soccer.data.zgzcw;
 
-import static com.loris.soccer.zgzcw.util.ZgzcwConstants.*;
+import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
 
 import java.util.Date;
 import java.util.HashMap;

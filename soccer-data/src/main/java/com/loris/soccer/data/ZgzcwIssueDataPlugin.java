@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.zgzcw;
+package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,8 +25,8 @@ import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.DateFilter;
-import com.loris.soccer.zgzcw.util.ZgzcwConstants;
-import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
+import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 
 import cn.hutool.core.thread.ThreadUtil;
 
