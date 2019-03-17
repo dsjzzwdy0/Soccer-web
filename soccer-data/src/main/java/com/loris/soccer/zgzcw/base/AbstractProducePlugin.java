@@ -145,8 +145,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	protected TableRecords executeWebPageTask(TaskPluginContext context, WebPage page) 
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
-		logger.info("Starting get the data from : " + page.getUrl());
-		if (StringUtils.isBlank(page.getContent()) && !webPagefetcher.download(page))
+		if (StringUtils.isBlank(page.getContent()) && !download(page))
 		{
 			logger.info("Error when HttpCommonExecutor execute: " + page.getUrl());
 			return null;
@@ -159,6 +158,25 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 			saveTableRecords(records);
 		}		
 		return records;
+	}
+	
+	/**
+	 * 数据下载，在下载之后将进行数据的存储
+	 * @param page 网页页面
+	 * @return 是否下载成功的标志
+	 * @throws IOException
+	 * @throws HostForbiddenException
+	 * @throws UrlFetchException
+	 */
+	protected boolean download(WebPage page) throws IOException, HostForbiddenException, UrlFetchException
+	{
+		logger.info("Starting get the data from : " + page.getUrl());
+		if(webPagefetcher.download(page))
+		{
+			pageService.save(page);
+			return true;
+		}
+		return false;
 	}
 	
 	/**

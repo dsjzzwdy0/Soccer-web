@@ -61,7 +61,7 @@ import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.service.OddsService;
-import com.loris.soccer.zgzcw.ZgzcwIssueProducePlugin;
+import com.loris.soccer.zgzcw.ZgzcwIssueDataPlugin;
 import com.loris.soccer.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.zgzcw.parser.LeagueWebPageParser;
@@ -100,8 +100,8 @@ public class App
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
-			testJcWebPage();
-			//testZgzcwIssueScheduler();
+			//testJcWebPage();
+			testZgzcwIssueScheduler();
 			
 			//testCenterPage();	
 			//testOddsOpPage();
@@ -127,7 +127,7 @@ public class App
 		{
 			try
 			{
-				context.close();
+				//context.close();
 			}
 			catch (Exception e)
 			{
@@ -154,7 +154,7 @@ public class App
 		scheduler.setMaxActiveTaskThread(3);
 		//scheduler.setName("即时任务下载器");
 		
-		ZgzcwIssueProducePlugin plugin = (ZgzcwIssueProducePlugin)context.getBean(ZgzcwIssueProducePlugin.class);
+		ZgzcwIssueDataPlugin plugin = (ZgzcwIssueDataPlugin)context.getBean(ZgzcwIssueDataPlugin.class);
 		//HttpCommonWebPageExecutor executor = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin");
 		
 		scheduler.addTaskPlugin(plugin);
@@ -461,7 +461,7 @@ public class App
 		info.setRandTimeSeed(200);
 		info.setType("zgzcw.downloader");
 		info.addPlugin("bean:httpCommonPlugin");
-		info.addPlugin(SchedulerInfo.PLUGIN_CLASS, ZgzcwIssueProducePlugin.class.getName());
+		info.addPlugin(SchedulerInfo.PLUGIN_CLASS, ZgzcwIssueDataPlugin.class.getName());
 		
 		Scheduler scheduler = SchedulerFactory.createTaskScheduler(info);
 		logger.info(scheduler.getName());
@@ -706,7 +706,7 @@ public class App
 	 */
 	public static void testAutowired() throws Exception
 	{
-		try(ZgzcwIssueProducePlugin plugin = context.getBean(ZgzcwIssueProducePlugin.class))
+		try(ZgzcwIssueDataPlugin plugin = context.getBean(ZgzcwIssueDataPlugin.class))
 		{		
 			plugin.initialize(null);
 		}
