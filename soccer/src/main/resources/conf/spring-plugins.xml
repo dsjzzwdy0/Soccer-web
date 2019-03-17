@@ -10,18 +10,7 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
-        
-    <bean id="httpCommonPlugin" class="com.loris.soccer.executor.HttpCommonWebPageExecutor">
-    	<constructor-arg ref="defaultSetting" />
-    	<property name="name" value="HttpCommonClient Plugin"></property>
-    </bean>
-    
-    <bean id="okoooHtmlUnitClient" class="com.loris.soccer.executor.HtmlUnitWebPageExecutor">
-    	<constructor-arg ref="defaultSetting" />
-    	<constructor-arg ref="okoooWebPage" />
-    	<property name="name" value="HttpUint Plugin"></property>
-    </bean>
-            
+                    
 	<bean id="settingFactory" class="com.loris.client.fetcher.setting.SettingFactory">
 		<property name="settings">
 			<map>
@@ -38,6 +27,12 @@
 		<property name="connectionTimeout" value="400000"></property>
 		<property name="browser" value="FIREFOX_60"></property>
 		<property name="interval" value="4500"></property>
+		<property name="headers">
+			<map>
+				<entry key="Accept" value="test"></entry>
+				<entry key="User-agent" value="Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-CN; rv:1.9.2.15) Gecko/20110303 Firefox/3.6.15"></entry>
+			</map>
+		</property>
 	</bean>
 	
 	<!-- IE网络客户端系统配置 -->

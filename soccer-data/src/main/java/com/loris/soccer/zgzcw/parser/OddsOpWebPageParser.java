@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.plugin.zgzcw.parser;
+package com.loris.soccer.zgzcw.parser;
 
 import java.util.Date;
 import org.jsoup.nodes.Document;
@@ -25,8 +25,8 @@ import com.loris.common.util.URLParser;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsOp;
-import com.loris.soccer.plugin.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
+import com.loris.soccer.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
+import com.loris.soccer.zgzcw.util.ZgzcwConstants;
 
 /**   
  * @ClassName:  League   

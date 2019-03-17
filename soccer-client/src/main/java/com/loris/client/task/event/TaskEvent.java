@@ -15,9 +15,6 @@ public class TaskEvent
 		Excute,
 		Executed,		
 		Error,
-		PostProcess,
-		PostProcessed,
-		PostError,
 		Removed,
 	}
 	

@@ -1,5 +1,7 @@
 /**  
- * All rights Reserved, Designed By www.loris.com
+kgp;g. .n'n'n''''gf
+
+ * ]s.sAll rights Reserved, Designed By www.loris.com
  * @Title:  WebFetcher.java   
  * @Package com.loris.net   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   

@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.plugin.zgzcw.base;
+package com.loris.soccer.zgzcw.base;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,14 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
+import com.loris.client.fetcher.WebFetcher;
 import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
-import com.loris.client.task.plugin.TaskPostProcessPlugin;
+import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
-import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.DateFilter;
 import com.loris.common.filter.Filter;
 import com.loris.common.model.TableRecords;
@@ -40,14 +40,13 @@ import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.base.BaseMatch;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageParser;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.impl.SoccerDataService;
+import com.loris.soccer.zgzcw.util.ZgzcwConstants;
+import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
+import com.loris.soccer.zgzcw.util.ZgzcwPageParser;
 
 /**
  * @ClassName: AbstractProducePlugin
@@ -57,11 +56,12 @@ import com.loris.soccer.service.impl.SoccerDataService;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugin implements TaskPostProcessPlugin, TaskProducePlugin
+public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugin implements TaskProducePlugin, TaskProcessPlugin
 {
 	private static Logger logger = Logger.getLogger(AbstractProducePlugin.class);
 
-	protected HttpCommonWebPageExecutor httpCommonExecutor;
+	/** 数据下载器 */
+	protected WebFetcher webPagefetcher;
 	
 	@Autowired
 	protected SoccerDataService soccerDataService;
@@ -77,7 +77,6 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	 */
 	public AbstractProducePlugin()
 	{
-		httpCommonExecutor = (HttpCommonWebPageExecutor)ApplicationContextHelper.getBean("httpCommonPlugin");
 	}
 
 	/**
@@ -98,6 +97,11 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 		{
 			return false;
 		}
+		WebPage page = (WebPage) task;
+		if(!ZgzcwConstants.SOURCE_ZGZCW.equals(page.getSource()))
+		{
+			return false;
+		}
 		return true;
 	}
 	
@@ -109,7 +113,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	 * @return 是否执行成功的标志
 	 */
 	@Override
-	public boolean postProcess(TaskPluginContext context, Task task) throws IOException, SQLException
+	public boolean execute(TaskPluginContext context, Task task) throws IOException, SQLException
 	{
 		if(!(task instanceof WebPage))
 		{
@@ -142,7 +146,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
 		logger.info("Starting get the data from : " + page.getUrl());
-		if (StringUtils.isBlank(page.getContent()) && !httpCommonExecutor.execute(context, page))
+		if (StringUtils.isBlank(page.getContent()) && !webPagefetcher.download(page))
 		{
 			logger.info("Error when HttpCommonExecutor execute: " + page.getUrl());
 			return null;

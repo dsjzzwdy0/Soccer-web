@@ -9,11 +9,12 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.plugin.zgzcw.parser;
+package com.loris.soccer.zgzcw.parser;
 
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -22,41 +23,76 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
-import com.loris.soccer.collection.OddsNumList;
+import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.model.OddsNum;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
+import com.loris.soccer.dict.HandicapDict;
+import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
+import com.loris.soccer.zgzcw.util.ZgzcwConstants;
 
-/**   
- * @ClassName:  League   
- * @Description: 解析进球数据  
+/**
+ * @ClassName: League
+ * @Description: 解析亚盘数据记录值
  * @author: 东方足彩
- * @date:   2019年1月28日 下午8:59:32   
- *     
- * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
- * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
+ * @date: 2019年1月28日 下午8:59:32
+ * 
+ * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
+ *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class OddsNumWebPageParser extends OddsYpWebPageParser
+public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 {
 	/**
 	 * Create a new instance of OddsYpWebPageParser
 	 */
-	public OddsNumWebPageParser()
+	public OddsYpWebPageParser()
 	{
-		super(ZgzcwConstants.PAGE_ODDS_NUM);
+		super(ZgzcwConstants.PAGE_ODDS_YP);
+	}
+
+	/**
+	 * Create a new instance of OddsYpWebPageParser
+	 */
+	public OddsYpWebPageParser(String acceptType)
+	{
+		super(acceptType);
 	}
 	
 	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage, 
-	 * 		org.jsoup.nodes.Document, com.loris.common.model.TableRecords)
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.soccer.zgzcw.parser.base.AbstractZgzcwWebPageParser#accept(com.loris.client.model.WebPage)
+	 */
+	@Override
+	protected boolean accept(WebPage page) throws WebParserException
+	{
+		if (!super.accept(page))
+		{
+			return false;
+		}
+
+		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
+		if (StringUtils.isEmpty(mathTime) || DateUtil.tryToParseDate(mathTime) == null)
+		{
+			throw new WebParserException("Error occured, the Page hasn't set the 'matchtime' param.");
+		}
+
+		return true;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage,
+	 *      org.jsoup.nodes.Document, com.loris.common.model.TableRecords)
 	 */
 	@Override
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
 		Elements elements = document.select(".main #data-body table tbody tr");
-		if (elements == null || elements.size() <= 0)
+		if (elements == null || elements.size() == 0)
 		{
+			System.out.println(page.getUrl());
 			throw new WebParserException("The document is not a validate Soccer Match yp page.");
 		}
 
@@ -64,23 +100,23 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(mathTime);
 
-		OddsNumList nums = new OddsNumList();
+		OddsYpList yps = new OddsYpList();
 		for (Element element2 : elements)
 		{
-			parseNum(element2, mid, time, nums);
+			parseYp(element2, mid, time, yps);
 		}
-		results.put(SoccerConstants.SOCCER_DATA_NUM_LIST, nums);
+		results.put(SoccerConstants.SOCCER_DATA_YP_LIST, yps);
 		return results;
 	}
-	
+
 	/**
-	 * 解析大小球对比数据
-	 * @param element Dom元素
+	 * 解析亚盘数据
+	 * @param element 亚盘数据元素
 	 * @param mid 比赛编号
 	 * @param matchTime 比赛时间
-	 * @param nums 大小球列表
+	 * @param yps 亚盘数据列表
 	 */
-	protected void parseNum(Element element, String mid, Date matchTime, List<OddsNum> nums)
+	protected void parseYp(Element element, String mid, Date matchTime, List<OddsYp> yps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
@@ -89,8 +125,8 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			return;
 		}
 
-		OddsNum firstOdds = new OddsNum(mid);
-		OddsNum odds = new OddsNum(mid);
+		OddsYp firstOdds = new OddsYp(mid);
+		OddsYp odds = new OddsYp(mid);
 
 		firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 		odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
@@ -118,7 +154,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		firstOdds.setCorpname(name);
 		firstOdds.setOpentime(firstTime.getTime());		
 		firstOdds.setWinodds(firstwinyp);
-		firstOdds.setGoalnum(getGoalNum(firsthandicap));
+		firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
 		firstOdds.setLoseodds(firstloseyp);
 		firstOdds.setWinprob(homeprob);
 		firstOdds.setLoseprob(guestprob);
@@ -130,7 +166,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		odds.setCorpname(name);
 		odds.setOpentime(getOpenTime(matchTime, updatetime));
 		odds.setWinodds(lastwinyp);
-		odds.setGoalnum(getGoalNum(lasthandicap));
+		odds.setHandicap(HandicapDict.getHandicapValue(lasthandicap));
 		odds.setLoseodds(lastloseyp);
 		odds.setWinprob(homeprob);
 		odds.setLoseprob(guestprob);
@@ -138,19 +174,46 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		odds.setLosekelly(guestkelly);
 		odds.setLossratio(lossratio);
 
-		nums.add(firstOdds);
-		nums.add(odds);
-	}
-	
-	/**
-	 * 解析进球数
-	 * @param value 进球数
-	 * @return 球数
-	 */
-	private String getGoalNum(String value)
-	{
-		value = value.replace("球", "");
-		return value;
+		yps.add(firstOdds);
+		yps.add(odds);
 	}
 
+	/**
+	 * 解析赔率等值的数据
+	 * 
+	 * @param element
+	 * @return
+	 */
+	protected float parseDataAttr(Element element)
+	{
+		return NumberUtil.parseFloat(element.attr(dataAttr));
+	}
+
+	/**
+	 * 解析时间，其格式为: 开赔时间：赛前61时27分
+	 * 
+	 * @param time
+	 *            时间值
+	 * @return 整型时间
+	 */
+	protected long getOpenTime(Date matchTime, String time)
+	{
+		Integer[] ts = NumberUtil.parseAllIntegerFromString(time);
+		long t = 0;
+		if (ts == null)
+		{
+			t = 0;
+		}
+		else if (ts.length == 1)
+		{
+			t = ts[0] * 60;
+		}
+		else
+		{
+			t = ts[0] * 3600 + ts[1] * 60;
+		}
+		t *= 1000;
+		Date d = DateUtil.add(matchTime, -t);
+		return d.getTime();
+	}
 }

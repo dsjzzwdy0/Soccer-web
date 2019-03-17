@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.plugin.zgzcw;
+package com.loris.soccer.zgzcw;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,12 +18,12 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.client.task.plugin.TaskPostProcessPlugin;
+import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.filter.DateFilter;
-import com.loris.soccer.plugin.zgzcw.base.AbstractProducePlugin;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
+import com.loris.soccer.zgzcw.base.AbstractProducePlugin;
+import com.loris.soccer.zgzcw.util.ZgzcwConstants;
+import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
 
 import cn.hutool.core.thread.ThreadUtil;
 
@@ -37,7 +37,7 @@ import cn.hutool.core.thread.ThreadUtil;
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 @Component
-public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements TaskPostProcessPlugin, TaskProducePlugin
+public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements TaskProducePlugin, TaskProcessPlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueProducePlugin.class);
 
@@ -46,6 +46,7 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements Ta
 
 	/**
 	 * 初始化任务产生器
+	 * 
 	 * @param context 插件任务运行环境
 	 * @throws IOException 在任务产生过程中出现异常
 	 */
@@ -57,6 +58,7 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements Ta
 
 	/**
 	 * 产生任务程序
+	 * 
 	 * @param context 插件运行环境
 	 */
 	@Override
@@ -69,13 +71,13 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements Ta
 			{
 				logger.info("No task produce from BDMainPage.");
 			}
-			
+
 			ThreadUtil.sleep(2000);
 			WebPage jcMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC);
 			if (!createTaskFromWebPage(context, jcMainPage, dateFiter))
 			{
 				logger.info("No task produce from JcMainPage.");
-			}			
+			}
 		}
 		catch (Exception e)
 		{
@@ -85,7 +87,8 @@ public class ZgzcwIssueProducePlugin extends AbstractProducePlugin implements Ta
 	}
 
 	/**
-	 * 设置日期过滤器 
+	 * 设置日期过滤器
+	 * 
 	 * @param dateFiter 日期过滤器
 	 */
 	public void setDateFiter(DateFilter dateFiter)

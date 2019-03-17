@@ -21,14 +21,12 @@ import com.loris.client.exception.NoProcessPluginException;
 import com.loris.client.model.SchedulerStatus;
 import com.loris.client.task.Task;
 import com.loris.client.task.TaskExecutor;
-import com.loris.client.task.TaskPostProcessor;
 import com.loris.client.task.TaskProducer;
 import com.loris.client.task.TaskVector;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEventListener;
 import com.loris.client.task.plugin.TaskPlugin;
-import com.loris.client.task.plugin.TaskPostProcessPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
@@ -79,9 +77,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	/** 任务处理工具类 */
 	TaskExecutor taskExecutor;
 
-	/** 任务后处理工具 */
-	TaskPostProcessor taskPostProcessor;
-
 	/** 运行中的线程 */
 	List<Task> runningTaskThreads = new ArrayList<>();
 	
@@ -104,8 +99,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		taskProducer.addTaskEventListener(this);
 		taskExecutor = new TaskExecutor(this);
 		taskExecutor.addTaskEventListener(this);
-		taskPostProcessor = new TaskPostProcessor(this);
-		taskPostProcessor.addTaskEventListener(this);
 		initialized = false;
 	}
 	
@@ -124,7 +117,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		{
 			e.printStackTrace();
 		}
-		taskPostProcessor.initialize(this);
 		taskExecutor.initialize(this);
 		
 		initialized = true;
@@ -202,22 +194,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	}
 
 	/**
-	 * 启动任务后处理线程
-	 */
-	protected void startTaskPostProcessThread(Task task)
-	{
-		try
-		{
-			taskPostProcessor.execute(task);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			logger.info(e.getMessage());
-		}
-	}
-
-	/**
 	 * 任务处理监听器 (non-Javadoc)
 	 * 
 	 * @see com.loris.client.task.event.TaskEventListener#notify(com.loris.client.task.event.TaskEvent)
@@ -241,10 +217,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		{
 			removeRunningTask(task);
 			logger.info("Finished to excute " + task.getName());
-			if (taskPostProcessor != null)
-			{
-				startTaskPostProcessThread(task);
-			}
 		}
 		else if (taskType == TaskEventType.Error)
 		{
@@ -268,14 +240,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 				logger.info("Error occured '" + throwable.getMessage() + "' when excuting " + task.getName() + ", push back to TaskQueue.");				
 				taskQueue.pushBack(task);
 			}					
-		}
-		else if(taskType == TaskEventType.PostProcessed)
-		{
-			logger.info("Finished to post excute " + task.getName());
-		}
-		else if(taskType == TaskEventType.PostError)
-		{
-			logger.info("Error occured when post excute " + task.getName());
 		}
 	}
 
@@ -393,8 +357,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		idleThreadInfo = null;
 		taskQueue.clear();
 		taskQueue = null;
-		taskPostProcessor.close();
-		taskPostProcessor = null;
 		taskExecutor.close();
 		taskExecutor = null;
 		taskProducer.close();
@@ -449,10 +411,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		{
 			taskExecutor.addTaskProcessPlugin((TaskProcessPlugin)plugin);
 		}
-		if(plugin instanceof TaskPostProcessPlugin)
-		{
-			taskPostProcessor.addTaskPostProcessPlugin((TaskPostProcessPlugin)plugin);
-		}
 	}
 	
 	/**********************************/
@@ -484,18 +442,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		taskProcessor.addTaskEventListener(this);
 		this.taskExecutor = taskProcessor;
 	}
-
-	public TaskPostProcessor getTaskPostProcessor()
-	{
-		return taskPostProcessor;
-	}
-
-	public void setTaskPostProcessor(TaskPostProcessor taskPostProcessor)
-	{
-		taskPostProcessor.addTaskEventListener(this);
-		this.taskPostProcessor = taskPostProcessor;
-	}
-
 	public int total()
 	{
 		return taskQueue.total();

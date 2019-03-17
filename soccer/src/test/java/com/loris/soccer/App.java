@@ -37,7 +37,6 @@ import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
-import com.loris.client.task.plugin.BasicTaskPostProcessPlugin;
 import com.loris.client.task.plugin.BasicTaskProcessPlugin;
 import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
@@ -53,7 +52,6 @@ import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.executor.HttpCommonWebPageExecutor;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
@@ -62,20 +60,20 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
-import com.loris.soccer.plugin.zgzcw.ZgzcwIssueProducePlugin;
-import com.loris.soccer.plugin.zgzcw.parser.CenterPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.CupWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.LeagueWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.LotteryBdScoreWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.LotteryBdWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.LotteryJcScoreWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.LotteryJcWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.OddsNumWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.OddsOpWebPageParser;
-import com.loris.soccer.plugin.zgzcw.parser.OddsYpWebPageParser;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwConstants;
-import com.loris.soccer.plugin.zgzcw.util.ZgzcwPageCreator;
 import com.loris.soccer.service.OddsService;
+import com.loris.soccer.zgzcw.ZgzcwIssueProducePlugin;
+import com.loris.soccer.zgzcw.parser.CenterPageParser;
+import com.loris.soccer.zgzcw.parser.CupWebPageParser;
+import com.loris.soccer.zgzcw.parser.LeagueWebPageParser;
+import com.loris.soccer.zgzcw.parser.LotteryBdScoreWebPageParser;
+import com.loris.soccer.zgzcw.parser.LotteryBdWebPageParser;
+import com.loris.soccer.zgzcw.parser.LotteryJcScoreWebPageParser;
+import com.loris.soccer.zgzcw.parser.LotteryJcWebPageParser;
+import com.loris.soccer.zgzcw.parser.OddsNumWebPageParser;
+import com.loris.soccer.zgzcw.parser.OddsOpWebPageParser;
+import com.loris.soccer.zgzcw.parser.OddsYpWebPageParser;
+import com.loris.soccer.zgzcw.util.ZgzcwConstants;
+import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
 
 
 /**
@@ -102,8 +100,8 @@ public class App
 			//testZgzcwNumWebPage();
 			//testZgzcwLeagueWebPage();
 			//testBdWebPage();
-			//testJcWebPage();
-			testZgzcwIssueScheduler();
+			testJcWebPage();
+			//testZgzcwIssueScheduler();
 			
 			//testCenterPage();	
 			//testOddsOpPage();
@@ -129,7 +127,7 @@ public class App
 		{
 			try
 			{
-				//context.close();
+				context.close();
 			}
 			catch (Exception e)
 			{
@@ -157,10 +155,10 @@ public class App
 		//scheduler.setName("即时任务下载器");
 		
 		ZgzcwIssueProducePlugin plugin = (ZgzcwIssueProducePlugin)context.getBean(ZgzcwIssueProducePlugin.class);
-		HttpCommonWebPageExecutor executor = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin");
+		//HttpCommonWebPageExecutor executor = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin");
 		
 		scheduler.addTaskPlugin(plugin);
-		scheduler.addTaskPlugin(executor);
+		//scheduler.addTaskPlugin(executor);
 
 		SchedulerFactory.startTaskScheduler(scheduler);
 	}
@@ -727,7 +725,6 @@ public class App
 
 		scheduler.addTaskPlugin(new BasicWebPageTaskProducePlugin());
 		scheduler.addTaskPlugin(new BasicTaskProcessPlugin());
-		scheduler.addTaskPlugin(new BasicTaskPostProcessPlugin());
 
 		SchedulerFactory.startTaskScheduler(scheduler);
 		
@@ -818,15 +815,12 @@ public class App
 	
 	private static boolean downloadWebPage(WebPage page) throws Exception
 	{
-		try(HttpCommonWebPageExecutor client = (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin"))
+		FetcherSetting defaulSetting = (FetcherSetting)context.getBean("defaultSetting");
+		try(WebFetcher client = new HttpCommonFetcher(defaulSetting))
 		{
 			long st = System.currentTimeMillis();
-			if(!client.isInitialized())
-			{
-				client.initialize(null);
-			}
 			
-			if(!client.execute(null, page))
+			if(!client.download(page))
 			{
 				logger.info("Error when downloading: " + page.getUrl());
 				return false;
