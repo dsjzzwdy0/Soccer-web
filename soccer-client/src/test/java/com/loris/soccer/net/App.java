@@ -16,8 +16,6 @@ import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.TaskScheduler;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
-import com.loris.client.task.plugin.BasicTaskProcessPlugin;
-import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 
@@ -63,8 +61,8 @@ public class App
 		TaskScheduler scheduler = new TaskScheduler();
 		scheduler.setMaxActiveTaskThread(1);
 
-		scheduler.getTaskProducer().addTaskProducePlugin(new BasicWebPageTaskProducePlugin());
-		scheduler.getTaskProcessor().addTaskProcessPlugin(new BasicTaskProcessPlugin());
+		//scheduler.getTaskProducer().addTaskProducePlugin(new BasicWebPageTaskPlugin());
+		//scheduler.getTaskProcessor().addTaskProcessPlugin(new BasicTaskProcessPlugin());
 		//scheduler.getTaskPostProcessor().addTaskPostProcessPlugin(new BasicTaskPostProcessPlugin());
 
 		Thread thread = new Thread(scheduler);

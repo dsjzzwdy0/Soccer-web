@@ -28,7 +28,7 @@ import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
+import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.filter.DateFilter;
@@ -56,9 +56,9 @@ import com.loris.soccer.zgzcw.util.ZgzcwPageParser;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugin implements TaskProducePlugin, TaskProcessPlugin
+public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements TaskProducePlugin, TaskProcessPlugin
 {
-	private static Logger logger = Logger.getLogger(AbstractProducePlugin.class);
+	private static Logger logger = Logger.getLogger(ZgzcwBasePlugin.class);
 
 	/** 数据下载器 */
 	protected WebFetcher webPagefetcher;
@@ -75,7 +75,7 @@ public abstract class AbstractProducePlugin extends BasicWebPageTaskProducePlugi
 	/**
 	 * Create a new instance of AbstractProducePlugin.
 	 */
-	public AbstractProducePlugin()
+	public ZgzcwBasePlugin()
 	{
 	}
 

@@ -25,7 +25,7 @@ import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.DateFilter;
-import com.loris.soccer.zgzcw.base.AbstractProducePlugin;
+import com.loris.soccer.zgzcw.base.ZgzcwBasePlugin;
 import com.loris.soccer.zgzcw.util.ZgzcwConstants;
 import com.loris.soccer.zgzcw.util.ZgzcwPageCreator;
 
@@ -41,7 +41,7 @@ import cn.hutool.core.thread.ThreadUtil;
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
 @Component
-public class ZgzcwIssueDataPlugin extends AbstractProducePlugin implements TaskProducePlugin, TaskProcessPlugin
+public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProducePlugin, TaskProcessPlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueDataPlugin.class);
 

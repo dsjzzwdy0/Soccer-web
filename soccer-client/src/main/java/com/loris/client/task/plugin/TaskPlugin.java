@@ -13,8 +13,11 @@ package com.loris.client.task.plugin;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
+
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.client.task.event.TaskEventListener;
 
 /**   
  * @ClassName:  TaskPlugin  
@@ -27,6 +30,23 @@ import com.loris.client.task.context.TaskPluginContext;
  */
 public interface TaskPlugin extends Closeable
 {
+	/**
+	 * 清进任务监听程序
+	 */
+	void clearTaskEventListners();
+	
+	/**
+	 * 删除任务监听处理
+	 * @param listener
+	 */
+	void removeTaskEventListner(TaskEventListener listener);
+	
+	/**
+	 * 加入任务处理的监听器
+	 * @param listeners
+	 */
+	void addTaskEventListeners(List<TaskEventListener> listeners);
+	
 	/**
 	 * 获得插件的名称
 	 * @return 插件的名称

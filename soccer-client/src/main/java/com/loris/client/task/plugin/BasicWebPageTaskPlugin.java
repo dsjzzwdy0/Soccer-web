@@ -11,14 +11,10 @@
  */
 package com.loris.client.task.plugin;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.loris.client.model.WebPage;
 import com.loris.client.task.Task;
-import com.loris.client.task.basic.BasicTask;
-import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEvent;
 import com.loris.client.task.event.TaskEvent.TaskEventType;
 import com.loris.client.task.event.TaskEventListener;
@@ -32,7 +28,7 @@ import com.loris.client.task.event.TaskEventListener;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class BasicWebPageTaskProducePlugin extends BasicTaskPlugin implements TaskProducePlugin
+public class BasicWebPageTaskPlugin extends BasicTaskPlugin implements TaskPlugin
 {
 	/**
 	 *  (non-Javadoc)
@@ -62,24 +58,6 @@ public class BasicWebPageTaskProducePlugin extends BasicTaskPlugin implements Ta
 	public void clearTaskEventListners()
 	{
 		listeners.clear();
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.task.plugin.TaskProducePlugin#produce()
-	 */
-	@Override
-	public void produce(TaskPluginContext context) throws IOException, SQLException
-	{
-		//System.out.println("产生新的任务");
-		for(int i = 0; i < 30; i ++)
-		{
-			Task task = new BasicTask();
-			task.setName("Task[" + i + "]");
-			task.setPriority((i % 7));
-			
-			notifyTaskEvent(new TaskEvent(task, TaskEventType.Created));
-		}
 	}
 
 	/**

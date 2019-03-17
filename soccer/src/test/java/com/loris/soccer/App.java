@@ -37,8 +37,7 @@ import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
-import com.loris.client.task.plugin.BasicTaskProcessPlugin;
-import com.loris.client.task.plugin.BasicWebPageTaskProducePlugin;
+import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
@@ -723,8 +722,7 @@ public class App
 		scheduler.setMaxActiveTaskThread(1);
 		//scheduler.setName("即时任务下载器");
 
-		scheduler.addTaskPlugin(new BasicWebPageTaskProducePlugin());
-		scheduler.addTaskPlugin(new BasicTaskProcessPlugin());
+		scheduler.addTaskPlugin(new BasicWebPageTaskPlugin());
 
 		SchedulerFactory.startTaskScheduler(scheduler);
 		

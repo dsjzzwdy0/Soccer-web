@@ -12,6 +12,7 @@
 package com.loris.client.task.plugin;
 
 import java.io.IOException;
+
 import com.loris.client.task.Task;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.event.TaskEventProducer;
@@ -25,7 +26,7 @@ import com.loris.client.task.event.TaskEventProducer;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
+public abstract class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 {
 	/** 插件的名称 */
 	protected String name;
@@ -58,7 +59,7 @@ public class BasicTaskPlugin extends TaskEventProducer implements TaskPlugin
 	@Override
 	public boolean isFit(Task task)
 	{
-		return true;
+		return false;
 	}
 	
 	/**
