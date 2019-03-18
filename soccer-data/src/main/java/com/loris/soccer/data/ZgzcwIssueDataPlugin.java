@@ -49,6 +49,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	/** 日期过滤器 */
 	private DateFilter dateFiter;
 	
+	/** 间隔时间 */
 	protected long interval = 2000;
 	
 	/**
