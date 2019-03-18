@@ -19,7 +19,7 @@ import com.loris.client.task.event.TaskEventProducer;
 
 /**   
  * @ClassName:  BasicTaskPlugin  
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 插件数据基础类  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -34,7 +34,8 @@ public abstract class BasicTaskPlugin extends TaskEventProducer implements TaskP
 	/** 是否已经初始化的标志 */
 	private boolean initialized = false;
 
-	/* (non-Javadoc)
+	/**
+	 *  (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskPlugin#getName()
 	 */
 	@Override
@@ -43,7 +44,8 @@ public abstract class BasicTaskPlugin extends TaskEventProducer implements TaskP
 		return name;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 *  (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskPlugin#setName(java.lang.String)
 	 */
 	@Override

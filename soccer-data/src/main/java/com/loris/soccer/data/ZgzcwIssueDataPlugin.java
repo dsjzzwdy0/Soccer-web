@@ -13,6 +13,8 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -46,6 +48,8 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 
 	/** 日期过滤器 */
 	private DateFilter dateFiter;
+	
+	protected long interval = 2000;
 	
 	/**
 	 * Create a new instance of ZgzcwIssueProducePlugin
@@ -84,25 +88,27 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
+
+		List<WebPage> initPages = new ArrayList<>();
+		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD));
+		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC));
+		
 		try
 		{
-			WebPage bdMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD);
-			if (!createTaskFromWebPage(context, bdMainPage, dateFiter))
+			for (WebPage webPage : initPages)
 			{
-				logger.info("No task produce from BDMainPage.");
-			}
+				if (!createTaskFromWebPage(context, webPage, dateFiter))
+				{
+					logger.warn("No task produce from WebPage: " + webPage.getName());
+				}
 
-			ThreadUtil.sleep(2000);
-			WebPage jcMainPage = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC);
-			if (!createTaskFromWebPage(context, jcMainPage, dateFiter))
-			{
-				logger.info("No task produce from JcMainPage.");
+				ThreadUtil.sleep(interval);
 			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			logger.info(e.getMessage());
+			//e.printStackTrace();
+			logger.warn("Warn: produce task list error info > " + e.getMessage());
 		}
 	}
 
@@ -114,5 +120,14 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	public void setDateFiter(DateFilter dateFiter)
 	{
 		this.dateFiter = dateFiter;
+	}
+
+	/**
+	 * 设置初始化时线程处理初始化任务需要等待的时间
+	 * @param interval
+	 */
+	public void setInterval(long interval)
+	{
+		this.interval = interval;
 	}
 }

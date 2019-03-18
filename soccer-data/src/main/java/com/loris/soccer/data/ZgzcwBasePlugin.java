@@ -147,7 +147,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		if (StringUtils.isBlank(page.getContent()) && !download(page))
 		{
-			logger.info("Error when HttpCommonExecutor execute: " + page.getUrl());
+			logger.warn("Error when HttpCommonExecutor execute: " + page.getUrl());
 			return null;
 		}
 		
@@ -269,7 +269,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		if(matchItems == null || matchItems.size() == 0)
 		{
-			logger.info("There are no MatchItems in the match item list.");
+			logger.warn("There are no MatchItems in the match item list.");
 			return false;
 		}
 		
