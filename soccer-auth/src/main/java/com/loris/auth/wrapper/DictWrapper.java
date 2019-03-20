@@ -14,9 +14,9 @@ import com.loris.common.web.wrapper.BaseWrapper;
  * @author fengshuonan
  * @date 2017年4月25日 18:10:31
  */
-public class DictWarpper extends BaseWrapper {
+public class DictWrapper extends BaseWrapper {
 
-    public DictWarpper(Object list) {
+    public DictWrapper(Object list) {
         super(list);
     }
 

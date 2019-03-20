@@ -28,6 +28,7 @@ public interface SoccerConstants
 	/** 数据SoccerData TableRecords关键字定义 */
 	final static public String SOCCER_DATA_LEAGUE = "league";
 	final static public String SOCCER_DATA_LEAGUE_LIST = "leagues";
+	final static public String SOCCER_DATA_LEAGUE_NAME_LIST = "leaguenames";
 	final static public String SOCCER_DATA_MATCH = "match";
 	final static public String SOCCER_DATA_MATCH_LIST = "matchs";
 	final static public String SOCCER_DATA_MATCH_BD_LIST = "matchbds";
