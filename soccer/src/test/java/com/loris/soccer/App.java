@@ -41,6 +41,7 @@ import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
+import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
@@ -533,10 +534,15 @@ public class App
 		logger.info("Match Jc data list size is " + matchJcs.size());
 		
 		MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
-		for (Match match : matchList)
-		{
-			logger.info(match.getLid() + ", " + match.getMid());
-		}	
+		if(matchList != null && matchList.size() > 0)
+		{		
+			List<String> leagues = ArraysUtil.getObjectFieldValue(matchList, Match.class, SoccerConstants.NAME_FIELD_LID);
+			for (String string : leagues)
+			{
+				logger.info(string);
+			}
+		}
+		
 		saveTableRecords(records);
 	}
 

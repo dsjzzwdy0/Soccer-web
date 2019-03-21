@@ -34,16 +34,19 @@ import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.filter.DateFilter;
 import com.loris.common.filter.Filter;
 import com.loris.common.model.TableRecords;
+import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
 import com.loris.soccer.model.League;
+import com.loris.soccer.model.Match;
 import com.loris.soccer.model.base.BaseMatch;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.impl.SoccerDataService;
@@ -71,6 +74,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	@Autowired
 	protected WebPageService pageService;
+	
+	/** 是否更新联赛中心页面 */
+	protected boolean updateLeagueCurrentRounds = false;
 	
 	/**
 	 * Create a new instance of AbstractProducePlugin.
@@ -227,6 +233,37 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		return size > 0;
 	}
+	
+	/**
+	 * 创建联赛下载页面
+	 * @param leagues
+	 * @param filter
+	 * @return
+	 */
+	protected boolean createLeagueCenterTasksFromNames(List<String> leagues, Filter<League> filter)
+	{
+		if(leagues != null && leagues.size() > 0)
+		{
+			
+		}
+		return false;
+	}
+	
+	/**
+	 * 创建联赛下载页面
+	 * @param leagues
+	 * @param filter
+	 * @return
+	 */
+	protected boolean createLeagueCenterTasksFromMatchs(List<Match> matchList, Filter<League> filter)
+	{
+		if(matchList != null && matchList.size() > 0)
+		{
+			List<String> leagues = ArraysUtil.getObjectFieldValue(matchList, Match.class, SoccerConstants.NAME_FIELD_LID);
+			return createLeagueCenterTasksFromNames(leagues, null);
+		}
+		return false;
+	}
 
 	/**
 	 * 建立比赛的数据下载任务
@@ -334,13 +371,32 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		switch (page.getType())
 		{
 		case ZgzcwConstants.PAGE_LOTTERY_BD:
+			if(updateLeagueCurrentRounds)
+			{
+				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+				createLeagueCenterTasksFromMatchs(matchList, null);
+			}
 			return createMatchTasks((MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), (DateFilter)filter);
 		case ZgzcwConstants.PAGE_LOTTERY_JC:
+			if(updateLeagueCurrentRounds)
+			{
+				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+				createLeagueCenterTasksFromMatchs(matchList, null);
+			}
 			return createMatchTasks((MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), (DateFilter) filter);
 		case ZgzcwConstants.PAGE_CENTER:
 			return createLeagueCenterTasks((LeagueList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST), (Filter<League>)filter);
 		default:
 			return false;
 		}
+	}
+
+	/**
+	 * 更新联赛当前比赛轮次的比赛数据
+	 * @param updateLeagueCurrentRounds
+	 */
+	public void setUpdateLeagueCurrentRounds(boolean updateLeagueCurrentRounds)
+	{
+		this.updateLeagueCurrentRounds = updateLeagueCurrentRounds;
 	}
 }
