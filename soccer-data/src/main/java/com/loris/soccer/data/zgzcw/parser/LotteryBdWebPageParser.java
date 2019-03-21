@@ -18,16 +18,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.loris.client.exception.WebParserException;
-import com.loris.client.model.WebPage;
-import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
-import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryMatchWebPageParser;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
@@ -42,36 +39,14 @@ import com.loris.soccer.model.base.IssueMatch;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
+public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 {		
 	/**
 	 * Create a new instance of LotteryWebPageParser.
 	 */
 	public LotteryBdWebPageParser()
 	{
-		super(ZgzcwConstants.PAGE_LOTTERY_BD);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage, 
-	 * 		org.jsoup.nodes.Document, com.loris.common.model.TableRecords)
-	 */
-	@Override
-	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
-	{
-		String issue = page.getParams().get(SoccerConstants.NAME_FIELD_ISSUE);
-		if(StringUtils.isEmpty(issue))
-		{
-			issue = parseIssueElement(document);
-		}
-		MatchItemList matchBds = new MatchItemList();
-		MatchList baseMatchs = new MatchList();		
-		parseBdMatchList(document, issue, baseMatchs, matchBds);
-		
-		if(matchBds.size() > 0)	results.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, matchBds);
-		if(baseMatchs.size() >0) results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, baseMatchs);
-		return results;
+		super(ZgzcwConstants.PAGE_LOTTERY_BD, SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
 	}
 	
 	/**
@@ -80,7 +55,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryWebPageParser
 	 * @param document
 	 * @param matchBds
 	 */
-	protected void parseBdMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchBds)
+	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchBds)
 	{
 		Element element = document.selectFirst("#tw #dcc");
 		Elements childElements = element.children();

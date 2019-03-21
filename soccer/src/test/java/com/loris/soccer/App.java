@@ -98,9 +98,9 @@ public class App
 			// testZgzcwNumWebPage();
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
-			// testJcWebPage();
-			testZgzcwIssueScheduler();
-
+			testJcWebPage();
+			
+			//testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -519,17 +519,24 @@ public class App
 			logger.info("Parser error.");
 			return;
 		}
-
-		MatchItemList matchJcs = (MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
-		if (matchJcs == null)
-		{
-			logger.info("Error: no Match JC data.");
-		}
+		
 		/*
 		 * int i = 1; for (MatchItem match : matchJcs) { logger.info(i +++ ": "
 		 * + match); }
 		 */
+		MatchItemList matchJcs = (MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		if (matchJcs == null)
+		{
+			logger.info("Error: no Match JC data.");
+			return;
+		}
 		logger.info("Match Jc data list size is " + matchJcs.size());
+		
+		MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		for (Match match : matchList)
+		{
+			logger.info(match.getLid() + ", " + match.getMid());
+		}	
 		saveTableRecords(records);
 	}
 

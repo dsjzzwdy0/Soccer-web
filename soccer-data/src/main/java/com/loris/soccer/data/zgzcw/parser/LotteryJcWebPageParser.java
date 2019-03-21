@@ -18,14 +18,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.loris.client.exception.WebParserException;
-import com.loris.client.model.WebPage;
-import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
+import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
-import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryMatchWebPageParser;
+import com.loris.soccer.model.League;
+import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchJc;
 
 /**
@@ -37,63 +38,44 @@ import com.loris.soccer.model.MatchJc;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
+public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 {
 	/**
 	 * Create a new instance of LotteryJcWebPageParser.
 	 */
 	public LotteryJcWebPageParser()
 	{
-		super(ZgzcwConstants.PAGE_LOTTERY_JC);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.loris.client.parser.impl.AbstractWebPageParser#parse(com.loris.client.model.WebPage,
-	 *      org.jsoup.nodes.Document, com.loris.common.model.TableRecords)
-	 */
-	@Override
-	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
-	{
-		String issue = page.getParams().get(SoccerConstants.NAME_FIELD_ISSUE);
-		if (StringUtils.isEmpty(issue))
-		{
-			issue = parseIssueElement(document);
-		}
-
-		MatchItemList matchJcs = new MatchItemList();
-		parseJcMatchList(document, issue, matchJcs);
-
-		results.put(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST, matchJcs);
-
-		return results;
+		super(ZgzcwConstants.PAGE_LOTTERY_JC, SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
 	}
 
 	/**
 	 * 解析竞彩比赛数据列表
 	 * 
-	 * @param document
-	 *            文档
-	 * @param issue
-	 *            期号
-	 * @param matchJcs
-	 *            数据表
+	 * @param document 文档
+	 * @param issue 期号
+	 * @param matchJcs 数据表
 	 */
-	protected void parseJcMatchList(Document document, String issue, MatchItemList matchJcs)
+	@Override
+	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchJcs)
 	{
 		Elements elements = document.select(".tz-wap .tz-body table tbody tr");
 		for (Element element : elements)
 		{
 			MatchJc match = new MatchJc();
+			Match baseMatch = new Match();
+			
 			String t = element.attr("t");
 			Date closeTime = DateUtil.tryToParseDate(t);
 
 			match.setClosetime(closeTime);
 			match.setIssue(issue);
-			parseJcMatch(element, match);
+			parseMatchInfo(element, baseMatch, match);
 			
 			matchJcs.add(match);
+			if(StringUtils.isNotBlank(match.getMid()) && !"0".equals(match.getMid()))
+			{
+				baseMatchs.add(baseMatch);
+			}
 		}
 	}
 
@@ -103,7 +85,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 	 * @param match
 	 * @param element
 	 */
-	protected void parseJcMatch(Element el, MatchJc match)
+	protected void parseMatchInfo(Element el, Match baseMatch, MatchJc match)
 	{
 		Elements elements = el.select("td");
 		for (Element element : elements)
@@ -115,6 +97,21 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 			}
 			else if (element.hasClass("wh-2")) // 联赛
 			{
+				Element el0 = element.child(0);
+				if("a".equalsIgnoreCase(el0.nodeName()))
+				{
+					String lid = NumberUtil.parseLastIntegerString(el0.attr("href"));
+					baseMatch.setLid(lid);
+				}
+				
+				if(StringUtils.isBlank(baseMatch.getLid()))
+				{
+					League league = getLeague(el0.text().trim());
+					if(league != null)
+					{
+						baseMatch.setLid(league.getLid());
+					}
+				}
 			}
 			else if (element.hasClass("wh-3")) // 比赛时间和截止时间
 			{
@@ -128,21 +125,21 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 						if(matchTime != null)
 						{
 							match.setMatchtime(matchTime);
+							baseMatch.setMatchtime(matchTime);
 						}
 					}
 				}
 			}
 			else if (element.hasClass("wh-4")) // 主队信息与排名
 			{
-
+				baseMatch.setHomeid(parseTeamId(element));
 			}
 			else if (element.hasClass("wh-5")) // 比分
 			{
-
 			}
 			else if (element.hasClass("wh-6")) // 客队信息与排名
 			{
-
+				baseMatch.setClientid(parseTeamId(element));	
 			}
 			else if (element.hasClass("wh-8")) // 赔率与让球赔率
 			{
@@ -154,6 +151,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryWebPageParser
 			{
 				String mid = element.attr("newPlayid");
 				match.setMid(mid); // 比赛的ID编号
+				baseMatch.setMid(mid);
 			}
 			else if (element.hasClass("wh-11")) // 主队信息
 			{
