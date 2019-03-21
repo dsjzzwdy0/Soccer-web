@@ -236,15 +236,24 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	/**
 	 * 创建联赛下载页面
-	 * @param leagues
+	 * @param leagueNames
 	 * @param filter
 	 * @return
 	 */
-	protected boolean createLeagueCenterTasksFromNames(List<String> leagues, Filter<League> filter)
+	protected boolean createLeagueCenterTasksFromNames(List<String> leagueNames, Filter<League> filter)
 	{
-		if(leagues != null && leagues.size() > 0)
+		if(leagueNames != null && leagueNames.size() > 0)
 		{
+			LeagueList allLeagues = new LeagueList(leagueService.list());
+			LeagueList leagues = new LeagueList();
 			
+			for (String leagueValue : leagueNames)
+			{
+				League l = allLeagues.getLeague(leagueValue);
+				if(l != null) leagues.add(l);
+			}
+			
+			return createLeagueCenterTasks(leagues, filter);
 		}
 		return false;
 	}

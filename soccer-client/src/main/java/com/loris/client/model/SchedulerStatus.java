@@ -139,4 +139,10 @@ public class SchedulerStatus extends SchedulerInfo
 	{
 		this.stoptime = stoptime;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "SchedulerStatus [total=" + total + ", leftsize=" + leftsize + ", createtime=" + createtime + "]";
+	}
 }

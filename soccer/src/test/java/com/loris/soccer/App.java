@@ -99,9 +99,9 @@ public class App
 			// testZgzcwNumWebPage();
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
-			testJcWebPage();
+			//testJcWebPage();
 			
-			//testZgzcwIssueScheduler();
+			testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();

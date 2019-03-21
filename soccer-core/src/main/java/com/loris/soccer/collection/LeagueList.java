@@ -12,6 +12,7 @@
 package com.loris.soccer.collection;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,6 +33,15 @@ public class LeagueList extends DataList<League>
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public LeagueList()
+	{
+	}
+	
+	public LeagueList(List<League> leagues)
+	{
+		addAll(leagues);
+	}
 
 	/**
 	 * 获得联赛数据

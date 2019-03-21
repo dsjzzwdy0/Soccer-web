@@ -58,6 +58,7 @@ create table soccer_logo
 	mimetype varchar(15),
 	images blob,
 	url varchar(100),
+	logotype varchar(10),
 	PRIMARY KEY (`id`),
 	INDEX `index_pid` (`pid`) USING BTREE
 );
@@ -96,7 +97,7 @@ create table soccer_league_rank(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	lid varchar(10),
 	tid varchar(10),
-	type varchar(8),
+	type varchar(15),
 	season varchar(20),
 	round varchar(20),
 	rank int,

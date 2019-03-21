@@ -67,6 +67,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		{
 			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
 		}
+		this.updateLeagueCurrentRounds = true;
 	}
 
 	/**

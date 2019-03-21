@@ -274,6 +274,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 				// 如果有空闲的线程，则新建一个任务处理
 				if (hasIdleThread())
 				{
+					logger.info("INFO: " + getSchedulerStatus());
 					Task task = popup();
 					if (task != null)
 					{
@@ -509,7 +510,6 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	@Override
 	public SchedulerStatus getSchedulerStatus()
 	{
-		
 		return status;
 	}
 	
