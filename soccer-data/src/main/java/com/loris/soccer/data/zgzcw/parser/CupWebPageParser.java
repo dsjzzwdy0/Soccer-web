@@ -74,6 +74,11 @@ public class CupWebPageParser extends AbstractLeagueWebPageParser
 		MatchList matchs = new MatchList();
 		MatchResultList matchResults = new MatchResultList();
 		
+		matchs.setOverwrite(true);
+		teams.setOverwrite(true);
+		matchResults.setOverwrite(true);
+		rounds.setOverwrite(true);
+		
 		// 解析球队信息
 		parseTeams(document, lid, season, teams, teamRfSeasons);
 

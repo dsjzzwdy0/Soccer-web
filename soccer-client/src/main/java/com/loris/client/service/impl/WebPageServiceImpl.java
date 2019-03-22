@@ -11,8 +11,10 @@
  */
 package com.loris.client.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,6 +22,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.client.dao.WebPageMapper;
 import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
+import com.loris.common.util.ToolUtil;
 
 /**   
  * @ClassName:  WebPageServiceImpl   
@@ -43,6 +46,48 @@ public class WebPageServiceImpl extends ServiceImpl<WebPageMapper, WebPage> impl
 	{
 		QueryWrapper<WebPage> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("pageid", pageid);
+		return baseMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.service.WebPageService#getWebPage(java.lang.String, java.util.List, java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<WebPage> getWebPage(String source, List<String> types, Date start, Date end)
+	{
+		QueryWrapper<WebPage> queryWrapper = new QueryWrapper<>();
+		
+		if(StringUtils.isNotBlank(source))
+		{
+			queryWrapper.like("source", source);
+		}
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("loadtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("loadtime", end);
+		}
+		//queryWrapper.and(wrapper->wrapper.eq("type", "yp").or().eq("type", "league"));
+		if(types != null && types.size() > 0)
+		{
+			QueryWrapper<WebPage> q1 = new QueryWrapper<>();
+			
+			//queryWrapper.and(wrapper-> wrapper.);
+			for (int i = 0; i < types.size(); i ++)
+			{
+				if(i > 0)
+				{
+					q1.or();
+				}
+				q1.like("type", types.get(i));
+			}
+			queryWrapper.and(wrapper-> q1);
+		}
+		
+		System.out.println(queryWrapper.getSqlSegment());
 		return baseMapper.selectList(queryWrapper);
 	}
 }

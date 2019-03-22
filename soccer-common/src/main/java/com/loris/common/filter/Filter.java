@@ -29,11 +29,4 @@ public interface Filter<T>
 	 * @return 是否被过滤
 	 */
 	boolean accept(T obj);
-
-	/**
-	 * 设置数据对象
-	 * 
-	 * @param value
-	 */
-	void setValue(T value);
 }

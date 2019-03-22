@@ -53,7 +53,6 @@ public class ObjectFilter<T> implements Filter<T>
 	 *  (non-Javadoc)
 	 * @see com.loris.common.filter.Filter#setValue(java.lang.Object)
 	 */
-	@Override
 	public void setValue(T value)
 	{
 		this.value = value;		

@@ -11,6 +11,7 @@
  */
 package com.loris.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -33,4 +34,14 @@ public interface WebPageService extends IService<WebPage>
 	 * @return 网页数据
 	 */
 	List<WebPage> selectWebPage(String pageid);
+	
+	/**
+	 * 从数据库中查询符合以下条件的数据库页面
+	 * @param source 数据来源
+	 * @param types 数据类型
+	 * @param start 起始日期
+	 * @param end 终止日期
+	 * @return 数据页面
+	 */
+	List<WebPage> getWebPage(String source, List<String> types, Date start, Date end);
 }

@@ -83,7 +83,7 @@ public class WebPage extends AutoIdEntity implements Task
 	{
 		encoding = EncodingUtil.ENCODING_UTF8;
 		protocol = "http";
-		createtime = new Date();
+		//createtime = new Date();
 		completed = false;
 		method = HttpUtil.HTTP_METHOD_GET;
 		port = "80";
@@ -331,8 +331,7 @@ public class WebPage extends AutoIdEntity implements Task
 	/**
 	 * 解析服务器地址基本信息
 	 * 
-	 * @param url
-	 *            远程URL地址
+	 * @param url 远程URL地址
 	 */
 	private void decodeHostInfo(String url)
 	{
@@ -340,8 +339,27 @@ public class WebPage extends AutoIdEntity implements Task
 		{
 			URL url2 = new URL(url);
 			host = url2.getHost();
-			port = url2.getPort() + "";
+			int p = url2.getPort();
 			protocol = url2.getProtocol();
+			if(p == -1)
+			{
+				if(StringUtils.equalsIgnoreCase("http", protocol))
+				{
+					port = "80";
+				}
+				else if(StringUtils.equalsIgnoreCase("ftp", protocol))
+				{
+					port = "21";
+				}
+				else
+				{
+					port = p + "";
+				}
+			}
+			else
+			{
+				port = p + "";
+			}
 		}
 		catch (Exception e)
 		{

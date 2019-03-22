@@ -11,6 +11,7 @@
  */
 package com.loris.soccer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -33,6 +34,7 @@ import com.loris.client.model.SchedulerStatus;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.TaskScheduler;
+import com.loris.client.service.WebPageService;
 import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
@@ -100,8 +102,9 @@ public class App
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
 			//testJcWebPage();
+			testWebPageService();
 			
-			testZgzcwIssueScheduler();
+			// testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -126,13 +129,28 @@ public class App
 		{
 			try
 			{
-				// context.close();
+				context.close();
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	public static void testWebPageService() throws Exception
+	{
+		List<String> types = new ArrayList<>();
+		types.add("yp");
+		types.add("league");
+		WebPageService pageService = context.getBean(WebPageService.class);
+		List<WebPage> pages = pageService.getWebPage(ZgzcwConstants.SOURCE_ZGZCW, types, null, null);
+		
+		int i = 1;
+		for (WebPage webPage : pages)
+		{
+			logger.info(i +++ ": " + webPage);
 		}
 	}
 

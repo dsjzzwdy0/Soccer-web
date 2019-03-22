@@ -34,7 +34,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.loris.common.bean.Entity;
-import com.loris.common.filter.Filter;
+import com.loris.common.filter.ObjectFilter;
 import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.ReflectUtil;
 
@@ -561,25 +561,19 @@ public class SqlHelper
 	/**
 	 * 插入数据列表
 	 * 
-	 * @param values
-	 *            列表值
-	 * @param clazz
-	 *            数据类型
-	 * @param mapper
-	 *            DAO数据接口
-	 * @param filter
-	 *            过滤器，比较两个数据是否一样
-	 * @param query
-	 *            数据查询过滤器
-	 * @param helper
-	 *            数据服务接口：这里是快速数据更新和服务接口
-	 * @param overwrite
-	 *            是事更新数据
+	 * @param values 列表值
+	 * @param clazz 数据类型
+	 * @param mapper DAO数据接口
+	 * @param filter 过滤器，比较两个数据是否一样
+	 * @param query 数据查询过滤器
+	 * @param helper 数据服务接口：这里是快速数据更新和服务接口
+	 * @param checkExist 是否检测重复数据
+	 * @param overwrite 是事更新数据
 	 * @param checkExist
 	 * @return 是否成功的标志
 	 */
 	public static <T extends Entity> boolean insertList(List<T> values, Class<T> clazz, BaseMapper<T> mapper,
-			Filter<T> filter, QueryWrapper<T> query, SqlHelper helper, boolean checkExist, boolean overwrite)
+			ObjectFilter<T> filter, QueryWrapper<T> query, SqlHelper helper, boolean checkExist, boolean overwrite)
 	{
 		if (values == null || values.size() == 0)
 		{
@@ -594,9 +588,8 @@ public class SqlHelper
 		}
 
 		List<T> newList = values;		
-		if(checkExist)
+		if(checkExist)				//处理数据重复的问题
 		{
-			//处理数据重叠的问题
 			List<T> existList = mapper.selectList(query);
 			List<T> updateList = new ArrayList<>();
 			newList = new ArrayList<>();
@@ -665,7 +658,7 @@ public class SqlHelper
 	 * @return
 	 */
 	public static <T extends Entity> boolean insertList(List<T> values, Class<T> clazz, BaseMapper<T> mapper,
-			Filter<T> filter, String key, SqlHelper helper, boolean checkExist, boolean overwrite)
+			ObjectFilter<T> filter, String key, SqlHelper helper, boolean checkExist, boolean overwrite)
 	{
 		if (values == null || values.size() == 0)
 		{
@@ -689,7 +682,7 @@ public class SqlHelper
 	 * @return
 	 */
 	public static <T extends Entity> boolean insertList(List<T> values, Class<T> clazz, BaseMapper<T> mapper,
-			Filter<T> filter, String key, SqlHelper helper, boolean overwrite)
+			ObjectFilter<T> filter, String key, SqlHelper helper, boolean overwrite)
 	{
 		return insertList(values, clazz, mapper, filter, key, helper, true, overwrite);
 	}

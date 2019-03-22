@@ -81,6 +81,11 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		MatchResultList matchResults = new MatchResultList();
 		LogoList logos = new LogoList();
 		RankList ranks = new RankList();
+		
+		matchs.setOverwrite(true);
+		teams.setOverwrite(false);
+		ranks.setOverwrite(true);
+		matchResults.setOverwrite(true);
 
 		//解析球队列表情况
 		parseTeams(document, lid, season, teams, teamRfSeasons);

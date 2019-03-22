@@ -76,13 +76,13 @@ public class BasicWebPageTaskPlugin extends BasicTaskPlugin implements TaskPlugi
 	 * @param quiet 是否不通知插件环境
 	 * @return 待处理的任务
 	 */
-	protected WebPage createWebPageTask(WebPage page, boolean quiet)
+	protected boolean createWebPageTask(WebPage page, boolean quiet)
 	{
 		if(!quiet)
 		{
 			notifyTaskEvent(new TaskEvent(page, TaskEventType.Created));
 		}
-		return page;
+		return true;
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class BasicWebPageTaskPlugin extends BasicTaskPlugin implements TaskPlugi
 	 * @param page 数据页面
 	 * @return 待处理的任务
 	 */
-	protected WebPage createWebPageTask(WebPage page)
+	protected boolean createWebPageTask(WebPage page)
 	{
 		return createWebPageTask(page, false);
 	}

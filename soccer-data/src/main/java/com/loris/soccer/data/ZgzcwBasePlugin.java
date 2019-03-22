@@ -42,6 +42,7 @@ import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -77,6 +78,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	/** 是否更新联赛中心页面 */
 	protected boolean updateLeagueCurrentRounds = false;
+	
+	/** 网络页面的过滤器 */
+	protected WebPageFilter webPageFilter;
 	
 	/**
 	 * Create a new instance of AbstractProducePlugin.
@@ -134,6 +138,22 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			logger.warn("Warn: " + e.toString());
 			return false;
 		}
+	}
+	
+	/**
+	 * 处理创建的页面
+	 * @param page 网络下载页面
+	 * @param quiet 是否通知处理器
+	 * @return 返回创建的标志
+	 */
+	@Override
+	protected boolean createWebPageTask(WebPage page, boolean quiet)
+	{
+		if(webPageFilter != null && !webPageFilter.accept(page))
+		{
+			return false;
+		}
+		return super.createWebPageTask(page, quiet);
 	}
 	
 	
@@ -407,5 +427,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	public void setUpdateLeagueCurrentRounds(boolean updateLeagueCurrentRounds)
 	{
 		this.updateLeagueCurrentRounds = updateLeagueCurrentRounds;
+	}
+
+	/**
+	 * 返回WebPage的过滤器设置
+	 * @param webPageFilter
+	 */
+	public void setWebPageFilter(WebPageFilter webPageFilter)
+	{
+		this.webPageFilter = webPageFilter;
 	}
 }
