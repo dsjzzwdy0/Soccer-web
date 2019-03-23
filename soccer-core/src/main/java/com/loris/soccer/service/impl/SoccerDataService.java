@@ -20,7 +20,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.LogoList;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.BaseMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsNumList;
@@ -108,7 +108,7 @@ public class SoccerDataService implements DataService
 				matchService.insertMatchs(matchList, matchList.isOverwrite());
 				break;
 			case SOCCER_DATA_MATCH_BD_LIST:
-				MatchItemList matchBdItemList = (MatchItemList) results.get(key);
+				BaseMatchList matchBdItemList = (BaseMatchList) results.get(key);
 				List<MatchBd> matchBds = new ArrayList<>();
 				for (MatchItem matchBd : matchBdItemList)
 				{
@@ -117,7 +117,7 @@ public class SoccerDataService implements DataService
 				matchService.insertMatchBds(matchBds, matchBdItemList.isOverwrite());
 				break;
 			case SOCCER_DATA_MATCH_JC_LIST:
-				MatchItemList matchJcItemList = (MatchItemList) results.get(key);
+				BaseMatchList matchJcItemList = (BaseMatchList) results.get(key);
 				List<MatchJc> matchJcs = new ArrayList<>();
 				for (MatchItem matchJc : matchJcItemList)
 				{

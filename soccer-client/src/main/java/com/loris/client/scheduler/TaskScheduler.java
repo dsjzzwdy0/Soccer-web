@@ -510,6 +510,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	@Override
 	public SchedulerStatus getSchedulerStatus()
 	{
+		updateStatus();
 		return status;
 	}
 	

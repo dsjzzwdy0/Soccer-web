@@ -25,6 +25,8 @@ import com.loris.common.filter.Filter;
  */
 public abstract class WebPageFilter implements Filter<WebPage>
 {
+	protected boolean initialized = false;
+	
 	/**
 	 * 过滤器的初始化
 	 * @return 是否成功
@@ -39,5 +41,10 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	public boolean accept(WebPage obj)
 	{
 		return false;
+	}
+
+	public boolean isInitialized()
+	{
+		return initialized;
 	}
 }

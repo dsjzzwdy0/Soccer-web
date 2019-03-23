@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.BaseMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
@@ -55,7 +55,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param document
 	 * @param matchBds
 	 */
-	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchBds)
+	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, BaseMatchList matchBds)
 	{
 		Element element = document.selectFirst("#tw #dcc");
 		Elements childElements = element.children();

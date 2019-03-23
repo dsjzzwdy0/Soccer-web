@@ -46,12 +46,13 @@ public class SchedulerStatus extends SchedulerInfo
 	 */
 	public SchedulerStatus()
 	{
+		this.createtime = new Date();
 	}
 	
 	public SchedulerStatus(SchedulerInfo schedulerInfo)
 	{
+		this();
 		setSchedulerInfo(schedulerInfo);
-		this.createtime = new Date();
 		this.stoptime = null;
 		this.finishtime = null;
 	}

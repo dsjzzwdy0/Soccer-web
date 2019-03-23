@@ -57,7 +57,7 @@ public class WebPageServiceImpl extends ServiceImpl<WebPageMapper, WebPage> impl
 	public List<WebPage> getWebPage(String source, List<String> types, Date start, Date end)
 	{
 		QueryWrapper<WebPage> queryWrapper = new QueryWrapper<>();
-		
+				
 		if(StringUtils.isNotBlank(source))
 		{
 			queryWrapper.like("source", source);
@@ -70,24 +70,10 @@ public class WebPageServiceImpl extends ServiceImpl<WebPageMapper, WebPage> impl
 		{
 			queryWrapper.lt("loadtime", end);
 		}
-		//queryWrapper.and(wrapper->wrapper.eq("type", "yp").or().eq("type", "league"));
 		if(types != null && types.size() > 0)
 		{
-			QueryWrapper<WebPage> q1 = new QueryWrapper<>();
-			
-			//queryWrapper.and(wrapper-> wrapper.);
-			for (int i = 0; i < types.size(); i ++)
-			{
-				if(i > 0)
-				{
-					q1.or();
-				}
-				q1.like("type", types.get(i));
-			}
-			queryWrapper.and(wrapper-> q1);
+			queryWrapper.and(wrapper -> wrapper.in("type", types));
 		}
-		
-		System.out.println(queryWrapper.getSqlSegment());
 		return baseMapper.selectList(queryWrapper);
 	}
 }

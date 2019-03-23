@@ -197,24 +197,39 @@ public abstract class AbstractLeagueWebPageParser extends AbstractZgzcwWebPagePa
 		}
 		
 		if(logos != null)
-		{
-			String homeLogoUrl = elements.get(1).selectFirst("img").attr("src");
-			String clientLogoUrl = elements.get(3).selectFirst("img").attr("src");
+		{			
 			Logo homeLogo = new Logo();
 			//homeLogo.setType(SoccerConstants.LOGO_TYPE_TEAM);
 			homeLogo.setLogotype(LogoType.Team);
 			homeLogo.setPid(homeid);
-			homeLogo.setUrl(homeLogoUrl);
+			parseLogoUrl(elements.get(1), homeLogo);
 			logos.add(homeLogo);
 			
 			Logo clientLogo = new Logo();
 			//clientLogo.setType(SoccerConstants.LOGO_TYPE_TEAM);
 			clientLogo.setLogotype(LogoType.Team);
 			clientLogo.setPid(clientid);
-			clientLogo.setUrl(clientLogoUrl);
+			parseLogoUrl(elements.get(3), clientLogo);
 			logos.add(clientLogo);
 		}
 	}
+
+	/**
+	 * 解析图标地址
+	 * @param element
+	 * @param logo
+	 */
+	private	void parseLogoUrl(Element element, Logo logo)
+	{
+		try
+		{
+			String clientLogoUrl = element.selectFirst("img").attr("src");
+			logo.setUrl(clientLogoUrl);
+		}
+		catch (Exception e) {
+		}
+	}
+		
 	
 	/**
 	 * Get the TeamId value.

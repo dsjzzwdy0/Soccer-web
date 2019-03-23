@@ -31,7 +31,6 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
-import com.loris.common.filter.DateFilter;
 import com.loris.common.filter.Filter;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.ArraysUtil;
@@ -39,7 +38,7 @@ import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.BaseMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.filter.WebPageFilter;
@@ -80,7 +79,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	protected boolean updateLeagueCurrentRounds = false;
 	
 	/** 网络页面的过滤器 */
-	protected WebPageFilter webPageFilter;
+	protected WebPageFilter webPageFilter = null;
 	
 	/**
 	 * Create a new instance of AbstractProducePlugin.
@@ -135,6 +134,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			logger.warn("Warn: " + e.toString());
 			return false;
 		}
@@ -331,7 +331,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param filter 过滤器
 	 * @return 是否创建的数据量大小0
 	 */
-	protected boolean createMatchTasks(List<? extends BaseMatch> matchItems, DateFilter filter)
+	protected <T extends BaseMatch> boolean createMatchTasks(List<T> matchItems, Filter<T> filter)
 	{
 		if(matchItems == null || matchItems.size() == 0)
 		{
@@ -341,9 +341,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		
 		logger.info("There are " + matchItems.size() + " matches in the list.");
 		int size = 0;
-		for (BaseMatch matchItem : matchItems)
+		for (T matchItem : matchItems)
 		{
-			if (filter == null || filter.accept(matchItem.getMatchtime()))
+			if (filter == null || filter.accept(matchItem))
 			{
 				if(ToolUtil.isEmpty(matchItem.getMatchtime()))
 				{
@@ -371,7 +371,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	public boolean createTaskFromWebPage(TaskPluginContext context, WebPage page)
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
-		return createTaskFromWebPage(context, page, null);
+		return createTaskFromWebPage(context, page, null, null);
 	}
 
 	/**
@@ -386,7 +386,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @throws UrlFetchException
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean createTaskFromWebPage(TaskPluginContext context, WebPage page, Filter<?> filter)
+	public<T> boolean createTaskFromWebPage(TaskPluginContext context, WebPage page, Class<T> clazz, Filter<T> filter)
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
 		//解析数据结果
@@ -405,14 +405,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
-			return createMatchTasks((MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), (DateFilter)filter);
+			return createMatchTasks((BaseMatchList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), (Filter<BaseMatch>)filter);
 		case ZgzcwConstants.PAGE_LOTTERY_JC:
 			if(updateLeagueCurrentRounds)
 			{
 				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
-			return createMatchTasks((MatchItemList)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), (DateFilter) filter);
+			return createMatchTasks((BaseMatchList)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), (Filter<BaseMatch>)filter);
 		case ZgzcwConstants.PAGE_CENTER:
 			return createLeagueCenterTasks((LeagueList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST), (Filter<League>)filter);
 		default:

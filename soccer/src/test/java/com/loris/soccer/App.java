@@ -46,7 +46,7 @@ import com.loris.common.service.DataService;
 import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.BaseMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsNumList;
@@ -102,9 +102,9 @@ public class App
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
 			//testJcWebPage();
-			testWebPageService();
+			// testWebPageService();
 			
-			// testZgzcwIssueScheduler();
+			testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -129,7 +129,7 @@ public class App
 		{
 			try
 			{
-				context.close();
+				//context.close();
 			}
 			catch (Exception e)
 			{
@@ -150,7 +150,7 @@ public class App
 		int i = 1;
 		for (WebPage webPage : pages)
 		{
-			logger.info(i +++ ": " + webPage);
+			logger.info(i +++ ": " + webPage.getUrl() + ", " + webPage.getType() + ", " + webPage.getSource());
 		}
 	}
 
@@ -543,7 +543,7 @@ public class App
 		 * int i = 1; for (MatchItem match : matchJcs) { logger.info(i +++ ": "
 		 * + match); }
 		 */
-		MatchItemList matchJcs = (MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		BaseMatchList matchJcs = (BaseMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
 		if (matchJcs == null)
 		{
 			logger.info("Error: no Match JC data.");

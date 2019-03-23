@@ -45,6 +45,9 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	/** 结束时间 */
 	protected Date end;
 	
+	/** 已经下载的数据 */
+	List<WebPage> existWebPages = null;
+	
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
 	 */
@@ -54,13 +57,17 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
-	 * @param types
-	 * @param source
+	 * @param types 数据类型
+	 * @param source 数据来源
+	 * @param start 开始日期
+	 * @param end 结束日期
 	 */
-	public DownloadedWebPageFilter(List<String> types, String source)
+	public DownloadedWebPageFilter(List<String> types, String source, Date start, Date end)
 	{
 		this.types.addAll(types);
 		this.source = source;
+		this.start = start;
+		this.end = end;
 	}
 	
 	/**
@@ -89,7 +96,23 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	@Override
 	public boolean accept(WebPage page)
 	{
-		return false;
+		String type = page.getType();
+		if(!types.contains(type)) return true;		
+		if(existWebPages == null || existWebPages.size() == 0) return true;
+		
+		for (WebPage webPage : existWebPages)
+		{
+			if(page.equals(webPage))
+			{
+				Date loadtime = webPage.getLoadtime();
+				if(loadtime == null)
+				{
+					continue;
+				}
+				return false;
+			}
+		}		
+		return true;
 	}
 
 	/**
@@ -107,8 +130,35 @@ public class DownloadedWebPageFilter extends WebPageFilter
 		{
 			throw new IllegalArgumentException("The WebPageService is null, can't initialize the DownloadedWebPageFilter.");
 		}
+		existWebPages = pageService.getWebPage(source, types, start, end);
 		
-		
-		return false;
+		System.out.println("There are total " + existWebPages.size() + " pages in database.");
+		initialized = true;
+		return true;
+	}
+
+	public Date getStart()
+	{
+		return start;
+	}
+
+	public void setStart(Date start)
+	{
+		this.start = start;
+	}
+
+	public Date getEnd()
+	{
+		return end;
+	}
+
+	public void setEnd(Date end)
+	{
+		this.end = end;
+	}
+
+	public String getSource()
+	{
+		return source;
 	}
 }

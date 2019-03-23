@@ -14,6 +14,7 @@ package com.loris.soccer.data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,9 +27,12 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
-import com.loris.common.filter.DateFilter;
+import com.loris.common.filter.Filter;
+import com.loris.common.util.DateUtil;
+import com.loris.soccer.data.filter.DownloadedWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
+import com.loris.soccer.model.base.BaseMatch;
 
 import cn.hutool.core.thread.ThreadUtil;
 
@@ -45,12 +49,12 @@ import cn.hutool.core.thread.ThreadUtil;
 public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProducePlugin, TaskProcessPlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwIssueDataPlugin.class);
-
-	/** 日期过滤器 */
-	private DateFilter dateFiter;
 	
 	/** 间隔时间 */
 	protected long interval = 2000;
+	
+	/** 比赛过滤器 */
+	Filter<BaseMatch> matchFilter = null;
 	
 	/**
 	 * Create a new instance of ZgzcwIssueProducePlugin
@@ -80,6 +84,16 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	public void initialize(TaskPluginContext context) throws IOException
 	{
 		super.initialize(context);
+		
+		List<String> types = new ArrayList<>();
+		types.add(ZgzcwConstants.PAGE_ODDS_OP);
+		types.add(ZgzcwConstants.PAGE_ODDS_YP);
+		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		webPageFilter = new DownloadedWebPageFilter(types, ZgzcwConstants.SOURCE_ZGZCW, 
+				DateUtil.addDateNum(new Date(), -1), null);
+		webPageFilter.initialize();
 	}
 
 	/**
@@ -99,7 +113,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		{
 			for (WebPage webPage : initPages)
 			{
-				if (!createTaskFromWebPage(context, webPage, dateFiter))
+				if (!createTaskFromWebPage(context, webPage, BaseMatch.class, matchFilter))
 				{
 					logger.warn("No task produce from WebPage: " + webPage.getName());
 				}
@@ -112,16 +126,6 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 			//e.printStackTrace();
 			logger.warn("Warn: produce task list error info > " + e.getMessage());
 		}
-	}
-
-	/**
-	 * 设置日期过滤器
-	 * 
-	 * @param dateFiter 日期过滤器
-	 */
-	public void setDateFiter(DateFilter dateFiter)
-	{
-		this.dateFiter = dateFiter;
 	}
 
 	/**
