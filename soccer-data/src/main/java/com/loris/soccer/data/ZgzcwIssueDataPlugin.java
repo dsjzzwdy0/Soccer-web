@@ -61,6 +61,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	 */
 	public ZgzcwIssueDataPlugin()
 	{
+		super("当日数据下载");
 		FetcherSetting setting = ApplicationContextHelper.getBean("defaultSetting");
 		webPagefetcher = new HttpCommonFetcher(setting);
 		try
@@ -72,6 +73,8 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
 		}
 		this.updateLeagueCurrentRounds = true;
+		setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 	}
 
 	/**
@@ -104,7 +107,6 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
-
 		List<WebPage> initPages = new ArrayList<>();
 		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD));
 		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC));
@@ -113,7 +115,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		{
 			for (WebPage webPage : initPages)
 			{
-				if (!createTaskFromWebPage(context, webPage, BaseMatch.class, matchFilter))
+				if (!createTaskFromWebPage(context, webPage))
 				{
 					logger.warn("No task produce from WebPage: " + webPage.getName());
 				}

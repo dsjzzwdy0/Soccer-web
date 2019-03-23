@@ -130,9 +130,8 @@ public class DownloadedWebPageFilter extends WebPageFilter
 		{
 			throw new IllegalArgumentException("The WebPageService is null, can't initialize the DownloadedWebPageFilter.");
 		}
-		existWebPages = pageService.getWebPage(source, types, start, end);
-		
-		System.out.println("There are total " + existWebPages.size() + " pages in database.");
+		existWebPages = pageService.getWebPage(source, types, start, end);		
+		//System.out.println("There are total " + existWebPages.size() + " pages in database.");
 		initialized = true;
 		return true;
 	}

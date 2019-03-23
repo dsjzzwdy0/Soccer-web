@@ -33,6 +33,14 @@ public abstract class BasicTaskPlugin extends TaskEventProducer implements TaskP
 
 	/** 是否已经初始化的标志 */
 	private boolean initialized = false;
+	
+	/**
+	 * Create a new instance of BasicTaskPlugin
+	 */
+	public BasicTaskPlugin(String name)
+	{
+		this.name = name;
+	}
 
 	/**
 	 *  (non-Javadoc)

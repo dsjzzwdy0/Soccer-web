@@ -211,6 +211,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		else if (taskType == TaskEventType.Excute)
 		{
 			logger.debug("Starting to excute " + task.getName());
+			status.setInfo(task.getName());
 			addRunningTask(task);
 		}
 		else if (taskType == TaskEventType.Executed)
@@ -289,7 +290,8 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 				if (isStopped())
 				{
 					status.setStoptime();
-					logger.info("The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interrupted now.");
+					status.setInfo("The TaskProcuder " + taskProducer.getName() + " has been set to stopped, interrupted now.");
+					logger.info(status.getInfo());
 					return;
 				}
 			}
@@ -298,7 +300,8 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			logger.info("Error occured when process TaskProcuder " + taskProducer.getName() + ", exit now.");
+			status.setInfo("Error occured when process TaskProcuder " + taskProducer.getName() + ", exit now.");
+			logger.warn(status.getInfo());
 		}
 		
 		//logger.info("Thread has been stopped, exit.");
@@ -311,7 +314,8 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 	{
 		isFinished = true;
 		status.setFinishtime();
-		logger.info("MainTashScheduler[" + status.getName() + "] has been finished, exit now");
+		status.setInfo("MainTashScheduler[" + status.getName() + "] has been finished, exit now");
+		logger.info(status.getInfo());
 	}
 
 	/**

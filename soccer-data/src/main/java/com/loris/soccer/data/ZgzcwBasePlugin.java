@@ -13,6 +13,7 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,11 +82,21 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	/** 网络页面的过滤器 */
 	protected WebPageFilter webPageFilter = null;
 	
+	/** 注册的过滤器 */
+	private Map<String, Filter<?>> filters = new HashMap<>();
+	
+	/** 页面下载之后是否产生新的任务，正向设置，如果不设置表示不产生 */
+	private Map<String, Boolean> pageProduceTask = new HashMap<>();
+	
+	/** 是否产生这种类型的任务，反向设置，如果不设置，则表示产生*/
+	private Map<String, Boolean> producePages = new HashMap<>();
+	
 	/**
 	 * Create a new instance of AbstractProducePlugin.
 	 */
-	public ZgzcwBasePlugin()
+	public ZgzcwBasePlugin(String name)
 	{
+		super(name);
 	}
 
 	/**
@@ -122,22 +133,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @return 是否执行成功的标志
 	 */
 	@Override
-	public boolean execute(TaskPluginContext context, Task task) throws IOException, SQLException
+	public boolean execute(TaskPluginContext context, Task task) throws UrlFetchException, 
+		WebParserException, IOException, HostForbiddenException, SQLException
 	{
 		if(!(task instanceof WebPage))
 		{
 			return false;
-		}
-		try
-		{
-			return (executeWebPageTask(context,(WebPage) task) != null);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			logger.warn("Warn: " + e.toString());
-			return false;
-		}
+		}	
+		return executeWebPageTask(context, (WebPage) task);
 	}
 	
 	/**
@@ -168,22 +171,25 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @throws HostForbiddenException
 	 * @throws UrlFetchException
 	 */
-	protected TableRecords executeWebPageTask(TaskPluginContext context, WebPage page) 
+	protected boolean executeWebPageTask(TaskPluginContext context, WebPage page) 
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
 		if (StringUtils.isBlank(page.getContent()) && !download(page))
 		{
 			logger.warn("Error when HttpCommonExecutor execute: " + page.getUrl());
-			return null;
+			return false;
 		}
 		
 		//解析数据结果
 		TableRecords records = ZgzcwPageParser.parseWebPage(page);
-		if(records != null)
+		if(records == null) return false;
+		
+		saveTableRecords(records);		
+		if(isPageProduceNewTask(page.getType()))
 		{
-			saveTableRecords(records);
+			produceTask(page.getType(), records);
 		}		
-		return records;
+		return true;
 	}
 	
 	/**
@@ -301,25 +307,25 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param hasYp 是否下载亚盘数据
 	 * @param hasNum 是否下载大小球数据
 	 */
-	protected void createMatchDataTask(BaseMatch match, boolean hasOp, boolean hasYp, boolean hasNum)
+	protected void createMatchDataTask(BaseMatch match)
 	{
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, match.getMid());		
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
 		
 		// 欧赔数据下载
-		if (hasOp)
+		if (isProducePage(ZgzcwConstants.PAGE_ODDS_OP))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params));
 		}
 
 		// 亚盘数据下载
-		if (hasYp)
+		if (isProducePage(ZgzcwConstants.PAGE_ODDS_YP))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params));
 		}
 
 		// 大小球数据下载
-		if (hasNum)
+		if (isProducePage(ZgzcwConstants.PAGE_ODDS_NUM))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params));
 		}
@@ -331,7 +337,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param filter 过滤器
 	 * @return 是否创建的数据量大小0
 	 */
-	protected <T extends BaseMatch> boolean createMatchTasks(List<T> matchItems, Filter<T> filter)
+	protected <T extends BaseMatch> boolean createMatchTasks(List<T> matchItems, Filter<BaseMatch> filter)
 	{
 		if(matchItems == null || matchItems.size() == 0)
 		{
@@ -350,34 +356,16 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 					logger.info("Match has no matchtime property: " + matchItem);
 					continue;
 				}
-				createMatchDataTask(matchItem, true, true, true);
+				createMatchDataTask(matchItem);
 				size ++;
 			}
 		}
 		return size > 0;
 	}
-	
-	/**
-	 * 从数据网页初始化下载数据任务
-	 * @param context 插件运行环境
-	 * @param page 网络页数据
-	 * @return 是否创建成成功的标志
-	 * 
-	 * @throws IOException
-	 * @throws WebParserException
-	 * @throws HostForbiddenException
-	 * @throws UrlFetchException
-	 */
-	public boolean createTaskFromWebPage(TaskPluginContext context, WebPage page)
-			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
-	{
-		return createTaskFromWebPage(context, page, null, null);
-	}
 
 	/**
 	 * 从数据网页初始化下载数据任务
 	 * @param context 插件运行环境
-	 * @param filter 数据过滤器
 	 * @param page 网络页数据
 	 * @return 是否创建成成功的标志
 	 * @throws IOException
@@ -385,38 +373,63 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @throws HostForbiddenException
 	 * @throws UrlFetchException
 	 */
-	@SuppressWarnings("unchecked")
-	public<T> boolean createTaskFromWebPage(TaskPluginContext context, WebPage page, Class<T> clazz, Filter<T> filter)
+	public<T> boolean createTaskFromWebPage(TaskPluginContext context, WebPage page)
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
+		setPageProduceNewTask(page.getType(), true);
 		//解析数据结果
-		TableRecords records = executeWebPageTask(context, page);
-		if(records == null)
-		{
-			return false;
-		}
-		
-		//通过不同的页面进行数据处理
-		switch (page.getType())
+		return executeWebPageTask(context, page);
+	}
+	
+	/**
+	 * 产生下载的任务
+	 * @param pageType 页面类型
+	 * @param records 数据记录
+	 */
+	protected void produceTask(String pageType, TableRecords records)
+	{
+		// 通过不同的页面进行数据处理
+		switch (pageType)
 		{
 		case ZgzcwConstants.PAGE_LOTTERY_BD:
-			if(updateLeagueCurrentRounds)
+		{
+			if (updateLeagueCurrentRounds)
 			{
 				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
-			return createMatchTasks((BaseMatchList)records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), (Filter<BaseMatch>)filter);
+			Filter<BaseMatch> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			createMatchTasks((BaseMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), filter);
+			break;
+		}
 		case ZgzcwConstants.PAGE_LOTTERY_JC:
-			if(updateLeagueCurrentRounds)
+		{
+			if (updateLeagueCurrentRounds)
 			{
 				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
-			return createMatchTasks((BaseMatchList)records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), (Filter<BaseMatch>)filter);
+			
+			Filter<BaseMatch> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			createMatchTasks((BaseMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), filter);
+			break;
+		}
 		case ZgzcwConstants.PAGE_CENTER:
-			return createLeagueCenterTasks((LeagueList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST), (Filter<League>)filter);
+		{
+			Filter<League> filter = getFilter(SoccerConstants.SOCCER_DATA_LEAGUE);
+			createLeagueCenterTasks((LeagueList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST), filter);
+			break;
+		}
+		case ZgzcwConstants.PAGE_LEAGUE_LEAGUE:
+		case ZgzcwConstants.PAGE_LEAGUE_CUP:
+		{
+			MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+			Filter<BaseMatch> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			createMatchTasks(matchList, filter);
+			break;
+		}
 		default:
-			return false;
+			return;
 		}
 	}
 
@@ -436,5 +449,89 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	public void setWebPageFilter(WebPageFilter webPageFilter)
 	{
 		this.webPageFilter = webPageFilter;
+	}
+	
+	/**
+	 * 注册过滤器
+	 * @param type 过滤器类型
+	 * @param filter 过滤器
+	 */
+	public void registFilter(String type, Filter<?> filter)
+	{
+		filters.put(type, filter);
+	}
+	
+	/**
+	 * 获得过滤器
+	 * @param type 类型
+	 * @return 返回过滤器
+	 */
+	@SuppressWarnings("unchecked")
+	public<T> Filter<T> getFilter(String type)
+	{
+		return (Filter<T>)filters.get(type);
+	}
+	
+	/**
+	 * 检测是否产生新的任务
+	 * @param type 页面类型
+	 * @return 是否检测的标志
+	 */
+	public boolean isPageProduceNewTask(String type)
+	{
+		if(StringUtils.isBlank(type)) return false;
+		Boolean b = pageProduceTask.get(type);
+		return b == null ? false : b;
+	}
+	
+	/**
+	 * 设置是否产生新的任务
+	 * @param type 类型
+	 * @param b 标志
+	 */
+	public void setPageProduceNewTask(String type, boolean b)
+	{
+		pageProduceTask.put(type, b);
+	}
+	
+	/**
+	 * 设置是否产生新的任务
+	 * @param type 类型
+	 */
+	public void setPageProduceNewTask(String type)
+	{
+		pageProduceTask.put(type, true);
+	}
+	
+	/**
+	 * 设置是否产生新的页面
+	 * @param type
+	 * @param b
+	 */
+	public void setProducePage(String type)
+	{
+		producePages.put(type, true);
+	}
+	
+	/**
+	 * 设置是否产生新的页面
+	 * @param type
+	 * @param b
+	 */
+	public void setProducePage(String type, boolean b)
+	{
+		producePages.put(type, b);
+	}
+	
+	/**
+	 * 是否产生新的页面
+	 * @param type 类型
+	 * @return 产生的标志
+	 */
+	public boolean isProducePage(String type)
+	{
+		if(StringUtils.isBlank(type)) return false;
+		Boolean b = producePages.get(type);
+		return b == null ? true : b;
 	}
 }

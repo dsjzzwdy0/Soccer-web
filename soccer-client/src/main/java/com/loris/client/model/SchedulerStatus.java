@@ -37,6 +37,7 @@ public class SchedulerStatus extends SchedulerInfo
 	protected int total;		//总数
 	protected int leftsize;		//剩余数
 	protected int state;		//1表示处理完成、0表示创建、2表示暂停
+	protected String info;		//当前的信息
 	protected Date createtime;	//创建时间
 	protected Date stoptime;	//停止时间
 	protected Date finishtime;	//完成时间
@@ -139,6 +140,16 @@ public class SchedulerStatus extends SchedulerInfo
 	public void setStoptime(Date stoptime)
 	{
 		this.stoptime = stoptime;
+	}
+
+	public String getInfo()
+	{
+		return info;
+	}
+
+	public void setInfo(String info)
+	{
+		this.info = info;
 	}
 
 	@Override

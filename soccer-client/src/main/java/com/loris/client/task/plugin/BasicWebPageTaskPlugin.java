@@ -31,6 +31,14 @@ import com.loris.client.task.event.TaskEventListener;
 public class BasicWebPageTaskPlugin extends BasicTaskPlugin implements TaskPlugin
 {
 	/**
+	 * Create a new instance of BasicWebpageTaskPlugin
+	 */
+	public BasicWebPageTaskPlugin(String name)
+	{
+		super(name);
+	}
+	
+	/**
 	 *  (non-Javadoc)
 	 * @see com.loris.client.task.plugin.TaskProducePlugin#removeTaskEventListner(com.loris.client.task.event.TaskEventListener)
 	 */

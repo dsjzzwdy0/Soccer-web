@@ -759,10 +759,8 @@ public class App
 		scheduler.setMaxActiveTaskThread(1);
 		// scheduler.setName("即时任务下载器");
 
-		scheduler.addTaskPlugin(new BasicWebPageTaskPlugin());
-
+		scheduler.addTaskPlugin(new BasicWebPageTaskPlugin(""));
 		SchedulerFactory.startTaskScheduler(scheduler);
-
 		// Thread thread = new Thread(scheduler);
 		// thread.start();
 	}
