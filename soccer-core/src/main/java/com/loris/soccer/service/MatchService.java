@@ -18,6 +18,8 @@ import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.view.MatchBdInfo;
+import com.loris.soccer.model.view.MatchJcInfo;
 
 /**   
  * @ClassName:  League   
@@ -90,4 +92,19 @@ public interface MatchService extends IService<Match>
 	 * @return 是否成功标志
 	 */
 	boolean insertMatchResults(List<MatchResult> results, boolean overwrite);
+	
+	/**
+	 * 按照北单的期号查询北单比赛数据
+	 * @param bdno 北单期号
+	 * @param issue 比赛日期
+	 * @return 数据列表
+	 */
+	List<MatchBdInfo> getMatchBdInfos(String issue, String bdno);
+	
+	/**
+	 * 获得竞彩比赛数据的列表
+	 * @param issue 比赛期号
+	 * @return 数据列表
+	 */
+	List<MatchJcInfo> getMatchJcInfos(String issue);
 }

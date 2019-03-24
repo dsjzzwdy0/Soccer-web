@@ -92,9 +92,6 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	/** 页面的配置项 */
 	protected WebPageProperties webPageConf = new WebPageProperties();
 	
-	/** 设置更新的时间 */
-	protected long timeToUpdate = 6 * 60 * 60 * 1000;
-	
 	/**
 	 * Create a new instance of AbstractProducePlugin.
 	 */

@@ -77,6 +77,8 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
+import com.loris.soccer.model.view.MatchBdInfo;
+import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 
 /**
@@ -121,10 +123,10 @@ public class App
 			// testJcWebPage();
 			// testWebPageService();
 			// testLeagueRoundWebPage();
+			// testZgzcwCupWebPage();
+			// testZgzcwLeagueCenterScheduler();	
 			
-			testZgzcwCupWebPage();
-			
-			//testZgzcwLeagueCenterScheduler();			
+			testBdMatchInfo();
 		}
 		catch (Exception e)
 		{
@@ -134,13 +136,24 @@ public class App
 		{
 			try
 			{
-				//context.close();
+				context.close();
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	public static void testBdMatchInfo() throws Exception
+	{
+		MatchService matchService = context.getBean(MatchService.class);
+		List<MatchBdInfo> matchBdInfos = matchService.getMatchBdInfos("2019-03-24", null);
+		int i = 1;
+		for (MatchBdInfo matchBdInfo : matchBdInfos)
+		{
+			logger.info(i +++ ": " + matchBdInfo);
 		}
 	}
 	
