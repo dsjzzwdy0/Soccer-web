@@ -12,6 +12,8 @@
 package com.loris.soccer.data.zgzcw;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
+
+import com.loris.soccer.constant.SoccerConstants;
 /**   
  * @ClassName:  League   
  * @Description: 中国足彩网的常量数据定义类 
@@ -40,4 +42,10 @@ public interface ZgzcwConstants
 	final static public String PAGE_CALENDAR = "calendar";
 	final static public String PAGE_SCORE_BD = "bdscore";
 	final static public String PAGE_SCORE_JC = "jcscore";
+	
+	/** 专用于LeagueRoundWebPage所定义 */
+	final static public String NAME_FIELD_SOURCE_LID = "source_league_id";
+	final static public String NAME_FIELD_CUR_ROUND = "currentRound";
+	final static public String NAME_FIELD_SEASON = SoccerConstants.NAME_FIELD_SEASON;
+	final static public String NAME_FIELD_LEAGUE_TYPE = "seasonType";
 }

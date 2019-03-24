@@ -11,6 +11,8 @@
  */
 package com.loris.common.util;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -24,13 +26,31 @@ import java.util.Map;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class URLBuilder
+public class URLUtil
 {
 	private static boolean[] eucIgnore = new boolean[256];
 
 	protected StringBuilder builder = new StringBuilder();
 	protected boolean firstParam = true;
 	protected boolean hasPath = false;
+	
+	/**
+	 * 获得URL地址的主机
+	 * 
+	 * @param url The URL String value.
+	 * @return The host string value.
+	 */
+	public static String getHost(String url)
+	{
+		try
+		{
+			return new URL(url).getHost();		
+		}
+		catch(MalformedURLException e)
+		{			
+		}
+		return "";
+	}
 	
 	/**
 	 * 组成访问页面地址
@@ -139,7 +159,7 @@ public class URLBuilder
 		}
 	}
 
-	public URLBuilder appendPath(String path)
+	public URLUtil appendPath(String path)
 	{
 		if (path == null)
 		{
@@ -156,7 +176,7 @@ public class URLBuilder
 		return this;
 	}
 
-	public URLBuilder appendParam(String key, String value)
+	public URLUtil appendParam(String key, String value)
 	{
 		if ((key != null) && (value != null))
 		{
@@ -168,7 +188,7 @@ public class URLBuilder
 		return this;
 	}
 
-	public URLBuilder appendParamEncode(String key, String value)
+	public URLUtil appendParamEncode(String key, String value)
 	{
 		if ((key != null) && (value != null))
 		{
@@ -180,21 +200,21 @@ public class URLBuilder
 		return this;
 	}
 
-	public URLBuilder appendParamEncode(String key, String value, String charset)
+	public URLUtil appendParamEncode(String key, String value, String charset)
 	{
 		appendParamEncode(key, value);
 
 		return this;
 	}
 
-	public URLBuilder appendLabel(String label)
+	public URLUtil appendLabel(String label)
 	{
 		this.builder.append('#').append(label);
 
 		return this;
 	}
 
-	public URLBuilder append(String str)
+	public URLUtil append(String str)
 	{
 		this.builder.append(str);
 

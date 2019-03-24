@@ -66,6 +66,7 @@ public class CupWebPageParser extends AbstractLeagueWebPageParser
 		if(StringUtils.isEmpty(season))
 		{
 			//解析得到当前的赛季信息
+			season = parseFirstSeasonInfo(document);
 		}
 		
 		TeamList teams = new TeamList();

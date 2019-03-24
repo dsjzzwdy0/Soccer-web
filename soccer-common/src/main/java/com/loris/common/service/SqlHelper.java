@@ -620,6 +620,7 @@ public class SqlHelper
 			{
 				try
 				{
+					logger.info("INFO: update " + updateList.size() + " " + clazz.getName() + " objects.");
 					helper.updateBatch(updateList, clazz);
 				}
 				catch (Exception e)
@@ -628,14 +629,18 @@ public class SqlHelper
 							+ e.toString());
 				}
 			}
-			if (newList.size() == 0)
-			{
-				logger.info("Warn: No " + clazz.getName() + " need to be updated.");
-				return true;
-			}
-		}		
+		}
+		else
+		{
+			newList = values;
+		}
 		try
 		{
+			if (newList == null || newList.size() == 0)
+			{
+				logger.info("Warn: No " + clazz.getName() + " need to be added.");
+				return true;
+			}
 			return helper.insertBatch(newList, clazz);
 		}
 		catch (Exception e)

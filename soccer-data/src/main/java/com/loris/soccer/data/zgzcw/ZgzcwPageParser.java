@@ -20,6 +20,7 @@ import com.loris.client.parser.WebPageParser;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LeagueRoundWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdScoreWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
@@ -46,6 +47,7 @@ public class ZgzcwPageParser
 	{
 		parsers.put(ZgzcwConstants.PAGE_CENTER, new CenterPageParser());
 		parsers.put(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, new LeagueWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_LEAGUE_LEAGUE_ROUND, new LeagueRoundWebPageParser());	
 		parsers.put(ZgzcwConstants.PAGE_LEAGUE_CUP, new CupWebPageParser());
 		parsers.put(ZgzcwConstants.PAGE_LOTTERY_JC, new LotteryJcWebPageParser());
 		parsers.put(ZgzcwConstants.PAGE_SCORE_JC, new LotteryJcScoreWebPageParser());
@@ -53,7 +55,7 @@ public class ZgzcwPageParser
 		parsers.put(ZgzcwConstants.PAGE_SCORE_BD, new LotteryBdScoreWebPageParser());
 		parsers.put(ZgzcwConstants.PAGE_ODDS_OP, new OddsOpWebPageParser());
 		parsers.put(ZgzcwConstants.PAGE_ODDS_YP, new OddsYpWebPageParser());
-		parsers.put(ZgzcwConstants.PAGE_ODDS_NUM, new OddsNumWebPageParser());		
+		parsers.put(ZgzcwConstants.PAGE_ODDS_NUM, new OddsNumWebPageParser());
 	}
 	
 	/**

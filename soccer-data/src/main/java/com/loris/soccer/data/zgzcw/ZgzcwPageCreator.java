@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.model.WebPage;
 import com.loris.common.util.EncodingUtil;
-import com.loris.common.util.URLBuilder;
+import com.loris.common.util.URLUtil;
 import com.loris.soccer.constant.SoccerConstants;
 
 /**
@@ -119,7 +119,7 @@ public class ZgzcwPageCreator
 	 */
 	public static WebPage createZgzcwWebPage(String type, Map<String, String> params) throws IllegalArgumentException
 	{
-		return createZgzcwWebPage(type, HttpUtil.HTTP_METHOD_GET, encoding, params);
+		return createZgzcwWebPage(type, encoding, params);
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class ZgzcwPageCreator
 	 * @return 数据页面
 	 * @throws IllegalArgumentException 如果type没有定义或参数错误，则抛出异常值
 	 */
-	public static WebPage createZgzcwWebPage(String type, String method, String encoding, Map<String, String> params) throws IllegalArgumentException
+	public static WebPage createZgzcwWebPage(String type, String encoding, Map<String, String> params) throws IllegalArgumentException
 	{
 		if(!PAGE_BASE_URLS.containsKey(type))
 		{
@@ -137,26 +137,17 @@ public class ZgzcwPageCreator
 		}
 		
 		WebPage page = new WebPage();
-		page.setEncoding(encoding);
 		page.setType(type);
 		page.setCreatetime(new Date());
-		page.setSource(SOURCE_ZGZCW);
-		page.setMethod(method);
-		page.setUrl(createURL(type, params));
+		page.setSource(SOURCE_ZGZCW);		
 		page.setPriority(getDefaultPriority(type));
-		if (params != null)
-		{
-			page.setParams(params);
-		}
 		
-		/*switch (type)
-		{
-		case PAGE_ODDS_YP:
-			page.addHeader("Host", PAGE_BASE_URLS.get(type));
-			break;
-		default:
-			break;
-		}*/
+		page.setEncoding(encoding);
+		page.setMethod(getHttpMethod(type));
+		page.setUrl(createURL(type, params));
+		page.setParams(params);
+		setHeaders(page);
+		
 		return page;
 	}
 	
@@ -173,6 +164,47 @@ public class ZgzcwPageCreator
 		}
 		else
 			return 1.0;
+	}
+	
+	/**
+	 * 获得页面方法类型
+	 * @param type 页面类型
+	 * @return
+	 */
+	protected static String getHttpMethod(String type)
+	{
+		switch (type)
+		{
+		case PAGE_LEAGUE_LEAGUE_ROUND:
+			return HttpUtil.HTTP_METHOD_POST;
+		default:
+			return HttpUtil.HTTP_METHOD_GET;
+		}
+	}
+	
+	/**
+	 * 设置页面的头部信息
+	 * @param type
+	 * @param headers
+	 */
+	protected static void setHeaders(WebPage page)
+	{
+		switch (page.getType())
+		{
+		case PAGE_LEAGUE_LEAGUE_ROUND:
+			Map<String, String> headers = page.getHeaders();
+			String baseUrl = "http://saishi.zgzcw.com";
+			String host = URLUtil.getHost(baseUrl);
+			String referer = baseUrl + "/soccer/league/" + page.getParam(ZgzcwConstants.NAME_FIELD_SOURCE_LID)
+				+ "/" + page.getParam(SoccerConstants.NAME_FIELD_SEASON);
+			headers.put("Host", host);
+			headers.put("Origin", baseUrl);
+			headers.put("Referer", referer);
+			headers.put("Content-Type", "application/x-www-form-urlencoded");
+			break;
+		default:
+			break;
+		}
 	}
 	
 	/**
@@ -203,8 +235,14 @@ public class ZgzcwPageCreator
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);
 			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID) + "/dxdb";
 			break;
+		case PAGE_LEAGUE_LEAGUE_ROUND:
+			checkParams(params, ZgzcwConstants.NAME_FIELD_SOURCE_LID);
+			checkParams(params, ZgzcwConstants.NAME_FIELD_SEASON);
+			checkParams(params, ZgzcwConstants.NAME_FIELD_CUR_ROUND);
+			//basicUrl = URLUtil.makeDefaultUrl(basicUrl, params);
+			break;
 		default:
-			basicUrl = URLBuilder.makeDefaultUrl(basicUrl, params);
+			basicUrl = URLUtil.makeDefaultUrl(basicUrl, params);
 			break;
 		}
 		return basicUrl;

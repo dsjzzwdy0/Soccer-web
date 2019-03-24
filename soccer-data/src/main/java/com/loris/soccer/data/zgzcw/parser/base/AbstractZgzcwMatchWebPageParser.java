@@ -32,10 +32,6 @@ public abstract class AbstractZgzcwMatchWebPageParser extends AbstractZgzcwWebPa
 	public final static String compIdAttr = "cid";
 	
 	
-	public AbstractZgzcwMatchWebPageParser()
-	{		
-	}
-	
 	public AbstractZgzcwMatchWebPageParser(String acceptType)
 	{
 		super(acceptType);

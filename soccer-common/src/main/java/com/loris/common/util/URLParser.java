@@ -127,7 +127,7 @@ public class URLParser
 		{
 			compile();
 		}
-		URLBuilder builder = new URLBuilder();
+		URLUtil builder = new URLUtil();
 
 		if (this.type == 1)
 		{

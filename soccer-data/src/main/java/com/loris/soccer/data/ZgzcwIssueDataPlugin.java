@@ -62,19 +62,9 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	public ZgzcwIssueDataPlugin()
 	{
 		super("当日数据下载");
-		FetcherSetting setting = ApplicationContextHelper.getBean("defaultSetting");
-		webPagefetcher = new HttpCommonFetcher(setting);
-		try
-		{
-			webPagefetcher.init();
-		}
-		catch(Exception e)
-		{
-			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
-		}
 		this.updateLeagueCurrentRounds = true;
-		setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP);
-		setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+		webPageConf.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		webPageConf.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 	}
 
 	/**
@@ -88,14 +78,26 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	{
 		super.initialize(context);
 		
+		FetcherSetting setting = ApplicationContextHelper.getBean("defaultSetting");
+		webPagefetcher = new HttpCommonFetcher(setting);
+		try
+		{
+			webPagefetcher.init();
+		}
+		catch(Exception e)
+		{
+			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
+		}
+		
 		List<String> types = new ArrayList<>();
 		types.add(ZgzcwConstants.PAGE_ODDS_OP);
 		types.add(ZgzcwConstants.PAGE_ODDS_YP);
 		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
-		webPageFilter = new DownloadedWebPageFilter(types, ZgzcwConstants.SOURCE_ZGZCW, 
-				DateUtil.addDateNum(new Date(), -1), null);
+		webPageFilter = new DownloadedWebPageFilter(types, 
+				ZgzcwConstants.SOURCE_ZGZCW, 
+				DateUtil.addDateNum(new Date(), - webPageConf.getDayNumOfGetPages()), null);
 		webPageFilter.initialize();
 	}
 

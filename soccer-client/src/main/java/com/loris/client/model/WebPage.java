@@ -153,6 +153,7 @@ public class WebPage extends AutoIdEntity implements Task
 
 	public void setParams(Map<String, String> params)
 	{
+		if(params == null || params.size() == 0) return;
 		this.params.putAll(params);
 		setParamsTextByMap();
 	}

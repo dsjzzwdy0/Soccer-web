@@ -13,8 +13,16 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.common.util.DateUtil;
+import com.loris.soccer.data.filter.DownloadedWebPageFilter;
+import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 
 /**   
  * @ClassName: ZgzcwOddsDataPlugin   
@@ -24,14 +32,37 @@ import com.loris.client.task.context.TaskPluginContext;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@Component
 public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 {
 	/**
+	 * Create a new instance of ZgzcwOddsDataPlugin
 	 * @param name
 	 */
 	public ZgzcwOddsDataPlugin()
 	{
-		super("赔率数据下载");
+		super("赔率数据更新");
+	}
+	
+	/**
+	 * 初始化任务产生器
+	 * 
+	 * @param context 插件任务运行环境
+	 * @throws IOException 在任务产生过程中出现异常
+	 */
+	@Override
+	public void initialize(TaskPluginContext context) throws IOException
+	{
+		super.initialize(context);
+		
+		List<String> types = new ArrayList<>();
+		types.add(ZgzcwConstants.PAGE_ODDS_OP);
+		types.add(ZgzcwConstants.PAGE_ODDS_YP);
+		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+		webPageFilter = new DownloadedWebPageFilter(types,
+				ZgzcwConstants.SOURCE_ZGZCW, 
+				DateUtil.addDateNum(new Date(), -1), null);
+		webPageFilter.initialize();
 	}
 
 	/**
@@ -41,6 +72,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
+		
 	}
 
 }

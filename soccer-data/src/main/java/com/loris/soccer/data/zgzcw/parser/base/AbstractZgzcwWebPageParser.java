@@ -34,13 +34,6 @@ public abstract class AbstractZgzcwWebPageParser extends AbstractWebPageParser
 	
 	/**
 	 * Create a new instance of AbstractZgzcwWebPageParser
-	 */
-	public AbstractZgzcwWebPageParser()
-	{
-	}
-	
-	/**
-	 * Create a new instance of AbstractZgzcwWebPageParser
 	 * @param acceptType
 	 */
 	public AbstractZgzcwWebPageParser(String acceptType)
@@ -65,7 +58,7 @@ public abstract class AbstractZgzcwWebPageParser extends AbstractWebPageParser
 			return false;
 		}
 		
-		if(StringUtils.isNotEmpty(acceptType) && !acceptType.equalsIgnoreCase(page.getType()))
+		if(StringUtils.isBlank(acceptType) || !acceptType.equalsIgnoreCase(page.getType()))
 		{
 			return false;
 		}

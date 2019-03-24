@@ -57,6 +57,7 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.ZgzcwIssueDataPlugin;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
+import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
@@ -104,7 +105,9 @@ public class App
 			//testJcWebPage();
 			// testWebPageService();
 			
-			testZgzcwIssueScheduler();
+			testLeagueRoundWebPage();
+			
+			//testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -137,6 +140,44 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testLeagueRoundWebPage() throws Exception
+	{
+		KeyMap params = new KeyMap();
+		params.put(ZgzcwConstants.NAME_FIELD_SOURCE_LID, "150");
+		params.put(ZgzcwConstants.NAME_FIELD_SEASON, "2018-2019");
+		params.put(ZgzcwConstants.NAME_FIELD_CUR_ROUND, "21");
+		params.put(ZgzcwConstants.NAME_FIELD_LEAGUE_TYPE, "");
+		
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE_ROUND, params);
+		if (!downloadWebPage(page))
+		{
+			return;
+		}
+		//logger.info(page.getUrl());
+		//logger.info(page.getContent());
+
+		TableRecords records = ZgzcwPageParser.parseWebPage(page);
+		if (records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+		MatchList list = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		if (list == null)
+		{
+			logger.info("No Match list, error.");
+			return;
+		}
+		logger.info("Total Match size is " + list.size());
+
+		// RoundList rounds = (RoundList)
+		// records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
+		MatchResultList results = (MatchResultList) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
+		logger.info("Total Match size is " + results.size());
+		
+		saveTableRecords(records);
 	}
 	
 	public static void testWebPageService() throws Exception

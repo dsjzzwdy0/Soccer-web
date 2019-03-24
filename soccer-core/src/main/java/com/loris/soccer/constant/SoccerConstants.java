@@ -80,6 +80,7 @@ public interface SoccerConstants
 	final static public String NAME_FIELD_SEASON = "season";
 	final static public String NAME_FIELD_ISSUE = "issue";
 	final static public String NAME_FIELD_TID = "tid";
+	final static public String NAME_FIELD_ROUND = "round";
 	
 	/** 图标的类型 */
 	final static public String LOGO_TYPE_LEAGUE = "league";

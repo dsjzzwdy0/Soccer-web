@@ -42,6 +42,7 @@ import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.BaseMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
@@ -76,20 +77,20 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	@Autowired
 	protected WebPageService pageService;
 	
-	/** 是否更新联赛中心页面 */
-	protected boolean updateLeagueCurrentRounds = false;
-	
 	/** 网络页面的过滤器 */
 	protected WebPageFilter webPageFilter = null;
+	
+	/** 是否更新联赛中心页面 */
+	protected boolean updateLeagueCurrentRounds = false;
 	
 	/** 注册的过滤器 */
 	private Map<String, Filter<?>> filters = new HashMap<>();
 	
-	/** 页面下载之后是否产生新的任务，正向设置，如果不设置表示不产生 */
-	private Map<String, Boolean> pageProduceTask = new HashMap<>();
+	/** 页面的配置项 */
+	protected WebPageProperties webPageConf = new WebPageProperties();
 	
-	/** 是否产生这种类型的任务，反向设置，如果不设置，则表示产生*/
-	private Map<String, Boolean> producePages = new HashMap<>();
+	/** 设置更新的时间 */
+	protected long timeToUpdate = 6 * 60 * 60 * 1000;
 	
 	/**
 	 * Create a new instance of AbstractProducePlugin.
@@ -185,7 +186,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		if(records == null) return false;
 		
 		saveTableRecords(records);		
-		if(isPageProduceNewTask(page.getType()))
+		if(webPageConf.isPageProduceNewTask(page.getType()))
 		{
 			produceTask(page.getType(), records);
 		}		
@@ -230,8 +231,11 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	protected void createLeagueCenterTask(League league)
 	{
-		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, league.getLid());
-		createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params));
+		if(webPageConf.isProducePage(league.getType()))
+		{
+			Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, league.getLid());
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params));
+		}
 	}
 	
 	/**
@@ -313,19 +317,19 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
 		
 		// 欧赔数据下载
-		if (isProducePage(ZgzcwConstants.PAGE_ODDS_OP))
+		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_OP))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params));
 		}
 
 		// 亚盘数据下载
-		if (isProducePage(ZgzcwConstants.PAGE_ODDS_YP))
+		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_YP))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params));
 		}
 
 		// 大小球数据下载
-		if (isProducePage(ZgzcwConstants.PAGE_ODDS_NUM))
+		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_NUM))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params));
 		}
@@ -376,7 +380,8 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	public<T> boolean createTaskFromWebPage(TaskPluginContext context, WebPage page)
 			throws IOException, WebParserException, HostForbiddenException, UrlFetchException
 	{
-		setPageProduceNewTask(page.getType(), true);
+		webPageConf.setPageProduceNewTask(page.getType(), true);
+		
 		//解析数据结果
 		return executeWebPageTask(context, page);
 	}
@@ -471,67 +476,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		return (Filter<T>)filters.get(type);
 	}
-	
-	/**
-	 * 检测是否产生新的任务
-	 * @param type 页面类型
-	 * @return 是否检测的标志
-	 */
-	public boolean isPageProduceNewTask(String type)
+
+	public WebPageProperties getWebPageConf()
 	{
-		if(StringUtils.isBlank(type)) return false;
-		Boolean b = pageProduceTask.get(type);
-		return b == null ? false : b;
+		return webPageConf;
 	}
-	
-	/**
-	 * 设置是否产生新的任务
-	 * @param type 类型
-	 * @param b 标志
-	 */
-	public void setPageProduceNewTask(String type, boolean b)
+
+	public void setWebPageConf(WebPageProperties webPageConf)
 	{
-		pageProduceTask.put(type, b);
-	}
-	
-	/**
-	 * 设置是否产生新的任务
-	 * @param type 类型
-	 */
-	public void setPageProduceNewTask(String type)
-	{
-		pageProduceTask.put(type, true);
-	}
-	
-	/**
-	 * 设置是否产生新的页面
-	 * @param type
-	 * @param b
-	 */
-	public void setProducePage(String type)
-	{
-		producePages.put(type, true);
-	}
-	
-	/**
-	 * 设置是否产生新的页面
-	 * @param type
-	 * @param b
-	 */
-	public void setProducePage(String type, boolean b)
-	{
-		producePages.put(type, b);
-	}
-	
-	/**
-	 * 是否产生新的页面
-	 * @param type 类型
-	 * @return 产生的标志
-	 */
-	public boolean isProducePage(String type)
-	{
-		if(StringUtils.isBlank(type)) return false;
-		Boolean b = producePages.get(type);
-		return b == null ? true : b;
+		this.webPageConf.setWebPageProperties(webPageConf);
 	}
 }
