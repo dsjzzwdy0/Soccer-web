@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.model.view;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult.ResultType;
 
@@ -22,6 +23,7 @@ import com.loris.soccer.model.MatchResult.ResultType;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@TableName("soccer_match_jc_info")
 public class MatchJcInfo extends MatchJc
 {
 	/**

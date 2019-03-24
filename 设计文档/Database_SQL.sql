@@ -288,5 +288,38 @@ ALGORITHM=UNDEFINED
 DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
 VIEW `sys_role_res`AS 
-select `m1`.`id` AS `id`,`m1`.`icon` AS `icon`,`m3`.`roleid` AS `roleid`,(case when ((`m2`.`id` = 0) or isnull(`m2`.`id`)) then 0 else `m2`.`id` end) AS `parentId`,`m1`.`name` AS `name`,`m1`.`url` AS `url`,`m1`.`levels` AS `levels`,`m1`.`ismenu` AS `ismenu`,`m1`.`num` AS `num` from ((`soccer`.`sys_menu` `m1` left join `soccer`.`sys_menu` `m2` on((`m1`.`pcode` = `m2`.`code`))) join (select `soccer`.`sys_menu`.`id` AS `ID`,`rela`.`roleid` AS `roleid` from (`soccer`.`sys_menu` left join `soccer`.`sys_relation` `rela` on((`soccer`.`sys_menu`.`id` = `rela`.`menuid`)))) `m3` on((`m1`.`id` = `m3`.`ID`))) where (`m1`.`ismenu` = 1) order by `m1`.`levels`,`m1`.`num` ;
+select `m1`.`id` AS `id`,`m1`.`icon` AS `icon`,`m3`.`roleid` AS `roleid`,(case when ((`m2`.`id` = 0) or isnull(`m2`.`id`)) then 0 else `m2`.`id` end) AS `parentId`,
+	`m1`.`name` AS `name`,`m1`.`url` AS `url`,`m1`.`levels` AS `levels`,`m1`.`ismenu` AS `ismenu`,`m1`.`num` AS `num` 
+	from ((`soccer`.`sys_menu` `m1` left join `soccer`.`sys_menu` `m2` on((`m1`.`pcode` = `m2`.`code`))) 
+	join (select `soccer`.`sys_menu`.`id` AS `ID`,`rela`.`roleid` AS `roleid` from (`soccer`.`sys_menu` left join `soccer`.`sys_relation` `rela` on((`soccer`.`sys_menu`.`id` = `rela`.`menuid`)))) `m3` on((`m1`.`id` = `m3`.`ID`))) where (`m1`.`ismenu` = 1) order by `m1`.`levels`,`m1`.`num` ;
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`%` 
+SQL SECURITY DEFINER 
+VIEW `soccer_match_info`AS 
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`a`.`matchtime` AS `matchtime`,`a`.`lid` AS `lid`,`d`.`name` AS `leaguename`,`a`.`round` AS `round`,`a`.`season` AS `season`,
+	`a`.`homeid` AS `homeid`,`b`.`name` AS `homename`,`a`.`clientid` AS `clientid`,`c`.`name` AS `clientname`,`e`.`result` AS `result`,`e`.`homegoal` AS `homegoal`,
+	`e`.`clientgoal` AS `clientgoal` from ((((`soccer_match` `a` left join `soccer_league_team` `b` on((`a`.`homeid` = `b`.`tid`)))
+	 left join `soccer_league_team` `c` on((`a`.`clientid` = `c`.`tid`))) left join `soccer_league` `d` on((`a`.`lid` = `d`.`lid`))) 
+	left join `soccer_match_result` `e` on((`a`.`mid` = `e`.`mid`))) ;
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`%` 
+SQL SECURITY DEFINER 
+VIEW `soccer_match_jc_info` AS 
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.`season` AS `season`,`b`.`round` AS `round`,`b`.`homeid` AS `homeid`,
+	`b`.`homename` AS `homename`,`b`.`clientid` AS `clientid`,`b`.`clientname` AS `clientname`,`a`.`issue` AS `issue`,`a`.`ordinary` AS `ordinary`,
+	`a`.`matchtime` AS `matchtime`,`a`.`closetime` AS `closetime`,`a`.`winodds` AS `winodds`,`a`.`drawodds` AS `drawodds`,`a`.`loseodds` AS `loseodds`,
+	`a`.`opened` AS `opened`,`a`.`danguan` AS `danguan`,`a`.`rqnum` AS `rqnum`,`a`.`rqopened` AS `rqopened`,`a`.`rqwinodds` AS `rqwinodds`,`a`.`rqdrawodds` AS `rqdrawodds`,
+	`a`.`rqloseodds` AS `rqloseodds`,`b`.`result` AS `result`,`b`.`homegoal` AS `homegoal`,`b`.`clientgoal` AS `clientgoal`,
+	`a`.`isdelayed` AS `isdelayed`,`a`.`delaytime` AS `delaytime` from (`soccer_match_jc` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`%` 
+SQL SECURITY DEFINER 
+VIEW `soccer_match_bd_info`AS 
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.`season` AS `season`,`b`.`round` AS `round`,`b`.`homeid` AS `homeid`,`b`.`homename` AS `homename`,`b`.`clientid` AS `clientid`,`b`.`clientname` AS `clientname`,`a`.`bdno` AS `bdno`,`a`.`issue` AS `issue`,`a`.`ordinary` AS `ordinary`,`a`.`matchtime` AS `matchtime`,`a`.`closetime` AS `closetime`,`a`.`winodds` AS `winodds`,`a`.`drawodds` AS `drawodds`,`a`.`loseodds` AS `loseodds`,`a`.`rqnum` AS `rqnum`,`a`.`rqopened` AS `rqopened`,`b`.`result` AS `result`,`b`.`homegoal` AS `homegoal`,`b`.`clientgoal` AS `clientgoal`,`a`.`isdelayed` AS `isdelayed`,`a`.`delaytime` AS `delaytime` from (`soccer_match_bd` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
 

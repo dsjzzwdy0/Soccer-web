@@ -78,6 +78,7 @@ import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchBdInfo;
+import com.loris.soccer.model.view.MatchJcInfo;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 
@@ -148,12 +149,19 @@ public class App
 	
 	public static void testBdMatchInfo() throws Exception
 	{
+		String issue = "2019-03-23";
 		MatchService matchService = context.getBean(MatchService.class);
-		List<MatchBdInfo> matchBdInfos = matchService.getMatchBdInfos("2019-03-24", null);
+		List<MatchBdInfo> matchBdInfos = matchService.getMatchBdInfos(issue, null);
 		int i = 1;
 		for (MatchBdInfo matchBdInfo : matchBdInfos)
 		{
 			logger.info(i +++ ": " + matchBdInfo);
+		}
+		List<MatchJcInfo> matchJcInfos = matchService.getMatchJcInfos(issue);
+		i = 1;
+		for (MatchJcInfo matchJcInfo : matchJcInfos)
+		{
+			logger.info(i +++ ": " + matchJcInfo);
 		}
 	}
 	
