@@ -55,6 +55,7 @@ import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.ZgzcwIssueDataPlugin;
+import com.loris.soccer.data.ZgzcwLeagueDataPlugin;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -95,19 +96,7 @@ public class App
 		{
 			getApplicationContext();
 			// testSetting();
-			// testQueue();
-			// testAutowired();
-			// testZgzcwWebPage();
-			// testZgzcwOpWebPage();
-			// testZgzcwNumWebPage();
-			// testZgzcwLeagueWebPage();
-			// testBdWebPage();
-			//testJcWebPage();
-			// testWebPageService();
-			
-			testLeagueRoundWebPage();
-			
-			//testZgzcwIssueScheduler();
+			// testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -118,11 +107,24 @@ public class App
 			// testMariaDB();
 			// testDateString();
 			// testJcWebPage();
-
 			// testSchedulerInfo();
 			// testMapEqual();
 			// testMainThreadScheduler();
 			// testContext();
+			// testQueue();
+			// testAutowired();
+			// testZgzcwWebPage();
+			// testZgzcwOpWebPage();
+			// testZgzcwNumWebPage();
+			// testZgzcwLeagueWebPage();
+			// testBdWebPage();
+			// testJcWebPage();
+			// testWebPageService();
+			// testLeagueRoundWebPage();
+			
+			testZgzcwCupWebPage();
+			
+			//testZgzcwLeagueCenterScheduler();			
 		}
 		catch (Exception e)
 		{
@@ -140,6 +142,33 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	/**
+	 * 测试线程处理工具
+	 * 
+	 * @throws Exception
+	 */
+	public static void testZgzcwLeagueCenterScheduler() throws Exception
+	{
+		SchedulerStatus status = new SchedulerStatus();
+		status.setIntervaltime(4000);
+		status.setName("任务处理器");
+		status.setSid("100-100-100");
+		status.setMaxActiveTaskThread(3);
+
+		TaskScheduler scheduler = new TaskScheduler(status);
+		scheduler.setMaxActiveTaskThread(3);
+		// scheduler.setName("即时任务下载器");
+
+		ZgzcwLeagueDataPlugin plugin = context.getBean(ZgzcwLeagueDataPlugin.class);
+		// HttpCommonWebPageExecutor executor =
+		// (HttpCommonWebPageExecutor)context.getBean("httpCommonPlugin");
+
+		scheduler.addTaskPlugin(plugin);
+		// scheduler.addTaskPlugin(executor);
+
+		SchedulerFactory.startTaskScheduler(scheduler);
 	}
 	
 	public static void testLeagueRoundWebPage() throws Exception
@@ -635,10 +664,10 @@ public class App
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static void testZgzcwLeagueWebPage() throws Exception
+	public static void testZgzcwCupWebPage() throws Exception
 	{
 		Map<String, String> params = new LinkedHashMap<>();
-		params.put("lid", "83");
+		params.put("lid", "67");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_CUP, params);
 
 		if (!downloadWebPage(page))
@@ -659,7 +688,7 @@ public class App
 		List<Match> matchs = (List<Match>) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 		for (Match match : matchs)
 		{
-			logger.info(i++ + ": " + match.getMid() + "(" + match.getMatchtime() + ")");
+			logger.info(i++ + ": " + match.getMid() + "(" + match.getMatchtime() + ", " + match.getSeason() + ")");
 		}
 
 		List<Team> teams = (List<Team>) records.get(SoccerConstants.SOCCER_DATA_TEAM_LIST);
@@ -668,6 +697,7 @@ public class App
 		{
 			logger.info(i++ + ": " + team.getTid() + ", " + team.getName());
 		}
+		saveTableRecords(records);
 	}
 
 	/**

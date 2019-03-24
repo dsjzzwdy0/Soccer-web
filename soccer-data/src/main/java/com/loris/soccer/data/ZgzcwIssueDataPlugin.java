@@ -20,13 +20,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.loris.client.fetcher.impl.HttpCommonFetcher;
-import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
-import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.Filter;
 import com.loris.common.util.DateUtil;
 import com.loris.soccer.data.filter.DownloadedWebPageFilter;
@@ -77,18 +74,6 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	public void initialize(TaskPluginContext context) throws IOException
 	{
 		super.initialize(context);
-		
-		FetcherSetting setting = ApplicationContextHelper.getBean("defaultSetting");
-		webPagefetcher = new HttpCommonFetcher(setting);
-		try
-		{
-			webPagefetcher.init();
-		}
-		catch(Exception e)
-		{
-			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
-		}
-		
 		List<String> types = new ArrayList<>();
 		types.add(ZgzcwConstants.PAGE_ODDS_OP);
 		types.add(ZgzcwConstants.PAGE_ODDS_YP);

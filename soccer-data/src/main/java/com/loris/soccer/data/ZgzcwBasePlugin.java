@@ -25,6 +25,8 @@ import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.fetcher.WebFetcher;
+import com.loris.client.fetcher.impl.HttpCommonFetcher;
+import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
 import com.loris.client.task.Task;
@@ -32,6 +34,7 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
+import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.Filter;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.ArraysUtil;
@@ -98,6 +101,29 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	public ZgzcwBasePlugin(String name)
 	{
 		super(name);
+	}
+	
+	/**
+	 * 初始化任务产生器
+	 * 
+	 * @param context 插件任务运行环境
+	 * @throws IOException 在任务产生过程中出现异常
+	 */
+	@Override
+	public void initialize(TaskPluginContext context) throws IOException
+	{
+		super.initialize(context);
+		
+		FetcherSetting setting = ApplicationContextHelper.getBean("defaultSetting");
+		webPagefetcher = new HttpCommonFetcher(setting);
+		try
+		{
+			webPagefetcher.init();
+		}
+		catch(Exception e)
+		{
+			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
+		}
 	}
 
 	/**
