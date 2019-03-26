@@ -100,19 +100,31 @@ public class DownloadedWebPageFilter extends WebPageFilter
 		if(!types.contains(type)) return true;		
 		if(existWebPages == null || existWebPages.size() == 0) return true;
 		
-		for (WebPage webPage : existWebPages)
+		for (WebPage existPage : existWebPages)
 		{
-			if(page.equals(webPage))
+			if(page.equals(existPage) && needToReject(page, existPage, source))
 			{
-				Date loadtime = webPage.getLoadtime();
-				if(loadtime == null)
-				{
-					continue;
-				}
 				return false;
 			}
 		}		
 		return true;
+	}
+	
+	/**
+	 * 是否需要对页面进行拒绝
+	 * @param page 当前页面
+	 * @param existPage 存在的页面
+	 * @param source 数据来源
+	 * @return 是否存在的标示 
+	 */
+	protected<T> boolean needToReject(WebPage page, WebPage existPage, T source)
+	{
+		Date loadtime = existPage.getLoadtime();
+		if(loadtime == null)
+		{
+			return false;
+		}
+		return false;
 	}
 
 	/**
