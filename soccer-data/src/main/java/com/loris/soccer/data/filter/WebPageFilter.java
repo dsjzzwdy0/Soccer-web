@@ -40,8 +40,16 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	@Override
 	public boolean accept(WebPage obj)
 	{
-		return false;
+		return accept(obj, null);
 	}
+	
+	/**
+	 * 检测是否满足条件
+	 * @param page 页面内容
+	 * @param source 数据来源
+	 * @return 是否满足条件
+	 */
+	abstract public<T> boolean accept(WebPage page, T source);
 
 	public boolean isInitialized()
 	{

@@ -173,10 +173,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param quiet 是否通知处理器
 	 * @return 返回创建的标志
 	 */
-	@Override
-	protected boolean createWebPageTask(WebPage page, boolean quiet)
+	protected<T> boolean createWebPageTask(WebPage page, T source, boolean quiet)
 	{
-		if(webPageFilter != null && !webPageFilter.accept(page))
+		if(webPageFilter != null && !webPageFilter.accept(page, source))
 		{
 			return false;
 		}
@@ -252,12 +251,12 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * 创建联赛数据下载页面
 	 * @param league 联赛数据下载页面
 	 */
-	protected void createLeagueCenterTask(League league)
+	protected void createLeagueCenterTask(League league, boolean quiet)
 	{
 		if(webPageConf.isProducePage(league.getType()))
 		{
 			Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, league.getLid());
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params));
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params), league, quiet);
 		}
 	}
 	
@@ -280,7 +279,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		{
 			if(filter == null || filter.accept(league))
 			{
-				createLeagueCenterTask(league);
+				createLeagueCenterTask(league, false);
 				size ++;
 			}
 		}
@@ -334,7 +333,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param hasYp 是否下载亚盘数据
 	 * @param hasNum 是否下载大小球数据
 	 */
-	protected void createMatchDataTask(BaseMatch match)
+	protected void createMatchDataTask(BaseMatch match, boolean quiet)
 	{
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, match.getMid());		
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
@@ -342,19 +341,19 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		// 欧赔数据下载
 		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_OP))
 		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params));
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params), match, quiet);
 		}
 
 		// 亚盘数据下载
 		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_YP))
 		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params));
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params), match, quiet);
 		}
 
 		// 大小球数据下载
 		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_NUM))
 		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params));
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params), match, quiet);
 		}
 	}
 
@@ -383,7 +382,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 					logger.info("Match has no matchtime property: " + matchItem);
 					continue;
 				}
-				createMatchDataTask(matchItem);
+				createMatchDataTask(matchItem, false);
 				size ++;
 			}
 		}

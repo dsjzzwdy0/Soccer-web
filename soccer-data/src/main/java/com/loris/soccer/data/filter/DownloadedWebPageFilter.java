@@ -87,14 +87,14 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	{
 		this.source = source;
 	}
+	
 
 	/**
-	 * 过滤网络页面
-	 * @param page 网络页面
-	 * @return 是否接受的标志
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.data.filter.WebPageFilter#accept(com.loris.client.model.WebPage, java.lang.Object)
 	 */
 	@Override
-	public boolean accept(WebPage page)
+	public <T> boolean accept(WebPage page, T source)
 	{
 		String type = page.getType();
 		if(!types.contains(type)) return true;		

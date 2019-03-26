@@ -295,7 +295,7 @@ select `m1`.`id` AS `id`,`m1`.`icon` AS `icon`,`m3`.`roleid` AS `roleid`,(case w
 
 CREATE 
 ALGORITHM=UNDEFINED 
-DEFINER=`root`@`%` 
+DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
 VIEW `soccer_match_info`AS 
 select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`a`.`matchtime` AS `matchtime`,`a`.`lid` AS `lid`,`d`.`name` AS `leaguename`,`a`.`round` AS `round`,`a`.`season` AS `season`,
@@ -306,7 +306,7 @@ select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`a`.`matchtime` AS `matchtime`,`a`.`l
 
 CREATE 
 ALGORITHM=UNDEFINED 
-DEFINER=`root`@`%` 
+DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
 VIEW `soccer_match_jc_info` AS 
 select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.`season` AS `season`,`b`.`round` AS `round`,`b`.`homeid` AS `homeid`,
@@ -318,8 +318,13 @@ select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` A
 
 CREATE 
 ALGORITHM=UNDEFINED 
-DEFINER=`root`@`%` 
+DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
 VIEW `soccer_match_bd_info`AS 
-select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.`season` AS `season`,`b`.`round` AS `round`,`b`.`homeid` AS `homeid`,`b`.`homename` AS `homename`,`b`.`clientid` AS `clientid`,`b`.`clientname` AS `clientname`,`a`.`bdno` AS `bdno`,`a`.`issue` AS `issue`,`a`.`ordinary` AS `ordinary`,`a`.`matchtime` AS `matchtime`,`a`.`closetime` AS `closetime`,`a`.`winodds` AS `winodds`,`a`.`drawodds` AS `drawodds`,`a`.`loseodds` AS `loseodds`,`a`.`rqnum` AS `rqnum`,`a`.`rqopened` AS `rqopened`,`b`.`result` AS `result`,`b`.`homegoal` AS `homegoal`,`b`.`clientgoal` AS `clientgoal`,`a`.`isdelayed` AS `isdelayed`,`a`.`delaytime` AS `delaytime` from (`soccer_match_bd` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.`season` AS `season`,`b`.`round` AS `round`,
+	`b`.`homeid` AS `homeid`,`b`.`homename` AS `homename`,`b`.`clientid` AS `clientid`,`b`.`clientname` AS `clientname`,`a`.`bdno` AS `bdno`,
+	`a`.`issue` AS `issue`,`a`.`ordinary` AS `ordinary`,`a`.`matchtime` AS `matchtime`,`a`.`closetime` AS `closetime`,`a`.`winodds` AS `winodds`,
+	`a`.`drawodds` AS `drawodds`,`a`.`loseodds` AS `loseodds`,`a`.`rqnum` AS `rqnum`,`a`.`rqopened` AS `rqopened`,
+	`b`.`result` AS `result`,`b`.`homegoal` AS `homegoal`,`b`.`clientgoal` AS `clientgoal`,`a`.`isdelayed` AS `isdelayed`,`a`.`delaytime` AS `delaytime`
+	 from (`soccer_match_bd` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
 

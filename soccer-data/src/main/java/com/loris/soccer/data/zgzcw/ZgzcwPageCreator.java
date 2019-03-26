@@ -87,7 +87,7 @@ public class ZgzcwPageCreator
 		PAGE_BASE_URLS.put(PAGE_CENTER, 			"http://saishi.zgzcw.com/soccer/");	// 数据主页面
 		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE,    	"http://saishi.zgzcw.com/soccer/league/");  // "cup/51/2017-2018/" 杯赛类型的数据
 		PAGE_BASE_URLS.put(PAGE_LEAGUE_CUP,    		"http://saishi.zgzcw.com/soccer/cup/");  	// "cup/51/2017-2018/" 杯赛类型的数据
-		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE_ROUND, 	"http://saishi.zgzcw.com/summary/liansaiAjax.action" ); // ?source_league_id=8&currentRound=3&season=2017-2018&seasonType=";//联赛类型的数据
+		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE_ROUND, 	"http://saishi.zgzcw.com/" ); // ?source_league_id=8&currentRound=3&season=2017-2018&seasonType=";//联赛类型的数据
 		PAGE_BASE_URLS.put(PAGE_LOTTERY_BD,        	"http://cp.zgzcw.com/lottery/bdplayvsforJsp.action?lotteryId=200"); // &issue=80401 // 北单足彩
 		PAGE_BASE_URLS.put(PAGE_LOTTERY_JC,        	"http://cp.zgzcw.com/lottery/jchtplayvsForJsp.action?lotteryId=47&type=jcmini"); // &issue=2018-03-25 // 竞彩足球
 		PAGE_BASE_URLS.put(PAGE_LOTTERY_ZC,       	"http://cp.zgzcw.com/lottery/zcplayvs.action?lotteryId=13"); // &issue=300&v=2018-02-22" 足彩足球
@@ -193,7 +193,7 @@ public class ZgzcwPageCreator
 		{
 		case PAGE_LEAGUE_LEAGUE_ROUND:
 			Map<String, String> headers = page.getHeaders();
-			String baseUrl = "http://saishi.zgzcw.com";
+			String baseUrl = PAGE_BASE_URLS.get(page.getType());
 			String host = URLUtil.getHost(baseUrl);
 			String referer = baseUrl + "/soccer/league/" + page.getParam(ZgzcwConstants.NAME_FIELD_SOURCE_LID)
 				+ "/" + page.getParam(SoccerConstants.NAME_FIELD_SEASON);
@@ -215,37 +215,38 @@ public class ZgzcwPageCreator
 	 */
 	protected static String createURL(String type, Map<String, String> params)
 	{
-		String basicUrl = PAGE_BASE_URLS.get(type);
+		String baseURL = PAGE_BASE_URLS.get(type);
 		switch (type)
 		{
 		case PAGE_LEAGUE_LEAGUE:
 		case PAGE_LEAGUE_CUP:
 			checkParams(params, SoccerConstants.NAME_FIELD_LID);
-			basicUrl += params.get(SoccerConstants.NAME_FIELD_LID);
+			baseURL += params.get(SoccerConstants.NAME_FIELD_LID);
 			break;
 		case PAGE_ODDS_OP:				//百家OP页面
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);
-			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID) + "/bjop";
+			baseURL += params.get(SoccerConstants.NAME_FIELD_MID) + "/bjop";
 			break;
 		case PAGE_ODDS_YP:		
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);//百家OP页面
-			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ypdb";
+			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ypdb";
 			break;
 		case PAGE_ODDS_NUM:
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);
-			basicUrl += params.get(SoccerConstants.NAME_FIELD_MID) + "/dxdb";
+			baseURL += params.get(SoccerConstants.NAME_FIELD_MID) + "/dxdb";
 			break;
 		case PAGE_LEAGUE_LEAGUE_ROUND:
 			checkParams(params, ZgzcwConstants.NAME_FIELD_SOURCE_LID);
 			checkParams(params, ZgzcwConstants.NAME_FIELD_SEASON);
 			checkParams(params, ZgzcwConstants.NAME_FIELD_CUR_ROUND);
+			baseURL += "summary/liansaiAjax.action";
 			//basicUrl = URLUtil.makeDefaultUrl(basicUrl, params);
 			break;
 		default:
-			basicUrl = URLUtil.makeDefaultUrl(basicUrl, params);
+			baseURL = URLUtil.makeDefaultUrl(baseURL, params);
 			break;
 		}
-		return basicUrl;
+		return baseURL;
 	}
 
 	/**
