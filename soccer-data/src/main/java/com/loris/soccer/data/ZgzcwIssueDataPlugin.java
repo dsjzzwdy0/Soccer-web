@@ -51,7 +51,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	private static Logger logger = Logger.getLogger(ZgzcwIssueDataPlugin.class);
 	
 	/** 间隔时间 */
-	protected long interval = 2000;
+	protected long interval = 3000;
 	
 	/** 比赛过滤器 */
 	Filter<BaseMatch> matchFilter = null;
@@ -75,6 +75,8 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	@Override
 	public void initialize(TaskPluginContext context) throws IOException
 	{
+		if(initialized) return;
+		
 		super.initialize(context);
 		List<String> types = new ArrayList<>();
 		types.add(ZgzcwConstants.PAGE_ODDS_OP);
@@ -92,6 +94,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		registFilter(SoccerConstants.SOCCER_DATA_MATCH, 
 				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), 
 				webPageConf.getDayNumOfGetPages()));
+		initialized = true;
 	}
 
 	/**

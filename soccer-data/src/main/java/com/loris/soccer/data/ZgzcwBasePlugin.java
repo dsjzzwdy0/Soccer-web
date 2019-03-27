@@ -110,6 +110,10 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	@Override
 	public void initialize(TaskPluginContext context) throws IOException
 	{
+		if(initialized)
+		{
+			return;
+		}
 		super.initialize(context);
 		
 		FetcherSetting setting = ApplicationContextHelper.getBean("defaultSetting");

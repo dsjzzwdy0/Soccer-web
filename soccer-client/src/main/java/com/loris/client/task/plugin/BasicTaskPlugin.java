@@ -32,7 +32,7 @@ public abstract class BasicTaskPlugin extends TaskEventProducer implements TaskP
 	protected String name;
 
 	/** 是否已经初始化的标志 */
-	private boolean initialized = false;
+	protected boolean initialized = false;
 	
 	/**
 	 * Create a new instance of BasicTaskPlugin
