@@ -192,6 +192,7 @@ public class WebPageProperties
 	{
 		WebPageProperties properties = new WebPageProperties();
 		properties.numDayfGetPages = 10;
+		properties.numDayOfHasOdds = 7;
 		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
 		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：1天
 		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
