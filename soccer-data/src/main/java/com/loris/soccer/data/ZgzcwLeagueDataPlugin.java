@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.common.util.DateUtil;
-import com.loris.soccer.data.filter.DownloadedWebPageFilter;
+import com.loris.soccer.data.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 /**   
@@ -62,7 +62,7 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
 		
-		webPageFilter = new DownloadedWebPageFilter(types, 
+		webPageFilter = new ZgzcwWebPageFilter(types, 
 				ZgzcwConstants.SOURCE_ZGZCW, 
 				DateUtil.addDateNum(new Date(), - webPageConf.getDayNumOfGetPages()), null);
 		webPageFilter.initialize();

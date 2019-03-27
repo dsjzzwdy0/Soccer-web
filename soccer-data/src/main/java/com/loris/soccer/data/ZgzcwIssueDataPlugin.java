@@ -26,7 +26,7 @@ import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.filter.Filter;
 import com.loris.common.util.DateUtil;
-import com.loris.soccer.data.filter.DownloadedWebPageFilter;
+import com.loris.soccer.data.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.model.base.BaseMatch;
@@ -80,7 +80,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
-		webPageFilter = new DownloadedWebPageFilter(types, 
+		webPageFilter = new ZgzcwWebPageFilter(types, 
 				ZgzcwConstants.SOURCE_ZGZCW, 
 				DateUtil.addDateNum(new Date(), - webPageConf.getDayNumOfGetPages()), null);
 		webPageFilter.initialize();

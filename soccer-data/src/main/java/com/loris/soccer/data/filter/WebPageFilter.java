@@ -23,10 +23,8 @@ import com.loris.common.filter.Filter;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public abstract class WebPageFilter implements Filter<WebPage>
-{
-	protected boolean initialized = false;
-	
+public interface WebPageFilter extends Filter<WebPage>
+{	
 	/**
 	 * 过滤器的初始化
 	 * @return 是否成功
@@ -34,25 +32,16 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	public abstract boolean initialize();
 	
 	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.common.filter.Filter#accept(java.lang.Object)
-	 */
-	@Override
-	public boolean accept(WebPage obj)
-	{
-		return accept(obj, null);
-	}
-	
-	/**
 	 * 检测是否满足条件
 	 * @param page 页面内容
 	 * @param source 数据来源
 	 * @return 是否满足条件
 	 */
-	abstract public<T> boolean accept(WebPage page, T source);
+	public<T> boolean accept(WebPage page, T source);
 
-	public boolean isInitialized()
-	{
-		return initialized;
-	}
+	/**
+	 * 检测是否已经初始化
+	 * @return
+	 */
+	public boolean isInitialized();
 }

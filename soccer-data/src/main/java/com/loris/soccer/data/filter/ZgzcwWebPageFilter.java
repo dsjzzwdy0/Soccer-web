@@ -18,6 +18,9 @@ import java.util.List;
 import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
 import com.loris.common.context.ApplicationContextHelper;
+import com.loris.common.util.ToolUtil;
+
+import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
 
 /**   
  * @ClassName:  WebPageFilter    
@@ -28,8 +31,11 @@ import com.loris.common.context.ApplicationContextHelper;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class DownloadedWebPageFilter extends WebPageFilter
+public class ZgzcwWebPageFilter implements WebPageFilter
 {
+	/** 初始化的标志 */
+	protected boolean initialized = false;
+	
 	/** 网络服务 */
 	protected WebPageService pageService;
 	
@@ -51,7 +57,7 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
 	 */
-	public DownloadedWebPageFilter()
+	public ZgzcwWebPageFilter()
 	{
 	}
 	
@@ -62,7 +68,7 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	 * @param start 开始日期
 	 * @param end 结束日期
 	 */
-	public DownloadedWebPageFilter(List<String> types, String source, Date start, Date end)
+	public ZgzcwWebPageFilter(List<String> types, String source, Date start, Date end)
 	{
 		this.types.addAll(types);
 		this.source = source;
@@ -102,7 +108,7 @@ public class DownloadedWebPageFilter extends WebPageFilter
 		
 		for (WebPage existPage : existWebPages)
 		{
-			if(page.equals(existPage) && needToReject(page, existPage, source))
+			if(page.equals(existPage) && needNotToReload(page, existPage, source))
 			{
 				return false;
 			}
@@ -111,18 +117,38 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	}
 	
 	/**
-	 * 是否需要对页面进行拒绝
+	 * 检测与判断是否需要对页面进行重新下载，需要重新下载的几种条件如下：
+	 * 1. 联赛与杯赛首页面： 超过设定的时间，如1天，则需要重新进行下载;
+	 * 2. 联赛轮次页面：已经下载的，不进行更新
+	 * 3. 赔率页面（含欧赔、亚盘、大小球）：
+	 *    第一种情况：比赛已经开始或已经结束的，并且已经下载过的，不需要重新进行下载；未下载过的，需要进行下载
+	 *    第二种情况：比赛还未开始的，未下载过的，需要进行下载；下载时间距离当前时间超过设定时间域值的，如2小时，
+	 *    则需要重新进行下载。
+	 * 
 	 * @param page 当前页面
 	 * @param existPage 存在的页面
 	 * @param source 数据来源
 	 * @return 是否存在的标示 
 	 */
-	protected<T> boolean needToReject(WebPage page, WebPage existPage, T source)
+	protected<T> boolean needNotToReload(WebPage page, WebPage existPage, T source)
 	{
-		Date loadtime = existPage.getLoadtime();
-		if(loadtime == null)
+		if(ToolUtil.isEmpty(existPage))
 		{
 			return false;
+		}
+		Date loadtime = existPage.getLoadtime();
+		if(ToolUtil.isEmpty(existPage) || ToolUtil.isEmpty(loadtime))
+		{
+			return false;
+		}
+		switch (page.getType())
+		{
+		case PAGE_LEAGUE_CUP:
+		case PAGE_LEAGUE_LEAGUE:
+			
+			break;
+		default:
+			break;
 		}
 		return false;
 	}
@@ -140,7 +166,7 @@ public class DownloadedWebPageFilter extends WebPageFilter
 		}
 		if(pageService == null)
 		{
-			throw new IllegalArgumentException("The WebPageService is null, can't initialize the DownloadedWebPageFilter.");
+			throw new IllegalArgumentException("The WebPageService is null, can't initialize the ZgzcwWebPageFilter.");
 		}
 		existWebPages = pageService.getWebPage(source, types, start, end);		
 		//System.out.println("There are total " + existWebPages.size() + " pages in database.");
@@ -171,5 +197,24 @@ public class DownloadedWebPageFilter extends WebPageFilter
 	public String getSource()
 	{
 		return source;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see com.loris.common.filter.Filter#accept(java.lang.Object)
+	 */
+	@Override
+	public boolean accept(WebPage obj)
+	{
+		return accept(obj, null);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.data.filter.WebPageFilter#isInitialized()
+	 */
+	@Override
+	public boolean isInitialized()
+	{
+		return initialized;
 	}
 }
