@@ -13,6 +13,7 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -325,6 +326,28 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		return false;
 	}
+	
+	/**
+	 * 获得比赛数据的类型页面
+	 * @return 比赛数据
+	 */
+	protected List<String> getMatchDataTypes()
+	{
+		List<String> types = new ArrayList<>();
+		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_OP))
+		{
+			types.add(ZgzcwConstants.PAGE_ODDS_OP);
+		}
+		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_YP))
+		{
+			types.add(ZgzcwConstants.PAGE_ODDS_YP);
+		}
+		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_NUM))
+		{
+			types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+		}
+		return types;
+	}
 
 	/**
 	 * 建立比赛的数据下载任务
@@ -333,27 +356,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param hasYp 是否下载亚盘数据
 	 * @param hasNum 是否下载大小球数据
 	 */
-	protected void createMatchDataTask(BaseMatch match, boolean quiet)
+	protected void createMatchDataTask(List<String> types, BaseMatch match, boolean quiet)
 	{
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, match.getMid());		
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
 		
-		// 欧赔数据下载
-		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_OP))
+		for (String type : types)
 		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params), match, quiet);
-		}
-
-		// 亚盘数据下载
-		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_YP))
-		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params), match, quiet);
-		}
-
-		// 大小球数据下载
-		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_NUM))
-		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params), match, quiet);
+			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(type, params), match, quiet);
 		}
 	}
 
@@ -373,6 +383,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		
 		logger.info("There are " + matchItems.size() + " matches in the list.");
 		int size = 0;
+		
+		List<String> types = getMatchDataTypes();
+		if(types.size() == 0)
+		{
+			logger.info("There are no match data type defined in the WebPageProperties.");
+			return false;
+		}
+		
 		for (T matchItem : matchItems)
 		{
 			if (filter == null || filter.accept(matchItem))
@@ -382,7 +400,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 					logger.info("Match has no matchtime property: " + matchItem);
 					continue;
 				}
-				createMatchDataTask(matchItem, false);
+				createMatchDataTask(types, matchItem, false);
 				size ++;
 			}
 		}

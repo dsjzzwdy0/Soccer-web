@@ -113,7 +113,7 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 		
 		for (WebPage existPage : existWebPages)
 		{
-			if(page.equals(existPage) && needToReload(page, existPage, source))
+			if(page.equals(existPage) && !needToReload(page, existPage, source))
 			{
 				return false;
 			}

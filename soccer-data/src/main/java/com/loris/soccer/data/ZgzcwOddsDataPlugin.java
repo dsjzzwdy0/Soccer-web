@@ -21,7 +21,9 @@ import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 
@@ -67,6 +69,8 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 		filter.setPageTypes(types);	
 		webPageFilter = filter;
 		webPageFilter.initialize();
+		
+		registFilter(SoccerConstants.SOCCER_DATA_MATCH, new MatchOddsFilter(webPageConf.getNumDayOfHasOdds()));
 	}
 
 	/**

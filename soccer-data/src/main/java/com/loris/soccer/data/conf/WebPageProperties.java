@@ -29,7 +29,10 @@ import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 public class WebPageProperties
 {
 	/** 设置WebPageFilter从数据库中获取下载页面的天数 */
-	protected int dayNumOfGetPages = 3;
+	protected int numDayfGetPages = 10;
+	
+	/** 当前之后的多少天的比赛有赔率 */
+	protected int numDayOfHasOdds = 6;
 	
 	/** 页面更新的时间， 按照秒为单位*/
 	protected Map<String, Long> pageUpdateTime = new HashMap<>();
@@ -150,17 +153,27 @@ public class WebPageProperties
 
 	public int getDayNumOfGetPages()
 	{
-		return dayNumOfGetPages;
+		return numDayfGetPages;
 	}
 
 	public void setDayNumOfGetPages(int dayNumOfGetPages)
 	{
-		this.dayNumOfGetPages = dayNumOfGetPages;
+		this.numDayfGetPages = dayNumOfGetPages;
 	}
 	
+	public int getNumDayOfHasOdds()
+	{
+		return numDayOfHasOdds;
+	}
+
+	public void setNumDayOfHasOdds(int numDayOfHasOdds)
+	{
+		this.numDayOfHasOdds = numDayOfHasOdds;
+	}
+
 	public void setWebPageProperties(WebPageProperties properties)
 	{
-		dayNumOfGetPages = properties.dayNumOfGetPages;
+		numDayfGetPages = properties.numDayfGetPages;
 		pageUpdateTime.clear();
 		if(properties.getPageUpdateTime().size() > 0)
 			pageUpdateTime.putAll(properties.getPageUpdateTime());
@@ -178,7 +191,7 @@ public class WebPageProperties
 	public static WebPageProperties getDefault()
 	{
 		WebPageProperties properties = new WebPageProperties();
-		properties.dayNumOfGetPages = 3;
+		properties.numDayfGetPages = 3;
 		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
 		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：1天
 		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
