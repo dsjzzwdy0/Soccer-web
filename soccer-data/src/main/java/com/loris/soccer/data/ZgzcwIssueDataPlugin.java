@@ -84,7 +84,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
 		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
 		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		filter.setStart(DateUtil.getFirstDateBefore(new Date(), - webPageConf.getDayNumOfGetPages()));
+		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
 		filter.setPageTypes(types);		
 		webPageFilter = filter;
 		webPageFilter.initialize();

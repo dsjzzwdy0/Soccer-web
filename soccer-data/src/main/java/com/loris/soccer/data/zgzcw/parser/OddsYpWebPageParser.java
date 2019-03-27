@@ -89,11 +89,16 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	@Override
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
-		Elements elements = document.select(".main #data-body table tbody tr");
-		if (elements == null || elements.size() == 0)
+		Element element = document.selectFirst(".main #data-body");
+		if(element == null)
 		{
-			System.out.println(page.getUrl());
 			throw new WebParserException("The document is not a validate Soccer Match yp page.");
+		}
+		
+		Elements elements = element.select("table tbody tr");
+		if(elements == null || elements.size() <= 0)
+		{
+			return null;
 		}
 
 		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);

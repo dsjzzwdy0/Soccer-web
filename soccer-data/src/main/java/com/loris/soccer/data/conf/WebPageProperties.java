@@ -32,7 +32,7 @@ public class WebPageProperties
 	protected int numDayfGetPages = 10;
 	
 	/** 当前之后的多少天的比赛有赔率 */
-	protected int numDayOfHasOdds = 6;
+	protected int numDayOfHasOdds = 4;
 	
 	/** 页面更新的时间， 按照秒为单位*/
 	protected Map<String, Long> pageUpdateTime = new HashMap<>();
@@ -192,7 +192,7 @@ public class WebPageProperties
 	{
 		WebPageProperties properties = new WebPageProperties();
 		properties.numDayfGetPages = 10;
-		properties.numDayOfHasOdds = 7;
+		properties.numDayOfHasOdds = 4;
 		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
 		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：1天
 		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时

@@ -66,7 +66,7 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 		
 		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
 		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		filter.setStart(DateUtil.getFirstDateBefore(new Date(), - webPageConf.getDayNumOfGetPages()));
+		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
 		filter.setPageTypes(types);		
 		webPageFilter = filter;
 		webPageFilter.initialize();

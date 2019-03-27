@@ -414,11 +414,11 @@ public class DateUtil
 	/**
 	 * 计算一个日期加上一个天数之后的日期
 	 * 
-	 * @param start
-	 * @param addDayNum
-	 * @return
+	 * @param start 开始日期
+	 * @param addDayNum 增加的天数
+	 * @return 增加后的日期
 	 */
-	public static Date addDateNum(Date start, int addDayNum)
+	public static Date addDayNum(Date start, int addDayNum)
 	{
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(start);

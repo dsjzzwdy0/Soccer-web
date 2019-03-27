@@ -238,6 +238,7 @@ public class TaskScheduler implements TaskPluginContext, TaskEventListener, Task
 			}
 			else
 			{
+				throwable.printStackTrace();
 				logger.info("Error occured '" + throwable.getMessage() + "' when excuting " + task.getName() + ", push back to TaskQueue.");				
 				taskQueue.pushBack(task);
 			}					

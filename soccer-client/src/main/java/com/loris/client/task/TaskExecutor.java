@@ -119,8 +119,9 @@ public class TaskExecutor extends TaskEventProducer implements Closeable
 			{
 				notifyTaskEvent(new TaskEvent(task, TaskEventType.Executed));
 			}
-			else {
-				notifyTaskEvent(new TaskEvent(task, TaskEventType.Error));
+			else
+			{
+				notifyTaskEvent(new TaskEvent(task, TaskEventType.Executed));
 			}
 		}
 		catch (Exception e)

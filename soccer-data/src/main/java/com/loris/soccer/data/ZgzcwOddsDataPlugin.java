@@ -65,7 +65,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
 		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
 		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		filter.setStart(DateUtil.getFirstDateBefore(new Date(), - webPageConf.getDayNumOfGetPages()));
+		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
 		filter.setPageTypes(types);	
 		webPageFilter = filter;
 		webPageFilter.initialize();

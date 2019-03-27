@@ -206,13 +206,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		
 		//解析数据结果
 		TableRecords records = ZgzcwPageParser.parseWebPage(page);
-		if(records == null) return false;
-		
-		saveTableRecords(records);		
-		if(webPageConf.isPageProduceNewTask(page.getType()))
-		{
-			produceTask(page.getType(), records);
-		}		
+		if(records != null)
+		{		
+			saveTableRecords(records);		
+			if(webPageConf.isPageProduceNewTask(page.getType()))
+			{
+				produceTask(page.getType(), records);
+			}
+		}
 		return true;
 	}
 	
