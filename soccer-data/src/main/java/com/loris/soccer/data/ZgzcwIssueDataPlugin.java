@@ -26,6 +26,7 @@ import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.filter.Filter;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
@@ -60,8 +61,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	{
 		super("当日数据下载");
 		this.updateLeagueCurrentRounds = true;
-		webPageConf.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP);
-		webPageConf.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+		webPageConf = WebPageProperties.getDefault();
 	}
 
 	/**
@@ -80,9 +80,11 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
-		webPageFilter = new ZgzcwWebPageFilter(types, 
-				ZgzcwConstants.SOURCE_ZGZCW, 
-				DateUtil.addDateNum(new Date(), - webPageConf.getDayNumOfGetPages()), null);
+		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
+		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		filter.setStart(DateUtil.getFirstDateBefore(new Date(), - webPageConf.getDayNumOfGetPages()));
+		filter.setPageTypes(types);		
+		webPageFilter = filter;
 		webPageFilter.initialize();
 	}
 

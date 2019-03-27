@@ -16,6 +16,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+
 /**   
  * @ClassName: WebPageConf   
  * @Description: 页面配置数据  
@@ -29,16 +31,20 @@ public class WebPageProperties
 	/** 设置WebPageFilter从数据库中获取下载页面的天数 */
 	protected int dayNumOfGetPages = 3;
 	
-	/** 页面更新的时间 */
+	/** 页面更新的时间， 按照秒为单位*/
 	protected Map<String, Long> pageUpdateTime = new HashMap<>();
 	
-	/** 页面产生新的任务 */
+	/** 页面产生新的任务,默认是都不创建 */
 	protected Map<String, Boolean> pageProduceTask = new HashMap<>();
 	
-	/** 产生页面下载任务 */
-	protected Map<String, Boolean> producePage = new HashMap<>();
+	/** 产生页面下载任务，默认皆为被创建 */
+	protected Map<String, Boolean> pageBeCreated = new HashMap<>();
 	
-	
+	/**
+	 * 按照秒为单位
+	 * @param type
+	 * @return
+	 */
 	public Long getPageUpdateTime(String type)
 	{
 		return pageUpdateTime.get(type);
@@ -69,16 +75,16 @@ public class WebPageProperties
 		this.pageProduceTask.putAll(pageToProduceTask);
 	}
 
-	public Map<String, Boolean> getProducePage()
+	public Map<String, Boolean> getPageBeCreated()
 	{
-		return producePage;
+		return pageBeCreated;
 	}
 
-	public void setProducePage(Map<String, Boolean> producePage)
+	public void setPageBeCreated(Map<String, Boolean> pageBeCreated)
 	{
-		this.producePage.putAll(producePage);;
+		this.pageBeCreated.putAll(pageBeCreated);
 	}
-	
+
 	/**
 	 * 检测是否产生新的任务
 	 * @param type 页面类型
@@ -117,7 +123,7 @@ public class WebPageProperties
 	 */
 	public void setProducePage(String type)
 	{
-		producePage.put(type, true);
+		pageBeCreated.put(type, true);
 	}
 	
 	/**
@@ -125,9 +131,9 @@ public class WebPageProperties
 	 * @param type
 	 * @param b
 	 */
-	public void setProducePage(String type, boolean b)
+	public void setPageBeCreated(String type, boolean b)
 	{
-		producePage.put(type, b);
+		pageBeCreated.put(type, b);
 	}
 	
 	/**
@@ -135,10 +141,10 @@ public class WebPageProperties
 	 * @param type 类型
 	 * @return 产生的标志
 	 */
-	public boolean isProducePage(String type)
+	public boolean isPageBeCreated(String type)
 	{
 		if(StringUtils.isBlank(type)) return false;
-		Boolean b = producePage.get(type);
+		Boolean b = pageBeCreated.get(type);
 		return b == null ? true : b;
 	}
 
@@ -161,7 +167,37 @@ public class WebPageProperties
 		pageProduceTask.clear();
 		if(properties.getPageProduceTask().size() > 0)
 			pageProduceTask.putAll(properties.getPageProduceTask());
-		if(properties.getProducePage().size() > 0)
-			producePage.putAll(properties.getProducePage());
+		if(properties.getPageBeCreated().size() > 0)
+			pageBeCreated.putAll(properties.getPageBeCreated());
+	}
+	
+	/**
+	 * 配置默认的信息
+	 * @return
+	 */
+	public static WebPageProperties getDefault()
+	{
+		WebPageProperties properties = new WebPageProperties();
+		properties.dayNumOfGetPages = 3;
+		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
+		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：1天
+		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_ODDS_YP, oddsUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_ODDS_NUM, oddsUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, leagueUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LEAGUE_CUP, leagueUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LOTTERY_JC, realPageUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LOTTERY_BD, realPageUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
+		properties.setPageUpdateTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
+		
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_JC, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_BD, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_BD, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_JC, true);
+		return properties;
 	}
 }

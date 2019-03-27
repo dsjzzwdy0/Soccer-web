@@ -253,7 +253,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	protected void createLeagueCenterTask(League league, boolean quiet)
 	{
-		if(webPageConf.isProducePage(league.getType()))
+		if(webPageConf.isPageBeCreated(league.getType()))
 		{
 			Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, league.getLid());
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params), league, quiet);
@@ -339,19 +339,19 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
 		
 		// 欧赔数据下载
-		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_OP))
+		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_OP))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params), match, quiet);
 		}
 
 		// 亚盘数据下载
-		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_YP))
+		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_YP))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params), match, quiet);
 		}
 
 		// 大小球数据下载
-		if (webPageConf.isProducePage(ZgzcwConstants.PAGE_ODDS_NUM))
+		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_NUM))
 		{
 			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params), match, quiet);
 		}

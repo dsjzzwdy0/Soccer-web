@@ -15,10 +15,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.util.ToolUtil;
+import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.model.base.BaseMatch;
 
 import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
 
@@ -54,11 +58,15 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 	/** 已经下载的数据 */
 	List<WebPage> existWebPages = null;
 	
+	/** 页面配置信息 */
+	protected WebPageProperties webPageConf;
+	
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
 	 */
 	public ZgzcwWebPageFilter()
 	{
+		this(WebPageProperties.getDefault());
 	}
 	
 	/**
@@ -68,32 +76,29 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 	 * @param start 开始日期
 	 * @param end 结束日期
 	 */
-	public ZgzcwWebPageFilter(List<String> types, String source, Date start, Date end)
+	public ZgzcwWebPageFilter(WebPageProperties webPageconf)
 	{
-		this.types.addAll(types);
-		this.source = source;
-		this.start = start;
-		this.end = end;
+		this.webPageConf = webPageconf;
 	}
 	
 	/**
-	 * 添加页面的类型
-	 * @param type
+	 * (non-Javadoc)
+	 * @see com.loris.common.filter.Filter#accept(java.lang.Object)
 	 */
-	public void addPageType(String type)
+	@Override
+	public boolean accept(WebPage obj)
 	{
-		types.add(type);
+		return accept(obj, null);
 	}
 
-	/**
-	 * 设置数据来源
-	 * @param source
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.data.filter.WebPageFilter#isInitialized()
 	 */
-	public void setSource(String source)
+	@Override
+	public boolean isInitialized()
 	{
-		this.source = source;
+		return initialized;
 	}
-	
 
 	/**
 	 *  (non-Javadoc)
@@ -108,7 +113,7 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 		
 		for (WebPage existPage : existWebPages)
 		{
-			if(page.equals(existPage) && needNotToReload(page, existPage, source))
+			if(page.equals(existPage) && needToReload(page, existPage, source))
 			{
 				return false;
 			}
@@ -130,27 +135,47 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 	 * @param source 数据来源
 	 * @return 是否存在的标示 
 	 */
-	protected<T> boolean needNotToReload(WebPage page, WebPage existPage, T source)
+	protected<T> boolean needToReload(WebPage page, WebPage existPage, T source)
 	{
 		if(ToolUtil.isEmpty(existPage))
 		{
-			return false;
+			return true;
+		}
+		String type = page.getType();
+		if(StringUtils.isEmpty(type))
+		{
+			return true;
 		}
 		Date loadtime = existPage.getLoadtime();
 		if(ToolUtil.isEmpty(existPage) || ToolUtil.isEmpty(loadtime))
 		{
-			return false;
+			return true;
 		}
-		switch (page.getType())
+		
+		Long timeThread = webPageConf.getPageUpdateTime(type);
+		if(timeThread == null || timeThread < 10L)		//域值设置小于10秒钟的，需要更新
 		{
-		case PAGE_LEAGUE_CUP:
-		case PAGE_LEAGUE_LEAGUE:
-			
-			break;
-		default:
+			return true;
+		}
+		long curTimeToLoadedTime = (System.currentTimeMillis() - loadtime.getTime()) / 1000;
+		if(curTimeToLoadedTime < timeThread) return false;
+		switch (type)
+		{
+		case PAGE_ODDS_YP:
+		case PAGE_ODDS_OP:
+		case PAGE_ODDS_NUM:
+			if(source instanceof BaseMatch)
+			{
+				Date matchTime = ((BaseMatch)source).getMatchtime();
+				if(ToolUtil.isNotEmpty(matchTime))
+				{
+					long loadTimeToMatchTime = (loadtime.getTime() - matchTime.getTime()) / 1000;
+					if(loadTimeToMatchTime > - 1800L) return false;		//比赛开始前30分钟之后更新的，不需要再度更新
+				}
+			}
 			break;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -198,23 +223,27 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 	{
 		return source;
 	}
-
+	
 	/**
-	 * (non-Javadoc)
-	 * @see com.loris.common.filter.Filter#accept(java.lang.Object)
+	 * 设置数据来源
+	 * @param source
 	 */
-	@Override
-	public boolean accept(WebPage obj)
+	public void setSource(String source)
 	{
-		return accept(obj, null);
+		this.source = source;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.loris.soccer.data.filter.WebPageFilter#isInitialized()
+	/**
+	 * 添加页面的类型
+	 * @param type
 	 */
-	@Override
-	public boolean isInitialized()
+	public void addPageType(String type)
 	{
-		return initialized;
+		types.add(type);
+	}
+	
+	public void setPageTypes(List<String> types)
+	{
+		this.types.addAll(types);
 	}
 }

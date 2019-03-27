@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 
@@ -42,6 +43,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	public ZgzcwOddsDataPlugin()
 	{
 		super("赔率数据更新");
+		webPageConf = WebPageProperties.getDefault();
 	}
 	
 	/**
@@ -59,9 +61,11 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 		types.add(ZgzcwConstants.PAGE_ODDS_OP);
 		types.add(ZgzcwConstants.PAGE_ODDS_YP);
 		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
-		webPageFilter = new ZgzcwWebPageFilter(types,
-				ZgzcwConstants.SOURCE_ZGZCW, 
-				DateUtil.addDateNum(new Date(), -webPageConf.getDayNumOfGetPages()), null);
+		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
+		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		filter.setStart(DateUtil.getFirstDateBefore(new Date(), - webPageConf.getDayNumOfGetPages()));
+		filter.setPageTypes(types);	
+		webPageFilter = filter;
 		webPageFilter.initialize();
 	}
 

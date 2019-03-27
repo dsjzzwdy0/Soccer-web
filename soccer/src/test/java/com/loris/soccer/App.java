@@ -99,7 +99,7 @@ public class App
 		{
 			getApplicationContext();
 			// testSetting();
-			// testZgzcwIssueScheduler();
+			testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -127,7 +127,7 @@ public class App
 			// testZgzcwCupWebPage();
 			// testZgzcwLeagueCenterScheduler();	
 			
-			testBdMatchInfo();
+			//testBdMatchInfo();
 		}
 		catch (Exception e)
 		{
@@ -137,7 +137,7 @@ public class App
 		{
 			try
 			{
-				context.close();
+				//context.close();
 			}
 			catch (Exception e)
 			{
