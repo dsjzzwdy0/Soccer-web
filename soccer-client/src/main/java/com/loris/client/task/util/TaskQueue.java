@@ -94,9 +94,11 @@ public class TaskQueue extends PriorityQueue<Task>
 			}
 			
 			errorTasks.put(task, time);
-		}		
-		task.setPriority(minPriority - 1.0);
-		return super.add(task);
+		}	
+		{
+			task.setPriority(minPriority - 1.0);
+		}
+		return add(task);
 	}
 	
 	/**

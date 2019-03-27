@@ -28,15 +28,19 @@ import com.loris.soccer.model.base.BaseMatch;
  */
 public class MatchOddsFilter extends ObjectFilter<BaseMatch>
 {
-	/**  */
+	/** 几天内的比赛有赔率值 */
 	protected int numOfDayHasOdds = 7;
+	
+	/** 下载几天前的数据 */
+	protected int numOfPreDayGetOdds = 8;
 	
 	/**
 	 * Create a new instance of MatchOddsFilter 
 	 */
-	public MatchOddsFilter(int numOfDayHasOdds)
+	public MatchOddsFilter(int numOfDayHasOdds, int numOfPreDayGetOdds)
 	{
 		this.numOfDayHasOdds = numOfDayHasOdds;
+		this.numOfPreDayGetOdds = numOfPreDayGetOdds;
 	}
 	
 	/**
@@ -53,7 +57,8 @@ public class MatchOddsFilter extends ObjectFilter<BaseMatch>
 		}
 		Date matchTime = match.getMatchtime();
 		long timeToMatch = (matchTime.getTime() - System.currentTimeMillis()) / 1000;
-		if(timeToMatch > numOfDayHasOdds * 24 * 3600) return false;
+		if(timeToMatch > numOfDayHasOdds * 86400) return false;		
+		if(- timeToMatch > numOfPreDayGetOdds * 86400) return false;
 		return true;
 	}
 }

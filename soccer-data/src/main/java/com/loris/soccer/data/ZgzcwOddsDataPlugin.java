@@ -70,7 +70,8 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 		webPageFilter = filter;
 		webPageFilter.initialize();
 		
-		registFilter(SoccerConstants.SOCCER_DATA_MATCH, new MatchOddsFilter(webPageConf.getNumDayOfHasOdds()));
+		registFilter(SoccerConstants.SOCCER_DATA_MATCH, new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), 
+				webPageConf.getDayNumOfGetPages()));
 	}
 
 	/**
