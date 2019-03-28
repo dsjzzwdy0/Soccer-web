@@ -82,11 +82,10 @@ public class WebPage extends AutoIdEntity implements Task
 	public WebPage()
 	{
 		encoding = EncodingUtil.ENCODING_UTF8;
-		protocol = "http";
-		//createtime = new Date();
-		completed = false;
 		method = HttpUtil.HTTP_METHOD_GET;
+		protocol = "http";
 		port = "80";
+		completed = false;		
 		plaintext = true;
 	}
 

@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.scheduler.SchedulerFactory;
@@ -85,5 +86,23 @@ public class TaskController extends BaseController
 		{
 			return Rest.failure("There are no SchedulerInfo of sid='" + sid + "'");
 		}
+	}
+	
+	/**
+	 * 获得配置的内容
+	 * @param type
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getConf")
+	public Rest getConf(String type)
+	{
+		return Rest.ok();
+	}
+	
+	@RequestMapping("/download")
+	public String download(String type, ModelAndView model)
+	{
+		return "/soccer/download";
 	}
 }

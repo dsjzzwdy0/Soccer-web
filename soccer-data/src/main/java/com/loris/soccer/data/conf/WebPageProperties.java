@@ -174,12 +174,14 @@ public class WebPageProperties
 	public void setWebPageProperties(WebPageProperties properties)
 	{
 		numDayfGetPages = properties.numDayfGetPages;
+		numDayOfHasOdds = properties.numDayOfHasOdds;
 		pageUpdateTime.clear();
 		if(properties.getPageUpdateTime().size() > 0)
 			pageUpdateTime.putAll(properties.getPageUpdateTime());
 		pageProduceTask.clear();
 		if(properties.getPageProduceTask().size() > 0)
 			pageProduceTask.putAll(properties.getPageProduceTask());
+		pageBeCreated.clear();
 		if(properties.getPageBeCreated().size() > 0)
 			pageBeCreated.putAll(properties.getPageBeCreated());
 	}

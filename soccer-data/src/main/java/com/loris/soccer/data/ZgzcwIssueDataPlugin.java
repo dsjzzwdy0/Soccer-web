@@ -61,9 +61,17 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	 */
 	public ZgzcwIssueDataPlugin()
 	{
+		this(WebPageProperties.getDefault());
+	}
+	
+	/**
+	 * Create a new instance of ZgzcwIssueProducePlugin
+	 */
+	public ZgzcwIssueDataPlugin(WebPageProperties webPageConf)
+	{
 		super("当日数据下载");
+		this.webPageConf = webPageConf;
 		this.updateLeagueCurrentRounds = true;
-		webPageConf = WebPageProperties.getDefault();
 	}
 
 	/**

@@ -1,0 +1,95 @@
+@layout("/layout/_container.html"){
+
+<h1>数据下载</h1>
+<div id="test"></div>
+
+<script type="text/javascript">
+$.isNullOrEmpty = function (obj) {
+    if ((typeof (obj) == "string" && obj == "") || obj == null || obj == undefined) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+$.isNotNullOrEmpty = function (obj) {
+	return !$.isNullOrEmpty(obj);
+}
+
+$(document).ready(function(){
+	var conf = [];
+	var el = {};
+	el.id = 'name';
+	el.type = 'input';
+	el.name = 'name';
+	conf.push(el);
+	
+	initPage(conf);
+});
+
+function initPage(conf)
+{
+	var div = $("#test");
+	Config.createHtml(div, conf);
+}
+
+
+var Config = {};
+
+Config.getElementClass = function (element)
+{
+	if($.isNullOrEmpty(element.classType))
+	{
+		return 'class="' + ClassValue.getDefaultClass(element.type) + '"';
+	}
+	else
+		return 'class="' + element.classType + '"';
+}
+
+
+Config.createHtml = function(div, conf)
+{
+	var html = [];
+	var size = conf.length;
+	
+	html.push('<table class="gridTable"><tbody>');
+	for(var i = 0; i < size; i ++)
+	{
+		var element = conf[i];
+		
+		html.push('<tr>');
+		html.push('<td>' + element.name + '</td>');
+		html.push('<td>')
+		var type = element.type;
+		switch(type)
+		{
+		case 'input':
+			html.push('<input id="' + element.id + '" ' + this.getElementClass(element) + ' />');
+			break;
+		default:
+			break;
+		}
+		html.push('</td>');
+		html.push('</tr>');
+	}
+	html.push('</tbody></table>')
+	div.append(html.join(' '));
+}
+
+var ClassValue = {};
+
+ClassValue.getDefaultClass = function(type)
+{
+	switch(type)
+	{
+	case 'input':
+		return 'newinput';
+	default:
+		break;
+	}
+	return '';
+}
+
+</script>
+
+@}
