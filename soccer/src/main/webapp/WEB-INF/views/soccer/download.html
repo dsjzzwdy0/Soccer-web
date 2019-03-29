@@ -1,7 +1,26 @@
 @layout("/layout/_container.html"){
+<style>
+.content{
+	text-align: center;
+	width: 80%;
+	min-width: 1100px;
+	margin: auto;
+}
+.colname
+{
+	width: 20%;
+	min-width: 150px;
+}
+.gridTable
+{
+	width: 100%;
+}
+</style>
 
+<div class="content">
 <h1>数据下载</h1>
 <div id="test"></div>
+</div>
 
 <script type="text/javascript">
 $.isNullOrEmpty = function (obj) {
@@ -39,13 +58,34 @@ var Config = {};
 Config.getElementClass = function (element)
 {
 	if($.isNullOrEmpty(element.classType))
-	{
-		return 'class="' + ClassValue.getDefaultClass(element.type) + '"';
-	}
+		return 'class="' + ClassValue[element.type] + '"';
 	else
 		return 'class="' + element.classType + '"';
 }
 
+Config.getBaseAttr = function(element)
+{
+	var text = 'id="' + element.id + '" class=' + this.getElementClass(element);
+	return text;
+}
+
+Config.getElementHtml = function(element)
+{
+	var html = [];
+	var type = element.type;
+	switch(type)
+	{
+	case 'input':
+		html.push('<input ' + this.getBaseAttr(element) + ' />');
+		break;
+	case 'checkbox':
+		hmtl.push('<input type="checkbox"' + this.getBaseAttr(element) + ' />');
+		break;
+	default:
+		break;
+	}
+	return html.join(' ');
+}
 
 Config.createHtml = function(div, conf)
 {
@@ -56,19 +96,10 @@ Config.createHtml = function(div, conf)
 	for(var i = 0; i < size; i ++)
 	{
 		var element = conf[i];
-		
 		html.push('<tr>');
-		html.push('<td>' + element.name + '</td>');
+		html.push('<td class="colname">' + element.name + '</td>');
 		html.push('<td>')
-		var type = element.type;
-		switch(type)
-		{
-		case 'input':
-			html.push('<input id="' + element.id + '" ' + this.getElementClass(element) + ' />');
-			break;
-		default:
-			break;
-		}
+		html.push(this.getElementHtml(element));
 		html.push('</td>');
 		html.push('</tr>');
 	}
@@ -77,18 +108,9 @@ Config.createHtml = function(div, conf)
 }
 
 var ClassValue = {};
-
-ClassValue.getDefaultClass = function(type)
-{
-	switch(type)
-	{
-	case 'input':
-		return 'newinput';
-	default:
-		break;
-	}
-	return '';
-}
+ClassValue['input'] = 'newinput';
+ClassValue['div'] = 'newdiv';
+ClassValue['checkbox'] = 'checkboxcls';
 
 </script>
 
