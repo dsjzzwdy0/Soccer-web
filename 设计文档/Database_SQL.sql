@@ -269,30 +269,6 @@ create table soccer_odds_score(
 	INDEX `index_type` (`type`) USING BTREE
 );
 
-CREATE
-ALGORITHM=UNDEFINED 
-DEFINER=`root`@`localhost` 
-SQL SECURITY DEFINER 
-VIEW `sys_menu_node`AS 
-select `m`.`id` AS `id`,`m`.`url` AS `url`,`rel`.`roleid` AS `roleid` from (`sys_relation` `rel` join `sys_menu` `m` on((`rel`.`menuid` = `m`.`id`))) ;
-
-CREATE 
-ALGORITHM=UNDEFINED 
-DEFINER=`root`@`localhost` 
-SQL SECURITY DEFINER 
-VIEW `sys_menu_tree`AS 
-select `m1`.`id` AS `id`,(case when ((`m2`.`id` = 0) or isnull(`m2`.`id`)) then 0 else `m2`.`id` end) AS `pId`,`m1`.`name` AS `NAME`,(case when ((`m2`.`id` = 0) or isnull(`m2`.`id`)) then 'true' else 'false' end) AS `isOpen` from (`sys_menu` `m1` left join `sys_menu` `m2` on((`m1`.`pcode` = `m2`.`code`))) order by `m1`.`id` ;
-
-CREATE 
-ALGORITHM=UNDEFINED 
-DEFINER=`root`@`localhost` 
-SQL SECURITY DEFINER 
-VIEW `sys_role_res`AS 
-select `m1`.`id` AS `id`,`m1`.`icon` AS `icon`,`m3`.`roleid` AS `roleid`,(case when ((`m2`.`id` = 0) or isnull(`m2`.`id`)) then 0 else `m2`.`id` end) AS `parentId`,
-	`m1`.`name` AS `name`,`m1`.`url` AS `url`,`m1`.`levels` AS `levels`,`m1`.`ismenu` AS `ismenu`,`m1`.`num` AS `num` 
-	from ((`soccer`.`sys_menu` `m1` left join `soccer`.`sys_menu` `m2` on((`m1`.`pcode` = `m2`.`code`))) 
-	join (select `soccer`.`sys_menu`.`id` AS `ID`,`rela`.`roleid` AS `roleid` from (`soccer`.`sys_menu` left join `soccer`.`sys_relation` `rela` on((`soccer`.`sys_menu`.`id` = `rela`.`menuid`)))) `m3` on((`m1`.`id` = `m3`.`ID`))) where (`m1`.`ismenu` = 1) order by `m1`.`levels`,`m1`.`num` ;
-
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 
