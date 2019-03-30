@@ -18,100 +18,68 @@
 </style>
 
 <div class="content">
-<h1>数据下载</h1>
-<div id="test"></div>
+	<h1>数据下载</h1>
+	<form id="settings">
+		<div id="test"></div>
+		<div id="buttons">
+			<input type="button" value="提交" onclick="submitInfo();"/>
+		</div>
+	</form>
 </div>
 
+<script type="text/javascript" src="${ctxPath}/content/scripts/Config.js"></script>
 <script type="text/javascript">
-$.isNullOrEmpty = function (obj) {
-    if ((typeof (obj) == "string" && obj == "") || obj == null || obj == undefined) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-$.isNotNullOrEmpty = function (obj) {
-	return !$.isNullOrEmpty(obj);
-}
-
 $(document).ready(function(){
 	var conf = [];
 	var el = {};
 	el.id = 'name';
 	el.type = 'input';
-	el.name = 'name';
+	el.name = '名称';
+	el.value = '今日比赛';
 	conf.push(el);
 	
+	el = {};
+	el.id = 'interval';
+	el.type = 'select';
+	el.name = '数据'
+	el.options = [{name:'1000',value:'1000'},
+		{name:'2000',value:'2000'},
+		{name:'3000',value:'3000'}];
+	el.value = '2000';
+	conf.push(el);
 	initPage(conf);
 });
 
 function initPage(conf)
 {
 	var div = $("#test");
-	Config.createHtml(div, conf);
+	Config.createHtml(div, conf, false);
 }
 
-
-var Config = {};
-
-Config.getElementClass = function (element)
+function submitInfo()
 {
-	if($.isNullOrEmpty(element.classType))
-		return 'class="' + ClassValue[element.type] + '"';
-	else
-		return 'class="' + element.classType + '"';
+	var values = getFormData('settings');
+	alert(values);
 }
 
-Config.getBaseAttr = function(element)
+function getFormData(eId)
 {
-	var text = 'id="' + element.id + '" class=' + this.getElementClass(element);
-	return text;
+    var inData = new Array();
+    $("#" + eId).find("input").each(function () {
+        if ($(this).attr("real-value") != null) {
+            inData.push({"name": $(this).attr("name"), "value": $(this).attr("real-value").trim()});
+        } else {
+            inData.push({"name": $(this).attr("name"), "value": $(this).val().trim()});
+        }
+    });
+    $("#" + eId).find("select").each(function () {
+        inData.push({"name": $(this).attr("name"), "value": $(this).val().trim()});
+    });
+    $("#" + eId).find("textarea").each(function () {
+        inData.push({"name": $(this).attr("name"), "value": $(this).val().trim()});
+    });
+    return inData;
 }
-
-Config.getElementHtml = function(element)
-{
-	var html = [];
-	var type = element.type;
-	switch(type)
-	{
-	case 'input':
-		html.push('<input ' + this.getBaseAttr(element) + ' />');
-		break;
-	case 'checkbox':
-		hmtl.push('<input type="checkbox"' + this.getBaseAttr(element) + ' />');
-		break;
-	default:
-		break;
-	}
-	return html.join(' ');
-}
-
-Config.createHtml = function(div, conf)
-{
-	var html = [];
-	var size = conf.length;
-	
-	html.push('<table class="gridTable"><tbody>');
-	for(var i = 0; i < size; i ++)
-	{
-		var element = conf[i];
-		html.push('<tr>');
-		html.push('<td class="colname">' + element.name + '</td>');
-		html.push('<td>')
-		html.push(this.getElementHtml(element));
-		html.push('</td>');
-		html.push('</tr>');
-	}
-	html.push('</tbody></table>')
-	div.append(html.join(' '));
-}
-
-var ClassValue = {};
-ClassValue['input'] = 'newinput';
-ClassValue['div'] = 'newdiv';
-ClassValue['checkbox'] = 'checkboxcls';
-
 </script>
 
 @}
