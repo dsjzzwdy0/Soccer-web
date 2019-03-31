@@ -27,9 +27,42 @@ public class WebElement
 	public final static String WEB_ELEMENT_CHECKBOX = "checkbox";
 	public final static String WEB_ELEMENT_RADIO = "radio";
 	
+	public static class Option<T, K>{
+		T name;
+		K value;
+		
+		public Option()
+		{
+		}
+		
+		public Option(T name, K value)
+		{
+			this.name = name;
+			this.value = value;
+		}
+		
+		public T getName()
+		{
+			return name;
+		}
+		public void setName(T name)
+		{
+			this.name = name;
+		}
+		public K getValue()
+		{
+			return value;
+		}
+		public void setValue(K value)
+		{
+			this.value = value;
+		}
+	}
+	
 	private String id;
 	private String name;
 	private String type;
+	private boolean visible;
 	private Object value;
 	private Object options;
 	
@@ -40,11 +73,12 @@ public class WebElement
 	{
 	}
 	
-	public WebElement(String id, String name, String type, Object value, Object options)
+	public WebElement(String id, String name, String type, boolean visible, Object value, Object options)
 	{
 		this.id = id;
 		this.name =name;
 		this.type = type;
+		this.visible = visible;
 		this.value = value;
 		this.options = options;
 	}
@@ -88,5 +122,15 @@ public class WebElement
 	public void setOptions(Object options)
 	{
 		this.options = options;
+	}
+
+	public boolean isVisible()
+	{
+		return visible;
+	}
+
+	public void setVisible(boolean visible)
+	{
+		this.visible = visible;
 	}
 }

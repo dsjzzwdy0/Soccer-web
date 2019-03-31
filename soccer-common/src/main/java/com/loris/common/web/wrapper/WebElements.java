@@ -36,8 +36,8 @@ public class WebElements extends ArrayList<WebElement>
 	 * @param value
 	 * @param options
 	 */
-	public void addWebElement(String id, String name, String type, Object value, Object options)
+	public void addWebElement(String id, String name, String type, boolean visible, Object value, Object options)
 	{
-		this.add(new WebElement(id, name, type, value, options));
+		this.add(new WebElement(id, name, type, visible, value, options));
 	}
 }

@@ -62,7 +62,7 @@ Config.getElementHtml = function(element, disabled)
 		html.push('</select>');
 		break;
 	default:
-		html.push('<div ' + getElementClass(element) + '>' + value + '</div>');
+		html.push('<div ' + this.getElementClass(element) + '>' + value + '</div>');
 		html.push('<input type="hidden" value="' + value + '" />');
 		break;
 	}
