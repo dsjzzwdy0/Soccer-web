@@ -63,6 +63,7 @@ public class WebElement
 	private String name;
 	private String type;
 	private boolean visible;
+	private boolean enable;
 	private Object value;
 	private Object options;
 	
@@ -132,5 +133,15 @@ public class WebElement
 	public void setVisible(boolean visible)
 	{
 		this.visible = visible;
+	}
+
+	public boolean isEnable()
+	{
+		return enable;
+	}
+
+	public void setEnable(boolean enable)
+	{
+		this.enable = enable;
 	}
 }
