@@ -14,12 +14,10 @@ package com.loris.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.common.bean.AutoIdEntity;
+import com.loris.common.bean.UUIDEntity;
 
 /**   
  * @ClassName:  Scheduler  
@@ -31,7 +29,7 @@ import com.loris.common.bean.AutoIdEntity;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_scheduler_info")
-public class SchedulerInfo extends AutoIdEntity
+public class SchedulerInfo extends UUIDEntity
 {
 	/** */
 	private static final long serialVersionUID = 1L;
@@ -40,9 +38,6 @@ public class SchedulerInfo extends AutoIdEntity
 	public static final String PLUGIN_CLASS = "class";
 	
 	private static final String separator = ";";
-
-	@NotBlank
-	protected String sid;
 	protected String name;
 	protected int maxActiveTaskThread;
 	protected int intervaltime;
@@ -57,14 +52,6 @@ public class SchedulerInfo extends AutoIdEntity
 		this.maxActiveTaskThread = 5;
 	}
 	
-	public String getSid()
-	{
-		return sid;
-	}
-	public void setSid(String sid)
-	{
-		this.sid = sid;
-	}
 	public String getName()
 	{
 		return name;

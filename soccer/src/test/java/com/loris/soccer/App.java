@@ -34,9 +34,9 @@ import com.loris.client.model.SchedulerStatus;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.TaskScheduler;
+import com.loris.client.scheduler.factory.SchedulerFactory;
 import com.loris.client.service.WebPageService;
 import com.loris.client.scheduler.Scheduler;
-import com.loris.client.scheduler.SchedulerFactory;
 import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
@@ -563,7 +563,7 @@ public class App
 	public static void testSchedulerInfo() throws Exception
 	{
 		SchedulerInfo info = new SchedulerInfo();
-		info.setSid("101-190");
+		info.setId("101-190");
 		info.setName("数据下载的信息");
 		info.setIntervaltime(4000);
 		info.setMaxActiveTaskThread(3);

@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.client.scheduler;
+package com.loris.client.scheduler.factory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.model.SchedulerStatus;
+import com.loris.client.scheduler.Scheduler;
+import com.loris.client.scheduler.TaskScheduler;
 import com.loris.client.service.SchedulerInfoService;
 import com.loris.client.service.SchedulerStatusService;
 import com.loris.client.task.plugin.TaskPlugin;
@@ -86,7 +88,7 @@ public class SchedulerFactory
 	{
 		for (SchedulerInfo schedulerInfo : schedulerInfos)
 		{
-			if (sid.equals(schedulerInfo.getSid()))
+			if (sid.equals(schedulerInfo.getId()))
 			{
 				return schedulerInfo;
 			}
@@ -116,7 +118,7 @@ public class SchedulerFactory
 	{
 		for (SchedulerInfo schedulerInfo : schedulers.keySet())
 		{
-			if (sid.equals(schedulerInfo.getSid()))
+			if (sid.equals(schedulerInfo.getId()))
 			{
 				return schedulers.get(schedulerInfo);
 			}

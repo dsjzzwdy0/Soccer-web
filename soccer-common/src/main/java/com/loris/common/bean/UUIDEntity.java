@@ -11,6 +11,8 @@
  */
 package com.loris.common.bean;
 
+import java.util.UUID;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
@@ -37,12 +39,19 @@ public class UUIDEntity implements Entity
 	/**
 	 * 设置ID值
 	 * 
-	 * @param id
-	 *            ID值
+	 * @param id ID值
 	 */
 	@Override
 	public void setId(String id)
 	{
 		this.id = id;
+	}
+	
+	/**
+	 * Create the id value.
+	 */
+	public void create()
+	{
+		this.id = UUID.randomUUID().toString();
 	}
 }

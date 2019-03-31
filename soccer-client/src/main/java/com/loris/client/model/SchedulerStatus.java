@@ -34,6 +34,7 @@ public class SchedulerStatus extends SchedulerInfo
 	final public static int STATUS_INIT = 0;
 	final public static int STATUS_STOP = 2;
 	
+	protected String sid;
 	protected int total;		//总数
 	protected int leftsize;		//剩余数
 	protected int state;		//1表示处理完成、0表示创建、2表示暂停
@@ -60,7 +61,7 @@ public class SchedulerStatus extends SchedulerInfo
 	
 	public void setSchedulerInfo(SchedulerInfo info)
 	{
-		this.sid = info.getSid();
+		this.sid = info.getId();
 		this.intervaltime = info.getIntervaltime();
 		this.name = info.getName();
 		this.type = info.getType();
@@ -69,6 +70,16 @@ public class SchedulerStatus extends SchedulerInfo
 		this.plugins = info.getPlugins();
 	}
 	
+	public String getSid()
+	{
+		return sid;
+	}
+
+	public void setSid(String sid)
+	{
+		this.sid = sid;
+	}
+
 	public int getTotal()
 	{
 		return total;

@@ -269,6 +269,17 @@ create table soccer_odds_score(
 	INDEX `index_type` (`type`) USING BTREE
 );
 
+create table soccer_scheduler_info(
+	`id`  varchar(50) NOT NULL,
+	name varchar(30),
+	maxactivetaskthread int,
+	intervaltime int,
+	randtimeseed int,
+	type varchar(20),
+	plugins text,
+	PRIMARY KEY (`id`)
+);
+
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 

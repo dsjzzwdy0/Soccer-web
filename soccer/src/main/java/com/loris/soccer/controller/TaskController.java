@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.loris.client.model.SchedulerInfo;
-import com.loris.client.scheduler.SchedulerFactory;
+import com.loris.client.scheduler.factory.SchedulerFactory;
 import com.loris.common.exception.ParamsException;
 import com.loris.common.pagination.PageInfo;
 import com.loris.common.web.BaseController;
