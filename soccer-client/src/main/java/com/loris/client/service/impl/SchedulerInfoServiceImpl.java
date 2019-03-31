@@ -40,6 +40,7 @@ public class SchedulerInfoServiceImpl extends ServiceImpl<SchedulerInfoMapper, S
 		}
 		else
 		{
+			schedulerInfo.create();
 			return baseMapper.insert(schedulerInfo) > 0;
 		}
 	}

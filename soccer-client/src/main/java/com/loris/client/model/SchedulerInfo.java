@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.UUIDEntity;
+import com.loris.common.web.wrapper.WebElements;
+import com.loris.common.web.wrapper.WebElementsWrapper;
 
 /**   
  * @ClassName:  Scheduler  
@@ -29,7 +31,7 @@ import com.loris.common.bean.UUIDEntity;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_scheduler_info")
-public class SchedulerInfo extends UUIDEntity
+public class SchedulerInfo extends UUIDEntity implements WebElementsWrapper
 {
 	/** */
 	private static final long serialVersionUID = 1L;
@@ -37,7 +39,7 @@ public class SchedulerInfo extends UUIDEntity
 	public static final String PLUGIN_BEAN = "bean";
 	public static final String PLUGIN_CLASS = "class";
 	
-	private static final String separator = ";";
+	public static final String separator = ";";
 	protected String name;
 	protected int maxActiveTaskThread;
 	protected int intervaltime;
@@ -146,5 +148,47 @@ public class SchedulerInfo extends UUIDEntity
 			}
 		}
 		return list;
+	}
+	
+	@Override
+	public boolean equals(Object object)
+	{
+		if(this == object) return true;
+		if(!(object instanceof SchedulerInfo)) return false;
+		SchedulerInfo other = (SchedulerInfo) object;
+		if(StringUtils.equals(id, other.id)) return true;
+		return StringUtils.equals(name, name);
+	}
+
+	/**
+	 * 包装
+	 *  (non-Javadoc)
+	 * @see com.loris.common.web.wrapper.WebElementsWrapper#wrapToWebElements()
+	 */
+	@Override
+	public WebElements wrapToWebElements()
+	{
+		List<Integer> threadsOptions = new ArrayList<>();
+		threadsOptions.add(1);
+		threadsOptions.add(2);
+		threadsOptions.add(3);
+		threadsOptions.add(4);
+		threadsOptions.add(5);
+		List<Long> intervalOptions = new ArrayList<>();
+		intervalOptions.add(2000L);
+		intervalOptions.add(3000L);
+		intervalOptions.add(4000L);
+		intervalOptions.add(5000L);
+		intervalOptions.add(6000L);
+		intervalOptions.add(7000L);
+		
+		WebElements elements = new WebElements();
+		elements.addWebElement("sid", "唯一标识", "", id, null);
+		elements.addWebElement("name", "名称", "", name, null);
+		elements.addWebElement("plugins", "插件内容", "", plugins, null);
+		elements.addWebElement("maxActiveTaskThread", "线程数", "select", maxActiveTaskThread, threadsOptions);
+		elements.addWebElement("intervaltime", "线程等待时间", "select", intervaltime, intervalOptions);
+		elements.addWebElement("randTimeSeed", "随机时间", "input", randTimeSeed, null);
+		return elements;
 	}
 }

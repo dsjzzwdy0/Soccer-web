@@ -99,7 +99,7 @@ public class App
 		{
 			getApplicationContext();
 			// testSetting();
-			testZgzcwIssueScheduler();
+			// testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
 			// testOddsYpPage();
@@ -128,6 +128,8 @@ public class App
 			// testZgzcwLeagueCenterScheduler();	
 			
 			//testBdMatchInfo();
+			
+			addSchedulerInfo();
 		}
 		catch (Exception e)
 		{
@@ -137,7 +139,7 @@ public class App
 		{
 			try
 			{
-				//context.close();
+				context.close();
 			}
 			catch (Exception e)
 			{
@@ -145,6 +147,27 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	/**
+	 * 添加运行计划数据
+	 * @throws Exception
+	 */
+	public static void addSchedulerInfo() throws Exception
+	{
+		SchedulerFactory factory = SchedulerFactory.me();
+		
+		SchedulerInfo info = new SchedulerInfo();
+		info.setIntervaltime(4500);
+		info.setMaxActiveTaskThread(3);
+		info.setName("最新开盘数据下载");
+		info.setRandTimeSeed(200);
+		info.setType("zgzcw.downloader");
+		info.addPlugin(SchedulerInfo.PLUGIN_BEAN, ZgzcwIssueDataPlugin.class.getName());
+		
+		factory.addSchedulerInfo(info);
+		
+		factory.saveAllSchedulers();
 	}
 	
 	public static void testBdMatchInfo() throws Exception

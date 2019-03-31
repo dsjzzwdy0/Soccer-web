@@ -56,6 +56,22 @@ public class SchedulerFactory
 
 	/** */
 	private static SchedulerFactory instance = null;
+	
+	/**
+	 * Create the instance of SchedulerFactory.
+	 */
+	private SchedulerFactory()
+	{
+	}
+	
+	protected void init()
+	{
+		if(schedulerInfoService != null)
+		{
+			List<SchedulerInfo> schedulerInfos = schedulerInfoService.list();
+			this.schedulerInfos.addAll(schedulerInfos);
+		}
+	}
 
 	/**
 	 * 获得数据列表
@@ -106,12 +122,24 @@ public class SchedulerFactory
 	{
 		return schedulers.get(info);
 	}
+	
+	/**
+	 * 添加任务处理类型
+	 * @param info
+	 */
+	public void addSchedulerInfo(SchedulerInfo info)
+	{
+		for (SchedulerInfo schedulerInfo : schedulerInfos)
+		{
+			if(schedulerInfo.equals(info)) return;
+		}
+		schedulerInfos.add(info);
+	}
 
 	/**
 	 * 通过SID值获得任务的列表
 	 * 
-	 * @param sid
-	 *            任务唯一标识
+	 * @param sid 任务唯一标识
 	 * @return 处理的任务
 	 */
 	public Scheduler getScheduler(String sid)
@@ -135,6 +163,19 @@ public class SchedulerFactory
 	public boolean save(SchedulerInfo info)
 	{
 		return schedulerInfoService.save(info);
+	}
+	
+	/**
+	 * 保存所有的计划信息
+	 * @return
+	 */
+	public boolean saveAllSchedulers()
+	{
+		for (SchedulerInfo schedulerInfo : schedulerInfos)
+		{
+			schedulerInfoService.save(schedulerInfo);
+		}
+		return true;
 	}
 	
 	/**
@@ -235,6 +276,7 @@ public class SchedulerFactory
 		if (instance == null)
 		{
 			instance = ApplicationContextHelper.getBean("schedulerFactory");
+			instance.init();
 		}
 		return instance;
 	}

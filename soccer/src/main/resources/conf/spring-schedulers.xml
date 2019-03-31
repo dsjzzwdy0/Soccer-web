@@ -11,31 +11,10 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
         
-    <bean id="schedulerFactory" class="com.loris.client.scheduler.SchedulerFactory">
+    <bean id="schedulerFactory" class="com.loris.client.scheduler.factory.SchedulerFactory">
     	<property name="schedulers"> 
             <list>
-            	<ref bean="schedulerInfo0" />
-            	<ref bean="schedulerInfo1" />
             </list>
         </property>
-    </bean>
-    
-    <bean id="schedulerInfo0" class="com.loris.client.model.SchedulerInfo">
-    	<property name="sid" value="1001-1001"/>
-    	<property name="intervaltime" value="4000"/>
-    	<property name="name" value="当日数据下载" />
-    	<property name="type" value="zgzcw.downloader" />
-    	<property name="maxActiveTaskThread" value="5" />
-    	<property name="randTimeSeed" value="500" />
-    </bean>
-    
-    <bean id="schedulerInfo1" class="com.loris.client.model.SchedulerInfo">
-    	<property name="sid" value="1001-1002"/>
-    	<property name="intervaltime" value="4000"/>
-    	<property name="name" value="比赛数据下载" />
-    	<property name="type" value="zgzcw.downloader" />
-    	<property name="maxActiveTaskThread" value="5" />
-    	<property name="randTimeSeed" value="500" />
-    </bean>
-    
+    </bean>    
 </beans>

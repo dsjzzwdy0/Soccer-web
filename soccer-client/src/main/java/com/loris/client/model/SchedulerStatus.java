@@ -11,9 +11,14 @@
  */
 package com.loris.client.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.loris.common.bean.AutoIdEntity;
 
 /**   
  * @ClassName:  SchedulerStatus  
@@ -25,7 +30,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_scheduler_status")
-public class SchedulerStatus extends SchedulerInfo
+public class SchedulerStatus extends AutoIdEntity
 {
 	/** */
 	private static final long serialVersionUID = 1L;
@@ -35,6 +40,12 @@ public class SchedulerStatus extends SchedulerInfo
 	final public static int STATUS_STOP = 2;
 	
 	protected String sid;
+	protected String name;
+	protected int maxActiveTaskThread;
+	protected int intervaltime;
+	protected int randTimeSeed;
+	protected String type;
+	protected String plugins;
 	protected int total;		//总数
 	protected int leftsize;		//剩余数
 	protected int state;		//1表示处理完成、0表示创建、2表示暂停
@@ -161,6 +172,101 @@ public class SchedulerStatus extends SchedulerInfo
 	public void setInfo(String info)
 	{
 		this.info = info;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public int getMaxActiveTaskThread()
+	{
+		return maxActiveTaskThread;
+	}
+
+	public void setMaxActiveTaskThread(int maxActiveTaskThread)
+	{
+		this.maxActiveTaskThread = maxActiveTaskThread;
+	}
+
+	public int getIntervaltime()
+	{
+		return intervaltime;
+	}
+
+	public void setIntervaltime(int intervaltime)
+	{
+		this.intervaltime = intervaltime;
+	}
+
+	public int getRandTimeSeed()
+	{
+		return randTimeSeed;
+	}
+
+	public void setRandTimeSeed(int randTimeSeed)
+	{
+		this.randTimeSeed = randTimeSeed;
+	}
+
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public String getPlugins()
+	{
+		return plugins;
+	}
+
+	public void setPlugins(String plugins)
+	{
+		this.plugins = plugins;
+	}
+	
+	/**
+	 * 获得任务数据
+	 * @return
+	 */
+	public SchedulerInfo getSchedulerInfo()
+	{
+		SchedulerInfo info = new SchedulerInfo();
+		info.setId(this.sid);
+		info.setIntervaltime(intervaltime);
+		info.setName(name);
+		info.setType(type);
+		info.setMaxActiveTaskThread(maxActiveTaskThread);
+		info.setRandTimeSeed(randTimeSeed);
+		info.setPlugins(plugins);
+		return info;
+	}
+	
+	/**
+	 * 分解插件信息
+	 * @return 插件列表
+	 */
+	public List<String> getPluginInfos()
+	{
+		List<String> list = new ArrayList<>();
+		String[] strings = plugins.split(SchedulerInfo.separator);
+		for (String string : strings)
+		{
+			if(StringUtils.isNotBlank(string))
+			{
+				list.add(string);
+			}
+		}
+		return list;
 	}
 
 	@Override

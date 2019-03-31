@@ -34,7 +34,7 @@ public class WebElement
 	private Object options;
 	
 	/**
-	 * 
+	 * 创建
 	 */
 	public WebElement()
 	{

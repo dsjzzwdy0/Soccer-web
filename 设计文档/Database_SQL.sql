@@ -280,6 +280,25 @@ create table soccer_scheduler_info(
 	PRIMARY KEY (`id`)
 );
 
+create table soccer_scheduler_status(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	sid varchar(50),
+	name varchar(30),
+	maxactivetaskthread int,
+	intervaltime int,
+	randtimeseed int,
+	type varchar(20),
+	plugins text,
+	total int,
+	leftsize int,
+	state smallint,
+	info text,
+	createtime timestamp,
+	stoptime timestamp,
+	finishtime timestamp,
+	PRIMARY KEY (`id`)
+);
+
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 

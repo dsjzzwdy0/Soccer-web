@@ -13,7 +13,6 @@ package com.loris.soccer.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -42,16 +41,13 @@ import com.loris.common.web.wrapper.Rest;
 public class TaskController extends BaseController
 {
 	//private static Logger logger = Logger.getLogger(TaskController.class);
-	
-	@Autowired
-	SchedulerFactory schedulerFactory;	
-	
+
 	@ResponseBody
 	@RequestMapping("/listSchedulers")
 	public Rest getSchedulerInfoList(HttpServletRequest request)
 	{
 		//logger.info(getCurrentIp(request));
-		return Rest.okData(schedulerFactory.getSchedulers());
+		return Rest.okData(SchedulerFactory.me().getSchedulers());
 	}
 	
 	@ResponseBody
@@ -76,6 +72,7 @@ public class TaskController extends BaseController
 	@RequestMapping("/create")
 	public Rest create(String sid)
 	{
+		SchedulerFactory schedulerFactory = SchedulerFactory.me();
 		SchedulerInfo schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
 		if(schedulerInfo != null)
 		{
@@ -95,9 +92,18 @@ public class TaskController extends BaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/getConf")
-	public Rest getConf(String type)
+	public Rest getConf(String sid)
 	{
-		return Rest.ok();
+		SchedulerFactory schedulerFactory = SchedulerFactory.me();
+		SchedulerInfo schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
+		if(schedulerInfo != null)
+		{
+			return Rest.okData(schedulerInfo.wrapToWebElements());
+		}
+		else
+		{
+			return Rest.failure("There are no SchedulerInfo of sid='" + sid + "'");
+		}
 	}
 	
 	@RequestMapping("/download")
