@@ -13,6 +13,7 @@ package com.loris.soccer.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerStatus;
 import com.loris.client.scheduler.factory.SchedulerFactory;
 import com.loris.common.exception.ParamsException;
 import com.loris.common.pagination.PageInfo;
@@ -40,7 +42,7 @@ import com.loris.common.web.wrapper.Rest;
 @RequestMapping("/task")
 public class TaskController extends BaseController
 {
-	//private static Logger logger = Logger.getLogger(TaskController.class);
+	private static Logger logger = Logger.getLogger(TaskController.class);
 
 	@ResponseBody
 	@RequestMapping("/listSchedulers")
@@ -104,6 +106,19 @@ public class TaskController extends BaseController
 		{
 			return Rest.failure("There are no SchedulerInfo of sid='" + sid + "'");
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping("/createScheduler")
+	public Rest createTaskScheduler(@Validated SchedulerStatus status, BindingResult bindingResult)
+	{
+		logger.info(status.getSid() + "," + status.getName() + ", " + status.getIntervaltime() + ", " +
+				status.getMaxActiveTaskThread() + ", " + status.getPlugins() + ", " + status.getType());
+		if(bindingResult.hasErrors())
+		{
+			logger.info(bindingResult.getAllErrors());
+		}
+		return Rest.ok();
 	}
 	
 	@RequestMapping("/download")

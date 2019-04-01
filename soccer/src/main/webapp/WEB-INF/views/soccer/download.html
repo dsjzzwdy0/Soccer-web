@@ -52,8 +52,21 @@ function initPage(conf)
 
 function submitInfo()
 {
-	var values = getFormData('settings');
-	alert(values);
+	$.ajax({
+    	//几个参数需要注意一下
+        type: "GET",//方法类型
+        dataType: "json",//预期服务器返回的数据类型
+        url: "createScheduler" ,//url
+        data: $('#settings').serialize(),
+        success: function (result) {
+            if (result.status == 200) {
+                alert("SUCCESS");
+            }
+        },
+        error : function() {
+            alert("异常！");
+        }
+    });
 }
 
 function getFormData(eId)

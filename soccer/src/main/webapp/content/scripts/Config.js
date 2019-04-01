@@ -25,6 +25,12 @@ Config.getElementClass = function (element)
 		return 'class="' + element.classType + '"';
 }
 
+Config.getHiddenElement = function(element)
+{
+	var value = element.value;
+	return '<input type="hidden" ' + this.getBaseAttr(element) + ' value="' + value + '" />';
+}
+
 Config.getBaseAttr = function(element)
 {
 	var text = 'name="' + element.id + '" class=' + this.getElementClass(element);
@@ -63,7 +69,7 @@ Config.getElementHtml = function(element, disabled)
 		break;
 	default:
 		html.push('<div ' + this.getElementClass(element) + '>' + value + '</div>');
-		html.push('<input type="hidden" value="' + value + '" />');
+		html.push(this.getHiddenElement(element));
 		break;
 	}
 	return html.join(' ');
