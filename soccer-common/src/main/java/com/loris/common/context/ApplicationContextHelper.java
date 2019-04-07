@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * @ClassName: ApplicationContextHelper
- * @Description:TODO(这里用一句话描述这个类的作用)
+ * @Description: Spring容器注入的类
  * @author: 东方足彩
  * @date: 2019年1月28日 下午9:06:19
  * 
@@ -72,6 +72,14 @@ public class ApplicationContextHelper implements ApplicationContextAware
 	{
 		assertContextInjected();
 		return (T) applicationContext.getBean(name);
+	}
+	
+	/**
+	 * 清除SpringContextHolder中的ApplicationContext为Null.
+	 */
+	public static void clearHolder()
+	{
+		applicationContext = null;
 	}
 	
 	/**

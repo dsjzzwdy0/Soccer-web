@@ -43,6 +43,14 @@ import com.loris.common.web.wrapper.Rest;
 public class TaskController extends BaseController
 {
 	private static Logger logger = Logger.getLogger(TaskController.class);
+	
+	/**
+	 * Create the new instance of TaskController.
+	 */
+	public TaskController()
+	{
+		logger.info("Initialize the TaskController.");
+	}
 
 	@ResponseBody
 	@RequestMapping("/listSchedulers")

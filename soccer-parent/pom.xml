@@ -39,6 +39,7 @@
 		<jsoup.version>1.11.2</jsoup.version>
 		<jackson.version>2.9.8</jackson.version>
 		<fastjson.version>1.2.47</fastjson.version>
+		<quartz.version>2.3.1</quartz.version>
 	</properties>
 
 	<dependencyManagement>
@@ -397,6 +398,13 @@
 				<groupId>com.google.code.kaptcha</groupId>
 				<artifactId>kaptcha</artifactId>
 				<version>${kaptcha.version}</version>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
+			<dependency>
+			    <groupId>org.quartz-scheduler</groupId>
+			    <artifactId>quartz</artifactId>
+			    <version>${quartz.version}</version>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->

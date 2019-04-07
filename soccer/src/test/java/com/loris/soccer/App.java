@@ -79,6 +79,8 @@ import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
+import com.loris.soccer.quartz.DataJob;
+import com.loris.soccer.quartz.QuartzUtil;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 
@@ -129,7 +131,9 @@ public class App
 			
 			//testBdMatchInfo();
 			
-			addSchedulerInfo();
+			//addSchedulerInfo();
+			
+			testQuartzJob();
 		}
 		catch (Exception e)
 		{
@@ -147,6 +151,11 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testQuartzJob() throws Exception
+	{
+        QuartzUtil.addJob("job1", "trigger1", DataJob.class, 2);
 	}
 	
 	/**

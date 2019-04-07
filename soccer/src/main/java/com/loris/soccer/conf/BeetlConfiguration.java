@@ -34,8 +34,8 @@ import java.nio.charset.StandardCharsets;
  * @author stylefeng
  * @Date 2018/2/22 21:03
  */
-public class BeetlConfiguration extends BeetlGroupUtilConfiguration {
-
+public class BeetlConfiguration extends BeetlGroupUtilConfiguration 
+{
     @Autowired
     private Environment env;
 

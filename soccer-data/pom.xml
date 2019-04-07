@@ -106,6 +106,12 @@
 			<artifactId>jstl</artifactId>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.loris</groupId>
 			<artifactId>soccer-common</artifactId>
