@@ -29,9 +29,9 @@ import com.loris.common.util.DateUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.MatchOddsFilter;
-import com.loris.soccer.data.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
+import com.loris.soccer.data.zgzcw.filter.ZgzcwWebPageFilter;
 import com.loris.soccer.model.base.BaseMatch;
 
 import cn.hutool.core.thread.ThreadUtil;
@@ -84,20 +84,27 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	public void initialize(TaskPluginContext context) throws IOException
 	{
 		if(initialized) return;
-		
 		super.initialize(context);
-		List<String> types = new ArrayList<>();
-		types.add(ZgzcwConstants.PAGE_ODDS_OP);
-		types.add(ZgzcwConstants.PAGE_ODDS_YP);
-		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
-		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
-		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
-		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
-		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
-		filter.setPageTypes(types);		
-		webPageFilter = filter;
-		webPageFilter.initialize();
+		
+		if(webPageFilter == null)
+		{
+			List<String> types = new ArrayList<>();
+			types.add(ZgzcwConstants.PAGE_ODDS_OP);
+			types.add(ZgzcwConstants.PAGE_ODDS_YP);
+			types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+			types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+			types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
+			ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
+			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
+			filter.setPageTypes(types);		
+			webPageFilter = filter;
+		}
+		
+		if(!webPageFilter.isInitialized())
+		{
+			webPageFilter.initialize();
+		}
 		
 		registFilter(SoccerConstants.SOCCER_DATA_MATCH, 
 				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), 

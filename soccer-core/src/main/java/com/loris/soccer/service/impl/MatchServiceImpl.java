@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
+import com.loris.common.util.ToolUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.MatchBdMapper;
 import com.loris.soccer.dao.MatchJcMapper;
@@ -186,5 +188,24 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		queryWrapper.eq("issue", issue);
 		queryWrapper.orderByAsc("issue, ordinary+0");
 		return matchJcInfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchs(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<Match> getMatchs(Date start, Date end)
+	{
+		QueryWrapper<Match> queryWrapper = new QueryWrapper<>();
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("matchtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("matchtime", end);
+		}
+		return baseMapper.selectList(queryWrapper);
 	}
 }

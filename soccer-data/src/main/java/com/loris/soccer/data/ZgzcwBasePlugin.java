@@ -55,6 +55,7 @@ import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.base.BaseMatch;
 import com.loris.soccer.service.LeagueService;
+import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.impl.SoccerDataService;
 
 /**
@@ -80,6 +81,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	@Autowired
 	protected WebPageService pageService;
+	
+	@Autowired
+	protected MatchService matchService;
 	
 	/** 网络页面的过滤器 */
 	protected WebPageFilter webPageFilter = null;

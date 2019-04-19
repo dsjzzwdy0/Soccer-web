@@ -35,10 +35,10 @@ public class WebPageProperties
 	protected int numDayOfHasOdds = 4;
 	
 	/** 页面更新的时间， 按照秒为单位*/
-	protected Map<String, Long> pageUpdateTime = new HashMap<>();
+	protected Map<String, Long> pageUpdateIntervalTime = new HashMap<>();
 	
 	/** 页面产生新的任务,默认是都不创建 */
-	protected Map<String, Boolean> pageProduceTask = new HashMap<>();
+	protected Map<String, Boolean> pageProduceNewTask = new HashMap<>();
 	
 	/** 产生页面下载任务，默认皆为被创建 */
 	protected Map<String, Boolean> pageBeCreated = new HashMap<>();
@@ -48,34 +48,34 @@ public class WebPageProperties
 	 * @param type
 	 * @return
 	 */
-	public Long getPageUpdateTime(String type)
+	public Long getPageUpdateIntervalTime(String type)
 	{
-		return pageUpdateTime.get(type);
+		return pageUpdateIntervalTime.get(type);
 	}
 	
-	public void setPageUpdateTime(String type, Long time)
+	public void setPageUpdateIntervalTime(String type, Long time)
 	{
-		pageUpdateTime.put(type, time);
+		pageUpdateIntervalTime.put(type, time);
 	}
 
-	public Map<String, Long> getPageUpdateTime()
+	public Map<String, Long> getPageUpdateIntervalTime()
 	{
-		return pageUpdateTime;
+		return pageUpdateIntervalTime;
 	}
 
 	public void setPageUpdateTime(Map<String, Long> pageUpdateTime)
 	{
-		this.pageUpdateTime.putAll(pageUpdateTime);
+		this.pageUpdateIntervalTime.putAll(pageUpdateTime);
 	}
 
-	public Map<String, Boolean> getPageProduceTask()
+	public Map<String, Boolean> getPageProduceNewTask()
 	{
-		return pageProduceTask;
+		return pageProduceNewTask;
 	}
 
-	public void setPageProduceTask(Map<String, Boolean> pageToProduceTask)
+	public void setPageProduceNewTask(Map<String, Boolean> pageToProduceTask)
 	{
-		this.pageProduceTask.putAll(pageToProduceTask);
+		this.pageProduceNewTask.putAll(pageToProduceTask);
 	}
 
 	public Map<String, Boolean> getPageBeCreated()
@@ -96,7 +96,7 @@ public class WebPageProperties
 	public boolean isPageProduceNewTask(String type)
 	{
 		if(StringUtils.isBlank(type)) return false;
-		Boolean b = pageProduceTask.get(type);
+		Boolean b = pageProduceNewTask.get(type);
 		return b == null ? false : b;
 	}
 	
@@ -107,7 +107,7 @@ public class WebPageProperties
 	 */
 	public void setPageProduceNewTask(String type, boolean b)
 	{
-		pageProduceTask.put(type, b);
+		pageProduceNewTask.put(type, b);
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class WebPageProperties
 	 */
 	public void setPageProduceNewTask(String type)
 	{
-		pageProduceTask.put(type, true);
+		pageProduceNewTask.put(type, true);
 	}
 	
 	/**
@@ -175,12 +175,12 @@ public class WebPageProperties
 	{
 		numDayfGetPages = properties.numDayfGetPages;
 		numDayOfHasOdds = properties.numDayOfHasOdds;
-		pageUpdateTime.clear();
-		if(properties.getPageUpdateTime().size() > 0)
-			pageUpdateTime.putAll(properties.getPageUpdateTime());
-		pageProduceTask.clear();
-		if(properties.getPageProduceTask().size() > 0)
-			pageProduceTask.putAll(properties.getPageProduceTask());
+		pageUpdateIntervalTime.clear();
+		if(properties.getPageUpdateIntervalTime().size() > 0)
+			pageUpdateIntervalTime.putAll(properties.getPageUpdateIntervalTime());
+		pageProduceNewTask.clear();
+		if(properties.getPageProduceNewTask().size() > 0)
+			pageProduceNewTask.putAll(properties.getPageProduceNewTask());
 		pageBeCreated.clear();
 		if(properties.getPageBeCreated().size() > 0)
 			pageBeCreated.putAll(properties.getPageBeCreated());
@@ -198,15 +198,15 @@ public class WebPageProperties
 		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
 		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：1天
 		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_ODDS_YP, oddsUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_ODDS_NUM, oddsUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, leagueUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LEAGUE_CUP, leagueUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LOTTERY_JC, realPageUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_LOTTERY_BD, realPageUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
-		properties.setPageUpdateTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_YP, oddsUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_NUM, oddsUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, leagueUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LEAGUE_CUP, leagueUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_JC, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_BD, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
 		
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP, true);

@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -47,6 +48,14 @@ public interface MatchService extends IService<Match>
 	 * @return 是否插入数据记录成功的标志
 	 */
 	boolean insertMatchs(List<Match> matchs, boolean overwrite);
+	
+	/**
+	 * 获得比赛数据
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 * @return 比赛列表
+	 */
+	List<Match> getMatchs(Date start, Date end);
 	
 	/**
 	 * 添加北单比赛的数据
