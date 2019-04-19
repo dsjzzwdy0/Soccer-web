@@ -20,52 +20,52 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dept`;
 CREATE TABLE `sys_dept` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼üid',
-  `num` int(11) DEFAULT NULL COMMENT 'ÅÅĞò',
-  `pid` int(11) DEFAULT NULL COMMENT '¸¸²¿ÃÅid',
-  `pids` varchar(255) DEFAULT NULL COMMENT '¸¸¼¶ids',
-  `simplename` varchar(45) DEFAULT NULL COMMENT '¼ò³Æ',
-  `fullname` varchar(255) DEFAULT NULL COMMENT 'È«³Æ',
-  `tips` varchar(255) DEFAULT NULL COMMENT 'ÌáÊ¾',
-  `version` int(11) DEFAULT NULL COMMENT '°æ±¾£¨ÀÖ¹ÛËø±£Áô×Ö¶Î£©',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®id',
+  `num` int(11) DEFAULT NULL COMMENT 'æ’åº',
+  `pid` int(11) DEFAULT NULL COMMENT 'çˆ¶éƒ¨é—¨id',
+  `pids` varchar(255) DEFAULT NULL COMMENT 'çˆ¶çº§ids',
+  `simplename` varchar(45) DEFAULT NULL COMMENT 'ç®€ç§°',
+  `fullname` varchar(255) DEFAULT NULL COMMENT 'å…¨ç§°',
+  `tips` varchar(255) DEFAULT NULL COMMENT 'æç¤º',
+  `version` int(11) DEFAULT NULL COMMENT 'ç‰ˆæœ¬ï¼ˆä¹è§‚é”ä¿ç•™å­—æ®µï¼‰',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='²¿ÃÅ±í';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='éƒ¨é—¨è¡¨';
 
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO `sys_dept` VALUES ('24', '1', '0', '[0],', '×Ü¹«Ë¾', '×Ü¹«Ë¾', '', null);
-INSERT INTO `sys_dept` VALUES ('25', '2', '24', '[0],[24],', '¿ª·¢²¿', '¿ª·¢²¿', '', null);
-INSERT INTO `sys_dept` VALUES ('26', '3', '24', '[0],[24],', 'ÔËÓª²¿', 'ÔËÓª²¿', '', null);
-INSERT INTO `sys_dept` VALUES ('27', '4', '24', '[0],[24],', 'Õ½ÂÔ²¿', 'Õ½ÂÔ²¿', '', null);
+INSERT INTO `sys_dept` VALUES ('24', '1', '0', '[0],', 'æ€»å…¬å¸', 'æ€»å…¬å¸', '', null);
+INSERT INTO `sys_dept` VALUES ('25', '2', '24', '[0],[24],', 'å¼€å‘éƒ¨', 'å¼€å‘éƒ¨', '', null);
+INSERT INTO `sys_dept` VALUES ('26', '3', '24', '[0],[24],', 'è¿è¥éƒ¨', 'è¿è¥éƒ¨', '', null);
+INSERT INTO `sys_dept` VALUES ('27', '4', '24', '[0],[24],', 'æˆ˜ç•¥éƒ¨', 'æˆ˜ç•¥éƒ¨', '', null);
 
 -- ----------------------------
 -- Table structure for sys_dict
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict`;
 CREATE TABLE `sys_dict` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼üid',
-  `num` int(11) DEFAULT NULL COMMENT 'ÅÅĞò',
-  `pid` int(11) DEFAULT NULL COMMENT '¸¸¼¶×Öµä',
-  `name` varchar(255) DEFAULT NULL COMMENT 'Ãû³Æ',
-  `tips` varchar(255) DEFAULT NULL COMMENT 'ÌáÊ¾',
-  `code` varchar(255) DEFAULT NULL COMMENT 'Öµ',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®id',
+  `num` int(11) DEFAULT NULL COMMENT 'æ’åº',
+  `pid` int(11) DEFAULT NULL COMMENT 'çˆ¶çº§å­—å…¸',
+  `name` varchar(255) DEFAULT NULL COMMENT 'åç§°',
+  `tips` varchar(255) DEFAULT NULL COMMENT 'æç¤º',
+  `code` varchar(255) DEFAULT NULL COMMENT 'å€¼',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='×Öµä±í';
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='å­—å…¸è¡¨';
 
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO `sys_dict` VALUES ('50', '0', '0', 'ĞÔ±ğ', null, 'sys_sex');
-INSERT INTO `sys_dict` VALUES ('51', '1', '50', 'ÄĞ', null, '1');
-INSERT INTO `sys_dict` VALUES ('52', '2', '50', 'Å®', null, '2');
-INSERT INTO `sys_dict` VALUES ('53', '0', '0', '×´Ì¬', null, 'sys_state');
-INSERT INTO `sys_dict` VALUES ('54', '1', '53', 'ÆôÓÃ', null, '1');
-INSERT INTO `sys_dict` VALUES ('55', '2', '53', '½ûÓÃ', null, '2');
-INSERT INTO `sys_dict` VALUES ('56', '0', '0', 'ÕËºÅ×´Ì¬', null, 'account_state');
-INSERT INTO `sys_dict` VALUES ('57', '1', '56', 'ÆôÓÃ', null, '1');
-INSERT INTO `sys_dict` VALUES ('58', '2', '56', '¶³½á', null, '2');
-INSERT INTO `sys_dict` VALUES ('59', '3', '56', 'ÒÑÉ¾³ı', null, '3');
+INSERT INTO `sys_dict` VALUES ('50', '0', '0', 'æ€§åˆ«', null, 'sys_sex');
+INSERT INTO `sys_dict` VALUES ('51', '1', '50', 'ç”·', null, '1');
+INSERT INTO `sys_dict` VALUES ('52', '2', '50', 'å¥³', null, '2');
+INSERT INTO `sys_dict` VALUES ('53', '0', '0', 'çŠ¶æ€', null, 'sys_state');
+INSERT INTO `sys_dict` VALUES ('54', '1', '53', 'å¯ç”¨', null, '1');
+INSERT INTO `sys_dict` VALUES ('55', '2', '53', 'ç¦ç”¨', null, '2');
+INSERT INTO `sys_dict` VALUES ('56', '0', '0', 'è´¦å·çŠ¶æ€', null, 'account_state');
+INSERT INTO `sys_dict` VALUES ('57', '1', '56', 'å¯ç”¨', null, '1');
+INSERT INTO `sys_dict` VALUES ('58', '2', '56', 'å†»ç»“', null, '2');
+INSERT INTO `sys_dict` VALUES ('59', '3', '56', 'å·²åˆ é™¤', null, '3');
 
 -- ----------------------------
 -- Table structure for sys_expense
@@ -73,14 +73,14 @@ INSERT INTO `sys_dict` VALUES ('59', '3', '56', 'ÒÑÉ¾³ı', null, '3');
 DROP TABLE IF EXISTS `sys_expense`;
 CREATE TABLE `sys_expense` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `money` decimal(20,2) DEFAULT NULL COMMENT '±¨Ïú½ğ¶î',
-  `desc` varchar(255) DEFAULT '' COMMENT 'ÃèÊö',
-  `createtime` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `state` int(11) DEFAULT NULL COMMENT '×´Ì¬: 1.´ıÌá½»  2:´ıÉóºË   3.ÉóºËÍ¨¹ı 4:²µ»Ø',
-  `userid` int(11) DEFAULT NULL COMMENT 'ÓÃ»§id',
-  `processId` varchar(255) DEFAULT NULL COMMENT 'Á÷³Ì¶¨Òåid',
+  `money` decimal(20,2) DEFAULT NULL COMMENT 'æŠ¥é”€é‡‘é¢',
+  `desc` varchar(255) DEFAULT '' COMMENT 'æè¿°',
+  `createtime` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `state` int(11) DEFAULT NULL COMMENT 'çŠ¶æ€: 1.å¾…æäº¤  2:å¾…å®¡æ ¸   3.å®¡æ ¸é€šè¿‡ 4:é©³å›',
+  `userid` int(11) DEFAULT NULL COMMENT 'ç”¨æˆ·id',
+  `processId` varchar(255) DEFAULT NULL COMMENT 'æµç¨‹å®šä¹‰id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='±¨Ïú±í';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='æŠ¥é”€è¡¨';
 
 -- ----------------------------
 -- Records of sys_expense
@@ -91,15 +91,15 @@ CREATE TABLE `sys_expense` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_login_log`;
 CREATE TABLE `sys_login_log` (
-  `id` int(65) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼ü',
-  `logname` varchar(255) DEFAULT NULL COMMENT 'ÈÕÖ¾Ãû³Æ',
-  `userid` int(65) DEFAULT NULL COMMENT '¹ÜÀíÔ±id',
-  `createtime` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `succeed` varchar(255) DEFAULT NULL COMMENT 'ÊÇ·ñÖ´ĞĞ³É¹¦',
-  `message` text COMMENT '¾ßÌåÏûÏ¢',
-  `ip` varchar(255) DEFAULT NULL COMMENT 'µÇÂ¼ip',
+  `id` int(65) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®',
+  `logname` varchar(255) DEFAULT NULL COMMENT 'æ—¥å¿—åç§°',
+  `userid` int(65) DEFAULT NULL COMMENT 'ç®¡ç†å‘˜id',
+  `createtime` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `succeed` varchar(255) DEFAULT NULL COMMENT 'æ˜¯å¦æ‰§è¡ŒæˆåŠŸ',
+  `message` text COMMENT 'å…·ä½“æ¶ˆæ¯',
+  `ip` varchar(255) DEFAULT NULL COMMENT 'ç™»å½•ip',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=utf8 COMMENT='µÇÂ¼¼ÇÂ¼';
+) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=utf8 COMMENT='ç™»å½•è®°å½•';
 
 -- ----------------------------
 -- Records of sys_login_log
@@ -110,117 +110,117 @@ CREATE TABLE `sys_login_log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼üid',
-  `code` varchar(255) DEFAULT NULL COMMENT '²Ëµ¥±àºÅ',
-  `pcode` varchar(255) DEFAULT NULL COMMENT '²Ëµ¥¸¸±àºÅ',
-  `pcodes` varchar(255) DEFAULT NULL COMMENT 'µ±Ç°²Ëµ¥µÄËùÓĞ¸¸²Ëµ¥±àºÅ',
-  `name` varchar(255) DEFAULT NULL COMMENT '²Ëµ¥Ãû³Æ',
-  `icon` varchar(255) DEFAULT NULL COMMENT '²Ëµ¥Í¼±ê',
-  `url` varchar(255) DEFAULT NULL COMMENT 'urlµØÖ·',
-  `num` int(65) DEFAULT NULL COMMENT '²Ëµ¥ÅÅĞòºÅ',
-  `levels` int(65) DEFAULT NULL COMMENT '²Ëµ¥²ã¼¶',
-  `ismenu` int(11) DEFAULT NULL COMMENT 'ÊÇ·ñÊÇ²Ëµ¥£¨1£ºÊÇ  0£º²»ÊÇ£©',
-  `tips` varchar(255) DEFAULT NULL COMMENT '±¸×¢',
-  `status` int(65) DEFAULT NULL COMMENT '²Ëµ¥×´Ì¬ :  1:ÆôÓÃ   0:²»ÆôÓÃ',
-  `isopen` int(11) DEFAULT NULL COMMENT 'ÊÇ·ñ´ò¿ª:    1:´ò¿ª   0:²»´ò¿ª',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®id',
+  `code` varchar(255) DEFAULT NULL COMMENT 'èœå•ç¼–å·',
+  `pcode` varchar(255) DEFAULT NULL COMMENT 'èœå•çˆ¶ç¼–å·',
+  `pcodes` varchar(255) DEFAULT NULL COMMENT 'å½“å‰èœå•çš„æ‰€æœ‰çˆ¶èœå•ç¼–å·',
+  `name` varchar(255) DEFAULT NULL COMMENT 'èœå•åç§°',
+  `icon` varchar(255) DEFAULT NULL COMMENT 'èœå•å›¾æ ‡',
+  `url` varchar(255) DEFAULT NULL COMMENT 'urlåœ°å€',
+  `num` int(65) DEFAULT NULL COMMENT 'èœå•æ’åºå·',
+  `levels` int(65) DEFAULT NULL COMMENT 'èœå•å±‚çº§',
+  `ismenu` int(11) DEFAULT NULL COMMENT 'æ˜¯å¦æ˜¯èœå•ï¼ˆ1ï¼šæ˜¯  0ï¼šä¸æ˜¯ï¼‰',
+  `tips` varchar(255) DEFAULT NULL COMMENT 'å¤‡æ³¨',
+  `status` int(65) DEFAULT NULL COMMENT 'èœå•çŠ¶æ€ :  1:å¯ç”¨   0:ä¸å¯ç”¨',
+  `isopen` int(11) DEFAULT NULL COMMENT 'æ˜¯å¦æ‰“å¼€:    1:æ‰“å¼€   0:ä¸æ‰“å¼€',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=171 DEFAULT CHARSET=utf8 COMMENT='²Ëµ¥±í';
+) ENGINE=InnoDB AUTO_INCREMENT=171 DEFAULT CHARSET=utf8 COMMENT='èœå•è¡¨';
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('105', 'system', '0', '[0],', 'ÏµÍ³¹ÜÀí', 'fa-user', '#', '4', '1', '1', null, '1', '1');
-INSERT INTO `sys_menu` VALUES ('106', 'mgr', 'system', '[0],[system],', 'ÓÃ»§¹ÜÀí', '', '/mgr', '1', '2', '1', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('107', 'mgr_add', 'mgr', '[0],[system],[mgr],', 'Ìí¼ÓÓÃ»§', null, '/mgr/add', '1', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('108', 'mgr_edit', 'mgr', '[0],[system],[mgr],', 'ĞŞ¸ÄÓÃ»§', null, '/mgr/edit', '2', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('109', 'mgr_delete', 'mgr', '[0],[system],[mgr],', 'É¾³ıÓÃ»§', null, '/mgr/delete', '3', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('110', 'mgr_reset', 'mgr', '[0],[system],[mgr],', 'ÖØÖÃÃÜÂë', null, '/mgr/reset', '4', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('111', 'mgr_freeze', 'mgr', '[0],[system],[mgr],', '¶³½áÓÃ»§', null, '/mgr/freeze', '5', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('112', 'mgr_unfreeze', 'mgr', '[0],[system],[mgr],', '½â³ı¶³½áÓÃ»§', null, '/mgr/unfreeze', '6', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('113', 'mgr_setRole', 'mgr', '[0],[system],[mgr],', '·ÖÅä½ÇÉ«', null, '/mgr/setRole', '7', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('114', 'role', 'system', '[0],[system],', '½ÇÉ«¹ÜÀí', null, '/role', '2', '2', '1', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('115', 'role_add', 'role', '[0],[system],[role],', 'Ìí¼Ó½ÇÉ«', null, '/role/add', '1', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('116', 'role_edit', 'role', '[0],[system],[role],', 'ĞŞ¸Ä½ÇÉ«', null, '/role/edit', '2', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('117', 'role_remove', 'role', '[0],[system],[role],', 'É¾³ı½ÇÉ«', null, '/role/remove', '3', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('118', 'role_setAuthority', 'role', '[0],[system],[role],', 'ÅäÖÃÈ¨ÏŞ', null, '/role/setAuthority', '4', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('119', 'menu', 'system', '[0],[system],', '²Ëµ¥¹ÜÀí', null, '/menu', '4', '2', '1', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('120', 'menu_add', 'menu', '[0],[system],[menu],', 'Ìí¼Ó²Ëµ¥', null, '/menu/add', '1', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('121', 'menu_edit', 'menu', '[0],[system],[menu],', 'ĞŞ¸Ä²Ëµ¥', null, '/menu/edit', '2', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('122', 'menu_remove', 'menu', '[0],[system],[menu],', 'É¾³ı²Ëµ¥', null, '/menu/remove', '3', '3', '0', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('128', 'log', 'system', '[0],[system],', 'ÒµÎñÈÕÖ¾', null, '/log', '6', '2', '1', null, '1', '0');
-INSERT INTO `sys_menu` VALUES ('130', 'druid', 'system', '[0],[system],', '¼à¿Ø¹ÜÀí', null, '/druid', '7', '2', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('131', 'dept', 'system', '[0],[system],', '²¿ÃÅ¹ÜÀí', null, '/dept', '3', '2', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('132', 'dict', 'system', '[0],[system],', '×Öµä¹ÜÀí', null, '/dict', '4', '2', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('133', 'loginLog', 'system', '[0],[system],', 'µÇÂ¼ÈÕÖ¾', null, '/loginLog', '6', '2', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('134', 'log_clean', 'log', '[0],[system],[log],', 'Çå¿ÕÈÕÖ¾', null, '/log/delLog', '3', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('135', 'dept_add', 'dept', '[0],[system],[dept],', 'Ìí¼Ó²¿ÃÅ', null, '/dept/add', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('136', 'dept_update', 'dept', '[0],[system],[dept],', 'ĞŞ¸Ä²¿ÃÅ', null, '/dept/update', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('137', 'dept_delete', 'dept', '[0],[system],[dept],', 'É¾³ı²¿ÃÅ', null, '/dept/delete', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('138', 'dict_add', 'dict', '[0],[system],[dict],', 'Ìí¼Ó×Öµä', null, '/dict/add', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('139', 'dict_update', 'dict', '[0],[system],[dict],', 'ĞŞ¸Ä×Öµä', null, '/dict/update', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('140', 'dict_delete', 'dict', '[0],[system],[dict],', 'É¾³ı×Öµä', null, '/dict/delete', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('141', 'notice', 'system', '[0],[system],', 'Í¨Öª¹ÜÀí', null, '/notice', '9', '2', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('142', 'notice_add', 'notice', '[0],[system],[notice],', 'Ìí¼ÓÍ¨Öª', null, '/notice/add', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('143', 'notice_update', 'notice', '[0],[system],[notice],', 'ĞŞ¸ÄÍ¨Öª', null, '/notice/update', '2', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('144', 'notice_delete', 'notice', '[0],[system],[notice],', 'É¾³ıÍ¨Öª', null, '/notice/delete', '3', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('145', 'hello', '0', '[0],', 'Í¨Öª', 'fa-rocket', '/notice/hello', '1', '1', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('148', 'code', '0', '[0],', '´úÂëÉú³É', 'fa-code', '/code', '3', '1', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('149', 'api_mgr', '0', '[0],', '½Ó¿ÚÎÄµµ', 'fa-leaf', '/swagger-ui.html', '2', '1', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('150', 'to_menu_edit', 'menu', '[0],[system],[menu],', '²Ëµ¥±à¼­Ìø×ª', '', '/menu/menu_edit', '4', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('151', 'menu_list', 'menu', '[0],[system],[menu],', '²Ëµ¥ÁĞ±í', '', '/menu/list', '5', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('152', 'to_dept_update', 'dept', '[0],[system],[dept],', 'ĞŞ¸Ä²¿ÃÅÌø×ª', '', '/dept/dept_update', '4', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('153', 'dept_list', 'dept', '[0],[system],[dept],', '²¿ÃÅÁĞ±í', '', '/dept/list', '5', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('154', 'dept_detail', 'dept', '[0],[system],[dept],', '²¿ÃÅÏêÇé', '', '/dept/detail', '6', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('155', 'to_dict_edit', 'dict', '[0],[system],[dict],', 'ĞŞ¸Ä²Ëµ¥Ìø×ª', '', '/dict/dict_edit', '4', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('156', 'dict_list', 'dict', '[0],[system],[dict],', '×ÖµäÁĞ±í', '', '/dict/list', '5', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('157', 'dict_detail', 'dict', '[0],[system],[dict],', '×ÖµäÏêÇé', '', '/dict/detail', '6', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('158', 'log_list', 'log', '[0],[system],[log],', 'ÈÕÖ¾ÁĞ±í', '', '/log/list', '2', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('159', 'log_detail', 'log', '[0],[system],[log],', 'ÈÕÖ¾ÏêÇé', '', '/log/detail', '3', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('160', 'del_login_log', 'loginLog', '[0],[system],[loginLog],', 'Çå¿ÕµÇÂ¼ÈÕÖ¾', '', '/loginLog/delLoginLog', '1', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('161', 'login_log_list', 'loginLog', '[0],[system],[loginLog],', 'µÇÂ¼ÈÕÖ¾ÁĞ±í', '', '/loginLog/list', '2', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('162', 'to_role_edit', 'role', '[0],[system],[role],', 'ĞŞ¸Ä½ÇÉ«Ìø×ª', '', '/role/role_edit', '5', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('163', 'to_role_assign', 'role', '[0],[system],[role],', '½ÇÉ«·ÖÅäÌø×ª', '', '/role/role_assign', '6', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('164', 'role_list', 'role', '[0],[system],[role],', '½ÇÉ«ÁĞ±í', '', '/role/list', '7', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('165', 'to_assign_role', 'mgr', '[0],[system],[mgr],', '·ÖÅä½ÇÉ«Ìø×ª', '', '/mgr/role_assign', '8', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('166', 'to_user_edit', 'mgr', '[0],[system],[mgr],', '±à¼­ÓÃ»§Ìø×ª', '', '/mgr/user_edit', '9', '3', '0', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('167', 'mgr_list', 'mgr', '[0],[system],[mgr],', 'ÓÃ»§ÁĞ±í', '', '/mgr/list', '10', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('105', 'system', '0', '[0],', 'ç³»ç»Ÿç®¡ç†', 'fa-user', '#', '4', '1', '1', null, '1', '1');
+INSERT INTO `sys_menu` VALUES ('106', 'mgr', 'system', '[0],[system],', 'ç”¨æˆ·ç®¡ç†', '', '/mgr', '1', '2', '1', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('107', 'mgr_add', 'mgr', '[0],[system],[mgr],', 'æ·»åŠ ç”¨æˆ·', null, '/mgr/add', '1', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('108', 'mgr_edit', 'mgr', '[0],[system],[mgr],', 'ä¿®æ”¹ç”¨æˆ·', null, '/mgr/edit', '2', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('109', 'mgr_delete', 'mgr', '[0],[system],[mgr],', 'åˆ é™¤ç”¨æˆ·', null, '/mgr/delete', '3', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('110', 'mgr_reset', 'mgr', '[0],[system],[mgr],', 'é‡ç½®å¯†ç ', null, '/mgr/reset', '4', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('111', 'mgr_freeze', 'mgr', '[0],[system],[mgr],', 'å†»ç»“ç”¨æˆ·', null, '/mgr/freeze', '5', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('112', 'mgr_unfreeze', 'mgr', '[0],[system],[mgr],', 'è§£é™¤å†»ç»“ç”¨æˆ·', null, '/mgr/unfreeze', '6', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('113', 'mgr_setRole', 'mgr', '[0],[system],[mgr],', 'åˆ†é…è§’è‰²', null, '/mgr/setRole', '7', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('114', 'role', 'system', '[0],[system],', 'è§’è‰²ç®¡ç†', null, '/role', '2', '2', '1', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('115', 'role_add', 'role', '[0],[system],[role],', 'æ·»åŠ è§’è‰²', null, '/role/add', '1', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('116', 'role_edit', 'role', '[0],[system],[role],', 'ä¿®æ”¹è§’è‰²', null, '/role/edit', '2', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('117', 'role_remove', 'role', '[0],[system],[role],', 'åˆ é™¤è§’è‰²', null, '/role/remove', '3', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('118', 'role_setAuthority', 'role', '[0],[system],[role],', 'é…ç½®æƒé™', null, '/role/setAuthority', '4', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('119', 'menu', 'system', '[0],[system],', 'èœå•ç®¡ç†', null, '/menu', '4', '2', '1', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('120', 'menu_add', 'menu', '[0],[system],[menu],', 'æ·»åŠ èœå•', null, '/menu/add', '1', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('121', 'menu_edit', 'menu', '[0],[system],[menu],', 'ä¿®æ”¹èœå•', null, '/menu/edit', '2', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('122', 'menu_remove', 'menu', '[0],[system],[menu],', 'åˆ é™¤èœå•', null, '/menu/remove', '3', '3', '0', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('128', 'log', 'system', '[0],[system],', 'ä¸šåŠ¡æ—¥å¿—', null, '/log', '6', '2', '1', null, '1', '0');
+INSERT INTO `sys_menu` VALUES ('130', 'druid', 'system', '[0],[system],', 'ç›‘æ§ç®¡ç†', null, '/druid', '7', '2', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('131', 'dept', 'system', '[0],[system],', 'éƒ¨é—¨ç®¡ç†', null, '/dept', '3', '2', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('132', 'dict', 'system', '[0],[system],', 'å­—å…¸ç®¡ç†', null, '/dict', '4', '2', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('133', 'loginLog', 'system', '[0],[system],', 'ç™»å½•æ—¥å¿—', null, '/loginLog', '6', '2', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('134', 'log_clean', 'log', '[0],[system],[log],', 'æ¸…ç©ºæ—¥å¿—', null, '/log/delLog', '3', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('135', 'dept_add', 'dept', '[0],[system],[dept],', 'æ·»åŠ éƒ¨é—¨', null, '/dept/add', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('136', 'dept_update', 'dept', '[0],[system],[dept],', 'ä¿®æ”¹éƒ¨é—¨', null, '/dept/update', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('137', 'dept_delete', 'dept', '[0],[system],[dept],', 'åˆ é™¤éƒ¨é—¨', null, '/dept/delete', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('138', 'dict_add', 'dict', '[0],[system],[dict],', 'æ·»åŠ å­—å…¸', null, '/dict/add', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('139', 'dict_update', 'dict', '[0],[system],[dict],', 'ä¿®æ”¹å­—å…¸', null, '/dict/update', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('140', 'dict_delete', 'dict', '[0],[system],[dict],', 'åˆ é™¤å­—å…¸', null, '/dict/delete', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('141', 'notice', 'system', '[0],[system],', 'é€šçŸ¥ç®¡ç†', null, '/notice', '9', '2', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('142', 'notice_add', 'notice', '[0],[system],[notice],', 'æ·»åŠ é€šçŸ¥', null, '/notice/add', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('143', 'notice_update', 'notice', '[0],[system],[notice],', 'ä¿®æ”¹é€šçŸ¥', null, '/notice/update', '2', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('144', 'notice_delete', 'notice', '[0],[system],[notice],', 'åˆ é™¤é€šçŸ¥', null, '/notice/delete', '3', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('145', 'hello', '0', '[0],', 'é€šçŸ¥', 'fa-rocket', '/notice/hello', '1', '1', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('148', 'code', '0', '[0],', 'ä»£ç ç”Ÿæˆ', 'fa-code', '/code', '3', '1', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('149', 'api_mgr', '0', '[0],', 'æ¥å£æ–‡æ¡£', 'fa-leaf', '/swagger-ui.html', '2', '1', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('150', 'to_menu_edit', 'menu', '[0],[system],[menu],', 'èœå•ç¼–è¾‘è·³è½¬', '', '/menu/menu_edit', '4', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('151', 'menu_list', 'menu', '[0],[system],[menu],', 'èœå•åˆ—è¡¨', '', '/menu/list', '5', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('152', 'to_dept_update', 'dept', '[0],[system],[dept],', 'ä¿®æ”¹éƒ¨é—¨è·³è½¬', '', '/dept/dept_update', '4', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('153', 'dept_list', 'dept', '[0],[system],[dept],', 'éƒ¨é—¨åˆ—è¡¨', '', '/dept/list', '5', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('154', 'dept_detail', 'dept', '[0],[system],[dept],', 'éƒ¨é—¨è¯¦æƒ…', '', '/dept/detail', '6', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('155', 'to_dict_edit', 'dict', '[0],[system],[dict],', 'ä¿®æ”¹èœå•è·³è½¬', '', '/dict/dict_edit', '4', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('156', 'dict_list', 'dict', '[0],[system],[dict],', 'å­—å…¸åˆ—è¡¨', '', '/dict/list', '5', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('157', 'dict_detail', 'dict', '[0],[system],[dict],', 'å­—å…¸è¯¦æƒ…', '', '/dict/detail', '6', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('158', 'log_list', 'log', '[0],[system],[log],', 'æ—¥å¿—åˆ—è¡¨', '', '/log/list', '2', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('159', 'log_detail', 'log', '[0],[system],[log],', 'æ—¥å¿—è¯¦æƒ…', '', '/log/detail', '3', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('160', 'del_login_log', 'loginLog', '[0],[system],[loginLog],', 'æ¸…ç©ºç™»å½•æ—¥å¿—', '', '/loginLog/delLoginLog', '1', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('161', 'login_log_list', 'loginLog', '[0],[system],[loginLog],', 'ç™»å½•æ—¥å¿—åˆ—è¡¨', '', '/loginLog/list', '2', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('162', 'to_role_edit', 'role', '[0],[system],[role],', 'ä¿®æ”¹è§’è‰²è·³è½¬', '', '/role/role_edit', '5', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('163', 'to_role_assign', 'role', '[0],[system],[role],', 'è§’è‰²åˆ†é…è·³è½¬', '', '/role/role_assign', '6', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('164', 'role_list', 'role', '[0],[system],[role],', 'è§’è‰²åˆ—è¡¨', '', '/role/list', '7', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('165', 'to_assign_role', 'mgr', '[0],[system],[mgr],', 'åˆ†é…è§’è‰²è·³è½¬', '', '/mgr/role_assign', '8', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('166', 'to_user_edit', 'mgr', '[0],[system],[mgr],', 'ç¼–è¾‘ç”¨æˆ·è·³è½¬', '', '/mgr/user_edit', '9', '3', '0', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('167', 'mgr_list', 'mgr', '[0],[system],[mgr],', 'ç”¨æˆ·åˆ—è¡¨', '', '/mgr/list', '10', '3', '0', null, '1', null);
 
 -- ----------------------------
 -- Table structure for sys_notice
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_notice`;
 CREATE TABLE `sys_notice` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼ü',
-  `title` varchar(255) DEFAULT NULL COMMENT '±êÌâ',
-  `type` int(11) DEFAULT NULL COMMENT 'ÀàĞÍ',
-  `content` text COMMENT 'ÄÚÈİ',
-  `createtime` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `creater` int(11) DEFAULT NULL COMMENT '´´½¨ÈË',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®',
+  `title` varchar(255) DEFAULT NULL COMMENT 'æ ‡é¢˜',
+  `type` int(11) DEFAULT NULL COMMENT 'ç±»å‹',
+  `content` text COMMENT 'å†…å®¹',
+  `createtime` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `creater` int(11) DEFAULT NULL COMMENT 'åˆ›å»ºäºº',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='Í¨Öª±í';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='é€šçŸ¥è¡¨';
 
 -- ----------------------------
 -- Records of sys_notice
 -- ----------------------------
-INSERT INTO `sys_notice` VALUES ('6', 'ÊÀ½ç', '10', '»¶Ó­Ê¹ÓÃGuns¹ÜÀíÏµÍ³', '2017-01-11 08:53:20', '1');
-INSERT INTO `sys_notice` VALUES ('8', 'ÄãºÃ', null, 'ÄãºÃ', '2017-05-10 19:28:57', '1');
+INSERT INTO `sys_notice` VALUES ('6', 'ä¸–ç•Œ', '10', 'æ¬¢è¿ä½¿ç”¨Gunsç®¡ç†ç³»ç»Ÿ', '2017-01-11 08:53:20', '1');
+INSERT INTO `sys_notice` VALUES ('8', 'ä½ å¥½', null, 'ä½ å¥½', '2017-05-10 19:28:57', '1');
 
 -- ----------------------------
 -- Table structure for sys_operation_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_operation_log`;
 CREATE TABLE `sys_operation_log` (
-  `id` int(65) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼ü',
-  `logtype` varchar(255) DEFAULT NULL COMMENT 'ÈÕÖ¾ÀàĞÍ',
-  `logname` varchar(255) DEFAULT NULL COMMENT 'ÈÕÖ¾Ãû³Æ',
-  `userid` int(65) DEFAULT NULL COMMENT 'ÓÃ»§id',
-  `classname` varchar(255) DEFAULT NULL COMMENT 'ÀàÃû³Æ',
-  `method` text COMMENT '·½·¨Ãû³Æ',
-  `createtime` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `succeed` varchar(255) DEFAULT NULL COMMENT 'ÊÇ·ñ³É¹¦',
-  `message` text COMMENT '±¸×¢',
+  `id` int(65) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®',
+  `logtype` varchar(255) DEFAULT NULL COMMENT 'æ—¥å¿—ç±»å‹',
+  `logname` varchar(255) DEFAULT NULL COMMENT 'æ—¥å¿—åç§°',
+  `userid` int(65) DEFAULT NULL COMMENT 'ç”¨æˆ·id',
+  `classname` varchar(255) DEFAULT NULL COMMENT 'ç±»åç§°',
+  `method` text COMMENT 'æ–¹æ³•åç§°',
+  `createtime` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `succeed` varchar(255) DEFAULT NULL COMMENT 'æ˜¯å¦æˆåŠŸ',
+  `message` text COMMENT 'å¤‡æ³¨',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=554 DEFAULT CHARSET=utf8 COMMENT='²Ù×÷ÈÕÖ¾';
+) ENGINE=InnoDB AUTO_INCREMENT=554 DEFAULT CHARSET=utf8 COMMENT='æ“ä½œæ—¥å¿—';
 
 -- ----------------------------
 -- Records of sys_operation_log
@@ -231,11 +231,11 @@ CREATE TABLE `sys_operation_log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_relation`;
 CREATE TABLE `sys_relation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼ü',
-  `menuid` bigint(11) DEFAULT NULL COMMENT '²Ëµ¥id',
-  `roleid` int(11) DEFAULT NULL COMMENT '½ÇÉ«id',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®',
+  `menuid` bigint(11) DEFAULT NULL COMMENT 'èœå•id',
+  `roleid` int(11) DEFAULT NULL COMMENT 'è§’è‰²id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3792 DEFAULT CHARSET=utf8 COMMENT='½ÇÉ«ºÍ²Ëµ¥¹ØÁª±í';
+) ENGINE=InnoDB AUTO_INCREMENT=3792 DEFAULT CHARSET=utf8 COMMENT='è§’è‰²å’Œèœå•å…³è”è¡¨';
 
 -- ----------------------------
 -- Records of sys_relation
@@ -321,52 +321,52 @@ INSERT INTO `sys_relation` VALUES ('3791', '149', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼üid',
-  `num` int(11) DEFAULT NULL COMMENT 'ĞòºÅ',
-  `pid` int(11) DEFAULT NULL COMMENT '¸¸½ÇÉ«id',
-  `name` varchar(255) DEFAULT NULL COMMENT '½ÇÉ«Ãû³Æ',
-  `deptid` int(11) DEFAULT NULL COMMENT '²¿ÃÅÃû³Æ',
-  `tips` varchar(255) DEFAULT NULL COMMENT 'ÌáÊ¾',
-  `version` int(11) DEFAULT NULL COMMENT '±£Áô×Ö¶Î(ÔİÊ±Ã»ÓÃ£©',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®id',
+  `num` int(11) DEFAULT NULL COMMENT 'åºå·',
+  `pid` int(11) DEFAULT NULL COMMENT 'çˆ¶è§’è‰²id',
+  `name` varchar(255) DEFAULT NULL COMMENT 'è§’è‰²åç§°',
+  `deptid` int(11) DEFAULT NULL COMMENT 'éƒ¨é—¨åç§°',
+  `tips` varchar(255) DEFAULT NULL COMMENT 'æç¤º',
+  `version` int(11) DEFAULT NULL COMMENT 'ä¿ç•™å­—æ®µ(æš‚æ—¶æ²¡ç”¨ï¼‰',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='½ÇÉ«±í';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='è§’è‰²è¡¨';
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '1', '0', '³¬¼¶¹ÜÀíÔ±', '24', 'administrator', '1');
-INSERT INTO `sys_role` VALUES ('5', '2', '1', 'ÁÙÊ±', '26', 'temp', null);
+INSERT INTO `sys_role` VALUES ('1', '1', '0', 'è¶…çº§ç®¡ç†å‘˜', '24', 'administrator', '1');
+INSERT INTO `sys_role` VALUES ('5', '2', '1', 'ä¸´æ—¶', '26', 'temp', null);
 
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼üid',
-  `avatar` varchar(255) DEFAULT NULL COMMENT 'Í·Ïñ',
-  `account` varchar(45) DEFAULT NULL COMMENT 'ÕËºÅ',
-  `password` varchar(45) DEFAULT NULL COMMENT 'ÃÜÂë',
-  `salt` varchar(45) DEFAULT NULL COMMENT 'md5ÃÜÂëÑÎ',
-  `name` varchar(45) DEFAULT NULL COMMENT 'Ãû×Ö',
-  `birthday` datetime DEFAULT NULL COMMENT 'ÉúÈÕ',
-  `sex` int(11) DEFAULT NULL COMMENT 'ĞÔ±ğ£¨1£ºÄĞ 2£ºÅ®£©',
-  `email` varchar(45) DEFAULT NULL COMMENT 'µç×ÓÓÊ¼ş',
-  `phone` varchar(45) DEFAULT NULL COMMENT 'µç»°',
-  `roleid` varchar(255) DEFAULT NULL COMMENT '½ÇÉ«id',
-  `deptid` int(11) DEFAULT NULL COMMENT '²¿ÃÅid',
-  `status` int(11) DEFAULT NULL COMMENT '×´Ì¬(1£ºÆôÓÃ  2£º¶³½á  3£ºÉ¾³ı£©',
-  `createtime` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `version` int(11) DEFAULT NULL COMMENT '±£Áô×Ö¶Î',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»é”®id',
+  `avatar` varchar(255) DEFAULT NULL COMMENT 'å¤´åƒ',
+  `account` varchar(45) DEFAULT NULL COMMENT 'è´¦å·',
+  `password` varchar(45) DEFAULT NULL COMMENT 'å¯†ç ',
+  `salt` varchar(45) DEFAULT NULL COMMENT 'md5å¯†ç ç›',
+  `name` varchar(45) DEFAULT NULL COMMENT 'åå­—',
+  `birthday` datetime DEFAULT NULL COMMENT 'ç”Ÿæ—¥',
+  `sex` int(11) DEFAULT NULL COMMENT 'æ€§åˆ«ï¼ˆ1ï¼šç”· 2ï¼šå¥³ï¼‰',
+  `email` varchar(45) DEFAULT NULL COMMENT 'ç”µå­é‚®ä»¶',
+  `phone` varchar(45) DEFAULT NULL COMMENT 'ç”µè¯',
+  `roleid` varchar(255) DEFAULT NULL COMMENT 'è§’è‰²id',
+  `deptid` int(11) DEFAULT NULL COMMENT 'éƒ¨é—¨id',
+  `status` int(11) DEFAULT NULL COMMENT 'çŠ¶æ€(1ï¼šå¯ç”¨  2ï¼šå†»ç»“  3ï¼šåˆ é™¤ï¼‰',
+  `createtime` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `version` int(11) DEFAULT NULL COMMENT 'ä¿ç•™å­—æ®µ',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='¹ÜÀíÔ±±í';
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='ç®¡ç†å‘˜è¡¨';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'girl.gif', 'admin', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', 'ÕÅÈı', '2017-05-05 00:00:00', '2', 'sn93@qq.com', '18200000000', '1', '27', '1', '2016-01-29 08:49:53', '25');
+INSERT INTO `sys_user` VALUES ('1', 'girl.gif', 'admin', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', 'å¼ ä¸‰', '2017-05-05 00:00:00', '2', 'sn93@qq.com', '18200000000', '1', '27', '1', '2016-01-29 08:49:53', '25');
 INSERT INTO `sys_user` VALUES ('44', null, 'test', '45abb7879f6a8268f1ef600e6038ac73', 'ssts3', 'test', '2017-05-01 00:00:00', '1', 'abc@123.com', '', '5', '26', '3', '2017-05-16 20:33:37', null);
-INSERT INTO `sys_user` VALUES ('45', null, 'boss', '71887a5ad666a18f709e1d4e693d5a35', '1f7bf', 'ÀÏ°å', '2017-12-04 00:00:00', '1', '', '', '1', '24', '1', '2017-12-04 22:24:02', null);
-INSERT INTO `sys_user` VALUES ('46', null, 'manager', 'b53cac62e7175637d4beb3b16b2f7915', 'j3cs9', '¾­Àí', '2017-12-04 00:00:00', '1', '', '', '1', '24', '1', '2017-12-04 22:24:24', null);
+INSERT INTO `sys_user` VALUES ('45', null, 'boss', '71887a5ad666a18f709e1d4e693d5a35', '1f7bf', 'è€æ¿', '2017-12-04 00:00:00', '1', '', '', '1', '24', '1', '2017-12-04 22:24:02', null);
+INSERT INTO `sys_user` VALUES ('46', null, 'manager', 'b53cac62e7175637d4beb3b16b2f7915', 'j3cs9', 'ç»ç†', '2017-12-04 00:00:00', '1', '', '', '1', '24', '1', '2017-12-04 22:24:24', null);
 
 
 DROP TABLE IF EXISTS `test`;
