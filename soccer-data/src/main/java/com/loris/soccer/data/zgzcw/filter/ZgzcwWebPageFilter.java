@@ -23,7 +23,7 @@ import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.WebPageFilter;
-import com.loris.soccer.model.base.BaseMatch;
+import com.loris.soccer.model.base.MatchItem;
 
 import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
 
@@ -165,9 +165,9 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 		case PAGE_ODDS_YP:
 		case PAGE_ODDS_OP:
 		case PAGE_ODDS_NUM:
-			if(source instanceof BaseMatch)
+			if(source instanceof MatchItem)
 			{
-				Date matchTime = ((BaseMatch)source).getMatchtime();
+				Date matchTime = ((MatchItem)source).getMatchtime();
 				if(ToolUtil.isNotEmpty(matchTime))
 				{
 					long loadTimeToMatchTime = (loadtime.getTime() - matchTime.getTime()) / 1000;

@@ -19,10 +19,6 @@ import java.util.Random;
 import com.loris.common.exception.ServiceException;
 import com.loris.common.exception.enums.CoreExceptionEnum;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import cn.hutool.core.date.DateUtil;
-
 /**
  * 高频方法集合
  *
@@ -193,10 +189,10 @@ public class ToolUtil extends ValidateUtil {
      *
      * @author fengshuonan
      * @Date 2018/7/25 下午4:41
-     */
+     
     public static void copyProperties(Object source, Object target) {
         BeanUtil.copyProperties(source, target, CopyOptions.create().setIgnoreNullValue(true));
-    }
+    }*/
 
     /**
      * 判断是否是windows操作系统
@@ -295,14 +291,14 @@ public class ToolUtil extends ValidateUtil {
      *
      * @author stylefeng
      * @Date 2017/4/18 12:55
-     */
+     
     public static String dateType(Object o) {
         if (o instanceof Date) {
             return DateUtil.formatDate((Date) o);
         } else {
             return o.toString();
         }
-    }
+    }*/
 
     /**
      * 当前时间

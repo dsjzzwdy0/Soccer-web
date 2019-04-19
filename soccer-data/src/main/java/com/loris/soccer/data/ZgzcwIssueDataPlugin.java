@@ -32,7 +32,7 @@ import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.filter.ZgzcwWebPageFilter;
-import com.loris.soccer.model.base.BaseMatch;
+import com.loris.soccer.model.base.MatchItem;
 
 import cn.hutool.core.thread.ThreadUtil;
 
@@ -54,7 +54,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	protected long interval = 3000;
 	
 	/** 比赛过滤器 */
-	Filter<BaseMatch> matchFilter = null;
+	Filter<MatchItem> matchFilter = null;
 	
 	/**
 	 * Create a new instance of ZgzcwIssueProducePlugin

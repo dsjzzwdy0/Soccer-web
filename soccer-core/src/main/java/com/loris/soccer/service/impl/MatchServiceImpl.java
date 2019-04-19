@@ -208,4 +208,42 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		}
 		return baseMapper.selectList(queryWrapper);
 	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchBds(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<MatchBd> getMatchBds(Date start, Date end)
+	{
+		QueryWrapper<MatchBd> queryWrapper = new QueryWrapper<>();
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("matchtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("matchtime", end);
+		}
+		return matchBdMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchJcs(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<MatchJc> getMatchJcs(Date start, Date end)
+	{
+		QueryWrapper<MatchJc> queryWrapper = new QueryWrapper<>();
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("matchtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("matchtime", end);
+		}
+		return matchJcMapper.selectList(queryWrapper);
+	}
 }

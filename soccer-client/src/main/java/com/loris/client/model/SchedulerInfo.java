@@ -122,11 +122,19 @@ public class SchedulerInfo extends UUIDEntity implements WebElementsWrapper
 		}
 		if(type.equalsIgnoreCase(PLUGIN_BEAN))
 		{
-			plugins += PLUGIN_BEAN + ":" + name;
+			if(!name.startsWith(PLUGIN_BEAN))
+			{
+				plugins += PLUGIN_BEAN + ":";
+			}
+			plugins += name;
 		}
 		else if(type.equalsIgnoreCase(PLUGIN_CLASS))
 		{
-			plugins += PLUGIN_CLASS + ":" + name;
+			if(!name.startsWith(PLUGIN_CLASS))
+			{
+				plugins += PLUGIN_CLASS + ":";
+			}
+			plugins += name;
 		}
 		else {
 			plugins += name;

@@ -43,7 +43,7 @@ import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.BaseMatchList;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
@@ -53,7 +53,7 @@ import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.base.BaseMatch;
+import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.impl.SoccerDataService;
@@ -365,7 +365,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param hasYp 是否下载亚盘数据
 	 * @param hasNum 是否下载大小球数据
 	 */
-	protected void createMatchDataTask(List<String> types, BaseMatch match, boolean quiet)
+	protected void createMatchDataTask(List<String> types, MatchItem match, boolean quiet)
 	{
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, match.getMid());		
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
@@ -382,7 +382,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param filter 过滤器
 	 * @return 是否创建的数据量大小0
 	 */
-	protected <T extends BaseMatch> boolean createMatchTasks(List<T> matchItems, Filter<BaseMatch> filter)
+	protected <T extends MatchItem> boolean createMatchTasks(List<T> matchItems, Filter<MatchItem> filter)
 	{
 		if(matchItems == null || matchItems.size() == 0)
 		{
@@ -452,8 +452,8 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
-			Filter<BaseMatch> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
-			createMatchTasks((BaseMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), filter);
+			Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			createMatchTasks((MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), filter);
 			break;
 		}
 		case ZgzcwConstants.PAGE_LOTTERY_JC:
@@ -464,8 +464,8 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
 			
-			Filter<BaseMatch> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
-			createMatchTasks((BaseMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), filter);
+			Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			createMatchTasks((MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), filter);
 			break;
 		}
 		case ZgzcwConstants.PAGE_CENTER:
@@ -478,7 +478,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		case ZgzcwConstants.PAGE_LEAGUE_CUP:
 		{
 			MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
-			Filter<BaseMatch> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
 			createMatchTasks(matchList, filter);
 			break;
 		}

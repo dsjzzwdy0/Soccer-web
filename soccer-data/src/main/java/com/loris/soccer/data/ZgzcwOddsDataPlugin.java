@@ -17,16 +17,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.common.filter.Filter;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.filter.ZgzcwWebPageFilter;
+import com.loris.soccer.model.Match;
+import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.MatchJc;
+import com.loris.soccer.model.base.MatchItem;
 
 /**   
  * @ClassName: ZgzcwOddsDataPlugin   
@@ -39,6 +46,8 @@ import com.loris.soccer.data.zgzcw.filter.ZgzcwWebPageFilter;
 @Component
 public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 {
+	private static Logger logger = Logger.getLogger(ZgzcwOddsDataPlugin.class);
+	
 	/**
 	 * Create a new instance of ZgzcwOddsDataPlugin
 	 */
@@ -63,8 +72,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	 */
 	public ZgzcwOddsDataPlugin(WebPageProperties webPageConf, WebPageFilter filter)
 	{
-		super("赔率数据更新");
-		this.webPageConf = webPageConf;
+		this(webPageConf);
 		this.webPageFilter = filter;
 	}
 	
@@ -111,7 +119,69 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
+		Date start = new Date();
+		Date end = getEndDate(start);	
+		MatchItemList matchs = new MatchItemList();
+		getMatchItems(matchs, start, end);
 		
+		if(matchs.size() == 0)
+		{
+			logger.warn("There are no match item between [" + start + "~" + end + "] in the database, no task produced.");
+			return;
+		}
+		
+		Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+		createMatchTasks(matchs, filter);
+	}
+	
+	/**
+	 * 从数据库系统中查找比赛数据,该函数将从三个渠道查找数据：
+	 * 北单比赛、竞彩比赛、比赛基础数据库
+	 * @param matchs 比赛窗口
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 */
+	protected void getMatchItems(MatchItemList matchs, Date start, Date end)
+	{
+		List<Match> baseMatchs = matchService.getMatchs(start, end);
+		if(baseMatchs != null && baseMatchs.size() > 0)
+			addMatchItems(matchs, baseMatchs);
+		
+		List<MatchBd> matchBds = matchService.getMatchBds(start, end);
+		if(matchBds != null && matchBds.size() > 0)
+			addMatchItems(matchs, matchBds);
+		
+		List<MatchJc> matchJcs = matchService.getMatchJcs(start, end);
+		if(matchBds != null && matchJcs.size() > 0)
+			addMatchItems(matchs, matchJcs);
+	}
+	
+	/**
+	 * 加入比赛数据到列表中
+	 * @param matchs 列表容器
+	 * @param list 比赛列表
+	 */
+	protected void addMatchItems(MatchItemList matchs, List<? extends MatchItem> list)
+	{
+		for (MatchItem matchItem : list)
+		{
+			if(!matchs.containsMid(matchItem.getMid()))
+			{
+				matchs.add(matchItem);
+			}
+		}
 	}
 
+	/**
+	 * 计算要查找的比赛最后的时间
+	 * @param date 日期
+	 * @return 日期
+	 */
+	protected Date getEndDate(Date date)
+	{
+		int numDayofHasOdds = webPageConf == null ? 0 : webPageConf.getNumDayOfHasOdds();
+		numDayofHasOdds = numDayofHasOdds > 0 ? numDayofHasOdds : 3;
+		Date end = DateUtil.addDayNum(date, numDayofHasOdds);
+		return end;
+	}
 }

@@ -15,7 +15,7 @@ import java.util.Date;
 
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.util.ToolUtil;
-import com.loris.soccer.model.base.BaseMatch;
+import com.loris.soccer.model.base.MatchItem;
 
 /**   
  * @ClassName:  MatchFilter    
@@ -26,7 +26,7 @@ import com.loris.soccer.model.base.BaseMatch;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class MatchOddsFilter extends ObjectFilter<BaseMatch>
+public class MatchOddsFilter extends ObjectFilter<MatchItem>
 {
 	/** 几天内的比赛有赔率值 */
 	protected int numOfDayHasOdds = 7;
@@ -49,7 +49,7 @@ public class MatchOddsFilter extends ObjectFilter<BaseMatch>
 	 * @param return 是否下载的标志
 	 */
 	@Override
-	public boolean accept(BaseMatch match)
+	public boolean accept(MatchItem match)
 	{
 		if(ToolUtil.isEmpty(match) || ToolUtil.isEmpty(match.getMatchtime()))
 		{

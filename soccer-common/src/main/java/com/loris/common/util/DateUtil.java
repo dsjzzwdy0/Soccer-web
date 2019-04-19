@@ -814,6 +814,12 @@ public class DateUtil
         return parse(s, pattern) != null;
 	}
 
+	/**
+	 * 获得相关的年份数据
+	 * @param startTime 开始时间
+	 * @param endTime 结束时间
+	 * @return 相关的年份数
+	 */
 	public static int getDiffYear(String startTime, String endTime) {
 		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -878,7 +884,8 @@ public class DateUtil
 	 * @param days
 	 * @return
 	 */
-	public static String getAfterDayWeek(String days) {
+	public static String getAfterDayWeek(String days)
+	{
 		int daysInt = Integer.parseInt(days);
 
 		Calendar canlendar = Calendar.getInstance(); // java.util包
@@ -898,11 +905,34 @@ public class DateUtil
 	 */
 	public static Date getDateZero(Date d)
 	{
+		return getDateTime(d, 0, 0, 0);
+	}
+	
+	/**
+	 * 获得某一天的xxxx-xx-xx 23:59:59的日期值
+	 * @param d 时间
+	 * @return 零时刻的日期
+	 */
+	public static Date getDateLast(Date d)
+	{
+		return getDateTime(d, 23, 59, 59);
+	}
+	
+	/**
+	 * 获得某一天的某个时刻值xxxx-xx-xx hour:minute:second的日期值
+	 * @param d 日期
+	 * @param hour 小时
+	 * @param minute 分钟
+	 * @param second 秒
+	 * @return 返回新的日期
+	 */
+	public static Date getDateTime(Date d, int hour, int minute, int second)
+	{
 		Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.setTime(d);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
         return calendar.getTime();
 	}
 }

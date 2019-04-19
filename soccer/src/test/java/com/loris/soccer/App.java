@@ -12,6 +12,7 @@
 package com.loris.soccer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -42,11 +43,13 @@ import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
+import com.loris.common.quartz.QuartzUtil;
 import com.loris.common.service.DataService;
 import com.loris.common.util.ArraysUtil;
+import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.BaseMatchList;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsNumList;
@@ -72,6 +75,7 @@ import com.loris.soccer.data.zgzcw.parser.OddsYpWebPageParser;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
+import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
@@ -79,8 +83,7 @@ import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
-import com.loris.soccer.quartz.DataJob;
-import com.loris.soccer.quartz.QuartzUtil;
+import com.loris.soccer.quartz.ZgzcwIssueJob;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 
@@ -134,6 +137,7 @@ public class App
 			//addSchedulerInfo();
 			
 			testQuartzJob();
+			//testMatchBd();
 		}
 		catch (Exception e)
 		{
@@ -155,7 +159,7 @@ public class App
 	
 	public static void testQuartzJob() throws Exception
 	{
-        QuartzUtil.addJob("job1", "trigger1", DataJob.class, 2);
+        QuartzUtil.addJob("job1", "trigger1", ZgzcwIssueJob.class, 2);
 	}
 	
 	/**
@@ -177,6 +181,22 @@ public class App
 		factory.addSchedulerInfo(info);
 		
 		factory.saveAllSchedulers();
+	}
+	
+	public static void testMatchBd() throws Exception
+	{
+		Date start = DateUtil.parseDay("2019-03-16");
+		Date end = DateUtil.parseDay("2019-03-16");
+		end = DateUtil.getDateLast(end);
+		logger.info("START: " + start);
+		logger.info("END: " + end);
+		MatchService matchService = context.getBean(MatchService.class);
+		List<MatchBd> matchBdInfos = matchService.getMatchBds(start, end);
+		int i = 1;
+		for (MatchBd matchBdInfo : matchBdInfos)
+		{
+			logger.info(i +++ ": " + matchBdInfo);
+		}
 	}
 	
 	public static void testBdMatchInfo() throws Exception
@@ -666,7 +686,7 @@ public class App
 		 * int i = 1; for (MatchItem match : matchJcs) { logger.info(i +++ ": "
 		 * + match); }
 		 */
-		BaseMatchList matchJcs = (BaseMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		MatchItemList matchJcs = (MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
 		if (matchJcs == null)
 		{
 			logger.info("Error: no Match JC data.");

@@ -50,7 +50,7 @@ public interface MatchService extends IService<Match>
 	boolean insertMatchs(List<Match> matchs, boolean overwrite);
 	
 	/**
-	 * 获得比赛数据
+	 * 按照日期查询比赛数据
 	 * @param start 开始时间
 	 * @param end 结束时间
 	 * @return 比赛列表
@@ -73,6 +73,14 @@ public interface MatchService extends IService<Match>
 	boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite);
 	
 	/**
+	 * 按照日期查询北单数据
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 * @return 比赛列表
+	 */
+	List<MatchBd> getMatchBds(Date start, Date end);
+	
+	/**
 	 * 插入竞彩比赛数据
 	 * @param matchJcs 竞彩数据
 	 * @return 是否插入成功的标志
@@ -86,6 +94,15 @@ public interface MatchService extends IService<Match>
 	 * @return
 	 */
 	boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite);
+	
+	
+	/**
+	 * 按照日期查询北单数据
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 * @return 比赛列表
+	 */
+	List<MatchJc> getMatchJcs(Date start, Date end);
 	
 	/**
 	 * 插入比赛结果数据记录

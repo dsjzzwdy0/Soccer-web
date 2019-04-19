@@ -17,7 +17,7 @@ import org.jsoup.nodes.Document;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.BaseMatchList;
+import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 
@@ -56,7 +56,7 @@ public abstract class AbstractLotteryMatchWebPageParser extends AbstractLotteryW
 		{
 			issue = parseIssueElement(document);
 		}
-		BaseMatchList lotterMatches = new BaseMatchList();
+		MatchItemList lotterMatches = new MatchItemList();
 		MatchList baseMatchs = new MatchList();	
 		parseMatchList(document, issue, baseMatchs, lotterMatches);
 		
@@ -74,5 +74,5 @@ public abstract class AbstractLotteryMatchWebPageParser extends AbstractLotteryW
 	 * @param matchBds
 	 * @param baseMatchs
 	 */
-	protected abstract void parseMatchList(Document document, String issue, MatchList baseMatchs, BaseMatchList lotterMatches);
+	protected abstract void parseMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList lotterMatches);
 }
