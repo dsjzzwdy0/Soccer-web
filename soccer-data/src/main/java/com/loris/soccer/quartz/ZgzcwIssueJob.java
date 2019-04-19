@@ -39,7 +39,6 @@ public class ZgzcwIssueJob extends DataJob
 		info.setMaxActiveTaskThread(3);
 		info.setRandTimeSeed(200);
 		info.setType("zgzcw.downloader");
-		info.addPlugin("bean:httpCommonPlugin");
 		info.addPlugin(SchedulerInfo.PLUGIN_CLASS, ZgzcwIssueDataPlugin.class.getName());
 		return info;
 	}

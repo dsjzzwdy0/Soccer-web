@@ -138,7 +138,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		}
 		catch (Exception e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 			logger.warn("Warn: produce task list error info > " + e.getMessage());
 		}
 	}

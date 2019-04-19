@@ -111,7 +111,7 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	 * @return 联赛数据列表
 	 */
 	@Override
-	@Cacheable(value=SoccerConstants.CAHE_ODDS_NAME, key="leagues")
+	@Cacheable(value=SoccerConstants.CAHE_ODDS_NAME, key="'leagues'")
 	public List<League> list()
 	{
 		return baseMapper.selectList(new QueryWrapper<League>());

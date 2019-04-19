@@ -11,6 +11,8 @@
  */
 package com.loris.common.model;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
@@ -27,14 +29,30 @@ import com.loris.common.bean.AutoIdEntity;
 public class JobInfo extends AutoIdEntity
 {
 	/**
-	 * 
+	 * Serial version.
 	 */
 	private static final long serialVersionUID = 1L;
 
 	protected String jobname;
 	protected String classname;
 	protected String groupname;
-	protected String cronExpression;
+	protected String cronexpression;
+	protected boolean enabled = true;
+	protected Date createtime;
+	protected Date modifytime;
+	
+	public JobInfo()
+	{
+	}
+	
+	public JobInfo(String jobname, String classname, String groupname, String cronexpression)
+	{
+		this.jobname = jobname;
+		this.classname = classname;
+		this.groupname = groupname;
+		this.cronexpression = cronexpression;
+	}
+	
 	public String getJobname()
 	{
 		return jobname;
@@ -59,12 +77,36 @@ public class JobInfo extends AutoIdEntity
 	{
 		this.groupname = groupname;
 	}
-	public String getCronExpression()
+	public String getCronexpression()
 	{
-		return cronExpression;
+		return cronexpression;
 	}
-	public void setCronExpression(String cronExpression)
+	public void setCronexpression(String cronExpression)
 	{
-		this.cronExpression = cronExpression;
+		this.cronexpression = cronExpression;
+	}
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+	}
+	public Date getCreatetime()
+	{
+		return createtime;
+	}
+	public void setCreatetime(Date createtime)
+	{
+		this.createtime = createtime;
+	}
+	public Date getModifytime()
+	{
+		return modifytime;
+	}
+	public void setModifytime(Date modifytime)
+	{
+		this.modifytime = modifytime;
 	}
 }

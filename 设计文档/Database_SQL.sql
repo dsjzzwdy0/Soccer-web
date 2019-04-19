@@ -1,27 +1,35 @@
-create table soccer_web_page(
-	`id`  int(11) NOT NULL AUTO_INCREMENT,
-	url varchar(100),
-	encoding varchar(10),
-	protocol varchar(5),
-	host varchar(15),
-	port varchar(5),
-	method varchar(4),
-	type varchar(10),
-	source varchar(10),
-	httpstatus integer,
-	createtime timestamp,
-	loadtime timestamp,
-	ziptype varchar(5),
-	completed tinyint(1),
-	plaintext tinyint(1),
+CREATE TABLE `soccer_web_page` (
+	`id`  int(11) NOT NULL AUTO_INCREMENT ,
+	`name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`url`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`encoding`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`protocol`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`host`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`port`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`method`  varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`type`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`source`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`httpstatus`  int(11) NULL DEFAULT NULL ,
+	`createtime`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+	`loadtime`  timestamp NULL DEFAULT '0000-00-00 00:00:00' ,
+	`ziptype`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`completed`  tinyint(1) NULL DEFAULT NULL ,
+	`plaintext`  tinyint(1) NULL DEFAULT NULL ,
+	`paramstext`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
 	PRIMARY KEY (`id`),
 	INDEX `index_url` (`url`) USING BTREE ,
 	INDEX `index_host` (`host`) USING BTREE ,
 	INDEX `index_type` (`type`) USING BTREE ,
 	INDEX `index_source` (`source`) USING BTREE 
-);
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=1627
+ROW_FORMAT=DYNAMIC
+;
 
-create table soccer_scheduler_info(
+
+create table soccer_scheduler_status(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	sid varchar(20),
 	name varchar(30),
@@ -34,6 +42,17 @@ create table soccer_scheduler_info(
 	state smallint,
 	createtime timestamp,
 	finishtime timestamp,
+	PRIMARY KEY (`id`)
+);
+
+create table soccer_scheduler_info(
+	`id`  varchar(50) NOT NULL,
+	name varchar(30),
+	maxactivetaskthread int,
+	intervaltime int,
+	randtimeseed int,
+	type varchar(20),
+	plugins text,
 	PRIMARY KEY (`id`)
 );
 
@@ -269,17 +288,6 @@ create table soccer_odds_score(
 	INDEX `index_type` (`type`) USING BTREE
 );
 
-create table soccer_scheduler_info(
-	`id`  varchar(50) NOT NULL,
-	name varchar(30),
-	maxactivetaskthread int,
-	intervaltime int,
-	randtimeseed int,
-	type varchar(20),
-	plugins text,
-	PRIMARY KEY (`id`)
-);
-
 create table soccer_scheduler_status(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	sid varchar(50),
@@ -296,6 +304,18 @@ create table soccer_scheduler_status(
 	createtime timestamp,
 	stoptime timestamp,
 	finishtime timestamp,
+	PRIMARY KEY (`id`)
+);
+
+create table soccer_job_info(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	jobname varchar(20),
+	classname varchar(100),
+	groupname varchar(20),
+	cronexpression varchar(50),
+	enabled tinyint(1),
+	createtime timestamp,
+	modifytime timestamp,
 	PRIMARY KEY (`id`)
 );
 
