@@ -122,7 +122,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 
 		firstOdds.setCorpid(compid);
 		firstOdds.setCorpname(name);
-		firstOdds.setOpentime(firstTime.getTime());		
+		firstOdds.setOpentime(firstTime != null ? firstTime.getTime() : null);		
 		firstOdds.setWinodds(firstwinyp);
 		firstOdds.setGoalnum(getGoalNum(firsthandicap));
 		firstOdds.setLoseodds(firstloseyp);

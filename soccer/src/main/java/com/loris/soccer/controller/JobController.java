@@ -77,7 +77,7 @@ public class JobController
 	        JobInfo zgzcwIssueJobInfo = new JobInfo("足彩网期号数据下载", 
 	        		ZgzcwIssueJob.class.getName(), JOB_GROUP_NAME, "0 15 12 * * ?");
 	        JobInfo zgzcwOddsJobInfo = new JobInfo("足彩网赔率数据下载", 
-	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 10 02,17,21 * * ?");
+	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 25 10,17,21 * * ?");
 	        
 	        addAndStart(zgzcwIssueJobInfo);
 	        addAndStart(zgzcwOddsJobInfo);

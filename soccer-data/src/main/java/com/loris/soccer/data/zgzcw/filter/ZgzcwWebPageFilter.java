@@ -38,6 +38,8 @@ import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
  */
 public class ZgzcwWebPageFilter implements WebPageFilter
 {
+	public static final long MINUS_OF_HOUR = 3600000L;
+	
 	/** 初始化的标志 */
 	protected boolean initialized = false;
 	
@@ -170,13 +172,49 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 				Date matchTime = ((MatchItem)source).getMatchtime();
 				if(ToolUtil.isNotEmpty(matchTime))
 				{
-					long loadTimeToMatchTime = (loadtime.getTime() - matchTime.getTime()) / 1000;
-					if(loadTimeToMatchTime > - 1800L) return false;		//比赛开始前30分钟之后更新的，不需要再度更新
+					return checkNeedToReloadMatchOddsPage(matchTime, loadtime);
+					//long loadTimeToMatchTime = (loadtime.getTime() - matchTime.getTime()) / 1000;
+					//if(loadTimeToMatchTime > - 1800L) return false;		//比赛开始前30分钟之后更新的，不需要再度更新
 				}
 			}
 			break;
 		}
 		return true;
+	}
+	
+	/**
+	 * 检测是否需要对比赛赔率页面进行更新，计算公式如下：
+	 * 时间差值＝比赛时间－当前时间
+	 * 时间差值在2天以上的，更新周期为24小时
+	 * 时间差值在1~2天的，更新周期为18小时
+	 * 时间差值在18~24小时的，更新周期为12小时
+	 * 时间差值在12~18小时的，更新周期为6小时
+	 * 时间差值在6~12小时的，更新周期为4小时
+	 * 时间差值在3~6小时的，更新周期为3小时
+	 * 时间差值在2~3小时的，更新周期为2小时
+	 * 时间差值在0.3~2小时的，更新周期为1小时
+	 * 时间差值在0.3小时以内的，不需要更新
+	 * @param matchTime 比赛时间
+	 * @param loadTime 最近
+	 * @return
+	 */
+	protected boolean checkNeedToReloadMatchOddsPage(Date matchTime, Date loadTime)
+	{
+		long currentTime = System.currentTimeMillis();
+		double timeDistToMatchTime =((double) (matchTime.getTime() - currentTime)) / MINUS_OF_HOUR;
+		double timeDistToLoadTime = ((double)(currentTime - loadTime.getTime())) / MINUS_OF_HOUR;
+		
+		if(timeDistToMatchTime > 96) return false;
+		else if(timeDistToMatchTime > 48) return timeDistToLoadTime > 36;
+		else if(timeDistToMatchTime > 36) return timeDistToLoadTime > 24;
+		else if(timeDistToMatchTime > 24) return timeDistToLoadTime > 18;
+		else if(timeDistToMatchTime > 18) return timeDistToLoadTime > 12;
+		else if(timeDistToMatchTime > 12) return timeDistToLoadTime > 6;
+		else if(timeDistToMatchTime > 6) return timeDistToLoadTime > 4;
+		else if(timeDistToMatchTime > 3) return timeDistToLoadTime > 3;
+		else if(timeDistToMatchTime > 2) return timeDistToLoadTime > 2;
+		else if(timeDistToMatchTime > 0.3) return timeDistToLoadTime > 1;
+		else return false;
 	}
 
 	/**

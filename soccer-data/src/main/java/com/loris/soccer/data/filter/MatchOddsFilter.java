@@ -29,10 +29,10 @@ import com.loris.soccer.model.base.MatchItem;
 public class MatchOddsFilter extends ObjectFilter<MatchItem>
 {
 	/** 几天内的比赛有赔率值 */
-	protected int numOfDayHasOdds = 7;
+	protected int numOfDayHasOdds = 4;
 	
 	/** 下载几天前的数据 */
-	protected int numOfPreDayGetOdds = 8;
+	protected int numOfPreDayGetOdds = 5;
 	
 	/**
 	 * Create a new instance of MatchOddsFilter 
@@ -57,7 +57,7 @@ public class MatchOddsFilter extends ObjectFilter<MatchItem>
 		}
 		Date matchTime = match.getMatchtime();
 		long timeToMatch = (matchTime.getTime() - System.currentTimeMillis()) / 1000;
-		if(timeToMatch > numOfDayHasOdds * 86400) return false;		
+		if(timeToMatch > numOfDayHasOdds * 86400) return false;
 		if(- timeToMatch > numOfPreDayGetOdds * 86400) return false;
 		return true;
 	}

@@ -157,7 +157,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 
 		firstOdds.setCorpid(compid);
 		firstOdds.setCorpname(name);
-		firstOdds.setOpentime(firstTime.getTime());		
+		firstOdds.setOpentime(firstTime != null ? firstTime.getTime() : null);		
 		firstOdds.setWinodds(firstwinyp);
 		firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
 		firstOdds.setLoseodds(firstloseyp);
