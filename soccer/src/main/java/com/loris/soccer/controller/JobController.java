@@ -35,6 +35,7 @@ import com.loris.common.quartz.BaseJob;
 import com.loris.common.service.JobInfoService;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.quartz.ZgzcwIssueJob;
+import com.loris.soccer.quartz.ZgzcwMainPageJob;
 import com.loris.soccer.quartz.ZgzcwOddsJob;
 
 /**   
@@ -75,12 +76,16 @@ public class JobController
 	        scheduler.start();
 	        
 	        JobInfo zgzcwIssueJobInfo = new JobInfo("足彩网期号数据下载", 
-	        		ZgzcwIssueJob.class.getName(), JOB_GROUP_NAME, "0 15 12 * * ?");
+	        		ZgzcwIssueJob.class.getName(), JOB_GROUP_NAME, "0 45 13 * * ?");
 	        JobInfo zgzcwOddsJobInfo = new JobInfo("足彩网赔率数据下载", 
-	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 25 10,17,21 * * ?");
+	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 45 11,23 * * ?");
+	        
+	        JobInfo zgzcwLeagueJobInfo = new JobInfo("足彩网联赛页面下载", 
+	        		ZgzcwMainPageJob.class.getName(), JOB_GROUP_NAME, "0 45 18 ? * TUE,FRI");
 	        
 	        addAndStart(zgzcwIssueJobInfo);
 	        addAndStart(zgzcwOddsJobInfo);
+	        addAndStart(zgzcwLeagueJobInfo);
 	        
 	        //addAndStart(IssueDataDownloadJob.class.getName(), JOB_GROUP_NAME, "0 10 12 * * ?");
 	        //addAndStart(LiveDataDownloadJob.class.getName(), JOB_GROUP_NAME, "0 50 17 * * ?");

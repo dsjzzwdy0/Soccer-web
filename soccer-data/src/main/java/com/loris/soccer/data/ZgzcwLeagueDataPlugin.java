@@ -23,7 +23,9 @@ import org.springframework.stereotype.Component;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.common.util.DateUtil;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.filter.ZgzcwWebPageFilter;
@@ -58,18 +60,32 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 	@Override
 	public void initialize(TaskPluginContext context) throws IOException
 	{
+		if(initialized) return;
 		super.initialize(context);
 		
-		List<String> types = new ArrayList<>();
-		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
-		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		if(webPageFilter == null)
+		{
+			List<String> types = new ArrayList<>();
+			types.add(ZgzcwConstants.PAGE_ODDS_OP);
+			types.add(ZgzcwConstants.PAGE_ODDS_YP);
+			types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+			types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+			types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
+			ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
+			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
+			filter.setPageTypes(types);		
+			webPageFilter = filter;
+		}
+		if(!webPageFilter.isInitialized())
+		{
+			webPageFilter.initialize();
+		}
 		
-		ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
-		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
-		filter.setPageTypes(types);		
-		webPageFilter = filter;
-		webPageFilter.initialize();
+		registFilter(SoccerConstants.SOCCER_DATA_MATCH, 
+				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), 
+				webPageConf.getDayNumOfGetPages()));
+		initialized = true;
 	}
 
 	/**

@@ -177,22 +177,6 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	}
 	
 	/**
-	 * 处理创建的页面
-	 * @param page 网络下载页面
-	 * @param quiet 是否通知处理器
-	 * @return 返回创建的标志
-	 */
-	protected<T> boolean createWebPageTask(WebPage page, T source, boolean quiet)
-	{
-		if(webPageFilter != null && !webPageFilter.accept(page, source))
-		{
-			return false;
-		}
-		return super.createWebPageTask(page, quiet);
-	}
-	
-	
-	/**
 	 * 从远程获取数据内容，并对数据进行解析
 	 * @param context 插件运行环境
 	 * @param page 网络页面
@@ -213,14 +197,27 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		
 		//解析数据结果
-		TableRecords records = ZgzcwPageParser.parseWebPage(page);
-		if(records != null)
-		{		
-			saveTableRecords(records);		
-			if(webPageConf.isPageProduceNewTask(page.getType()))
+		try
+		{
+			if(StringUtils.isBlank(page.getContent()))
 			{
-				produceTask(page.getType(), records);
+				logger.warn("The page has no content downloaded: " + page.getUrl());
+				return true;
 			}
+			TableRecords records = ZgzcwPageParser.parseWebPage(page);
+			if(records != null)
+			{		
+				saveTableRecords(records);		
+				if(webPageConf.isPageProduceNewTask(page.getType()))
+				{
+					produceTask(page.getType(), records);
+				}
+			}			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.warn("Error occured when parsing and postExcute the WebPage: " + page.getUrl());
 		}
 		return true;
 	}
@@ -255,6 +252,21 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * 处理创建的页面
+	 * @param page 网络下载页面
+	 * @param quiet 是否通知处理器
+	 * @return 返回创建的标志
+	 */
+	protected<T> boolean createWebPageTask(WebPage page, T source, boolean quiet)
+	{
+		if(webPageFilter != null && !webPageFilter.accept(page, source))
+		{
+			return false;
+		}
+		return super.createWebPageTask(page, quiet);
 	}
 	
 	/**

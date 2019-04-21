@@ -21,9 +21,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.model.WebPage;
+import com.loris.common.util.DateUtil;
 import com.loris.common.util.EncodingUtil;
 import com.loris.common.util.URLUtil;
 import com.loris.soccer.constant.SoccerConstants;
+
 
 /**
  * @ClassName: League
@@ -71,18 +73,18 @@ public class ZgzcwPageCreator
 	
 	static
 	{
-		PAGE_PRIORITIES.put(PAGE_CENTER, 100.0);
-		PAGE_PRIORITIES.put(PAGE_LEAGUE_LEAGUE, 20.0);
-		PAGE_PRIORITIES.put(PAGE_LEAGUE_CUP, 20.0);
-		PAGE_PRIORITIES.put(PAGE_LEAGUE_LEAGUE_ROUND, 19.0);
-		PAGE_PRIORITIES.put(PAGE_LOTTERY_BD, 10.0);
-		PAGE_PRIORITIES.put(PAGE_LOTTERY_JC, 10.0);
-		PAGE_PRIORITIES.put(PAGE_LOTTERY_ZC, 10.0);
-		PAGE_PRIORITIES.put(PAGE_SCORE_BD, 10.0);
-		PAGE_PRIORITIES.put(PAGE_SCORE_JC, 10.0);
-		PAGE_PRIORITIES.put(PAGE_ODDS_OP, 1.0);
-		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1.0);
-		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1.0);		
+		PAGE_PRIORITIES.put(PAGE_CENTER, 10000.0);
+		PAGE_PRIORITIES.put(PAGE_LEAGUE_LEAGUE, 8000.0);
+		PAGE_PRIORITIES.put(PAGE_LEAGUE_CUP, 8000.0);
+		PAGE_PRIORITIES.put(PAGE_LEAGUE_LEAGUE_ROUND, 5000.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_BD, 4000.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_JC, 4000.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_ZC, 4000.0);
+		PAGE_PRIORITIES.put(PAGE_SCORE_BD, 3500.0);
+		PAGE_PRIORITIES.put(PAGE_SCORE_JC, 3500.0);
+		PAGE_PRIORITIES.put(PAGE_ODDS_OP, 1000.0);
+		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1000.0);
+		PAGE_PRIORITIES.put(PAGE_ODDS_NUM, 1000.0);		
 		
 		PAGE_BASE_URLS.put(PAGE_CENTER, 			"http://saishi.zgzcw.com/soccer/");	// 数据主页面
 		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE,    	"http://saishi.zgzcw.com/soccer/league/");  // "cup/51/2017-2018/" 杯赛类型的数据
@@ -140,7 +142,7 @@ public class ZgzcwPageCreator
 		page.setType(type);
 		page.setCreatetime(new Date());
 		page.setSource(SOURCE_ZGZCW);		
-		page.setPriority(getDefaultPriority(type));
+		page.setPriority(getDefaultPriority(type, params));
 		
 		page.setEncoding(encoding);
 		page.setMethod(getHttpMethod(type));
@@ -156,11 +158,24 @@ public class ZgzcwPageCreator
 	 * @param type 页面类型
 	 * @return 页面优先等级值
 	 */
-	protected static Double getDefaultPriority(String type)
+	protected static Double getDefaultPriority(String type, Map<String, String> params)
 	{
 		if(PAGE_PRIORITIES.containsKey(type))
 		{
-			return PAGE_PRIORITIES.get(type);
+			double priority = PAGE_PRIORITIES.get(type);
+			switch (type)
+			{
+			case PAGE_ODDS_OP:
+			case PAGE_ODDS_YP:
+			case PAGE_ODDS_NUM:
+				Date matchTime = DateUtil.tryToParseDate(params.get(SoccerConstants.NAME_FIELD_MATCHTIME));
+				if(matchTime != null)
+				{
+					priority += -((double)(matchTime.getTime() - System.currentTimeMillis())) / 3600000.0;
+				}
+				break;
+			}
+			return priority;
 		}
 		else
 			return 1.0;

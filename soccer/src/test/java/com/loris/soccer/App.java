@@ -80,6 +80,7 @@ import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
+import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
@@ -123,7 +124,8 @@ public class App
 			// testAutowired();
 			// testZgzcwWebPage();
 			// testZgzcwOpWebPage();
-			// testZgzcwNumWebPage();
+			testZgzcwNumWebPage();
+			// testZgzcwYpWebPage();
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
 			// testJcWebPage();
@@ -131,13 +133,10 @@ public class App
 			// testLeagueRoundWebPage();
 			// testZgzcwCupWebPage();
 			// testZgzcwLeagueCenterScheduler();	
-			
-			//testBdMatchInfo();
-			
-			//addSchedulerInfo();
-			
-			testQuartzJob();
-			//testMatchBd();
+			// testBdMatchInfo();
+			// addSchedulerInfo();
+			// testQuartzJob();
+			// testMatchBd();
 		}
 		catch (Exception e)
 		{
@@ -852,8 +851,8 @@ public class App
 	public static void testZgzcwNumWebPage() throws Exception
 	{
 		Map<String, String> params = new LinkedHashMap<>();
-		params.put("mid", "2437113");
-		params.put("matchtime", "2019-02-02 14:35:00");
+		params.put(SoccerConstants.NAME_FIELD_MID, "2514558");
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-04-21 13:00:00");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_NUM, params);
 
 		if (!downloadWebPage(page))
@@ -875,7 +874,43 @@ public class App
 		for (OddsNum odd : odds)
 		{
 			logger.info(i++ + ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " + odd.getGoalnum() + ", "
-					+ odd.getLoseodds() + ")" + odd.getOpentime());
+					+ odd.getLoseodds() + ")" + new Date(odd.getOpentime()));
+		}
+	}
+	
+	/**
+	 * 创建数据主页面
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testZgzcwYpWebPage() throws Exception
+	{
+		Map<String, String> params = new LinkedHashMap<>();
+		params.put(SoccerConstants.NAME_FIELD_MID, "2514558");
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-04-21 13:00:00");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params);
+
+		if (!downloadWebPage(page))
+		{
+			return;
+		}
+
+		// logger.info(page.getContent());
+
+		OddsYpWebPageParser parser = new OddsYpWebPageParser();
+		TableRecords records = parser.parse(page);
+		if (records == null)
+		{
+			logger.info("Parser error.");
+		}
+
+		int i = 1;
+		List<OddsYp> odds = (List<OddsYp>) records.get(SoccerConstants.SOCCER_DATA_YP_LIST);
+		for (OddsYp odd : odds)
+		{
+			logger.info(i++ + ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " + odd.getHandicapName() + ", "
+					+ odd.getLoseodds() + ")" + new Date(odd.getOpentime()));
 		}
 	}
 

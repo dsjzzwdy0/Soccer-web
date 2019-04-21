@@ -22,6 +22,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
+import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
@@ -73,7 +74,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		OddsNumList nums = new OddsNumList();
 		for (Element element2 : elements)
 		{
-			parseNum(element2, mid, time, nums);
+			parseNum(document, element2, mid, time, nums);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_NUM_LIST, nums);
 		return results;
@@ -86,7 +87,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 	 * @param matchTime 比赛时间
 	 * @param nums 大小球列表
 	 */
-	protected void parseNum(Element element, String mid, Date matchTime, List<OddsNum> nums)
+	protected void parseNum(Document document, Element element, String mid, Date matchTime, List<OddsNum> nums)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
@@ -95,22 +96,16 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			return;
 		}
 
-		OddsNum firstOdds = new OddsNum(mid);
-		OddsNum odds = new OddsNum(mid);
-
-		firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-
 		String first = element.attr("firsttime");
 		Date firstTime = DateUtil.tryToParseDate(first);
 		
 		String name = elements.get(1).text();
 		float firstwinyp = parseDataAttr(elements.get(2));
-		String firsthandicap = elements.get(3).attr(dataAttr);
+		String firstGoal = elements.get(3).attr(dataAttr);
 		float firstloseyp = parseDataAttr(elements.get(4));
 		float lastwinyp = parseDataAttr(elements.get(5));
 		String compid = elements.get(5).attr(compIdAttr);
-		String lasthandicap = elements.get(6).attr(dataAttr);
+		String lastGoal = elements.get(6).attr(dataAttr);
 
 		float lastloseyp = parseDataAttr(elements.get(7));
 		String updatetime = elements.get(8).selectFirst("em").attr("title");
@@ -119,33 +114,92 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		float homekelly = parseDataAttr(elements.get(11));
 		float guestkelly = parseDataAttr(elements.get(12));
 		float lossratio = parseDataAttr(elements.get(13));
-
-		firstOdds.setCorpid(compid);
-		firstOdds.setCorpname(name);
-		firstOdds.setOpentime(firstTime != null ? firstTime.getTime() : null);		
-		firstOdds.setWinodds(firstwinyp);
-		firstOdds.setGoalnum(getGoalNum(firsthandicap));
-		firstOdds.setLoseodds(firstloseyp);
-		firstOdds.setWinprob(homeprob);
-		firstOdds.setLoseprob(guestprob);
-		firstOdds.setWinkelly(homekelly);
-		firstOdds.setLosekelly(guestkelly);
-		firstOdds.setLossratio(lossratio);
-
-		odds.setCorpid(compid);
-		odds.setCorpname(name);
-		odds.setOpentime(getOpenTime(matchTime, updatetime));
-		odds.setWinodds(lastwinyp);
-		odds.setGoalnum(getGoalNum(lasthandicap));
-		odds.setLoseodds(lastloseyp);
-		odds.setWinprob(homeprob);
-		odds.setLoseprob(guestprob);
-		odds.setWinkelly(homekelly);
-		odds.setLosekelly(guestkelly);
-		odds.setLossratio(lossratio);
-
-		nums.add(firstOdds);
-		nums.add(odds);
+		
+		Element detailElement = getCorpElements(document, compid);
+		if(detailElement == null)
+		{
+			OddsNum firstOdds = new OddsNum(mid);
+			OddsNum odds = new OddsNum(mid);
+	
+			firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			firstOdds.setCorpid(compid);
+			firstOdds.setCorpname(name);
+			if(firstTime != null) firstOdds.setOpentime(firstTime.getTime());
+			firstOdds.setWinodds(firstwinyp);
+			firstOdds.setGoalnum(getGoalNum(firstGoal));
+			firstOdds.setLoseodds(firstloseyp);
+			firstOdds.setWinprob(homeprob);
+			firstOdds.setLoseprob(guestprob);
+			firstOdds.setWinkelly(homekelly);
+			firstOdds.setLosekelly(guestkelly);
+			firstOdds.setLossratio(lossratio);
+	
+			odds.setCorpid(compid);
+			odds.setCorpname(name);
+			odds.setOpentime(getOpenTime(matchTime, updatetime));
+			odds.setWinodds(lastwinyp);
+			odds.setGoalnum(getGoalNum(lastGoal));
+			odds.setLoseodds(lastloseyp);
+			odds.setWinprob(homeprob);
+			odds.setLoseprob(guestprob);
+			odds.setWinkelly(homekelly);
+			odds.setLosekelly(guestkelly);
+			odds.setLossratio(lossratio);
+	
+			nums.add(firstOdds);
+			nums.add(odds);
+		}
+		else
+		{
+			parseCorpNums(nums, detailElement, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+		}
+	}
+	
+	/**
+	 * 解析亚盘的详细数据
+	 * @param element
+	 * @param corpid
+	 * @param corpname
+	 * @param winprob
+	 * @param loseprob
+	 * @param winkelly
+	 * @param losekelly
+	 * @param lossratio
+	 */
+	protected void parseCorpNums(List<OddsNum> nums, Element element, String compid, String name, 
+			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
+	{
+		Elements elements = element.select("li");
+		for (Element ypElement : elements)
+		{
+			Elements valueEls = ypElement.select("i");			
+			if(valueEls == null || valueEls.size() < 3)
+			{
+				continue;
+			}
+			
+			long opemtime = NumberUtil.parseLong(ypElement.attr("timestamp"));
+			float winodds = NumberUtil.parseFloat(getElementValue(valueEls.get(0)));
+			String goal = getElementValue(valueEls.get(1));
+			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
+			
+			OddsNum odds = new OddsNum();
+			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			odds.setOpentime(opemtime);
+			odds.setCorpid(compid);
+			odds.setCorpname(name);
+			odds.setWinodds(winodds);
+			odds.setGoalnum(getGoalNum(goal));
+			odds.setLoseodds(loseodds);
+			odds.setWinprob(homeprob);
+			odds.setLoseprob(guestprob);
+			odds.setWinkelly(homekelly);
+			odds.setLosekelly(guestkelly);
+			odds.setLossratio(lossratio);
+			
+			nums.add(odds);
+		}
 	}
 	
 	/**
@@ -158,5 +212,4 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		value = value.replace("球", "");
 		return value;
 	}
-
 }

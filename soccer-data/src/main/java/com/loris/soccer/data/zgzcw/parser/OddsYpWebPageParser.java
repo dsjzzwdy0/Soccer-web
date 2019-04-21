@@ -102,13 +102,13 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 
 		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
-		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
-		Date time = DateUtil.tryToParseDate(mathTime);
+		String matchTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
+		Date time = DateUtil.tryToParseDate(matchTime);
 
 		OddsYpList yps = new OddsYpList();
-		for (Element element2 : elements)
+		for (Element corpElement : elements)
 		{
-			parseYp(element2, mid, time, yps);
+			parseYp(document, corpElement, mid, time, yps);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_YP_LIST, yps);
 		return results;
@@ -121,7 +121,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param matchTime 比赛时间
 	 * @param yps 亚盘数据列表
 	 */
-	protected void parseYp(Element element, String mid, Date matchTime, List<OddsYp> yps)
+	protected void parseYp(Document document, Element element, String mid, Date matchTime, List<OddsYp> yps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
@@ -129,12 +129,6 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		{
 			return;
 		}
-
-		OddsYp firstOdds = new OddsYp(mid);
-		OddsYp odds = new OddsYp(mid);
-
-		firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 
 		String first = element.attr("firsttime");
 		Date firstTime = DateUtil.tryToParseDate(first);
@@ -154,33 +148,103 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		float homekelly = parseDataAttr(elements.get(11));
 		float guestkelly = parseDataAttr(elements.get(12));
 		float lossratio = parseDataAttr(elements.get(13));
-
-		firstOdds.setCorpid(compid);
-		firstOdds.setCorpname(name);
-		firstOdds.setOpentime(firstTime != null ? firstTime.getTime() : null);		
-		firstOdds.setWinodds(firstwinyp);
-		firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
-		firstOdds.setLoseodds(firstloseyp);
-		firstOdds.setWinprob(homeprob);
-		firstOdds.setLoseprob(guestprob);
-		firstOdds.setWinkelly(homekelly);
-		firstOdds.setLosekelly(guestkelly);
-		firstOdds.setLossratio(lossratio);
-
-		odds.setCorpid(compid);
-		odds.setCorpname(name);
-		odds.setOpentime(getOpenTime(matchTime, updatetime));
-		odds.setWinodds(lastwinyp);
-		odds.setHandicap(HandicapDict.getHandicapValue(lasthandicap));
-		odds.setLoseodds(lastloseyp);
-		odds.setWinprob(homeprob);
-		odds.setLoseprob(guestprob);
-		odds.setWinkelly(homekelly);
-		odds.setLosekelly(guestkelly);
-		odds.setLossratio(lossratio);
-
-		yps.add(firstOdds);
-		yps.add(odds);
+		
+		Element detailElement = getCorpElements(document, compid);
+		if(detailElement == null)
+		{
+			OddsYp firstOdds = new OddsYp(mid);
+			OddsYp odds = new OddsYp(mid);
+			firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			
+			firstOdds.setCorpid(compid);
+			firstOdds.setCorpname(name);
+			firstOdds.setOpentime(firstTime != null ? firstTime.getTime() : null);		
+			firstOdds.setWinodds(firstwinyp);
+			firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
+			firstOdds.setLoseodds(firstloseyp);
+			firstOdds.setWinprob(homeprob);
+			firstOdds.setLoseprob(guestprob);
+			firstOdds.setWinkelly(homekelly);
+			firstOdds.setLosekelly(guestkelly);
+			firstOdds.setLossratio(lossratio);
+	
+			odds.setCorpid(compid);
+			odds.setCorpname(name);
+			odds.setOpentime(getOpenTime(matchTime, updatetime));
+			odds.setWinodds(lastwinyp);
+			odds.setHandicap(HandicapDict.getHandicapValue(lasthandicap));
+			odds.setLoseodds(lastloseyp);
+			odds.setWinprob(homeprob);
+			odds.setLoseprob(guestprob);
+			odds.setWinkelly(homekelly);
+			odds.setLosekelly(guestkelly);
+			odds.setLossratio(lossratio);
+	
+			yps.add(firstOdds);
+			yps.add(odds);
+		}
+		else
+		{
+			parseCorpYps(yps, detailElement, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+		}
+	}
+	
+	/**
+	 * 解析亚盘的详细数据
+	 * @param element
+	 * @param corpid
+	 * @param corpname
+	 * @param winprob
+	 * @param loseprob
+	 * @param winkelly
+	 * @param losekelly
+	 * @param lossratio
+	 */
+	protected void parseCorpYps(List<OddsYp> yps, Element element, String compid, String name, 
+			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
+	{
+		Elements elements = element.select("li");
+		for (Element ypElement : elements)
+		{
+			Elements valueEls = ypElement.select("i");			
+			if(valueEls == null || valueEls.size() < 3)
+			{
+				continue;
+			}
+			
+			long opemtime = NumberUtil.parseLong(ypElement.attr("timestamp"));
+			float winodds = NumberUtil.parseFloat(getElementValue(valueEls.get(0)));
+			String handicap = getElementValue(valueEls.get(1));
+			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
+			
+			OddsYp odds = new OddsYp();
+			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			odds.setOpentime(opemtime);
+			odds.setCorpid(compid);
+			odds.setCorpname(name);
+			odds.setWinodds(winodds);
+			odds.setHandicap(HandicapDict.getHandicapValue(handicap));
+			odds.setLoseodds(loseodds);
+			odds.setWinprob(homeprob);
+			odds.setLoseprob(guestprob);
+			odds.setWinkelly(homekelly);
+			odds.setLosekelly(guestkelly);
+			odds.setLossratio(lossratio);
+			
+			yps.add(odds);
+		}
+	}
+	
+	/**
+	 * 查找详细的赔率元素
+	 * @param document
+	 * @param cid
+	 * @return
+	 */
+	protected Element getCorpElements(Document document, String cid)
+	{
+		return document.selectFirst("#data-layer-" + cid);
 	}
 
 	/**
@@ -220,5 +284,14 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		t *= 1000;
 		Date d = DateUtil.add(matchTime, -t);
 		return d.getTime();
+	}
+	
+	protected String getElementValue(Element element)
+	{
+		String value = element.text();
+		value = value.replace("↓", "");
+		value = value.replace("→", "");
+		value = value.replace("↑", "");
+		return value;
 	}
 }
