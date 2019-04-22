@@ -186,7 +186,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 		else
 		{
-			parseCorpYps(yps, detailElement, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+			parseCorpYps(yps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
 		}
 	}
 	
@@ -201,7 +201,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param losekelly
 	 * @param lossratio
 	 */
-	protected void parseCorpYps(List<OddsYp> yps, Element element, String compid, String name, 
+	protected void parseCorpYps(List<OddsYp> yps, Element element, String mid, String compid, String name, 
 			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
 	{
 		Elements elements = element.select("li");
@@ -218,7 +218,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			String handicap = getElementValue(valueEls.get(1));
 			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
 			
-			OddsYp odds = new OddsYp();
+			OddsYp odds = new OddsYp(mid);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			odds.setOpentime(opemtime);
 			odds.setCorpid(compid);

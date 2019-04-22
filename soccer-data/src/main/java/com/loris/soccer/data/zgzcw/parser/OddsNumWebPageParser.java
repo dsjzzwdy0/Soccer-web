@@ -152,7 +152,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		}
 		else
 		{
-			parseCorpNums(nums, detailElement, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+			parseCorpNums(nums, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
 		}
 	}
 	
@@ -167,7 +167,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 	 * @param losekelly
 	 * @param lossratio
 	 */
-	protected void parseCorpNums(List<OddsNum> nums, Element element, String compid, String name, 
+	protected void parseCorpNums(List<OddsNum> nums, Element element, String mid, String compid, String name, 
 			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
 	{
 		Elements elements = element.select("li");
@@ -184,7 +184,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			String goal = getElementValue(valueEls.get(1));
 			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
 			
-			OddsNum odds = new OddsNum();
+			OddsNum odds = new OddsNum(mid);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			odds.setOpentime(opemtime);
 			odds.setCorpid(compid);
