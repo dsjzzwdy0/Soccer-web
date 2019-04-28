@@ -64,7 +64,6 @@ import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
-import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdScoreWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryJcScoreWebPageParser;
@@ -112,7 +111,7 @@ public class App
 			// testOddsNumPage();
 			// testJcScoreWebPage();
 			// testUpdate();
-			// testLeagueCenterPage();
+			testLeagueCenterPage();
 			// testMariaDB();
 			// testDateString();
 			// testJcWebPage();
@@ -124,7 +123,7 @@ public class App
 			// testAutowired();
 			// testZgzcwWebPage();
 			// testZgzcwOpWebPage();
-			testZgzcwNumWebPage();
+			// testZgzcwNumWebPage();
 			// testZgzcwYpWebPage();
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
@@ -387,9 +386,8 @@ public class App
 		{
 			return;
 		}
-
-		LeagueWebPageParser parser = new LeagueWebPageParser();
-		TableRecords records = parser.parse(page);
+		
+		TableRecords records = ZgzcwPageParser.parseWebPage(page);
 
 		if (records == null)
 		{
@@ -409,9 +407,9 @@ public class App
 		// records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
 		MatchResultList results = (MatchResultList) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
 		int i = 1;
-		for (MatchResult round : results)
+		for (MatchResult result : results)
 		{
-			logger.info(i++ + ": " + round);
+			logger.info(i++ + ": " + result);
 		}
 
 		saveTableRecords(records);

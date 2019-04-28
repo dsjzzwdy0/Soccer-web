@@ -58,7 +58,7 @@ public abstract class AbstractWebPageParser implements WebPageParser
 			throw new WebParserException("The page '" + page.getType() + "' is not be accepted by this Parser '" + getClass().getName() + "'");
 		}
 		
-		if(StringUtils.isAllEmpty(page.getContent()))
+		if(StringUtils.isEmpty(page.getContent()))
 		{
 			throw new WebParserException("The page content is empty, there are no content bo be parsed.");
 		}

@@ -11,11 +11,13 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
 /**   
- * @ClassName:  League   
+ * @ClassName:  MatchResult   
  * @Description: 比赛的比分数据 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
@@ -123,6 +125,15 @@ public class MatchResult extends AutoIdEntity
 		{
 			//Do nothing
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !StringUtils.equals(getClass().getName(), obj.getClass().getName())) return false;
+		MatchResult other = (MatchResult)obj;
+		return StringUtils.equals(mid, other.mid);
 	}
 	
 	/**
