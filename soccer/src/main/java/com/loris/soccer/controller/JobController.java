@@ -80,7 +80,7 @@ public class JobController
 	        JobInfo zgzcwOddsJobInfo = new JobInfo("足彩网赔率数据下载", 
 	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 45 11,23 * * ?");
 	        
-	        JobInfo zgzcwLeagueJobInfo = new JobInfo("足彩网联赛页面下载", 
+	        JobInfo zgzcwLeagueJobInfo = new JobInfo("足彩网联赛页面下载",
 	        		ZgzcwMainPageJob.class.getName(), JOB_GROUP_NAME, "0 45 18 ? * MON,TUE,THU,FRI");
 	        
 	        addAndStart(zgzcwIssueJobInfo);

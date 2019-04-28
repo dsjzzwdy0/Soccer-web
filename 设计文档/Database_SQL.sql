@@ -203,7 +203,7 @@ create table soccer_match_result
 (
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10),
-	result smallint,
+	result varchar(6),
 	homegoal smallint,
 	clientgoal smallint,
 	PRIMARY KEY (`id`),	
