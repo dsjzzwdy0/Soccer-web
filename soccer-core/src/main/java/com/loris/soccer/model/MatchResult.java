@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
@@ -123,6 +125,16 @@ public class MatchResult extends AutoIdEntity
 		{
 			//Do nothing
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !StringUtils.equals(obj.getClass().getName(), this.getClass().getName())) return false;
+		MatchResult other = (MatchResult) obj;
+		if(StringUtils.equals(mid, other.mid)) return true;
+		else return false;
 	}
 	
 	/**

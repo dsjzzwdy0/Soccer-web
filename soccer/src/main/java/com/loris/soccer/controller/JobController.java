@@ -81,7 +81,7 @@ public class JobController
 	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 45 11,23 * * ?");
 	        
 	        JobInfo zgzcwLeagueJobInfo = new JobInfo("足彩网联赛页面下载", 
-	        		ZgzcwMainPageJob.class.getName(), JOB_GROUP_NAME, "0 45 18 ? * TUE,FRI");
+	        		ZgzcwMainPageJob.class.getName(), JOB_GROUP_NAME, "0 57 13 * * ?");
 	        
 	        addAndStart(zgzcwIssueJobInfo);
 	        addAndStart(zgzcwOddsJobInfo);
