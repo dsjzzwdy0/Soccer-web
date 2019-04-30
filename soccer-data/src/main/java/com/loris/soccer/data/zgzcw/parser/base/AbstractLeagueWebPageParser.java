@@ -27,6 +27,7 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.model.Logo.LogoType;
@@ -75,19 +76,24 @@ public abstract class AbstractLeagueWebPageParser extends AbstractZgzcwWebPagePa
 	 * 
 	 * @param element
 	 */
-	protected String parseFirstSeasonInfo(Document document)
+	protected void parseSeasonInfos(Element document, String lid, List<Season> seasons)
 	{
 		//解析赛季信息
 		Element element = document.selectFirst(".league .left .team_out .div-select");	
-		
 		if(element == null)
 		{
-			return "";
+			return;
 		}
-		String season;
-		Element el = element.select("a").first();
-		season = el.select("li").first().text();
-		return season;
+		String seasonInfo = "";
+		Elements els = element.select("a");
+		for (Element el : els)
+		{
+			seasonInfo = el.select("li").first().text();
+			Season s = new Season();
+			s.setLid(lid);
+			s.setSeason(seasonInfo);
+			seasons.add(s);
+		}
 	}
 	
 	/**

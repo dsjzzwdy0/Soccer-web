@@ -28,6 +28,7 @@ import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.RankList;
 import com.loris.soccer.collection.RoundList;
+import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.collection.TeamList;
 import com.loris.soccer.collection.TeamRfSeasonList;
 import com.loris.soccer.constant.SoccerConstants;
@@ -69,11 +70,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		String season = page.getParams().get(SoccerConstants.NAME_FIELD_SEASON);
 		String round = null;
 		
-		if(StringUtils.isEmpty(season))
-		{
-			season = parseFirstSeasonInfo(document);
-		}
-		
+		SeasonList seasons = new SeasonList();
 		TeamList teams = new TeamList();
 		TeamRfSeasonList teamRfSeasons = new TeamRfSeasonList();
 		RoundList rounds = new RoundList();
@@ -82,11 +79,18 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		LogoList logos = new LogoList();
 		RankList ranks = new RankList();
 		
+		seasons.setOverwrite(false);
 		matchs.setOverwrite(true);
 		teams.setOverwrite(false);
 		ranks.setOverwrite(true);
 		matchResults.setOverwrite(true);
-
+		
+		parseSeasonInfos(document, lid, seasons);		
+		if(StringUtils.isEmpty(season))
+		{
+			season = seasons.getLastSeason();
+		}
+		
 		//解析球队列表情况
 		parseTeams(document, lid, season, teams, teamRfSeasons);
 		
@@ -99,6 +103,7 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		// 球队的排名情况
 		parseRanks(document, lid, season, round, ranks);
 		
+		results.put(SoccerConstants.SOCCER_DATA_SEASON_LIST, seasons);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_LIST, teams);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_SEASON, teamRfSeasons);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, matchs);

@@ -18,6 +18,7 @@ import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Rank;
 import com.loris.soccer.model.Round;
+import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 
@@ -71,6 +72,21 @@ public interface LeagueService extends IService<League>
 	 * @return 是否成功的标志
 	 */
 	boolean insertTeams(List<Team> teams, boolean overwrite);
+	
+	/**
+	 * 保存赛季数据
+	 * @param seasons
+	 * @return 是否成功的标志
+	 */
+	boolean insertSeasons(List<Season> seasons);
+	
+	/**
+	 * 保存赛季数据	
+	 * @param seasons 赛季
+	 * @param overwrite 是否覆盖
+	 * @return 是否成功的标志
+	 */
+	boolean insertSeasons(List<Season> seasons, boolean overwrite);
 	
 	/**
 	 * 保存联赛轮次数据

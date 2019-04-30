@@ -670,8 +670,8 @@ public class SqlHelper
 			logger.warn("Warn: No " + clazz.getName() + " need to be updated.");
 			return false;
 		}
-		List<String> tids = ArraysUtil.getObjectFieldValue(values, clazz, key);
-		QueryWrapper<T> queryWrapper = new QueryWrapper<T>().in(key, tids);
+		List<String> keyValues = ArraysUtil.getObjectFieldValue(values, clazz, key);
+		QueryWrapper<T> queryWrapper = new QueryWrapper<T>().in(key, keyValues);
 		return insertList(values, clazz, mapper, filter, queryWrapper, helper, checkExist, overwrite);
 	}
 	

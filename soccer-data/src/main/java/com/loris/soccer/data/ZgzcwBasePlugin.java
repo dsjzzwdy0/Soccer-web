@@ -202,17 +202,19 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			if(StringUtils.isBlank(page.getContent()))
 			{
 				logger.warn("The page has no content downloaded: " + page.getUrl());
-				return true;
 			}
-			TableRecords records = ZgzcwPageParser.parseWebPage(page);
-			if(records != null)
-			{		
-				saveTableRecords(records);		
-				if(webPageConf.isPageProduceNewTask(page.getType()))
-				{
-					produceTask(page.getType(), records);
+			else
+			{
+				TableRecords records = ZgzcwPageParser.parseWebPage(page);
+				if(records != null)
+				{		
+					saveTableRecords(records);		
+					if(webPageConf.isPageProduceNewTask(page.getType()))
+					{
+						produceTask(page.getType(), records);
+					}
 				}
-			}			
+			}
 		}
 		catch(Exception e)
 		{
@@ -229,10 +231,18 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	public void saveTableRecords(TableRecords records) throws IOException
 	{
-		long st = System.currentTimeMillis();
-		soccerDataService.saveTableRecords(records);
-		long en = System.currentTimeMillis();
-		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
+		try
+		{
+			long st = System.currentTimeMillis();
+			soccerDataService.saveTableRecords(records);
+			long en = System.currentTimeMillis();
+			logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.warn("Error '" + e.toString() + "' occured when save records[" + records.toString() + "].");
+		}
 	}
 	
 	/**
@@ -355,6 +365,15 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	protected List<String> getMatchDataTypes()
 	{
 		List<String> types = new ArrayList<>();
+		
+		for (String key : webPageConf.getPageBeCreated().keySet())
+		{
+			if(webPageConf.isPageBeCreated(key))
+			{
+				types.add(key);
+			}
+		}
+		
 		if (webPageConf.isPageBeCreated(ZgzcwConstants.PAGE_ODDS_OP))
 		{
 			types.add(ZgzcwConstants.PAGE_ODDS_OP);
@@ -367,6 +386,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		{
 			types.add(ZgzcwConstants.PAGE_ODDS_NUM);
 		}
+
 		return types;
 	}
 

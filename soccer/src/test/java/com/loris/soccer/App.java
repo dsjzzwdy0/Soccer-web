@@ -56,6 +56,7 @@ import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
+import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.ZgzcwIssueDataPlugin;
 import com.loris.soccer.data.ZgzcwLeagueDataPlugin;
@@ -80,6 +81,7 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
@@ -378,9 +380,9 @@ public class App
 
 	public static void testLeagueCenterPage() throws Exception
 	{
-		String lid = "36";
+		String lid = "83";
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, lid);
-		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, params);
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_CUP, params);
 
 		if (!downloadWebPage(page))
 		{
@@ -410,6 +412,13 @@ public class App
 		for (MatchResult result : results)
 		{
 			logger.info(i++ + ": " + result);
+		}
+		
+		SeasonList seasons = (SeasonList) records.get(SoccerConstants.SOCCER_DATA_SEASON_LIST);
+		i = 1;
+		for (Season season : seasons)
+		{
+			logger.info(i++ + ": " + season);
 		}
 
 		saveTableRecords(records);

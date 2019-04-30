@@ -29,6 +29,7 @@ import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.collection.RankList;
 import com.loris.soccer.collection.RoundList;
+import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.collection.TeamList;
 import com.loris.soccer.collection.TeamRfSeasonList;
 import com.loris.soccer.model.MatchBd;
@@ -90,6 +91,10 @@ public class SoccerDataService implements DataService
 			case SOCCER_DATA_ROUND_LIST:
 				RoundList rounds = (RoundList) results.get(key);
 				leagueService.insertRounds(rounds, rounds.isOverwrite());
+				break;
+			case SOCCER_DATA_SEASON_LIST:
+				SeasonList seasons = (SeasonList) results.get(key);
+				leagueService.insertSeasons(seasons, seasons.isOverwrite());
 				break;
 			case SOCCER_DATA_TEAM_LIST:
 				TeamList teams = (TeamList) results.get(key);

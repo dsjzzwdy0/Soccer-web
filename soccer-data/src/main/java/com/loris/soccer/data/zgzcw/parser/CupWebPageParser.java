@@ -23,6 +23,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.RoundList;
+import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.collection.TeamList;
 import com.loris.soccer.collection.TeamRfSeasonList;
 import com.loris.soccer.constant.SoccerConstants;
@@ -63,22 +64,25 @@ public class CupWebPageParser extends AbstractLeagueWebPageParser
 		String lid = page.getParams().get(SoccerConstants.NAME_FIELD_LID);
 		String season = page.getParams().get(SoccerConstants.NAME_FIELD_SEASON);
 				
-		if(StringUtils.isEmpty(season))
-		{
-			//解析得到当前的赛季信息
-			season = parseFirstSeasonInfo(document);
-		}
 		
+		SeasonList seasons = new SeasonList();
 		TeamList teams = new TeamList();
 		TeamRfSeasonList teamRfSeasons = new TeamRfSeasonList();
 		RoundList rounds = new RoundList();
 		MatchList matchs = new MatchList();
 		MatchResultList matchResults = new MatchResultList();
 		
+		seasons.setOverwrite(false);
 		matchs.setOverwrite(true);
 		teams.setOverwrite(true);
 		matchResults.setOverwrite(true);
 		rounds.setOverwrite(true);
+		
+		parseSeasonInfos(document, lid, seasons);		
+		if(StringUtils.isEmpty(season))
+		{
+			season = seasons.getLastSeason();
+		}
 		
 		// 解析球队信息
 		parseTeams(document, lid, season, teams, teamRfSeasons);
@@ -88,7 +92,8 @@ public class CupWebPageParser extends AbstractLeagueWebPageParser
 
 		// 解析比赛信息
 		parseMatches(document, lid, season, rounds, matchs, matchResults, null);
-		
+
+		results.put(SoccerConstants.SOCCER_DATA_SEASON_LIST, seasons);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_LIST, teams);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_SEASON, teamRfSeasons);
 		results.put(SoccerConstants.SOCCER_DATA_ROUND_LIST, rounds);

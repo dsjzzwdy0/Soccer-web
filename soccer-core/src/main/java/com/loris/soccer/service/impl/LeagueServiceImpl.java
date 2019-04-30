@@ -27,12 +27,14 @@ import com.loris.soccer.dao.LeagueMapper;
 import com.loris.soccer.dao.LogoMapper;
 import com.loris.soccer.dao.RankMapper;
 import com.loris.soccer.dao.RoundMapper;
+import com.loris.soccer.dao.SeasonMapper;
 import com.loris.soccer.dao.TeamMapper;
 import com.loris.soccer.dao.TeamRfSeasonMapper;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Rank;
 import com.loris.soccer.model.Round;
+import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.service.LeagueService;
@@ -54,6 +56,9 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	
 	@Autowired
 	private TeamMapper teamMapper;
+	
+	@Autowired
+	private SeasonMapper seasonMapper;
 	
 	@Autowired
 	private RoundMapper roundMapper;
@@ -221,6 +226,28 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	{
 		ObjectFilter<Rank> filter = new ObjectFilter<>();
 		return SqlHelper.insertList(ranks, Rank.class, rankMapper, filter, SoccerConstants.NAME_FIELD_LID, 
+				sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertSeasons(java.util.List)
+	 */
+	@Override
+	public boolean insertSeasons(List<Season> seasons)
+	{
+		return insertSeasons(seasons, true);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertSeasons(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertSeasons(List<Season> seasons, boolean overwrite)
+	{
+		ObjectFilter<Season> filter = new ObjectFilter<>();
+		return SqlHelper.insertList(seasons, Season.class, seasonMapper, filter, SoccerConstants.NAME_FIELD_LID, 
 				sqlHelper, overwrite);
 	}
 }

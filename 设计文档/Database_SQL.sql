@@ -82,6 +82,15 @@ create table soccer_logo
 	INDEX `index_pid` (`pid`) USING BTREE
 );
 
+create table soccer_league_season(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	lid varchar(10),
+	season varchar(20),
+	PRIMARY KEY (`id`),
+	INDEX `index_lid` (`lid`) USING BTREE ,
+	INDEX `index_season` (`season`) USING BTREE
+);
+
 create table soccer_league_round(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	lid varchar(10),
