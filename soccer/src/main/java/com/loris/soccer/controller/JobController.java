@@ -30,13 +30,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.JobInfo;
 import com.loris.common.quartz.BaseJob;
 import com.loris.common.service.JobInfoService;
 import com.loris.common.web.wrapper.Rest;
-import com.loris.soccer.quartz.ZgzcwIssueJob;
-import com.loris.soccer.quartz.ZgzcwMainPageJob;
-import com.loris.soccer.quartz.ZgzcwOddsJob;
 
 /**   
  * @ClassName:  JobController    
@@ -69,26 +67,7 @@ public class JobController
 	{
 		try
 		{
-			SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-	        scheduler = schedulerFactory.getScheduler();//可以通过SchedulerFactory创建一个Scheduler实例
-	        
-	        // 启动调度器
-	        scheduler.start();
-	        
-	        JobInfo zgzcwIssueJobInfo = new JobInfo("足彩网期号数据下载", 
-	        		ZgzcwIssueJob.class.getName(), JOB_GROUP_NAME, "0 45 13 * * ?");
-	        JobInfo zgzcwOddsJobInfo = new JobInfo("足彩网赔率数据下载", 
-	        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 45 11,23 * * ?");
-	        
-	        JobInfo zgzcwLeagueJobInfo = new JobInfo("足彩网联赛页面下载",
-	        		ZgzcwMainPageJob.class.getName(), JOB_GROUP_NAME, "0 45 18 ? * MON,TUE,THU,FRI");
-	        
-	        addAndStart(zgzcwIssueJobInfo);
-	        addAndStart(zgzcwOddsJobInfo);
-	        addAndStart(zgzcwLeagueJobInfo);
-	        
-	        //addAndStart(IssueDataDownloadJob.class.getName(), JOB_GROUP_NAME, "0 10 12 * * ?");
-	        //addAndStart(LiveDataDownloadJob.class.getName(), JOB_GROUP_NAME, "0 50 17 * * ?");
+			initialize();
 		}
 		catch(SchedulerException e)
 		{
@@ -100,6 +79,39 @@ public class JobController
 			e.printStackTrace();
 			logger.warn(e.toString());
 		}
+	}
+	
+	protected void initialize() throws SchedulerException, Exception
+	{
+		if(jobInfoService == null) jobInfoService = ApplicationContextHelper.getBean(JobInfoService.class);
+		List<JobInfo> jobInfos = jobInfoService.list();
+		if(jobInfos == null || jobInfos.size() == 0)
+		{
+			throw new SchedulerException("There are no job in database to be schedulered.");
+		}
+		
+		SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        scheduler = schedulerFactory.getScheduler();//可以通过SchedulerFactory创建一个Scheduler实例
+        
+        // 启动调度器
+        scheduler.start();
+        for (JobInfo jobInfo : jobInfos)
+		{
+			addAndStart(jobInfo);
+		}
+        
+        /*
+        JobInfo zgzcwIssueJobInfo = new JobInfo("足彩网期号数据下载", 
+        		ZgzcwIssueJob.class.getName(), JOB_GROUP_NAME, "0 45 13 * * ?");
+        JobInfo zgzcwOddsJobInfo = new JobInfo("足彩网赔率数据下载", 
+        		ZgzcwOddsJob.class.getName(), JOB_GROUP_NAME, "0 45 11,23 * * ?");
+        
+        JobInfo zgzcwLeagueJobInfo = new JobInfo("足彩网联赛页面下载",
+        		ZgzcwMainPageJob.class.getName(), JOB_GROUP_NAME, "0 45 18 ? * MON,TUE,THU,FRI");
+        
+        addAndStart(zgzcwIssueJobInfo);
+        addAndStart(zgzcwOddsJobInfo);
+        addAndStart(zgzcwLeagueJobInfo);*/
 	}
 
 	/**
@@ -148,8 +160,14 @@ public class JobController
 	protected void addAndStart(String jobClassName, String jobGroupName, String cronExpression, 
 			String triggerName, String triggerGroupName) throws Exception
 	{
+		JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobClassName, jobGroupName));
+		if(jobDetail != null)
+		{
+			logger.warn("The class[" + jobClassName + "] and group[" + jobGroupName + "] has been exist in Scheduler.");
+		}
+		
 		// 构建job信息
-		JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass())
+		jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass())
 				.withIdentity(jobClassName, jobGroupName).build();
 		
 		// 表达式调度构建器(即任务执行的时间)

@@ -330,6 +330,15 @@ create table soccer_job_info(
 
 create table soccer_job_info(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	jobname varchar(20),
+	classname varchar(100),
+	groupname varchar(20),
+	cronexpression varchar(200),
+	enabled tinyint(1) NULL,
+	createtime timestamp NULL,
+	modifytime timestamp NULL,
+	PRIMARY KEY (`id`),
+	INDEX `index_jobname` (`jobname`) USING BTREE
 );
 
 CREATE 

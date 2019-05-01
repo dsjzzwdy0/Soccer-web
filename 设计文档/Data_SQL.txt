@@ -1,0 +1,5 @@
+insert into soccer_job_info(jobname, classname, groupname,cronexpression,enabled,createtime)
+	values
+  ('足彩网期号数据下载', 'com.loris.soccer.quartz.ZgzcwIssueJob', 'SOCCER_DATA_DOWNLOAD', '0 45 13 * * ?', true, now()),   
+  ('足彩网赔率数据下载', 'com.loris.soccer.quartz.ZgzcwOddsJob', 'SOCCER_DATA_DOWNLOAD', '0 45 11,23 * * ?', true, now()),
+  ('足足彩网联赛页面下载', 'com.loris.soccer.quartz.ZgzcwMainPageJob', 'SOCCER_DATA_DOWNLOAD', '0 45 18 ? * MON,TUE,THU,FRI', true, now());

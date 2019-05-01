@@ -14,9 +14,6 @@
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven />
 	
-	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
-	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer, com.loris.auth" />
-	
 	<!-- 引入Spring -->
     <import resource="classpath:spring-mybatis.xml" />
     <import resource="classpath:spring-shiro.xml" />
