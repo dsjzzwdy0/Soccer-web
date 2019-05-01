@@ -420,6 +420,8 @@ public class App
 		{
 			logger.info(i++ + ": " + season);
 		}
+		
+		logger.info("Last Season of " + lid + " is " + seasons.getLastSeason());
 
 		saveTableRecords(records);
 	}

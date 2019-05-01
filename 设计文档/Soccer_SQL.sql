@@ -328,6 +328,10 @@ create table soccer_job_info(
 	PRIMARY KEY (`id`)
 );
 
+create table soccer_job_info(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+);
+
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 
