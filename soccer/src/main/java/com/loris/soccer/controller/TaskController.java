@@ -11,9 +11,12 @@
  */
 package com.loris.soccer.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.loris.client.model.SchedulerInfo;
 import com.loris.client.model.SchedulerStatus;
 import com.loris.client.scheduler.factory.SchedulerFactory;
+import com.loris.client.service.SchedulerInfoService;
 import com.loris.common.exception.ParamsException;
 import com.loris.common.pagination.PageInfo;
 import com.loris.common.web.BaseController;
@@ -44,20 +48,32 @@ public class TaskController extends BaseController
 {
 	private static Logger logger = Logger.getLogger(TaskController.class);
 	
-	/**
-	 * Create the new instance of TaskController.
-	 */
-	public TaskController()
-	{
-		logger.info("Initialize the TaskController.");
-	}
+	@Autowired
+	private SchedulerInfoService schedulerInfoService;
+	
 
 	@ResponseBody
 	@RequestMapping("/listSchedulers")
 	public Rest getSchedulerInfoList(HttpServletRequest request)
 	{
-		//logger.info(getCurrentIp(request));
-		return Rest.okData(SchedulerFactory.me().getSchedulers());
+		List<SchedulerInfo> schedulerInfos = schedulerInfoService.list();
+		return Rest.okData(schedulerInfos);
+	}
+	
+	/**
+	 * 添加调度计划任务
+	 * @param info 计划任务
+	 * @return 返回结果值
+	 */
+	@ResponseBody
+	@RequestMapping("/addScheduler")
+	public Rest addSchedulerInfo(@Validated SchedulerInfo info, BindingResult bindingResult)
+	{
+		if(bindingResult.hasErrors())
+		{
+			return Rest.failure(errorInfos(bindingResult).toString());
+		}
+		return Rest.ok();
 	}
 	
 	@ResponseBody
@@ -69,7 +85,7 @@ public class TaskController extends BaseController
 		{
 			//return Rest.failureData(errorInfos(bindingResult));
 			throw new ParamsException(errorInfos(bindingResult));
-		}		
+		}	
 		return Rest.okData(pageInfo);
 	}
 	
@@ -129,6 +145,12 @@ public class TaskController extends BaseController
 		return Rest.ok();
 	}
 	
+	/**
+	 * 数据下载与任务创建
+	 * @param type
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/download")
 	public String download(String type, ModelAndView model)
 	{

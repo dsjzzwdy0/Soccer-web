@@ -13,6 +13,7 @@ package com.loris.soccer.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -249,5 +250,24 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 		ObjectFilter<Season> filter = new ObjectFilter<>();
 		return SqlHelper.insertList(seasons, Season.class, seasonMapper, filter, SoccerConstants.NAME_FIELD_LID, 
 				sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#getRounds(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Round> getRounds(String startSeason, String endSeason)
+	{
+		QueryWrapper<Round> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotBlank(startSeason))
+		{
+			queryWrapper.eq("season", startSeason).or().gt("season", startSeason);
+		}
+		if(StringUtils.isNotBlank(endSeason))
+		{
+			queryWrapper.and(wrapper->wrapper.eq("season", endSeason).or().lt("season", endSeason));
+		}
+		return roundMapper.selectList(queryWrapper);
 	}
 }

@@ -104,6 +104,14 @@ public interface LeagueService extends IService<League>
 	boolean insertRounds(List<Round> rounds, boolean overwrite);
 	
 	/**
+	 * 获得比赛轮次数据
+	 * @param startSeason 开始赛季
+	 * @param endSeason 结束赛季
+	 * @return 轮次数据列表
+	 */
+	List<Round> getRounds(String startSeason, String endSeason);
+	
+	/**
 	 * 插入联赛数据的排名
 	 * @param ranks 排名列表
 	 * @return 是否成功
