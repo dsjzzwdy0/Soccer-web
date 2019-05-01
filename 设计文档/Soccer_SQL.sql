@@ -297,6 +297,17 @@ create table soccer_odds_score(
 	INDEX `index_type` (`type`) USING BTREE
 );
 
+create table soccer_scheduler_info(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	name varchar(30),
+	maxactivetaskthread int,
+	intervaltime int,
+	randtimeseed int,
+	type varchar(20),
+	plugins text,
+	PRIMARY KEY (`id`)
+);
+
 create table soccer_scheduler_status(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	sid varchar(50),
@@ -334,6 +345,7 @@ create table soccer_job_info(
 	classname varchar(100),
 	groupname varchar(20),
 	cronexpression varchar(200),
+	data varchar(100),
 	enabled tinyint(1) NULL,
 	createtime timestamp NULL,
 	modifytime timestamp NULL,

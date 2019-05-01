@@ -37,6 +37,7 @@ public class JobInfo extends AutoIdEntity
 	protected String classname;
 	protected String groupname;
 	protected String cronexpression;
+	protected String data;
 	protected boolean enabled = true;
 	protected Date createtime;
 	protected Date modifytime;
@@ -108,5 +109,15 @@ public class JobInfo extends AutoIdEntity
 	public void setModifytime(Date modifytime)
 	{
 		this.modifytime = modifytime;
+	}
+
+	public String getData()
+	{
+		return data;
+	}
+
+	public void setData(String data)
+	{
+		this.data = data;
 	}
 }

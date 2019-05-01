@@ -16,7 +16,7 @@ import com.loris.client.model.SchedulerInfo;
 
 /**   
  * @ClassName:  SchedulerInfoService    
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 调度管理器的服务类   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -25,5 +25,10 @@ import com.loris.client.model.SchedulerInfo;
  */
 public interface SchedulerInfoService extends IService<SchedulerInfo>
 {
-
+	/**
+	 * 获得管理器的类型数据
+	 * @param type 类型
+	 * @return
+	 */
+	SchedulerInfo getSchedulerInfo(String type);
 }

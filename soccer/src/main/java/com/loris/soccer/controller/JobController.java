@@ -13,6 +13,7 @@ package com.loris.soccer.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -35,6 +36,7 @@ import com.loris.common.model.JobInfo;
 import com.loris.common.quartz.BaseJob;
 import com.loris.common.service.JobInfoService;
 import com.loris.common.web.wrapper.Rest;
+import com.loris.soccer.quartz.DataPluginJob;
 
 /**   
  * @ClassName:  JobController    
@@ -146,21 +148,16 @@ public class JobController
 	 */
 	public void addAndStart(JobInfo info) throws Exception
 	{
-		addAndStart(info.getClassname(), info.getGroupname(), info.getCronexpression(), info.getClassname(), info.getGroupname());
-	}
-	
-
-	/**
-	 * 在控制器中添加任务
-	 * @param jobClassName
-	 * @param jobGroupName
-	 * @param cronExpression
-	 * @throws Exception
-	 */
-	protected void addAndStart(String jobClassName, String jobGroupName, String cronExpression, 
-			String triggerName, String triggerGroupName) throws Exception
-	{
-		JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobClassName, jobGroupName));
+		//addAndStart(info.getJobname(), info.getClassname(), info.getGroupname(), info.getCronexpression(), info.getClassname(), info.getGroupname());
+		String jobName = info.getJobname();
+		String jobClassName = info.getClassname();
+		String jobGroupName = info.getGroupname();
+		String cronExpression = info.getCronexpression();
+		String triggerName = info.getJobname();
+		String triggerGroupName = info.getGroupname();
+		String data = info.getData();
+		
+		JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName, jobGroupName));
 		if(jobDetail != null)
 		{
 			logger.warn("The class[" + jobClassName + "] and group[" + jobGroupName + "] has been exist in Scheduler.");
@@ -168,7 +165,19 @@ public class JobController
 		
 		// 构建job信息
 		jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass())
-				.withIdentity(jobClassName, jobGroupName).build();
+				.withIdentity(jobName, jobGroupName).build();
+		
+		if(StringUtils.equals(DataPluginJob.class.getName(), jobClassName))
+		{
+			jobDetail.getJobDataMap().put(DataPluginJob.TYPE_JOB_PLUGIN, data);
+		}
+		else
+		{
+			if(StringUtils.isNotBlank(data))
+			{
+				jobDetail.getJobDataMap().put("data", data);
+			}
+		}
 		
 		// 表达式调度构建器(即任务执行的时间)
 		CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
@@ -178,7 +187,7 @@ public class JobController
 				.withIdentity(triggerName, triggerGroupName)
 				.withSchedule(scheduleBuilder).build();
 		
-		logger.info("Add job: " + jobClassName + " to Group: " + jobGroupName + ", cron: " + cronExpression);
+		logger.info("Add job " + jobName + "[" + jobClassName + "] to Group: " + jobGroupName + ", cron: " + cronExpression);
 		try
 		{
 			scheduler.scheduleJob(jobDetail, trigger);

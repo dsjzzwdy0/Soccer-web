@@ -29,7 +29,7 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	/** 每次最大的数据下载量 */
 	protected int maxSize = 300;
 	
-	/** */
+	/** 开始的赛季数据 */
 	protected String startSeason = "2018";
 	
 	/**
@@ -56,5 +56,4 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
 	}
-
 }

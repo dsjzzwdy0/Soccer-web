@@ -14,6 +14,7 @@ package com.loris.client.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.client.dao.SchedulerInfoMapper;
 import com.loris.client.model.SchedulerInfo;
@@ -43,5 +44,17 @@ public class SchedulerInfoServiceImpl extends ServiceImpl<SchedulerInfoMapper, S
 			schedulerInfo.create();
 			return baseMapper.insert(schedulerInfo) > 0;
 		}
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.service.SchedulerInfoService#getSchedulerInfo(java.lang.String)
+	 */
+	@Override
+	public SchedulerInfo getSchedulerInfo(String type)
+	{
+		QueryWrapper<SchedulerInfo> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("type", type);
+		return baseMapper.selectOne(queryWrapper);
 	}
 }
