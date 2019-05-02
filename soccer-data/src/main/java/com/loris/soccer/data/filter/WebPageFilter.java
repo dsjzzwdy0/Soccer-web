@@ -138,12 +138,12 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	 * 添加页面的类型
 	 * @param type
 	 */
-	public void addPageType(String type)
+	public void addAcceptPageType(String type)
 	{
 		types.add(type);
 	}
 	
-	public void setPageTypes(List<String> types)
+	public void setAcceptPageTypes(List<String> types)
 	{
 		this.types.addAll(types);
 	}

@@ -23,11 +23,9 @@ import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
-import com.loris.common.filter.Filter;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
-import com.loris.soccer.model.base.MatchItem;
 
 import cn.hutool.core.thread.ThreadUtil;
 
@@ -47,10 +45,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	
 	/** 间隔时间 */
 	protected long interval = 3000;
-	
-	/** 比赛过滤器 */
-	Filter<MatchItem> matchFilter = null;
-	
+		
 	/**
 	 * Create a new instance of ZgzcwIssueProducePlugin
 	 */

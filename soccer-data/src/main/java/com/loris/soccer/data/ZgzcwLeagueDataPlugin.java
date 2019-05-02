@@ -67,7 +67,8 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 *  (non-Javadoc)
 	 * @see com.loris.soccer.data.ZgzcwBasePlugin#registerProcessPageTypes(java.util.List)
 	 */
 	@Override

@@ -66,7 +66,7 @@ public class ZgzcBasePageFilter extends WebPageFilter
 	public <T> boolean accept(WebPage page, T source)
 	{
 		String type = page.getType();
-		if(!types.contains(type)) return true;		
+		if(!types.contains(type)) return false;		
 		if(existWebPages == null || existWebPages.size() == 0) return true;
 		
 		for (WebPage existPage : existWebPages)

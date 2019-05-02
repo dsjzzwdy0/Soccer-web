@@ -146,12 +146,13 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		if(webPageFilter == null)
 		{
-			List<String> types = new ArrayList<>();			
-			registerProcessPageTypes(types);
 			ZgzcBasePageFilter filter = new ZgzcBasePageFilter(webPageConf);
 			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
-			filter.setPageTypes(types);		
+			
+			List<String> types = new ArrayList<>();			
+			registerProcessPageTypes(types);
+			filter.setAcceptPageTypes(types);		
 			webPageFilter = filter;
 		}
 		
