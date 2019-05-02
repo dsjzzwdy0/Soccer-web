@@ -59,6 +59,7 @@ import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.ZgzcwIssueDataPlugin;
 import com.loris.soccer.data.ZgzcwLeagueDataPlugin;
+import com.loris.soccer.data.ZgzcwMatchResultDataPlugin;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -111,7 +112,10 @@ public class App
 			// testOddsNumPage();
 			// testJcScoreWebPage();
 			// testUpdate();
-			testLeagueCenterPage();
+			// testLeagueCenterPage();
+			
+			testMatchResult();
+			
 			// testMariaDB();
 			// testDateString();
 			// testJcWebPage();
@@ -153,6 +157,12 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testMatchResult() throws Exception
+	{
+		ZgzcwMatchResultDataPlugin plugin = context.getBean(ZgzcwMatchResultDataPlugin.class);
+		plugin.produce(null);
 	}
 	
 	public static void testQuartzJob() throws Exception

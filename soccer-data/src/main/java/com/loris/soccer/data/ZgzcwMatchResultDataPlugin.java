@@ -16,8 +16,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.soccer.model.League;
 import com.loris.soccer.model.Round;
 
 /**   
@@ -28,6 +30,7 @@ import com.loris.soccer.model.Round;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
+@Component
 public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 {
 	private static Logger logger = Logger.getLogger(ZgzcwMatchResultDataPlugin.class);
@@ -67,5 +70,25 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 			logger.warn("There are no rounds in the database, the ZgzcwMatchResultDataPlugin exit.");
 			return;
 		}
+		
+		int i = 1;
+		for (Round round : rounds)
+		{
+			logger.info(i +++ ": " + round);
+		}
+		
+		List<League> leagues = leagueService.list();
+		for (League league : leagues)
+		{
+			logger.info(i +++ ": " + league);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.data.ZgzcwBasePlugin#registerProcessPageTypes(java.util.List)
+	 */
+	@Override
+	protected void registerProcessPageTypes(List<String> types)
+	{
 	}
 }

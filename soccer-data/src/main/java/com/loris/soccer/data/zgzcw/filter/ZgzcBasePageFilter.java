@@ -36,16 +36,10 @@ import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class ZgzcwWebPageFilter implements WebPageFilter
+public class ZgzcBasePageFilter extends WebPageFilter
 {
 	public static final long MINUS_OF_HOUR = 3600000L;
-	
-	/** 初始化的标志 */
-	protected boolean initialized = false;
-	
-	/** 网络服务 */
-	protected WebPageService pageService;
-	
+		
 	/** 网络页面类型 */
 	protected List<String> types = new ArrayList<>();
 	
@@ -67,7 +61,7 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
 	 */
-	public ZgzcwWebPageFilter()
+	public ZgzcBasePageFilter()
 	{
 		this(WebPageProperties.getDefault());
 	}
@@ -79,28 +73,9 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 	 * @param start 开始日期
 	 * @param end 结束日期
 	 */
-	public ZgzcwWebPageFilter(WebPageProperties webPageconf)
+	public ZgzcBasePageFilter(WebPageProperties webPageconf)
 	{
 		this.webPageConf = webPageconf;
-	}
-	
-	/**
-	 * (non-Javadoc)
-	 * @see com.loris.common.filter.Filter#accept(java.lang.Object)
-	 */
-	@Override
-	public boolean accept(WebPage obj)
-	{
-		return accept(obj, null);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.loris.soccer.data.filter.WebPageFilter#isInitialized()
-	 */
-	@Override
-	public boolean isInitialized()
-	{
-		return initialized;
 	}
 
 	/**
@@ -167,14 +142,12 @@ public class ZgzcwWebPageFilter implements WebPageFilter
 		case PAGE_ODDS_YP:
 		case PAGE_ODDS_OP:
 		case PAGE_ODDS_NUM:
-			if(source instanceof MatchItem)
+			if(source != null && (source instanceof MatchItem))
 			{
 				Date matchTime = ((MatchItem)source).getMatchtime();
 				if(ToolUtil.isNotEmpty(matchTime))
 				{
 					return checkNeedToReloadMatchOddsPage(matchTime, loadtime);
-					//long loadTimeToMatchTime = (loadtime.getTime() - matchTime.getTime()) / 1000;
-					//if(loadTimeToMatchTime > - 1800L) return false;		//比赛开始前30分钟之后更新的，不需要再度更新
 				}
 			}
 			break;

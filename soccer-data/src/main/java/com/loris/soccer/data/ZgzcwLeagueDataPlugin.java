@@ -13,8 +13,6 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,13 +20,9 @@ import org.springframework.stereotype.Component;
 
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.common.util.DateUtil;
-import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
-import com.loris.soccer.data.zgzcw.filter.ZgzcwWebPageFilter;
 /**   
  * @ClassName: ZgzcwLeagueDataPlugin   
  * @Description: 联赛数据中心页面下载 
@@ -49,43 +43,6 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 	{
 		super("联赛信息下载");
 		webPageConf = WebPageProperties.getDefault();
-	}
-	
-	/**
-	 * 初始化任务产生器
-	 * 
-	 * @param context 插件任务运行环境
-	 * @throws IOException 在任务产生过程中出现异常
-	 */
-	@Override
-	public void initialize(TaskPluginContext context) throws IOException
-	{
-		if(initialized) return;
-		super.initialize(context);
-		
-		if(webPageFilter == null)
-		{
-			List<String> types = new ArrayList<>();
-			types.add(ZgzcwConstants.PAGE_ODDS_OP);
-			types.add(ZgzcwConstants.PAGE_ODDS_YP);
-			types.add(ZgzcwConstants.PAGE_ODDS_NUM);
-			types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
-			types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
-			ZgzcwWebPageFilter filter = new ZgzcwWebPageFilter(webPageConf);
-			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
-			filter.setPageTypes(types);		
-			webPageFilter = filter;
-		}
-		if(!webPageFilter.isInitialized())
-		{
-			webPageFilter.initialize();
-		}
-		
-		registFilter(SoccerConstants.SOCCER_DATA_MATCH, 
-				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), 
-				webPageConf.getDayNumOfGetPages()));
-		initialized = true;
 	}
 
 	/**
@@ -108,6 +65,18 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 			e.printStackTrace();
 			logger.warn("Warn: produce task list error info > " + e.getMessage());
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.data.ZgzcwBasePlugin#registerProcessPageTypes(java.util.List)
+	 */
+	@Override
+	protected void registerProcessPageTypes(List<String> types)
+	{
+		types.add(ZgzcwConstants.PAGE_ODDS_OP);
+		types.add(ZgzcwConstants.PAGE_ODDS_YP);
+		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 	}
 
 }

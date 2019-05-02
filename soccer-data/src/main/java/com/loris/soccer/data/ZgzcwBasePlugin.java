@@ -14,6 +14,7 @@ package com.loris.soccer.data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +48,12 @@ import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
+import com.loris.soccer.data.zgzcw.filter.ZgzcBasePageFilter;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.base.MatchItem;
@@ -130,6 +133,35 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		{
 			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
 		}
+		
+		//初始化过滤器
+		initFilter(context);		
+		initialized = true;
+	}
+	
+	/**
+	 * 初始化过滤器 
+	 */
+	protected void initFilter(TaskPluginContext context)
+	{
+		if(webPageFilter == null)
+		{
+			List<String> types = new ArrayList<>();			
+			registerProcessPageTypes(types);
+			ZgzcBasePageFilter filter = new ZgzcBasePageFilter(webPageConf);
+			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
+			filter.setPageTypes(types);		
+			webPageFilter = filter;
+		}
+		
+		if(webPageFilter != null && !webPageFilter.isInitialized())
+		{
+			webPageFilter.initialize();
+		}
+		
+		registFilter(SoccerConstants.SOCCER_DATA_MATCH, 
+				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), webPageConf.getDayNumOfGetPages()));
 	}
 
 	/**
@@ -138,6 +170,12 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	@Override
 	public abstract void produce(TaskPluginContext context) throws IOException, SQLException;
+	
+	/**
+	 * 注册处理的页面类型
+	 * @param types
+	 */
+	protected abstract void registerProcessPageTypes(List<String> types);
 	
 	/**
 	 *  (non-Javadoc)
