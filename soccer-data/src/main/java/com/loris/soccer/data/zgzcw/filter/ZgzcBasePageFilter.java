@@ -11,15 +11,10 @@
  */
 package com.loris.soccer.data.zgzcw.filter;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.model.WebPage;
-import com.loris.client.service.WebPageService;
-import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.WebPageFilter;
@@ -38,22 +33,7 @@ import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
  */
 public class ZgzcBasePageFilter extends WebPageFilter
 {
-	public static final long MINUS_OF_HOUR = 3600000L;
-		
-	/** 网络页面类型 */
-	protected List<String> types = new ArrayList<>();
-	
-	/** 数据来源 */
-	protected String source;
-	
-	/** 开始时间 */
-	protected Date start;
-	
-	/** 结束时间 */
-	protected Date end;
-	
-	/** 已经下载的数据 */
-	List<WebPage> existWebPages = null;
+	public static final long MINUS_OF_HOUR = 3600000L;	
 	
 	/** 页面配置信息 */
 	protected WebPageProperties webPageConf;
@@ -188,74 +168,5 @@ public class ZgzcBasePageFilter extends WebPageFilter
 		else if(timeDistToMatchTime > 2) return timeDistToLoadTime > 2;
 		else if(timeDistToMatchTime > 0.3) return timeDistToLoadTime > 1;
 		else return false;
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.data.filter.WebPageFilter#initialize()
-	 */
-	@Override
-	public boolean initialize()
-	{
-		if(pageService == null)
-		{
-			pageService = ApplicationContextHelper.getBean(WebPageService.class);
-		}
-		if(pageService == null)
-		{
-			throw new IllegalArgumentException("The WebPageService is null, can't initialize the ZgzcwWebPageFilter.");
-		}
-		existWebPages = pageService.getWebPage(source, types, start, end);		
-		//System.out.println("There are total " + existWebPages.size() + " pages in database.");
-		initialized = true;
-		return true;
-	}
-
-	public Date getStart()
-	{
-		return start;
-	}
-
-	public void setStart(Date start)
-	{
-		this.start = start;
-	}
-
-	public Date getEnd()
-	{
-		return end;
-	}
-
-	public void setEnd(Date end)
-	{
-		this.end = end;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-	
-	/**
-	 * 设置数据来源
-	 * @param source
-	 */
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	/**
-	 * 添加页面的类型
-	 * @param type
-	 */
-	public void addPageType(String type)
-	{
-		types.add(type);
-	}
-	
-	public void setPageTypes(List<String> types)
-	{
-		this.types.addAll(types);
 	}
 }

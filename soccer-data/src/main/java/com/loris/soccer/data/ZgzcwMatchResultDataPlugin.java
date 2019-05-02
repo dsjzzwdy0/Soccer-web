@@ -83,12 +83,4 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 			logger.info(i +++ ": " + league);
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see com.loris.soccer.data.ZgzcwBasePlugin#registerProcessPageTypes(java.util.List)
-	 */
-	@Override
-	protected void registerProcessPageTypes(List<String> types)
-	{
-	}
 }

@@ -175,7 +175,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * 注册处理的页面类型
 	 * @param types
 	 */
-	protected abstract void registerProcessPageTypes(List<String> types);
+	protected void registerProcessPageTypes(List<String> types)
+	{
+	}
 	
 	/**
 	 *  (non-Javadoc)

@@ -11,8 +11,13 @@
  */
 package com.loris.soccer.data.filter;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.loris.client.model.WebPage;
 import com.loris.client.service.WebPageService;
+import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.filter.Filter;
 
 /**
@@ -27,16 +32,43 @@ public abstract class WebPageFilter implements Filter<WebPage>
 {
 	/** 初始化的标志 */
 	protected boolean initialized = false;
+	
+	/** 网络页面类型 */
+	protected List<String> types = new ArrayList<>();
+	
+	/** 数据来源 */
+	protected String source;
+	
+	/** 已经下载的数据 */
+	protected List<WebPage> existWebPages = null;
 
 	/** 网络服务 */
 	protected WebPageService pageService;
+	
+	/** 开始时间 */
+	protected Date start;
+	
+	/** 结束时间 */
+	protected Date end;
 
 	/**
-	 * 过滤器的初始化
-	 * 
-	 * @return 是否成功
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.data.filter.WebPageFilter#initialize()
 	 */
-	public abstract boolean initialize();
+	public boolean initialize()
+	{
+		if(pageService == null)
+		{
+			pageService = ApplicationContextHelper.getBean(WebPageService.class);
+		}
+		if(pageService == null)
+		{
+			throw new IllegalArgumentException("The WebPageService is null, can't initialize the ZgzcwWebPageFilter.");
+		}
+		existWebPages = pageService.getWebPage(source, types, start, end);
+		initialized = true;
+		return true;
+	}
 
 	/**
 	 * 检测是否满足条件
@@ -66,5 +98,53 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	public boolean isInitialized()
 	{
 		return initialized;
+	}
+	
+	public Date getStart()
+	{
+		return start;
+	}
+
+	public void setStart(Date start)
+	{
+		this.start = start;
+	}
+
+	public Date getEnd()
+	{
+		return end;
+	}
+
+	public void setEnd(Date end)
+	{
+		this.end = end;
+	}
+
+	public String getSource()
+	{
+		return source;
+	}
+	
+	/**
+	 * 设置数据来源
+	 * @param source
+	 */
+	public void setSource(String source)
+	{
+		this.source = source;
+	}
+	
+	/**
+	 * 添加页面的类型
+	 * @param type
+	 */
+	public void addPageType(String type)
+	{
+		types.add(type);
+	}
+	
+	public void setPageTypes(List<String> types)
+	{
+		this.types.addAll(types);
 	}
 }

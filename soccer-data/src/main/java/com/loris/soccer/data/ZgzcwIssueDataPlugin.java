@@ -73,6 +73,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	 * 注册处理的页面类型
 	 * @param types 数据的类型
 	 */
+	@Override
 	protected void registerProcessPageTypes(List<String> types)
 	{
 		types.add(ZgzcwConstants.PAGE_ODDS_OP);
