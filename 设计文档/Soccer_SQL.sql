@@ -332,18 +332,6 @@ create table soccer_job_info(
 	jobname varchar(20),
 	classname varchar(100),
 	groupname varchar(20),
-	cronexpression varchar(50),
-	enabled tinyint(1),
-	createtime timestamp,
-	modifytime timestamp,
-	PRIMARY KEY (`id`)
-);
-
-create table soccer_job_info(
-	`id`  int(11) NOT NULL AUTO_INCREMENT,
-	jobname varchar(20),
-	classname varchar(100),
-	groupname varchar(20),
 	cronexpression varchar(200),
 	data varchar(100),
 	enabled tinyint(1) NULL,

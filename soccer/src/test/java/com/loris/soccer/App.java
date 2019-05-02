@@ -43,7 +43,6 @@ import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.model.TableRecords;
-import com.loris.common.quartz.QuartzUtil;
 import com.loris.common.service.DataService;
 import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
@@ -85,7 +84,6 @@ import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
-import com.loris.soccer.quartz.ZgzcwIssueJob;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 
@@ -159,7 +157,7 @@ public class App
 	
 	public static void testQuartzJob() throws Exception
 	{
-        QuartzUtil.addJob("job1", "trigger1", ZgzcwIssueJob.class, 2);
+        logger.info("Test Quartz job.");
 	}
 	
 	/**
