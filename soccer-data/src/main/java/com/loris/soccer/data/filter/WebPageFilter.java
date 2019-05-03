@@ -37,7 +37,7 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	protected List<String> types = new ArrayList<>();
 	
 	/** 数据来源 */
-	protected String source;
+	protected String source = null;
 	
 	/** 已经下载的数据 */
 	protected List<WebPage> existWebPages = null;
@@ -46,10 +46,10 @@ public abstract class WebPageFilter implements Filter<WebPage>
 	protected WebPageService pageService;
 	
 	/** 开始时间 */
-	protected Date start;
+	protected Date start = null;
 	
 	/** 结束时间 */
-	protected Date end;
+	protected Date end = null;
 
 	/**
 	 *  (non-Javadoc)

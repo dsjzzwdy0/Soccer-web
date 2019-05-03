@@ -53,7 +53,7 @@ import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
-import com.loris.soccer.data.zgzcw.filter.ZgzcBasePageFilter;
+import com.loris.soccer.data.zgzcw.filter.ZgzcwPageFilter;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.base.MatchItem;
@@ -146,7 +146,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		if(webPageFilter == null)
 		{
-			ZgzcBasePageFilter filter = new ZgzcBasePageFilter(webPageConf);
+			ZgzcwPageFilter filter = new ZgzcwPageFilter(webPageConf);
 			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
 			

@@ -13,6 +13,7 @@ package com.loris.soccer.data.zgzcw.filter;
 
 import com.loris.client.model.WebPage;
 import com.loris.soccer.data.filter.WebPageFilter;
+import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 
 /**   
  * @ClassName: ZgzcwRoundPageFilter   
@@ -25,13 +26,13 @@ import com.loris.soccer.data.filter.WebPageFilter;
 public class ZgzcwRoundPageFilter extends WebPageFilter
 {
 	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.data.filter.WebPageFilter#initialize()
+	 * Create a new insance of ZgzcwRoundPageFilter.
 	 */
-	@Override
-	public boolean initialize()
+	public ZgzcwRoundPageFilter()
 	{
-		return false;
+		this.source = ZgzcwConstants.SOURCE_ZGZCW;
+		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE_ROUND);
 	}
 	
 	/**

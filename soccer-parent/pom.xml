@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.loris</groupId>
 	<artifactId>soccer-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0-RELEASE</version>
 	<packaging>pom</packaging>
 
 	<name>soccer-parent</name>
@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<soccer.version>1.0.0-SNAPSHOT</soccer.version>
+		<soccer.version>1.0.0-RELEASE</soccer.version>
 		<java.version>1.8</java.version>
 		<shiro.version>1.4.0</shiro.version>
 		<kaptcha.version>2.3</kaptcha.version>

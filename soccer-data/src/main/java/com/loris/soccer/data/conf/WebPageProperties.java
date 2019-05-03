@@ -196,7 +196,7 @@ public class WebPageProperties
 		properties.numDayfGetPages = 10;
 		properties.numDayOfHasOdds = 4;
 		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
-		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：1天
+		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：20小时
 		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_YP, oddsUpdateTime);
@@ -208,6 +208,7 @@ public class WebPageProperties
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
 		
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_CENTER, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_JC, true);

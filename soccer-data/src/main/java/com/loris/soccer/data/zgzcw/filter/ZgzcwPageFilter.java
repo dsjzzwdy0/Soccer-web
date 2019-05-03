@@ -31,7 +31,7 @@ import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class ZgzcBasePageFilter extends WebPageFilter
+public class ZgzcwPageFilter extends WebPageFilter
 {
 	public static final long MINUS_OF_HOUR = 3600000L;	
 	
@@ -41,7 +41,7 @@ public class ZgzcBasePageFilter extends WebPageFilter
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
 	 */
-	public ZgzcBasePageFilter()
+	public ZgzcwPageFilter()
 	{
 		this(WebPageProperties.getDefault());
 	}
@@ -53,7 +53,7 @@ public class ZgzcBasePageFilter extends WebPageFilter
 	 * @param start 开始日期
 	 * @param end 结束日期
 	 */
-	public ZgzcBasePageFilter(WebPageProperties webPageconf)
+	public ZgzcwPageFilter(WebPageProperties webPageconf)
 	{
 		this.webPageConf = webPageconf;
 	}
