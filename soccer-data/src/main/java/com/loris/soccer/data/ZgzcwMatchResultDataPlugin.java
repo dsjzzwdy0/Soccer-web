@@ -19,8 +19,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.soccer.model.League;
-import com.loris.soccer.model.Round;
+import com.loris.soccer.model.Season;
 
 /**   
  * @ClassName: ZgzcwMatchResultDataPlugin   
@@ -64,7 +63,14 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
-		List<Round> rounds = leagueService.getRounds(startSeason, null);
+		List<Season> seasons = leagueService.getSeasons(startSeason, null);
+		int i = 1;
+		for (Season season : seasons)
+		{
+			logger.info(i +++ ": " + season);
+		}
+		
+		/*List<RoundInfo> rounds = leagueService.getRoundInfos(startSeason, null);
 		if(rounds == null || rounds.size() == 0)
 		{
 			logger.warn("There are no rounds in the database, the ZgzcwMatchResultDataPlugin exit.");
@@ -75,12 +81,6 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 		for (Round round : rounds)
 		{
 			logger.info(i +++ ": " + round);
-		}
-		
-		List<League> leagues = leagueService.list();
-		for (League league : leagues)
-		{
-			logger.info(i +++ ": " + league);
-		}
+		}*/
 	}
 }

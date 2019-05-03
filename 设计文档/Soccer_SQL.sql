@@ -376,3 +376,16 @@ select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`lid` AS `lid`,`b`.`leaguename` A
 	`b`.`result` AS `result`,`b`.`homegoal` AS `homegoal`,`b`.`clientgoal` AS `clientgoal`,`a`.`isdelayed` AS `isdelayed`,`a`.`delaytime` AS `delaytime`
 	 from (`soccer_match_bd` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
 
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_league_round_info`AS 
+select `a`.`id` AS `id`,`a`.`lid` AS `lid`,`c`.`type` AS `leaguetype`,`c`.`name` AS `name`,`a`.`season` AS `season`,`a`.`round` AS `round`,
+  `b`.`starttime` AS `starttime`,`b`.`endtime` AS `endtime`,`b`.`matchnum` AS `matchnum` from ((`soccer`.`soccer_league_round` `a` 
+  left join (select `soccer`.`soccer_match`.`lid` AS `lid`,`soccer`.`soccer_match`.`season` AS `season`,`soccer`.`soccer_match`.`round` AS `round`,
+  min(`soccer`.`soccer_match`.`matchtime`) AS `starttime`,max(`soccer`.`soccer_match`.`matchtime`) AS `endtime`,count(1) AS `matchnum` 
+  from `soccer`.`soccer_match` group by `soccer`.`soccer_match`.`lid`,`soccer`.`soccer_match`.`round`) `b` on(((`a`.`lid` = `b`.`lid`) 
+  and (`a`.`season` = `b`.`season`) and (`a`.`round` = `b`.`round`)))) 
+  left join `soccer`.`soccer_league` `c` on((`a`.`lid` = `c`.`lid`)))
+

@@ -104,13 +104,14 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		parseRanks(document, lid, season, round, ranks);
 		
 		results.put(SoccerConstants.SOCCER_DATA_SEASON_LIST, seasons);
+		results.put(SoccerConstants.SOCCER_DATA_ROUND_LIST, rounds);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_LIST, teams);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_SEASON, teamRfSeasons);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, matchs);
-		results.put(SoccerConstants.SOCCER_DATA_ROUND_LIST, rounds);
 		results.put(SoccerConstants.SOCCER_DATA_LOGO_LIST, logos);
 		results.put(SoccerConstants.SOCCER_DATA_RANK_LIST, ranks);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST, matchResults);
+		results.put(SoccerConstants.SOCCER_DATA_ROUND_CUR, round);
 		
 		return results;
 	}

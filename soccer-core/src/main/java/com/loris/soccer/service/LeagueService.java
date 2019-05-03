@@ -21,6 +21,7 @@ import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
+import com.loris.soccer.model.view.RoundInfo;
 
 /**
  * @ClassName: League
@@ -89,6 +90,14 @@ public interface LeagueService extends IService<League>
 	boolean insertSeasons(List<Season> seasons, boolean overwrite);
 	
 	/**
+	 * 获得赛季数据
+	 * @param startSeason
+	 * @param endSeason
+	 * @return
+	 */
+	List<Season> getSeasons(String startSeason, String endSeason);
+	
+	/**
 	 * 保存联赛轮次数据
 	 * @param rounds
 	 * @return
@@ -110,6 +119,14 @@ public interface LeagueService extends IService<League>
 	 * @return 轮次数据列表
 	 */
 	List<Round> getRounds(String startSeason, String endSeason);
+	
+	/**
+	 * 获得比赛轮次数据
+	 * @param startSeason 开始赛季
+	 * @param endSeason 结束赛季
+	 * @return 轮次数据列表
+	 */
+	List<RoundInfo> getRoundInfos(String startSeason, String endSeason);
 	
 	/**
 	 * 插入联赛数据的排名

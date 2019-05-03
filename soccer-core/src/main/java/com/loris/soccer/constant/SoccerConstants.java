@@ -46,6 +46,7 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_ROUND_LIST = "roundlist";
 	final static public String SOCCER_DATA_SEASON_LIST = "seasonlist";
 	final static public String SOCCER_DATA_RANK_LIST = "ranklist";
+	final static public String SOCCER_DATA_ROUND_CUR = "curround";
 
 	/** 北京单场 */
 	final static public String LOTTERY_BD = "bd";
