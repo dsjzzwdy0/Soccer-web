@@ -99,6 +99,10 @@ public class JobController
         scheduler.start();
         for (JobInfo jobInfo : jobInfos)
 		{
+        	if(!jobInfo.isEnabled())
+        	{
+        		continue;
+        	}
 			addAndStart(jobInfo);
 		}
         
