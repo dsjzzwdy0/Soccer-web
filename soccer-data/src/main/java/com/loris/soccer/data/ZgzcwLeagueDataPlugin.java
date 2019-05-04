@@ -13,7 +13,6 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Component;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 /**   
@@ -41,8 +41,7 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 	 */
 	public ZgzcwLeagueDataPlugin()
 	{
-		super("联赛信息下载");
-		webPageConf = WebPageProperties.getDefault();
+		super("联赛信息下载", WebPageProperties.getDefault());
 	}
 
 	/**
@@ -72,12 +71,12 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 	 * @see com.loris.soccer.data.ZgzcwBasePlugin#registerProcessPageTypes(java.util.List)
 	 */
 	@Override
-	protected void registerProcessPageTypes(List<String> types)
+	protected void registerProcessPageTypes(WebPageFilter webPageFilter)
 	{
-		types.add(ZgzcwConstants.PAGE_ODDS_OP);
-		types.add(ZgzcwConstants.PAGE_ODDS_YP);
-		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
-		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_OP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_YP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_NUM);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 	}
 
 }

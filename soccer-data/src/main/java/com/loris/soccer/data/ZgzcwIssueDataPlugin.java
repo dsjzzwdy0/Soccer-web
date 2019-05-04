@@ -24,6 +24,7 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 
@@ -59,8 +60,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	 */
 	public ZgzcwIssueDataPlugin(WebPageProperties webPageConf)
 	{
-		super("当日数据下载");
-		this.webPageConf = webPageConf;
+		super("当日数据下载", webPageConf);
 		this.updateLeagueCurrentRounds = true;
 	}
 	
@@ -69,13 +69,13 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	 * @param types 数据的类型
 	 */
 	@Override
-	protected void registerProcessPageTypes(List<String> types)
+	protected void registerProcessPageTypes(WebPageFilter webPageFilter)
 	{
-		types.add(ZgzcwConstants.PAGE_ODDS_OP);
-		types.add(ZgzcwConstants.PAGE_ODDS_YP);
-		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
-		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
-		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_OP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_YP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_NUM);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_LEAGUE_CUP);
 	}
 
 	/**

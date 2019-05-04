@@ -19,7 +19,13 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.filter.RoundInfoFilter;
+import com.loris.soccer.data.filter.SeasonInfoFilter;
+import com.loris.soccer.data.filter.impl.ZgzcwRoundPageFilter;
 import com.loris.soccer.model.Season;
+import com.loris.soccer.model.view.RoundInfo;
+import com.loris.soccer.model.view.SeasonInfo;
 
 /**   
  * @ClassName: ZgzcwMatchResultDataPlugin   
@@ -45,15 +51,17 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	 */
 	public ZgzcwMatchResultDataPlugin()
 	{
-		this("比赛结果数据下载");
+		this("比赛结果数据下载", new WebPageProperties());
 	}
 
 	/**
+	 * Create a new instance of ZgzcwMatchResultDataPlugin
 	 * @param name
 	 */
-	protected ZgzcwMatchResultDataPlugin(String name)
+	public ZgzcwMatchResultDataPlugin(String name, WebPageProperties webPageConf)
 	{
-		super(name);
+		super(name, webPageConf);
+		webPageFilter = new ZgzcwRoundPageFilter();
 	}
 
 	/**
@@ -63,24 +71,63 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	@Override
 	public void produce(TaskPluginContext context) throws IOException, SQLException
 	{
-		List<Season> seasons = leagueService.getSeasons(startSeason, null);
-		int i = 1;
-		for (Season season : seasons)
+		List<SeasonInfo> seasons = leagueService.getSeasonInfos(startSeason, null);
+		List<RoundInfo> rounds = leagueService.getRoundInfos(startSeason, null);
+		
+		int taskSize = 0;
+		
+		//注册过滤器
+		SeasonInfoFilter seasonFilter = new SeasonInfoFilter(rounds);		
+		for (SeasonInfo season : seasons)
 		{
-			logger.info(i +++ ": " + season);
+			if(seasonFilter.accept(season))
+			{
+				//logger.info("Create League season senter Task: " + season);
+				if(createLeagueSeasonCenterTask(season, false))
+				{
+					taskSize ++;
+					if(taskSize >= maxSize)
+					{
+						logger.info("There are " + taskSize + " page to be downloaded.");
+						return;
+					}
+				}
+			}
 		}
 		
-		/*List<RoundInfo> rounds = leagueService.getRoundInfos(startSeason, null);
-		if(rounds == null || rounds.size() == 0)
+		//联赛轮次数据下载
+		RoundInfoFilter roundInfoFilter = new RoundInfoFilter();
+		for (RoundInfo roundInfo : rounds)
 		{
-			logger.warn("There are no rounds in the database, the ZgzcwMatchResultDataPlugin exit.");
-			return;
+			if(!roundInfoFilter.accept(roundInfo))
+			{
+				continue;
+			}
+			
+			if(createLeagueRoundTask(roundInfo, false))
+			{
+				taskSize ++;
+				if(taskSize >= maxSize)
+				{
+					logger.info("There are " + taskSize + " page to be downloaded.");
+					return;
+				}
+			}
 		}
-		
-		int i = 1;
-		for (Round round : rounds)
+	}
+	
+	/**
+	 * 检测是否已经下载了赛季轮次比赛数据
+	 * @param season 赛季数据
+	 * @param rounds 轮次比赛
+	 * @return
+	 */
+	protected boolean hasRoundInfo(Season season, List<RoundInfo> rounds)
+	{
+		for (RoundInfo roundInfo : rounds)
 		{
-			logger.info(i +++ ": " + round);
-		}*/
+			if(roundInfo.isSameSeason(season)) return true;
+		}
+		return false;
 	}
 }

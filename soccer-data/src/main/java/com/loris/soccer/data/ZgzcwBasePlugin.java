@@ -50,13 +50,15 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.filter.WebPageFilter;
+import com.loris.soccer.data.filter.impl.ZgzcwPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
-import com.loris.soccer.data.zgzcw.filter.ZgzcwPageFilter;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.model.view.RoundInfo;
+import com.loris.soccer.model.view.SeasonInfo;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.impl.SoccerDataService;
@@ -98,14 +100,15 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	private Map<String, Filter<?>> filters = new HashMap<>();
 	
 	/** 页面的配置项 */
-	protected WebPageProperties webPageConf = new WebPageProperties();
+	protected WebPageProperties webPageConf = null;
 	
 	/**
-	 * Create a new instance of AbstractProducePlugin.
+	 * Create a new instance of ZgzcwBasePlugin.
 	 */
-	public ZgzcwBasePlugin(String name)
+	public ZgzcwBasePlugin(String name, WebPageProperties webPageConf)
 	{
 		super(name);
+		this.webPageConf = webPageConf;
 	}
 	
 	/**
@@ -146,14 +149,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		if(webPageFilter == null)
 		{
-			ZgzcwPageFilter filter = new ZgzcwPageFilter(webPageConf);
-			filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
-			
-			List<String> types = new ArrayList<>();			
-			registerProcessPageTypes(types);
-			filter.setAcceptPageTypes(types);		
-			webPageFilter = filter;
+			webPageFilter = this.createDefaultWebPageFilter();
 		}
 		
 		if(webPageFilter != null && !webPageFilter.isInitialized())
@@ -161,8 +157,21 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			webPageFilter.initialize();
 		}
 		
-		registFilter(SoccerConstants.SOCCER_DATA_MATCH, 
+		registSourceFilter(SoccerConstants.SOCCER_DATA_MATCH, 
 				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), webPageConf.getDayNumOfGetPages()));
+	}
+	
+	/**
+	 * 创建默认的页面过滤器
+	 * @return
+	 */
+	protected WebPageFilter createDefaultWebPageFilter()
+	{
+		ZgzcwPageFilter filter = new ZgzcwPageFilter(webPageConf);
+		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
+		registerProcessPageTypes(filter);
+		return filter;
 	}
 
 	/**
@@ -176,7 +185,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * 注册处理的页面类型
 	 * @param types
 	 */
-	protected void registerProcessPageTypes(List<String> types)
+	protected void registerProcessPageTypes(WebPageFilter webPageFilter)
 	{
 	}
 	
@@ -296,7 +305,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	protected boolean download(WebPage page) throws IOException, HostForbiddenException, UrlFetchException
 	{
-		logger.info("Starting get the data from : " + page.getUrl());
+		logger.info("Starting get the data from : " + page.getUrl() + (StringUtils.isEmpty(page.getParamstext()) ? "" : page.getParamstext()) );
 		if(webPagefetcher.download(page))
 		{
 			pageService.save(page);
@@ -324,13 +333,14 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * 创建联赛数据下载页面
 	 * @param league 联赛数据下载页面
 	 */
-	protected void createLeagueCenterTask(League league, boolean quiet)
+	protected boolean createLeagueCenterTask(League league, boolean quiet)
 	{
 		if(webPageConf.isPageBeCreated(league.getType()))
 		{
 			Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, league.getLid());
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params), league, quiet);
+			return createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params), league, quiet);
 		}
+		return false;
 	}
 	
 	/**
@@ -438,15 +448,47 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param hasYp 是否下载亚盘数据
 	 * @param hasNum 是否下载大小球数据
 	 */
-	protected void createMatchDataTask(List<String> types, MatchItem match, boolean quiet)
+	protected int createMatchDataTask(List<String> types, MatchItem match, boolean quiet)
 	{
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, match.getMid());		
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
 		
+		int size = 0;
 		for (String type : types)
 		{
-			createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(type, params), match, quiet);
+			if(createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(type, params), match, quiet))
+				size ++;
 		}
+		return size;
+	}
+	
+	/**
+	 * 创建联赛赛季数据下载页面
+	 * @param seasonInfo 赛季信息
+	 * @param quiet 是否不发送任务创建通知
+	 */
+	protected boolean createLeagueSeasonCenterTask(SeasonInfo seasonInfo, boolean quiet)
+	{
+		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, seasonInfo.getLid());
+		params.put(SoccerConstants.NAME_FIELD_SEASON, seasonInfo.getSeason());
+		return createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(seasonInfo.getLeaguetype(), params), seasonInfo, quiet);		
+	}
+	
+	/**
+	 * 创建赛事轮次数据下载页面
+	 * @param roundInfo
+	 * @param quiet
+	 */
+	protected boolean createLeagueRoundTask(RoundInfo roundInfo, boolean quiet)
+	{
+		//如果是非联赛，则不能创建下载页面
+		if(!StringUtils.equals(roundInfo.getLeaguetype(), SoccerConstants.LEAGUE_TYPE_LEAGUE))
+			return false;
+		
+		Map<String, String> params = new KeyMap(ZgzcwConstants.NAME_FIELD_SOURCE_LID, roundInfo.getLid());
+		params.put(ZgzcwConstants.NAME_FIELD_SEASON, roundInfo.getSeason());
+		params.put(ZgzcwConstants.NAME_FIELD_CUR_ROUND, roundInfo.getRound());
+		return createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE_ROUND, params), roundInfo, quiet);		
 	}
 
 	/**
@@ -525,7 +567,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 				MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
-			Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			Filter<MatchItem> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_MATCH);
 			createMatchTasks((MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), filter);
 			break;
 		}
@@ -537,13 +579,13 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
 			
-			Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			Filter<MatchItem> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_MATCH);
 			createMatchTasks((MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), filter);
 			break;
 		}
 		case ZgzcwConstants.PAGE_CENTER:
 		{
-			Filter<League> filter = getFilter(SoccerConstants.SOCCER_DATA_LEAGUE);
+			Filter<League> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_LEAGUE);
 			createLeagueCenterTasks((LeagueList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_LIST), filter);
 			break;
 		}
@@ -551,7 +593,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		case ZgzcwConstants.PAGE_LEAGUE_CUP:
 		{
 			MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
-			Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+			Filter<MatchItem> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_MATCH);
 			createMatchTasks(matchList, filter);
 			break;
 		}
@@ -583,7 +625,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param type 过滤器类型
 	 * @param filter 过滤器
 	 */
-	public void registFilter(String type, Filter<?> filter)
+	public void registSourceFilter(String type, Filter<?> filter)
 	{
 		filters.put(type, filter);
 	}
@@ -594,7 +636,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @return 返回过滤器
 	 */
 	@SuppressWarnings("unchecked")
-	public<T> Filter<T> getFilter(String type)
+	public<T> Filter<T> getSourceFilter(String type)
 	{
 		return (Filter<T>)filters.get(type);
 	}

@@ -59,8 +59,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	 */
 	public ZgzcwOddsDataPlugin(WebPageProperties webPageConf)
 	{
-		super("赔率数据更新");
-		this.webPageConf = webPageConf;
+		super("赔率数据更新", webPageConf);
 	}
 	
 	/**
@@ -91,7 +90,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 			return;
 		}
 		
-		Filter<MatchItem> filter = getFilter(SoccerConstants.SOCCER_DATA_MATCH);
+		Filter<MatchItem> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_MATCH);
 		createMatchTasks(matchs, filter);
 	}
 	
@@ -151,10 +150,10 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	 * @see com.loris.soccer.data.ZgzcwBasePlugin#registerProcessPageTypes(java.util.List)
 	 */
 	@Override
-	protected void registerProcessPageTypes(List<String> types)
+	protected void registerProcessPageTypes(WebPageFilter webPageFilter)
 	{
-		types.add(ZgzcwConstants.PAGE_ODDS_OP);
-		types.add(ZgzcwConstants.PAGE_ODDS_YP);
-		types.add(ZgzcwConstants.PAGE_ODDS_NUM);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_OP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_YP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_NUM);
 	}
 }

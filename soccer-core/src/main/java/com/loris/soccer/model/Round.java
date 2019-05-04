@@ -60,6 +60,19 @@ public class Round extends AutoIdEntity
 	{
 		this.round = round;
 	}
+
+	/**
+	 * 是否同一个赛季的数据
+	 * @param seasonInfo
+	 * @return
+	 */
+	public boolean isSameSeason(Season seasonInfo)
+	{
+		if(StringUtils.equals(lid, seasonInfo.getLid()) && StringUtils.equals(season, seasonInfo.getSeason()))
+			return true;
+		else 
+			return false;
+	}
 	
 	@Override
 	public boolean equals(Object obj)

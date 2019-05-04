@@ -32,6 +32,7 @@ import com.loris.soccer.dao.SeasonMapper;
 import com.loris.soccer.dao.TeamMapper;
 import com.loris.soccer.dao.TeamRfSeasonMapper;
 import com.loris.soccer.dao.view.RoundInfoMapper;
+import com.loris.soccer.dao.view.SeasonInfoMapper;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Rank;
@@ -40,6 +41,7 @@ import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.model.view.RoundInfo;
+import com.loris.soccer.model.view.SeasonInfo;
 import com.loris.soccer.service.LeagueService;
 
 /**
@@ -77,6 +79,9 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	
 	@Autowired
 	private RankMapper rankMapper;
+	
+	@Autowired
+	private SeasonInfoMapper seasonInfoMapper;
 
 	/**
 	 *  (non-Javadoc)
@@ -310,5 +315,23 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 			queryWrapper.and(wrapper->wrapper.eq("season", endSeason).or().lt("season", endSeason));
 		}
 		return seasonMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 * 获得联赛赛季数据
+	 */
+	@Override
+	public List<SeasonInfo> getSeasonInfos(String startSeason, String endSeason)
+	{
+		QueryWrapper<SeasonInfo> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotBlank(startSeason))
+		{
+			queryWrapper.eq("season", startSeason).or().gt("season", startSeason);
+		}
+		if(StringUtils.isNotBlank(endSeason))
+		{
+			queryWrapper.and(wrapper->wrapper.eq("season", endSeason).or().lt("season", endSeason));
+		}
+		return seasonInfoMapper.selectList(queryWrapper);
 	}
 }

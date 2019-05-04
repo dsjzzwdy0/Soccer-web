@@ -7,7 +7,7 @@ CREATE TABLE `soccer_web_page` (
 	`host`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`port`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`method`  varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-	`type`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`type`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`source`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`httpstatus`  int(11) NULL DEFAULT NULL ,
 	`createtime`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -388,4 +388,14 @@ select `a`.`id` AS `id`,`a`.`lid` AS `lid`,`c`.`type` AS `leaguetype`,`c`.`name`
   from `soccer`.`soccer_match` group by `soccer`.`soccer_match`.`lid`,`soccer`.`soccer_match`.`round`) `b` on(((`a`.`lid` = `b`.`lid`) 
   and (`a`.`season` = `b`.`season`) and (`a`.`round` = `b`.`round`)))) 
   left join `soccer`.`soccer_league` `c` on((`a`.`lid` = `c`.`lid`)))
+
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_league_season_info`AS 
+select `a`.`id` AS `id`,`a`.`lid` AS `lid`,`a`.`season` AS `season`,`b`.`name` AS `name`,`b`.`type` AS `leaguetype` from (`soccer_league_season` `a` 
+	left join `soccer_league` `b` on((`a`.`lid` = `b`.`lid`))) ;
+
 

@@ -22,6 +22,7 @@ import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.model.view.RoundInfo;
+import com.loris.soccer.model.view.SeasonInfo;
 
 /**
  * @ClassName: League
@@ -96,6 +97,14 @@ public interface LeagueService extends IService<League>
 	 * @return
 	 */
 	List<Season> getSeasons(String startSeason, String endSeason);
+	
+	/**
+	 * 获得赛季数据
+	 * @param startSeason
+	 * @param endSeason
+	 * @return
+	 */
+	List<SeasonInfo> getSeasonInfos(String startSeason, String endSeason);
 	
 	/**
 	 * 保存联赛轮次数据

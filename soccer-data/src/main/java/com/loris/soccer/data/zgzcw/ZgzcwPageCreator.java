@@ -236,7 +236,11 @@ public class ZgzcwPageCreator
 		case PAGE_LEAGUE_LEAGUE:
 		case PAGE_LEAGUE_CUP:
 			checkParams(params, SoccerConstants.NAME_FIELD_LID);
-			baseURL += params.get(SoccerConstants.NAME_FIELD_LID);
+			baseURL += params.get(SoccerConstants.NAME_FIELD_LID) + "/";
+			if(params.containsKey(SoccerConstants.NAME_FIELD_SEASON))
+			{
+				baseURL += params.get(SoccerConstants.NAME_FIELD_SEASON) + "/";
+			}			
 			break;
 		case PAGE_ODDS_OP:				//百家OP页面
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);
