@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.filter;
+package com.loris.soccer.data.filter.object;
 
 import java.util.Date;
 
@@ -26,7 +26,7 @@ import com.loris.soccer.model.base.MatchItem;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class MatchOddsFilter extends ObjectFilter<MatchItem>
+public class LatestMatchFilter extends ObjectFilter<MatchItem>
 {
 	/** 几天内的比赛有赔率值 */
 	protected int numOfDayHasOdds = 4;
@@ -37,7 +37,7 @@ public class MatchOddsFilter extends ObjectFilter<MatchItem>
 	/**
 	 * Create a new instance of MatchOddsFilter 
 	 */
-	public MatchOddsFilter(int numOfDayHasOdds, int numOfPreDayGetOdds)
+	public LatestMatchFilter(int numOfDayHasOdds, int numOfPreDayGetOdds)
 	{
 		this.numOfDayHasOdds = numOfDayHasOdds;
 		this.numOfPreDayGetOdds = numOfPreDayGetOdds;

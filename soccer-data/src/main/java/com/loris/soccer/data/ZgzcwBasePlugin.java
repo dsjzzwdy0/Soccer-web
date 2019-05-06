@@ -48,9 +48,9 @@ import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.data.filter.MatchOddsFilter;
 import com.loris.soccer.data.filter.WebPageFilter;
-import com.loris.soccer.data.filter.impl.ZgzcwPageFilter;
+import com.loris.soccer.data.filter.object.LatestMatchFilter;
+import com.loris.soccer.data.filter.page.ZgzcwPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -158,7 +158,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		
 		registSourceFilter(SoccerConstants.SOCCER_DATA_MATCH, 
-				new MatchOddsFilter(webPageConf.getNumDayOfHasOdds(), webPageConf.getDayNumOfGetPages()));
+				new LatestMatchFilter(webPageConf.getNumDayOfHasOdds(), webPageConf.getDayNumOfGetPages()));
 	}
 	
 	/**

@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.data.filter.RoundInfoFilter;
-import com.loris.soccer.data.filter.SeasonInfoFilter;
-import com.loris.soccer.data.filter.impl.ZgzcwRoundPageFilter;
+import com.loris.soccer.data.filter.object.RoundInfoFilter;
+import com.loris.soccer.data.filter.object.SeasonInfoFilter;
+import com.loris.soccer.data.filter.page.ZgzcwRoundPageFilter;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.view.RoundInfo;
 import com.loris.soccer.model.view.SeasonInfo;
