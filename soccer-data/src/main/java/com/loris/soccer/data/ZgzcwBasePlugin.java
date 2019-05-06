@@ -305,7 +305,8 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	protected boolean download(WebPage page) throws IOException, HostForbiddenException, UrlFetchException
 	{
-		logger.info("Starting get the data from : " + page.getUrl() + (StringUtils.isEmpty(page.getParamstext()) ? "" : page.getParamstext()) );
+		logger.info("Starting get the data from : " + page.getUrl() 
+			+ (StringUtils.isEmpty(page.getParamstext()) ? "" : ", params:" + page.getParamstext()) );
 		if(webPagefetcher.download(page))
 		{
 			pageService.save(page);
