@@ -84,7 +84,10 @@ public class ZgzcwPageCreator
 		PAGE_PRIORITIES.put(PAGE_SCORE_JC, 3500.0);
 		PAGE_PRIORITIES.put(PAGE_ODDS_OP, 1000.0);
 		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1000.0);
-		PAGE_PRIORITIES.put(PAGE_ODDS_NUM, 1000.0);		
+		PAGE_PRIORITIES.put(PAGE_ODDS_NUM, 1000.0);
+		PAGE_PRIORITIES.put(PAGE_JSON_ODDS_OP, 1000.0);
+		PAGE_PRIORITIES.put(PAGE_JSON_ODDS_YP, 1000.0);
+		PAGE_PRIORITIES.put(PAGE_JSON_ODDS_NUM, 1000.0);
 		
 		PAGE_BASE_URLS.put(PAGE_CENTER, 			"http://saishi.zgzcw.com/soccer/");	// 数据主页面
 		PAGE_BASE_URLS.put(PAGE_LEAGUE_LEAGUE,    	"http://saishi.zgzcw.com/soccer/league/");  // "cup/51/2017-2018/" 杯赛类型的数据
@@ -97,7 +100,10 @@ public class ZgzcwPageCreator
 		PAGE_BASE_URLS.put(PAGE_SCORE_JC, 			"http://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=23");
 		PAGE_BASE_URLS.put(PAGE_ODDS_OP,      		"http://fenxi.zgzcw.com/"); 			// 2249815/bjop /mid/bjop
 		PAGE_BASE_URLS.put(PAGE_ODDS_YP,      		"http://fenxi.zgzcw.com/"); 			// 2249815/ypdb /mid/ypdb
-		PAGE_BASE_URLS.put(PAGE_ODDS_NUM,      		"http://fenxi.zgzcw.com/"); 
+		PAGE_BASE_URLS.put(PAGE_ODDS_NUM,      		"http://fenxi.zgzcw.com/");
+		PAGE_BASE_URLS.put(PAGE_JSON_ODDS_OP,       "http://fenxi.zgzcw.com/json/");
+		PAGE_BASE_URLS.put(PAGE_JSON_ODDS_YP,       "http://fenxi.zgzcw.com/json/");
+		PAGE_BASE_URLS.put(PAGE_JSON_ODDS_NUM,      "http://fenxi.zgzcw.com/json/");
 	}
 	
 	/**
@@ -243,14 +249,17 @@ public class ZgzcwPageCreator
 			}			
 			break;
 		case PAGE_ODDS_OP:				//百家OP页面
+		case PAGE_JSON_ODDS_OP:
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);
 			baseURL += params.get(SoccerConstants.NAME_FIELD_MID) + "/bjop";
 			break;
-		case PAGE_ODDS_YP:		
+		case PAGE_ODDS_YP:
+		case PAGE_JSON_ODDS_YP:
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);//百家OP页面
 			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ypdb";
 			break;
 		case PAGE_ODDS_NUM:
+		case PAGE_JSON_ODDS_NUM:
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);
 			baseURL += params.get(SoccerConstants.NAME_FIELD_MID) + "/dxdb";
 			break;

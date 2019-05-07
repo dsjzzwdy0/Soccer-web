@@ -36,6 +36,9 @@ public interface ZgzcwConstants
 	final static public String PAGE_ODDS_OP = "op";
 	final static public String PAGE_ODDS_YP = "yp";
 	final static public String PAGE_ODDS_NUM = "num";
+	final static public String PAGE_JSON_ODDS_OP = "jsonop";
+	final static public String PAGE_JSON_ODDS_YP = "jsonyp";
+	final static public String PAGE_JSON_ODDS_NUM = "jsonnum";
 	final static public String PAGE_LOTTERY_JC = "jc";
 	final static public String PAGE_LOTTERY_BD = "bd";
 	final static public String PAGE_LOTTERY_ZC = "zc";
