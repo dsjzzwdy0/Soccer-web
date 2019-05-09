@@ -167,15 +167,19 @@ public class App
 	public static void testUpload() throws Exception
 	{
 		HttpWebSender sender = new HttpWebSender();
-		sender.setUrl("http://localhost/soccer/data/uploadData");
+		sender.setUrl("http://localhost/soccer/upload/uploadRecords");
 		
 		MatchResult result = new MatchResult();
 		result.setMid("5656458");
 		result.setResult(ResultType.LOSE);
 		result.setHomegoal(3);
 		result.setClientgoal(5);
-		Rest rest = sender.send("json", result);
+		result.setMid("这是管委会");
+		Rest rest = sender.send("records", result);
+		logger.info("Result: " + rest);
 		
+		sender.setUrl("http://localhost/soccer/upload/uploadJson");
+		rest = sender.send(result);
 		logger.info("Result: " + rest);
 	}
 	

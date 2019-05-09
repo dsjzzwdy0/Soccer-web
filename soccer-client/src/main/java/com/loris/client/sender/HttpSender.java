@@ -29,6 +29,15 @@ import com.loris.common.web.wrapper.Rest;
 public interface HttpSender
 {
 	/**
+	 * 发送数据
+	 * @param records
+	 * @return
+	 * @throws IOException
+	 * @throws HttpException
+	 */
+	Rest send(Object records) throws IOException, HttpException;
+	
+	/**
 	 * 向服务器提交列表数据
 	 * @param key 关键字
 	 * @param records 内容

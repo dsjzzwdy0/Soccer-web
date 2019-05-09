@@ -48,7 +48,8 @@ public class HttpWebSender implements HttpSender
 	protected String url;
 	
 	protected String encoding = "UTF-8";
-	protected String contentType = "application/json";
+	public static String Content_Type_Json = "application/json";	
+	public static String Content_Type_Form = "application/x-www-form-urlencoded; charset=utf-8";
 	
 	/**
 	 * Create a new instance of HttpCommonSender
@@ -65,6 +66,16 @@ public class HttpWebSender implements HttpSender
 	{
 		this.setUrl(url);
 	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.sender.HttpSender#send(com.lang.Object)
+	 */
+	@Override
+	public Rest send(Object records) throws IOException, HttpException
+	{
+		return send(null, records);
+	}
 	
 	/**
 	 *  (non-Javadoc)
@@ -73,7 +84,7 @@ public class HttpWebSender implements HttpSender
 	@Override
 	public Rest send(String key, Object records) throws IOException, HttpException
 	{
-		return send(url, contentType, encoding, key, records);
+		return send(url, encoding, key, records);
 	}
 
 	public String getUrl()
@@ -95,16 +106,6 @@ public class HttpWebSender implements HttpSender
 	{
 		this.encoding = encoding;
 	}
-	
-	public String getContentType()
-	{
-		return contentType;
-	}
-
-	public void setContentType(String contentType)
-	{
-		this.contentType = contentType;
-	}
 
 	/**
 	 * 发送数据记录
@@ -117,7 +118,7 @@ public class HttpWebSender implements HttpSender
 	 * @throws IOException
 	 * @throws HttpException
 	 */
-	public static Rest send(String url, String contentType, String encoding, String key, Object records)
+	public static Rest send(String url, String encoding, String key, Object records)
 			throws IOException, HttpException
 	{
 		String json = JSON.toJSONString(records);
@@ -129,14 +130,14 @@ public class HttpWebSender implements HttpSender
 		{
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 	        params.add(new BasicNameValuePair(key, json));
-	        post.addHeader("Content-type", contentType);
+	        post.addHeader("Content-type", Content_Type_Form);
 	        post.setEntity(new UrlEncodedFormEntity(params, encoding));
 		}
 		else
 		{
-			StringEntity s = new StringEntity(json);
+			StringEntity s = new StringEntity(json, encoding);
 			s.setContentEncoding(encoding);
-			s.setContentType(contentType); // 发送json数据需要设置contentType
+			s.setContentType(Content_Type_Json); // 发送json数据需要设置contentType
 			post.setEntity(s);
 		}
 		

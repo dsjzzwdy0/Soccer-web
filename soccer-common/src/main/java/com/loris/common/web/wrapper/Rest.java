@@ -195,4 +195,10 @@ public class Rest
 		return rest;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Rest [status=" + status + ", render=" + render + ", msg=" + msg + ", data=" + data + ", pages=" + pages
+				+ ", url=" + url + ", details=" + details + "]";
+	}
 }

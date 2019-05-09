@@ -13,9 +13,11 @@ package com.loris.soccer.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
 
 /**   
@@ -29,7 +31,7 @@ import com.loris.common.web.wrapper.Rest;
  */
 @Controller
 @RequestMapping("/upload")
-public class UploadController
+public class UploadController extends BaseController
 {
 	private static Logger logger = Logger.getLogger(UploadController.class);
 	
@@ -43,6 +45,19 @@ public class UploadController
 	public Rest uploadRecords(String records)
 	{
 		logger.info(records);
+		return Rest.ok();
+	}
+	
+	/**
+	 * 上传JSON数据
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/uploadJson")
+	public Rest uploadJson(@RequestBody String request)
+	{
+		logger.info(request);
 		return Rest.ok();
 	}
 }
