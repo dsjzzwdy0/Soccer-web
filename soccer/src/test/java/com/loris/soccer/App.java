@@ -36,6 +36,7 @@ import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
 import com.loris.client.scheduler.TaskScheduler;
 import com.loris.client.scheduler.factory.SchedulerFactory;
+import com.loris.client.sender.impl.HttpWebSender;
 import com.loris.client.service.WebPageService;
 import com.loris.client.scheduler.Scheduler;
 import com.loris.client.task.Task;
@@ -47,6 +48,7 @@ import com.loris.common.service.DataService;
 import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
+import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
@@ -77,6 +79,7 @@ import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.MatchResult.ResultType;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
@@ -87,6 +90,7 @@ import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
+
 
 /**
  * Hello world!
@@ -113,8 +117,9 @@ public class App
 			// testJcScoreWebPage();
 			// testUpdate();
 			// testLeagueCenterPage();
+			// testMatchResult();
 			
-			testMatchResult();
+			testUpload();
 			
 			// testMariaDB();
 			// testDateString();
@@ -157,6 +162,21 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testUpload() throws Exception
+	{
+		HttpWebSender sender = new HttpWebSender();
+		sender.setUrl("http://localhost/soccer/data/uploadData");
+		
+		MatchResult result = new MatchResult();
+		result.setMid("5656458");
+		result.setResult(ResultType.LOSE);
+		result.setHomegoal(3);
+		result.setClientgoal(5);
+		Rest rest = sender.send("json", result);
+		
+		logger.info("Result: " + rest);
 	}
 	
 	public static void testMatchResult() throws Exception

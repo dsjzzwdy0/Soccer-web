@@ -83,6 +83,11 @@ public class JobController
 		}
 	}
 	
+	/**
+	 * 初始化任务控制器
+	 * @throws SchedulerException
+	 * @throws Exception
+	 */
 	protected void initialize() throws SchedulerException, Exception
 	{
 		if(jobInfoService == null) jobInfoService = ApplicationContextHelper.getBean(JobInfoService.class);
