@@ -91,6 +91,7 @@ public class JobController
 	 */
 	protected void initialize() throws SchedulerException, Exception
 	{
+		//如果不启动任务器
 		if(!Enviroment.startJobScheduler) return;
 		
 		if(jobInfoService == null) jobInfoService = ApplicationContextHelper.getBean(JobInfoService.class);
