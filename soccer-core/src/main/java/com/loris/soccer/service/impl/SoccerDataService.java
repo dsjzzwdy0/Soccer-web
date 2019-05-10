@@ -32,8 +32,21 @@ import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.collection.TeamList;
 import com.loris.soccer.collection.TeamRfSeasonList;
+import com.loris.soccer.model.League;
+import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
+import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.OddsNum;
+import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsScore;
+import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.Rank;
+import com.loris.soccer.model.Round;
+import com.loris.soccer.model.Season;
+import com.loris.soccer.model.Team;
+import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
@@ -78,84 +91,211 @@ public class SoccerDataService implements DataService
 	{
 		for (String key : results.keySet())
 		{
-			switch (key)
+			try
 			{
-			case SOCCER_DATA_LEAGUE_LIST:
-				LeagueList leagues = (LeagueList) results.get(key);
-				leagueService.insertLeagues(leagues, leagues.isOverwrite());
-				break;
-			case SOCCER_DATA_LOGO_LIST:
-				LogoList logos = (LogoList) results.get(key);
-				leagueService.insertLogos(logos, logos.isOverwrite());
-				break;
-			case SOCCER_DATA_ROUND_LIST:
-				RoundList rounds = (RoundList) results.get(key);
-				leagueService.insertRounds(rounds, rounds.isOverwrite());
-				break;
-			case SOCCER_DATA_SEASON_LIST:
-				SeasonList seasons = (SeasonList) results.get(key);
-				leagueService.insertSeasons(seasons, seasons.isOverwrite());
-				break;
-			case SOCCER_DATA_TEAM_LIST:
-				TeamList teams = (TeamList) results.get(key);
-				leagueService.insertTeams(teams, teams.isOverwrite());
-				break;
-			case SOCCER_DATA_TEAM_SEASON:
-				TeamRfSeasonList rfSeasons = (TeamRfSeasonList) results.get(key);
-				leagueService.insertTeamRfSeasons(rfSeasons, rfSeasons.isOverwrite());
-				break;
-			case SOCCER_DATA_RANK_LIST:
-				RankList ranks = (RankList) results.get(key);
-				leagueService.insertRanks(ranks, ranks.isOverwrite());
-				break;
-			case SOCCER_DATA_MATCH_LIST:
-				MatchList matchList = (MatchList) results.get(key);
-				matchService.insertMatchs(matchList, matchList.isOverwrite());
-				break;
-			case SOCCER_DATA_MATCH_BD_LIST:
-				MatchItemList matchBdItemList = (MatchItemList) results.get(key);
-				List<MatchBd> matchBds = new ArrayList<>();
+				saveRecord(key, results.get(key));
+			}
+			catch (Exception e) {
+				logger.warn("Error occured when save '" + key + "' record.");
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 保存数据记录
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public boolean saveRecord(String key, Object value)
+	{
+		boolean overwrite = true;
+		switch (key)
+		{
+		case SOCCER_DATA_LEAGUE_LIST:
+			List<League> leagues = null;
+			if(value instanceof LeagueList)
+			{
+				leagues = (LeagueList) value;
+				overwrite = ((LeagueList)leagues).isOverwrite();
+			}
+			else
+			{
+				leagues = (List<League>) value;				
+			}
+			return leagueService.insertLeagues(leagues, overwrite);
+		case SOCCER_DATA_LOGO_LIST:
+			List<Logo> logos = null;
+			if(value instanceof LogoList)
+			{
+				logos = (LogoList)value;
+				overwrite = ((LogoList)value).isOverwrite();
+			}
+			else {
+				logos = (List<Logo>)value;
+			}
+			return leagueService.insertLogos(logos, overwrite);
+		case SOCCER_DATA_ROUND_LIST:
+			List<Round> rounds = null;
+			if(value instanceof RoundList)
+			{
+				rounds = (RoundList)value;
+				overwrite = ((RoundList)value).isOverwrite();
+			}
+			else {
+				rounds = (List<Round>)value;
+			}
+			return leagueService.insertRounds(rounds, overwrite);
+		case SOCCER_DATA_SEASON_LIST:
+			List<Season> seasons = null;
+			if(value instanceof SeasonList)
+			{
+				seasons = (SeasonList)value;
+				overwrite = ((SeasonList)value).isOverwrite();
+			}
+			else {
+				seasons = (List<Season>)value;
+			}
+			return leagueService.insertSeasons(seasons, overwrite);
+		case SOCCER_DATA_TEAM_LIST:
+			List<Team> teams = null;
+			if(value instanceof TeamList)
+			{
+				teams = (TeamList)value;
+				overwrite = ((TeamList)value).isOverwrite();
+			}
+			else {
+				teams = (List<Team>)value;
+			}
+			return leagueService.insertTeams(teams, overwrite);
+		case SOCCER_DATA_TEAM_SEASON_RELATION:
+			List<TeamRfSeason> teamRfSeasons = null;
+			if(value instanceof TeamRfSeasonList)
+			{
+				teamRfSeasons = (TeamRfSeasonList) value;
+				overwrite = ((TeamRfSeasonList)value).isOverwrite();
+			}
+			else {
+				teamRfSeasons = (List<TeamRfSeason>)value;
+			}
+			return leagueService.insertTeamRfSeasons(teamRfSeasons, overwrite);
+		case SOCCER_DATA_RANK_LIST:
+			List<Rank> ranks = null;
+			if(value instanceof RankList)
+			{
+				ranks = (RankList) value;
+				overwrite = ((RankList)value).isOverwrite();
+			}
+			else
+			{
+				ranks = (List<Rank>)value;
+			}
+			return leagueService.insertRanks(ranks, overwrite);
+		case SOCCER_DATA_MATCH_LIST:
+			List<Match> matchs = null;
+			if(value instanceof MatchList)
+			{
+				matchs = (MatchList) value;
+				overwrite = ((MatchList) value).isOverwrite();
+			}
+			else {
+				matchs = (List<Match>)value;
+			}
+			return matchService.insertMatchs(matchs, overwrite);
+		case SOCCER_DATA_MATCH_BD_LIST:
+			List<MatchBd> matchBds = null;
+			if(value instanceof MatchItemList)
+			{			
+				MatchItemList matchBdItemList = (MatchItemList) value;
+				matchBds = new ArrayList<>();
 				for (MatchItem matchBd : matchBdItemList)
 				{
 					matchBds.add((MatchBd)matchBd);
 				}
-				matchService.insertMatchBds(matchBds, matchBdItemList.isOverwrite());
-				break;
-			case SOCCER_DATA_MATCH_JC_LIST:
-				MatchItemList matchJcItemList = (MatchItemList) results.get(key);
-				List<MatchJc> matchJcs = new ArrayList<>();
+				overwrite = matchBdItemList.isOverwrite();
+			}
+			else
+			{
+				matchBds = (List<MatchBd>)value;
+			}
+			return matchService.insertMatchBds(matchBds, overwrite);
+		case SOCCER_DATA_MATCH_JC_LIST:
+			List<MatchJc> matchJcs = null;
+			if(value instanceof MatchItemList)
+			{
+				MatchItemList matchJcItemList = (MatchItemList) value;
+				matchJcs = new ArrayList<>();
 				for (MatchItem matchJc : matchJcItemList)
 				{
 					matchJcs.add((MatchJc)matchJc);
 				}
-				matchService.insertMatchJcs(matchJcs, matchJcItemList.isOverwrite());
-				break;
-			case SOCCER_DATA_MATCH_RESULT_LIST:
-				MatchResultList matchResults = (MatchResultList) results.get(key);
-				matchService.insertMatchResults(matchResults, matchResults.isOverwrite());
-				break;
-			case SOCCER_DATA_OP_LIST:
-				OddsOpList ops = (OddsOpList) results.get(key);
-				oddsService.insertOddsOps(ops, ops.isOverwrite());
-				break;
-			case SOCCER_DATA_YP_LIST:
-				OddsYpList yps = (OddsYpList) results.get(key);
-				oddsService.insertOddsYps(yps, yps.isOverwrite());
-				break;
-			case SOCCER_DATA_NUM_LIST:
-				OddsNumList nums = (OddsNumList) results.get(key);
-				oddsService.insertOddsNums(nums, nums.isOverwrite());
-				break;
-			case SOCCER_DATA_SCORE_LIST:
-				OddsScoreList scores = (OddsScoreList) results.get(key);
-				oddsService.insertOddsScores(scores, scores.isOverwrite());
-				break;
-			default:
-				// No nothing.
-				logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");
-				break;
 			}
+			else {
+				matchJcs = (List<MatchJc>)value;
+			}
+			return matchService.insertMatchJcs(matchJcs, overwrite);
+		case SOCCER_DATA_MATCH_RESULT_LIST:
+			List<MatchResult> matchResults = null;
+			if(value instanceof MatchResultList)
+			{
+				matchResults = (MatchResultList) value;
+				overwrite = ((MatchResultList) value).isOverwrite();
+			}
+			else
+			{
+				matchResults = (List<MatchResult>)value;
+			}
+			return matchService.insertMatchResults(matchResults, overwrite);
+		case SOCCER_DATA_OP_LIST:
+			List<OddsOp> ops = null;
+			if(value instanceof OddsOpList)
+			{
+				ops = (OddsOpList) value;
+				overwrite = ((OddsOpList)value).isOverwrite();
+			}
+			else {
+				ops = (List<OddsOp>)value;
+			}
+			return oddsService.insertOddsOps(ops, overwrite);
+		case SOCCER_DATA_YP_LIST:
+			List<OddsYp> yps = null;
+			if(value instanceof OddsYpList)
+			{
+				yps = (OddsYpList)value;
+				overwrite = ((OddsYpList)value).isOverwrite();
+			}
+			else {
+				yps = (List<OddsYp>)value;				
+			}
+			return oddsService.insertOddsYps(yps, overwrite);
+		case SOCCER_DATA_NUM_LIST:
+			List<OddsNum> nums = null;
+			if(value instanceof OddsNumList)
+			{
+				nums = (OddsNumList)value;
+				overwrite = ((OddsNumList)value).isOverwrite();
+			}
+			else {
+				nums = (List<OddsNum>) value;
+			}
+			return oddsService.insertOddsNums(nums, overwrite);
+		case SOCCER_DATA_SCORE_LIST:
+			List<OddsScore> scores = null;
+			if(value instanceof OddsScoreList)
+			{
+				scores = (OddsScoreList)value;
+				overwrite = ((OddsScoreList)value).isOverwrite();
+			}
+			else
+			{
+				scores = (List<OddsScore>) value;
+			}
+			return oddsService.insertOddsScores(scores, overwrite);
+		default:
+			// No nothing.
+			logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");
+			return false;
 		}
-		return true;
 	}
 }

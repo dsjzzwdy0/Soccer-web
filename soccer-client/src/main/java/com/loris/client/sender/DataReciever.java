@@ -1,6 +1,6 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  HttpSender.java   
+ * @Title:  DataReciever.java   
  * @Package com.loris.client.sender   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
@@ -11,39 +11,25 @@
  */
 package com.loris.client.sender;
 
-import java.io.IOException;
-
-import org.apache.commons.httpclient.HttpException;
-
-import com.loris.common.web.wrapper.Rest;
+import com.alibaba.fastjson.JSONException;
+import com.loris.client.exception.DataRecieveException;
 
 /**   
- * @ClassName:  HttpSender    
- * @Description: 向服务器发送数据  
+ * @ClassName:  DataReciever    
+ * @Description: 数据接收器   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface HttpSender
+public interface DataReciever
 {
 	/**
-	 * 发送数据
-	 * @param records
+	 * 数据接收处理器
+	 * @param json
 	 * @return
-	 * @throws IOException
-	 * @throws HttpException
+	 * @throws JSONException
 	 */
-	Rest send(Object records) throws IOException, HttpException;
-	
-	/**
-	 * 向服务器提交列表数据
-	 * @param key 关键字
-	 * @param records 内容
-	 * @return
-	 * @throws IOException
-	 * @throws HttpException
-	 */
-	Rest send(String key, Object records) throws IOException, HttpException;
+	boolean recieve(String text) throws DataRecieveException;
 }

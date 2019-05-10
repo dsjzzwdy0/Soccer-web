@@ -14,6 +14,7 @@ package com.loris.client.sender.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -30,7 +31,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.loris.client.sender.HttpSender;
+import com.loris.client.sender.DataSender;
 import com.loris.common.web.wrapper.Rest;
 
 /**   
@@ -42,7 +43,7 @@ import com.loris.common.web.wrapper.Rest;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class HttpWebSender implements HttpSender
+public class HttpWebSender implements DataSender
 {
 	/** 服务器地址 */
 	protected String url;
@@ -69,20 +70,20 @@ public class HttpWebSender implements HttpSender
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.sender.HttpSender#send(com.lang.Object)
+	 * @see com.loris.client.sender.DataSender#send(com.lang.Object)
 	 */
 	@Override
-	public Rest send(Object records) throws IOException, HttpException
+	public <T> Rest send(Map<String, T>  records) throws IOException, HttpException
 	{
 		return send(null, records);
 	}
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.client.sender.HttpSender#send(com.lang.Object)
+	 * @see com.loris.client.sender.DataSender#send(com.lang.Object)
 	 */
 	@Override
-	public Rest send(String key, Object records) throws IOException, HttpException
+	public <T> Rest send(String key, Map<String, T> records) throws IOException, HttpException
 	{
 		return send(url, encoding, key, records);
 	}
@@ -122,7 +123,7 @@ public class HttpWebSender implements HttpSender
 			throws IOException, HttpException
 	{
 		String json = JSON.toJSONString(records);
-		
+		//System.out.println(json);
 		CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost(url);
 		

@@ -31,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.common.constant.Enviroment;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.JobInfo;
 import com.loris.common.quartz.BaseJob;
@@ -90,6 +91,8 @@ public class JobController
 	 */
 	protected void initialize() throws SchedulerException, Exception
 	{
+		if(!Enviroment.startJobScheduler) return;
+		
 		if(jobInfoService == null) jobInfoService = ApplicationContextHelper.getBean(JobInfoService.class);
 		List<JobInfo> jobInfos = jobInfoService.list();
 		if(jobInfos == null || jobInfos.size() == 0)

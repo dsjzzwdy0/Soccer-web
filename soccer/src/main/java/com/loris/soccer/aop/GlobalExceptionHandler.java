@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.loris.auth.log.LogManager;
 import com.loris.auth.log.LogTaskFactory;
 import com.loris.auth.security.ShiroKit;
+import com.loris.auth.security.ShiroUser;
 import com.loris.common.constant.tips.ErrorTip;
 import com.loris.common.exception.BussinessException;
 import com.loris.common.exception.InvalidKaptchaException;
@@ -138,7 +139,8 @@ public class GlobalExceptionHandler
 	@ResponseBody
 	public ErrorTip notFount(RuntimeException e)
 	{
-		LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
+		ShiroUser shiroUser = ShiroKit.getUser();
+		LogManager.me().executeLog(LogTaskFactory.exceptionLog(shiroUser != null ? shiroUser.getId() : -100, e));
 		getRequest().setAttribute("tip", "服务器未知运行时异常");
 		log.error("运行时异常:", e);
 		return new ErrorTip(BizExceptionEnum.SERVER_ERROR);

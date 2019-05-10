@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.alibaba.fastjson.JSON;
 import com.loris.client.fetcher.WebFetcher;
 import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.SettingFactory;
@@ -43,6 +44,7 @@ import com.loris.client.task.Task;
 import com.loris.client.task.basic.BasicTask;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
+import com.loris.common.constant.Enviroment;
 import com.loris.common.model.TableRecords;
 import com.loris.common.service.DataService;
 import com.loris.common.util.ArraysUtil;
@@ -107,6 +109,7 @@ public class App
 	{
 		try
 		{
+			Enviroment.startJobScheduler = false;
 			getApplicationContext();
 			// testSetting();
 			// testZgzcwIssueScheduler();
@@ -166,6 +169,8 @@ public class App
 	
 	public static void testUpload() throws Exception
 	{
+		//logger.info("startScheduler: " + Enviroment.getParams("startScheduler"));
+		//logger.info("file.encoding: " + Enviroment.getParams("file.encoding"));
 		HttpWebSender sender = new HttpWebSender();
 		sender.setUrl("http://localhost/soccer/upload/uploadRecords");
 		
@@ -175,12 +180,24 @@ public class App
 		result.setHomegoal(3);
 		result.setClientgoal(5);
 		result.setMid("这是管委会");
-		Rest rest = sender.send("records", result);
+		
+		MatchResultList results = new MatchResultList();
+		results.add(result);
+		
+		//TableRecords records = new TableRecords();
+		//records.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT, records);
+		//records.put("Tst", "test");
+		
+		Map<String, MatchResultList> records = new HashMap<>();
+		records.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST, results);
+		logger.info(JSON.toJSONString(records));
+		
+		Rest rest = sender.send("records", records);
 		logger.info("Result: " + rest);
 		
-		sender.setUrl("http://localhost/soccer/upload/uploadJson");
-		rest = sender.send(result);
-		logger.info("Result: " + rest);
+		/*sender.setUrl("http://localhost/soccer/upload/uploadJson");
+		rest = sender.send(records);
+		logger.info("Result: " + rest);*/
 	}
 	
 	public static void testMatchResult() throws Exception

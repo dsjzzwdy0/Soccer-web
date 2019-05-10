@@ -56,7 +56,7 @@
 		<property name="realm" ref="authShiroRealm"/>
 		
 		<!-- 使用下面配置的缓存管理器-->
-	    <property name="cacheManager" ref="cacheManager0"/>
+	    <property name="cacheManager" ref="shiroCacheManager"/>
 	    <property name="sessionManager" ref="sessionManager" />
 	    <property name="rememberMeManager" ref="rememberMeManager"/>
 	</bean>
@@ -95,9 +95,9 @@
 	
 	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"> 
 		<property name="cacheManagerConfigFile" value="classpath:/conf/shiro-ehcache.xml"/> 
-	</bean>-->
-	
-	<bean id="cacheManager0" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+	</bean>
+	 -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManager" ref="cacheManagerFactory"/>
-    </bean>  
+    </bean> 
 </beans>

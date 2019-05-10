@@ -1,7 +1,7 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  League.java   
- * @Package com.loris.soccer.model   
+ * @Title:  Enviroment.java   
+ * @Package com.loris.soccer.constant   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
  * @date:   2019年1月28日 下午8:59:32   
@@ -9,33 +9,29 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.common.service;
-
-import com.loris.common.model.TableRecords;
+package com.loris.common.constant;
 
 /**   
- * @ClassName:  League   
- * @Description: 数据后处理的插件类  
+ * @ClassName:  Enviroment    
+ * @Description: 系统环境   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
- * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
+ * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface DataService
-{	
-	/**
-	 * 保存网页的解析结果内容到数据库中
-	 * @param results 网页解析结果
-	 * @return 是否成功的标志
-	 */
-	public boolean saveTableRecords(TableRecords results);
+public class Enviroment
+{
+	/** 运行环境变量与数据 */
+	public static boolean startJobScheduler = true;
 	
 	/**
-	 * 保存数据结果到数据库中
+	 * 获得系统运行环境变量
 	 * @param key
-	 * @param record
-	 * @return 是否成功的标志
+	 * @return
 	 */
-	public boolean saveRecord(String key, Object record);
+	public static String getProperty(String key)
+	{
+		return System.getProperty(key);
+	}
 }

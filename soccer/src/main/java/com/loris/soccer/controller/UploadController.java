@@ -11,12 +11,14 @@
  */
 package com.loris.soccer.controller;
 
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.client.exception.DataRecieveException;
+import com.loris.client.sender.DataReciever;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
 
@@ -33,7 +35,11 @@ import com.loris.common.web.wrapper.Rest;
 @RequestMapping("/upload")
 public class UploadController extends BaseController
 {
-	private static Logger logger = Logger.getLogger(UploadController.class);
+	//private static Logger logger = Logger.getLogger(UploadController.class);
+	
+	/** 数据接收处理器 */
+	@Autowired
+	private DataReciever dataReciever;
 	
 	/**
 	 * 上传数据记录表
@@ -44,8 +50,7 @@ public class UploadController extends BaseController
 	@RequestMapping("/uploadRecords")
 	public Rest uploadRecords(String records)
 	{
-		logger.info(records);
-		return Rest.ok();
+		return processRecievedData(records);
 	}
 	
 	/**
@@ -57,7 +62,37 @@ public class UploadController extends BaseController
 	@RequestMapping("/uploadJson")
 	public Rest uploadJson(@RequestBody String request)
 	{
-		logger.info(request);
-		return Rest.ok();
+		return processRecievedData(request);
+	}
+	
+	/**
+	 * 处理数据类
+	 * @param content
+	 * @return
+	 */
+	private Rest processRecievedData(String content)
+	{
+		//logger.info(content);
+		try
+		{
+			if(dataReciever.recieve(content))
+			{
+				return Rest.ok();
+			}
+			else
+			{
+				return Rest.failure("Failure to process upload records.");
+			}
+		}
+		catch (DataRecieveException e) 
+		{
+			e.printStackTrace();
+			return Rest.failure(e.toString());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return Rest.failure(e.toString());
+		}
 	}
 }
