@@ -24,7 +24,7 @@ import com.loris.soccer.model.base.OddsValue;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_odds_op")
-public class OddsOp extends OddsValue
+public class OddsOp extends OddsValue implements Cloneable
 {
 	/***/
 	private static final long serialVersionUID = 1L;
