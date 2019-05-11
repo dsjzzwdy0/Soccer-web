@@ -103,15 +103,15 @@ public class LeagueWebPageParser extends AbstractLeagueWebPageParser
 		// 球队的排名情况
 		parseRanks(document, lid, season, round, ranks);
 		
-		results.put(SoccerConstants.SOCCER_DATA_SEASON_LIST, seasons);
-		results.put(SoccerConstants.SOCCER_DATA_ROUND_LIST, rounds);
+		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_SEASON_LIST, seasons);
+		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_ROUND_LIST, rounds);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_LIST, teams);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_SEASON_RELATION, teamRfSeasons);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, matchs);
 		results.put(SoccerConstants.SOCCER_DATA_LOGO_LIST, logos);
-		results.put(SoccerConstants.SOCCER_DATA_RANK_LIST, ranks);
+		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_RANK_LIST, ranks);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST, matchResults);
-		results.put(SoccerConstants.SOCCER_DATA_ROUND_CUR, round);
+		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_ROUND_CUR, round);
 		
 		return results;
 	}

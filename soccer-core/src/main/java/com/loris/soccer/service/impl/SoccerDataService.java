@@ -136,7 +136,7 @@ public class SoccerDataService implements DataService
 				logos = (List<Logo>)value;
 			}
 			return leagueService.insertLogos(logos, overwrite);
-		case SOCCER_DATA_ROUND_LIST:
+		case SOCCER_DATA_LEAGUE_ROUND_LIST:
 			List<Round> rounds = null;
 			if(value instanceof RoundList)
 			{
@@ -147,7 +147,7 @@ public class SoccerDataService implements DataService
 				rounds = (List<Round>)value;
 			}
 			return leagueService.insertRounds(rounds, overwrite);
-		case SOCCER_DATA_SEASON_LIST:
+		case SOCCER_DATA_LEAGUE_SEASON_LIST:
 			List<Season> seasons = null;
 			if(value instanceof SeasonList)
 			{
@@ -180,7 +180,7 @@ public class SoccerDataService implements DataService
 				teamRfSeasons = (List<TeamRfSeason>)value;
 			}
 			return leagueService.insertTeamRfSeasons(teamRfSeasons, overwrite);
-		case SOCCER_DATA_RANK_LIST:
+		case SOCCER_DATA_LEAGUE_RANK_LIST:
 			List<Rank> ranks = null;
 			if(value instanceof RankList)
 			{
@@ -247,7 +247,7 @@ public class SoccerDataService implements DataService
 				matchResults = (List<MatchResult>)value;
 			}
 			return matchService.insertMatchResults(matchResults, overwrite);
-		case SOCCER_DATA_OP_LIST:
+		case SOCCER_DATA_ODDS_OP_LIST:
 			List<OddsOp> ops = null;
 			if(value instanceof OddsOpList)
 			{
@@ -258,7 +258,7 @@ public class SoccerDataService implements DataService
 				ops = (List<OddsOp>)value;
 			}
 			return oddsService.insertOddsOps(ops, overwrite);
-		case SOCCER_DATA_YP_LIST:
+		case SOCCER_DATA_ODDS_YP_LIST:
 			List<OddsYp> yps = null;
 			if(value instanceof OddsYpList)
 			{
@@ -269,7 +269,7 @@ public class SoccerDataService implements DataService
 				yps = (List<OddsYp>)value;				
 			}
 			return oddsService.insertOddsYps(yps, overwrite);
-		case SOCCER_DATA_NUM_LIST:
+		case SOCCER_DATA_ODDS_NUM_LIST:
 			List<OddsNum> nums = null;
 			if(value instanceof OddsNumList)
 			{
@@ -280,7 +280,7 @@ public class SoccerDataService implements DataService
 				nums = (List<OddsNum>) value;
 			}
 			return oddsService.insertOddsNums(nums, overwrite);
-		case SOCCER_DATA_SCORE_LIST:
+		case SOCCER_DATA_ODDS_SCORE_LIST:
 			List<OddsScore> scores = null;
 			if(value instanceof OddsScoreList)
 			{

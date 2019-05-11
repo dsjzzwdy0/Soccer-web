@@ -11,7 +11,9 @@
  */
 package com.loris.soccer.data.reciever;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.loris.client.sender.impl.JsonDataReciever;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.Season;
 import com.loris.soccer.service.impl.SoccerDataService;
 
 /**   
@@ -43,6 +49,21 @@ public class SoccerDataReciever extends JsonDataReciever
 	
 	@Autowired
 	private SoccerDataService soccerDataService;
+	
+	/** 数据类型 */
+	static Map<String, Class<?>> typeClasses = new HashMap<>();
+	
+	static {
+		typeClasses.put(SoccerConstants.SOCCER_DATA_LEAGUE_LIST, League.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_LEAGUE_SEASON_LIST, Season.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, Match.class);		
+		typeClasses.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, MatchBd.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST, MatchBd.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST, MatchResult.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_ODDS_OP_LIST, OddsOp.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_ODDS_YP_LIST, OddsYp.class);
+		typeClasses.put(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST, OddsNum.class);
+	}
 
 	/**
 	 *  (non-Javadoc)
@@ -68,27 +89,31 @@ public class SoccerDataReciever extends JsonDataReciever
 	{
 		try
 		{
+			Object value = null;
+			Class<?> clazz = typeClasses.get(key);
+			if(clazz == null)
+			{
+				logger.warn("The key '" + value + "' class type is not registerd, there will be no data processed.");
+				return false;
+			}
+			
 			switch (key)
 			{
-			case SoccerConstants.SOCCER_DATA_MATCH_LIST:
-				List<Match> matchs = getObjectArray(object, key, Match.class);
-				logger.info("Match size is : " + matchs.size());
-				return true;
-			case SoccerConstants.SOCCER_DATA_MATCH_BD_LIST:
-				List<MatchBd> matchBds = getObjectArray(object, key, MatchBd.class);
-				logger.info("Match size is : " + matchBds.size());
-				return true;
-			case SoccerConstants.SOCCER_DATA_OP_LIST:
-				List<OddsOp> oddsOpList = getObjectArray(object, key, OddsOp.class);
-				logger.info("Match size is : " + oddsOpList.size());
-				return true;
-			case SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST:
-				List<MatchResult> resultList = getObjectArray(object, key, MatchResult.class);
-				logger.info("Match size is : " + resultList.size());
-				return soccerDataService.saveRecord(key, resultList);
+			case SoccerConstants.SOCCER_DATA_LEAGUE:
+				value = getObject(object, key, clazz);
+				break;
 			default:
+				value = getObjectArray(object, key, clazz);
 				break;
 			}
+			
+			if(value == null)
+			{
+				logger.warn("The key '" + value + "' is null, there will be no data processed.");
+				return false;
+			}
+			
+			return soccerDataService.saveRecord(key, value);
 		}
 		catch (Exception e) 
 		{

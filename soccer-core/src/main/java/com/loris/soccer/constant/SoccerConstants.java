@@ -29,6 +29,12 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_LEAGUE = "league";
 	final static public String SOCCER_DATA_LEAGUE_LIST = "leagues";
 	final static public String SOCCER_DATA_LEAGUE_NAME_LIST = "leaguenames";
+	final static public String SOCCER_DATA_LEAGUE_ROUND_LIST = "roundlist";
+	final static public String SOCCER_DATA_LEAGUE_SEASON_LIST = "seasonlist";
+	final static public String SOCCER_DATA_LEAGUE_RANK_LIST = "ranklist";
+	final static public String SOCCER_DATA_LEAGUE_ROUND_CUR = "curround";
+	final static public String SOCCER_DATA_TEAM_LIST = "teamlist";
+	final static public String SOCCER_DATA_TEAM_SEASON_RELATION = "teamrfseason";
 	final static public String SOCCER_DATA_MATCH = "match";
 	final static public String SOCCER_DATA_MATCH_LIST = "matchs";
 	final static public String SOCCER_DATA_MATCH_BD_LIST = "matchbds";
@@ -36,18 +42,13 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_MATCH_RESULT = "result";
 	final static public String SOCCER_DATA_MATCH_RESULT_LIST = "resultlist";
 	final static public String SOCCER_DATA_ODDS_NUM = "oddsnum";
-	final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
 	final static public String SOCCER_DATA_LOGO_LIST = "logolist";
-	final static public String SOCCER_DATA_OP_LIST = "oplist";
-	final static public String SOCCER_DATA_YP_LIST = "yplist";
-	final static public String SOCCER_DATA_NUM_LIST = "numlist";
-	final static public String SOCCER_DATA_SCORE_LIST = "scorelist";
-	final static public String SOCCER_DATA_TEAM_LIST = "teamlist";
-	final static public String SOCCER_DATA_TEAM_SEASON_RELATION = "teamrfseason";
-	final static public String SOCCER_DATA_ROUND_LIST = "roundlist";
-	final static public String SOCCER_DATA_SEASON_LIST = "seasonlist";
-	final static public String SOCCER_DATA_RANK_LIST = "ranklist";
-	final static public String SOCCER_DATA_ROUND_CUR = "curround";
+	final static public String SOCCER_DATA_ODDS_OP_LIST = "oplist";
+	final static public String SOCCER_DATA_ODDS_YP_LIST = "yplist";
+	final static public String SOCCER_DATA_ODDS_NUM_LIST = "numlist";
+	final static public String SOCCER_DATA_ODDS_SCORE_LIST = "scorelist";
+	//final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
+
 
 	/** 北京单场 */
 	final static public String LOTTERY_BD = "bd";

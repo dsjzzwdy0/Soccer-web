@@ -93,10 +93,10 @@ public class CupWebPageParser extends AbstractLeagueWebPageParser
 		// 解析比赛信息
 		parseMatches(document, lid, season, rounds, matchs, matchResults, null);
 
-		results.put(SoccerConstants.SOCCER_DATA_SEASON_LIST, seasons);
+		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_SEASON_LIST, seasons);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_LIST, teams);
 		results.put(SoccerConstants.SOCCER_DATA_TEAM_SEASON_RELATION, teamRfSeasons);
-		results.put(SoccerConstants.SOCCER_DATA_ROUND_LIST, rounds);
+		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_ROUND_LIST, rounds);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, matchs);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST, matchResults);
 		

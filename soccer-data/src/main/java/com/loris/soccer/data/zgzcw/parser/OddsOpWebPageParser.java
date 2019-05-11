@@ -72,7 +72,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		{
 			parseOdds(element2, mid, ops);
 		}
-		results.put(SoccerConstants.SOCCER_DATA_OP_LIST, ops);
+		results.put(SoccerConstants.SOCCER_DATA_ODDS_OP_LIST, ops);
 		return results;
 	}
 	

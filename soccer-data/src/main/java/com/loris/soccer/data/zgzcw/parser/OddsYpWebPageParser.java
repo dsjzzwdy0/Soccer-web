@@ -110,7 +110,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		{
 			parseYp(document, corpElement, mid, time, yps);
 		}
-		results.put(SoccerConstants.SOCCER_DATA_YP_LIST, yps);
+		results.put(SoccerConstants.SOCCER_DATA_ODDS_YP_LIST, yps);
 		return results;
 	}
 

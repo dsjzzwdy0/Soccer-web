@@ -390,7 +390,7 @@ public class App
 			return;
 		}
 
-		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_SCORE_LIST);
+		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST);
 		if (list == null)
 		{
 			logger.info("No OddsScore List, error.");
@@ -417,7 +417,7 @@ public class App
 			return;
 		}
 
-		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_SCORE_LIST);
+		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST);
 		if (list == null)
 		{
 			logger.info("No OddsScore List, error.");
@@ -463,7 +463,7 @@ public class App
 			logger.info(i++ + ": " + result);
 		}
 		
-		SeasonList seasons = (SeasonList) records.get(SoccerConstants.SOCCER_DATA_SEASON_LIST);
+		SeasonList seasons = (SeasonList) records.get(SoccerConstants.SOCCER_DATA_LEAGUE_SEASON_LIST);
 		i = 1;
 		for (Season season : seasons)
 		{
@@ -506,7 +506,7 @@ public class App
 			return;
 		}
 
-		OddsNumList list = (OddsNumList) records.get(SoccerConstants.SOCCER_DATA_NUM_LIST);
+		OddsNumList list = (OddsNumList) records.get(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST);
 		if (list == null)
 		{
 			logger.info("No NumList, error.");
@@ -537,7 +537,7 @@ public class App
 			return;
 		}
 
-		OddsYpList list = (OddsYpList) records.get(SoccerConstants.SOCCER_DATA_YP_LIST);
+		OddsYpList list = (OddsYpList) records.get(SoccerConstants.SOCCER_DATA_ODDS_YP_LIST);
 		if (list == null)
 		{
 			logger.info("No yplist, error.");
@@ -567,7 +567,7 @@ public class App
 			return;
 		}
 
-		OddsOpList list = (OddsOpList) records.get(SoccerConstants.SOCCER_DATA_OP_LIST);
+		OddsOpList list = (OddsOpList) records.get(SoccerConstants.SOCCER_DATA_ODDS_OP_LIST);
 		if (list == null)
 		{
 			logger.info("No oplist, error.");
@@ -892,7 +892,7 @@ public class App
 		}
 
 		int i = 1;
-		List<OddsOp> ops = (List<OddsOp>) records.get(SoccerConstants.SOCCER_DATA_OP_LIST);
+		List<OddsOp> ops = (List<OddsOp>) records.get(SoccerConstants.SOCCER_DATA_ODDS_OP_LIST);
 		for (OddsOp op : ops)
 		{
 			logger.info(i++ + ": " + op.getCorpid() + "(" + op.getWinodds() + ", " + op.getDrawodds() + ", "
@@ -928,7 +928,7 @@ public class App
 		}
 
 		int i = 1;
-		List<OddsNum> odds = (List<OddsNum>) records.get(SoccerConstants.SOCCER_DATA_NUM_LIST);
+		List<OddsNum> odds = (List<OddsNum>) records.get(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST);
 		for (OddsNum odd : odds)
 		{
 			logger.info(i++ + ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " + odd.getGoalnum() + ", "
@@ -964,7 +964,7 @@ public class App
 		}
 
 		int i = 1;
-		List<OddsYp> odds = (List<OddsYp>) records.get(SoccerConstants.SOCCER_DATA_YP_LIST);
+		List<OddsYp> odds = (List<OddsYp>) records.get(SoccerConstants.SOCCER_DATA_ODDS_YP_LIST);
 		for (OddsYp odd : odds)
 		{
 			logger.info(i++ + ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " + odd.getHandicapName() + ", "

@@ -59,7 +59,7 @@ public abstract class AbstractLotteryScoreWebPageParser extends AbstractLotteryW
 	{
 		OddsScoreList oddsScores = new OddsScoreList();
 		parseOddsScores(document, oddsScores);
-		results.put(SoccerConstants.SOCCER_DATA_SCORE_LIST, oddsScores);
+		results.put(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST, oddsScores);
 		return results;
 	}
 	

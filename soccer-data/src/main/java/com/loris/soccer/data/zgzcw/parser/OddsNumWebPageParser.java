@@ -76,7 +76,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		{
 			parseNum(document, element2, mid, time, nums);
 		}
-		results.put(SoccerConstants.SOCCER_DATA_NUM_LIST, nums);
+		results.put(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST, nums);
 		return results;
 	}
 	
