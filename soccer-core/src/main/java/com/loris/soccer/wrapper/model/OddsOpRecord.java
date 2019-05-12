@@ -35,6 +35,16 @@ public class OddsOpRecord extends OddsOp
 	private float firstwinodds;
 	private float firstdrawodds;
 	private float firstloseodds;
+	
+	public OddsOpRecord()
+	{
+	}
+	
+	public OddsOpRecord(OddsOp oddsOp)
+	{
+		this.addOddsOp(oddsOp);
+	}
+	
 	public long getFirsttime()
 	{
 		return firsttime;

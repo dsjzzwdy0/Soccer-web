@@ -11,10 +11,15 @@
  */
 package com.loris.soccer.wrapper.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.loris.common.util.ArraysUtil;
+import com.loris.soccer.filter.OddsValueFilter;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.base.OddsValue;
 import com.loris.soccer.wrapper.Wrapper;
+import com.loris.soccer.wrapper.model.OddsOpRecord;
 
 /**   
  * @ClassName:  OddsOpListWrapper.java   
@@ -30,8 +35,24 @@ public class OddsOpListWrapper implements Wrapper<List<OddsOp>>
 	@Override
 	public Object wrap(List<OddsOp> source)
 	{
-		
-		return null;
+		List<OddsOpRecord> list = new ArrayList<>();
+		OddsValueFilter filter = new OddsValueFilter();
+		for (OddsOp oddsOp : source)
+		{
+			filter.setValue(oddsOp);
+			OddsValue record = ArraysUtil.getSameObject(list, filter);
+			if(record == null)
+			{
+				OddsOpRecord oddsOpRecord = new OddsOpRecord(oddsOp);
+				list.add(oddsOpRecord);
+			}
+			else
+			{
+				OddsOpRecord oddsOpRecord = (OddsOpRecord) record;
+				oddsOpRecord.addOddsOp(oddsOp);
+			}
+		}
+		return list;
 	}
 
 }
