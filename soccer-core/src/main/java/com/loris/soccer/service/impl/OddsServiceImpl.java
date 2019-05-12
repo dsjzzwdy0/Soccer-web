@@ -85,6 +85,7 @@ public class OddsServiceImpl implements OddsService
 	{
 		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("mid", mid).eq("corpid", corpid);
+		queryWrapper.orderByAsc("opentime");
 		return oddsOpMapper.selectList(queryWrapper);
 	}
 

@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.filter;
+package com.loris.soccer.wrapper.filter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,6 +35,10 @@ public class OddsValueFilter extends ObjectFilter<OddsValue>
 	@Override
 	public boolean accept(OddsValue oddsValue)
 	{
+		if(value == null || oddsValue == null)
+		{
+			return false;
+		}
 		if(StringUtils.equals(value.getMid(), oddsValue.getMid()) &&
 				StringUtils.equals(value.getCorpid(), oddsValue.getCorpid()))
 		{

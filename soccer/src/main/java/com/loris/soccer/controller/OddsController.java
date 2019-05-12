@@ -22,6 +22,7 @@ import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsService;
+import com.loris.soccer.wrapper.list.OddsOpListWrapper;
 
 /**   
  * @ClassName:  OddsController.java   
@@ -39,6 +40,9 @@ public class OddsController extends BaseController
 	@Autowired
 	OddsService oddsService;
 	
+	/** 欧赔数据的包装管理器 */
+	private OddsOpListWrapper oddsOpListWrapper = new OddsOpListWrapper();
+	
 	/**
 	 * 获得比赛的欧赔数据
 	 * @param mid 比赛编号
@@ -49,7 +53,7 @@ public class OddsController extends BaseController
 	public Rest getMatchOddsOp(String mid)
 	{
 		List<OddsOp> ops = oddsService.selectOddsOp(mid);
-		return Rest.okData(ops);
+		return Rest.okData(oddsOpListWrapper.wrap(ops));
 	}
 	
 	/**
