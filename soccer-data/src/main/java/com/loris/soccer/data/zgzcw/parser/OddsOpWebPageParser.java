@@ -12,6 +12,8 @@
 package com.loris.soccer.data.zgzcw.parser;
 
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -94,8 +96,9 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		String last = element.attr("lasttime");
 		
 		Date firstTime = DateUtil.tryToParseDate(first);		
-		firstOdds.setOpentime(firstTime.getTime());
-		odds.setOpentime(Long.parseLong(last));
+		firstOdds.setOpentime(firstTime);
+		if(StringUtils.isNotBlank(last))
+			odds.setOpentime(new Date(Long.parseLong(last)));
 		
 		Elements elements = element.select("td");
 		int size = elements.size();

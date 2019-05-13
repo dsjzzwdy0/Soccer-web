@@ -159,7 +159,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			
 			firstOdds.setCorpid(compid);
 			firstOdds.setCorpname(name);
-			firstOdds.setOpentime(firstTime != null ? firstTime.getTime() : null);		
+			firstOdds.setOpentime(firstTime);		
 			firstOdds.setWinodds(firstwinyp);
 			firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
 			firstOdds.setLoseodds(firstloseyp);
@@ -220,7 +220,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			
 			OddsYp odds = new OddsYp(mid);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			odds.setOpentime(opemtime);
+			odds.setOpentime(new Date(opemtime));
 			odds.setCorpid(compid);
 			odds.setCorpname(name);
 			odds.setWinodds(winodds);
@@ -265,7 +265,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 *            时间值
 	 * @return 整型时间
 	 */
-	protected long getOpenTime(Date matchTime, String time)
+	protected Date getOpenTime(Date matchTime, String time)
 	{
 		Integer[] ts = NumberUtil.parseAllIntegerFromString(time);
 		long t = 0;
@@ -283,7 +283,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 		t *= 1000;
 		Date d = DateUtil.add(matchTime, -t);
-		return d.getTime();
+		return d;
 	}
 	
 	protected String getElementValue(Element element)

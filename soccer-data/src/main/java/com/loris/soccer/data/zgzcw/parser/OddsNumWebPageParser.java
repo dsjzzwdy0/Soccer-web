@@ -125,7 +125,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			firstOdds.setCorpid(compid);
 			firstOdds.setCorpname(name);
-			if(firstTime != null) firstOdds.setOpentime(firstTime.getTime());
+			firstOdds.setOpentime(firstTime);
 			firstOdds.setWinodds(firstwinyp);
 			firstOdds.setGoalnum(getGoalNum(firstGoal));
 			firstOdds.setLoseodds(firstloseyp);
@@ -186,7 +186,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			
 			OddsNum odds = new OddsNum(mid);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			odds.setOpentime(opemtime);
+			odds.setOpentime(new Date(opemtime));
 			odds.setCorpid(compid);
 			odds.setCorpname(name);
 			odds.setWinodds(winodds);

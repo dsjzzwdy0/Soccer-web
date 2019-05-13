@@ -46,6 +46,9 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	/** 开始的赛季数据 */
 	protected String startSeason = "2018";
 	
+	/** 日期 */
+	protected String startDate = "2018-07-01";
+	
 	/**
 	 * Create a new instance of ZgzcwMatchResultDataPlugin
 	 */

@@ -932,7 +932,7 @@ public class App
 		for (OddsNum odd : odds)
 		{
 			logger.info(i++ + ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " + odd.getGoalnum() + ", "
-					+ odd.getLoseodds() + ")" + new Date(odd.getOpentime()));
+					+ odd.getLoseodds() + ")" + odd.getOpentime());
 		}
 	}
 	
@@ -968,7 +968,7 @@ public class App
 		for (OddsYp odd : odds)
 		{
 			logger.info(i++ + ": " + odd.getCorpid() + "(" + odd.getWinodds() + ", " + odd.getHandicapName() + ", "
-					+ odd.getLoseodds() + ")" + new Date(odd.getOpentime()));
+					+ odd.getLoseodds() + ")" + odd.getOpentime());
 		}
 	}
 

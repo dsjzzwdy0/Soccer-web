@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.wrapper.model;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.soccer.model.OddsOp;
@@ -31,7 +33,7 @@ public class OddsOpRecord extends OddsOp
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private long firsttime;
+	private Date firsttime;
 	private float firstwinodds;
 	private float firstdrawodds;
 	private float firstloseodds;
@@ -45,11 +47,11 @@ public class OddsOpRecord extends OddsOp
 		this.addOddsOp(oddsOp);
 	}
 	
-	public long getFirsttime()
+	public Date getFirsttime()
 	{
 		return firsttime;
 	}
-	public void setFirsttime(long firsttime)
+	public void setFirsttime(Date firsttime)
 	{
 		this.firsttime = firsttime;
 	}
@@ -86,11 +88,11 @@ public class OddsOpRecord extends OddsOp
 			this.setLastOddsOp(oddsOp);
 			return;
 		}
-		if(this.firsttime > oddsOp.getOpentime())
+		if(firsttime == null || this.firsttime.getTime() > oddsOp.getOpentime().getTime())
 		{
 			setFirstOddsOp(oddsOp);
 		}
-		if(this.opentime < oddsOp.getOpentime())
+		if(opentime == null || this.opentime.getTime() < oddsOp.getOpentime().getTime())
 		{
 			setLastOddsOp(oddsOp);
 		}

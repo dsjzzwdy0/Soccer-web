@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model.base;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.common.bean.AutoIdEntity;
@@ -32,7 +34,7 @@ public class OddsValue extends AutoIdEntity
 	protected String mid;				//比赛编号
 	protected String corpid;			//博彩公司
 	protected String corpname;			//博彩公司名称
-	protected long opentime;			//开盘时间
+	protected Date opentime;			//开盘时间
 	protected float winodds;
 	protected float loseodds;
 	protected float winkelly;
@@ -66,11 +68,11 @@ public class OddsValue extends AutoIdEntity
 	{
 		this.corpname = corpname;
 	}
-	public long getOpentime()
+	public Date getOpentime()
 	{
 		return opentime;
 	}
-	public void setOpentime(long opentime)
+	public void setOpentime(Date opentime)
 	{
 		this.opentime = opentime;
 	}

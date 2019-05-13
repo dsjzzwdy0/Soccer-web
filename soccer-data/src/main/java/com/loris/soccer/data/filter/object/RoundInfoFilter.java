@@ -28,7 +28,6 @@ import com.loris.soccer.model.view.RoundInfo;
  */
 public class RoundInfoFilter extends ObjectFilter<RoundInfo>
 {
-	
 	/**
 	 * 检测数据页面
 	 */
