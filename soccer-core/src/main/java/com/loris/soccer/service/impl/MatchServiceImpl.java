@@ -30,12 +30,14 @@ import com.loris.soccer.dao.MatchJcMapper;
 import com.loris.soccer.dao.MatchMapper;
 import com.loris.soccer.dao.MatchResultMapper;
 import com.loris.soccer.dao.view.MatchBdInfoMapper;
+import com.loris.soccer.dao.view.MatchInfoMapper;
 import com.loris.soccer.dao.view.MatchJcInfoMapper;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.view.MatchBdInfo;
+import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
 import com.loris.soccer.service.MatchService;
 
@@ -69,6 +71,9 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	@Autowired
 	private MatchJcInfoMapper matchJcInfoMapper;
 	
+	@Autowired
+	private MatchInfoMapper matchInfoMapper;
+	
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -93,6 +98,31 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		ObjectFilter<Match> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(matchs, Match.class, baseMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+	
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.util.Date, java.util.Date, java.lang.Boolean)
+	 */
+	@Override
+	public List<MatchInfo> getMatchInfos(Date start, Date end, Boolean hasResult)
+	{
+		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("matchtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("matchtime", end);
+		}
+		if(ToolUtil.isNotEmpty(hasResult))
+		{
+			if(!hasResult) queryWrapper.isNull("result");
+			else queryWrapper.isNotNull("result");
+		}
+		return matchInfoMapper.selectList(queryWrapper);
 	}
 	
 	/**

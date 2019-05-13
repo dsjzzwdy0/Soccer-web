@@ -20,6 +20,7 @@ import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.view.MatchBdInfo;
+import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
 
 /**   
@@ -56,6 +57,15 @@ public interface MatchService extends IService<Match>
 	 * @return 比赛列表
 	 */
 	List<Match> getMatchs(Date start, Date end);
+	
+	/**
+	 * 查询比赛数据
+	 * @param start
+	 * @param end
+	 * @param hasResult
+	 * @return
+	 */
+	List<MatchInfo> getMatchInfos(Date start, Date end, Boolean hasResult);
 	
 	/**
 	 * 添加北单比赛的数据

@@ -41,7 +41,7 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 	private static Logger logger = Logger.getLogger(ZgzcwMatchResultDataPlugin.class);
 	
 	/** 每次最大的数据下载量 */
-	protected int maxSize = 300;
+	protected int maxSize = 500;
 	
 	/** 开始的赛季数据 */
 	protected String startSeason = "2018";
