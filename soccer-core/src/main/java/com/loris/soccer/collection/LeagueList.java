@@ -54,7 +54,8 @@ public class LeagueList extends DataList<League>
 			return null;
 		for (League league : this)
 		{
-			if(league.getLid().equals(name) || league.getName().equals(name))
+			if(StringUtils.equalsIgnoreCase(league.getLid(), name) ||
+					StringUtils.equalsIgnoreCase(league.getName(), name))
 			{
 				return league;
 			}

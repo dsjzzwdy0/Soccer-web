@@ -17,6 +17,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.model.League;
 import com.loris.soccer.model.view.RoundInfo;
 import com.loris.soccer.model.view.SeasonInfo;
 
@@ -52,10 +53,13 @@ public class ZgzcwRoundPageFilter extends WebPageFilter
 		if(source instanceof RoundInfo)
 		{
 			RoundInfo roundInfo = (RoundInfo) source;
-			if(needToLoad(page, roundInfo))
-				return true;
+			return needToLoad(page, roundInfo);
 		}
 		else if(source instanceof SeasonInfo)
+		{
+			return true;
+		}
+		else if(source instanceof League)
 		{
 			return true;
 		}

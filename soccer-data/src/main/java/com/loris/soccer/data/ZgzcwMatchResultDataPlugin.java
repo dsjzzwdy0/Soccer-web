@@ -13,17 +13,24 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.common.util.DateUtil;
+import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.filter.object.RoundInfoFilter;
 import com.loris.soccer.data.filter.object.SeasonInfoFilter;
 import com.loris.soccer.data.filter.page.ZgzcwRoundPageFilter;
+import com.loris.soccer.model.League;
 import com.loris.soccer.model.Season;
+import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.RoundInfo;
 import com.loris.soccer.model.view.SeasonInfo;
 
@@ -83,17 +90,18 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 		SeasonInfoFilter seasonFilter = new SeasonInfoFilter(rounds);		
 		for (SeasonInfo season : seasons)
 		{
-			if(seasonFilter.accept(season))
+			if(!seasonFilter.accept(season))
 			{
-				//logger.info("Create League season senter Task: " + season);
-				if(createLeagueSeasonCenterTask(season, false))
+				continue;
+			}
+			// logger.info("Create League season senter Task: " + season);
+			if (createLeagueSeasonCenterTask(season, false))
+			{
+				taskSize++;
+				if (taskSize >= maxSize)
 				{
-					taskSize ++;
-					if(taskSize >= maxSize)
-					{
-						logger.info("There are " + taskSize + " page to be downloaded.");
-						return;
-					}
+					logger.info("There are " + taskSize + " page to be downloaded.");
+					return;
 				}
 			}
 		}
@@ -114,6 +122,62 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 				{
 					logger.info("There are " + taskSize + " page to be downloaded.");
 					return;
+				}
+			}
+		}
+		
+		// 比赛数据
+		List<MatchInfo> matchInfos = matchService.getMatchInfos(DateUtil.tryToParseDate(startDate), 
+				new Date(), new Boolean(false));
+		List<League> leagues = leagueService.list();
+		LeagueList leagueList = new LeagueList(leagues);
+		
+		for (MatchInfo matchInfo : matchInfos)
+		{
+			String lid = matchInfo.getLid();
+			String season = matchInfo.getSeason();
+			String round = matchInfo.getRound();
+			
+			if(StringUtils.isEmpty(lid) || StringUtils.isEmpty(round) || StringUtils.isEmpty(season))
+			{
+				continue;
+			}
+			
+			League league = leagueList.getLeague(lid);
+			if(league == null)
+			{
+				continue;
+			}
+			
+			//杯赛数据
+			if(StringUtils.equals(league.getType(), SoccerConstants.LEAGUE_TYPE_CUP))
+			{
+				if(createLeagueCenterTask(league, false))
+				{
+					taskSize ++;
+					if(taskSize >= maxSize)
+					{
+						logger.info("There are " + taskSize + " page to be downloaded.");
+						return;
+					}
+				}
+			}			
+			else 
+			{
+				//联赛轮次数据
+				RoundInfo roundInfo = new RoundInfo();
+				roundInfo.setLid(lid);
+				roundInfo.setLeaguetype(league.getType());
+				roundInfo.setSeason(season);
+				roundInfo.setRound(round);
+				if(createLeagueRoundTask(roundInfo, false))
+				{
+					taskSize ++;
+					if(taskSize >= maxSize)
+					{
+						logger.info("There are " + taskSize + " page to be downloaded.");
+						return;
+					}
 				}
 			}
 		}
