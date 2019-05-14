@@ -334,11 +334,15 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * 创建联赛数据下载页面
 	 * @param league 联赛数据下载页面
 	 */
-	protected boolean createLeagueCenterTask(League league, boolean quiet)
+	protected boolean createLeagueCenterTask(League league, String season, boolean quiet)
 	{
 		if(webPageConf.isPageBeCreated(league.getType()))
 		{
 			Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_LID, league.getLid());
+			if(StringUtils.isNotEmpty(season))
+			{
+				params.put(SoccerConstants.NAME_FIELD_SEASON, season);
+			}
 			return createWebPageTask(ZgzcwPageCreator.createZgzcwWebPage(league.getType(), params), league, quiet);
 		}
 		return false;
@@ -363,7 +367,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		{
 			if(filter == null || filter.accept(league))
 			{
-				createLeagueCenterTask(league, false);
+				createLeagueCenterTask(league, null, false);
 				size ++;
 			}
 		}

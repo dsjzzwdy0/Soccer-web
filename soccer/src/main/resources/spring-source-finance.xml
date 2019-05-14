@@ -12,20 +12,13 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
                         http://www.springframework.org/schema/cache
        					http://www.springframework.org/schema/cache/spring-cache.xsd">
-	
-	<!-- 引入Spring -->
-    <import resource="classpath:/conf/spring-plugins.xml"/>
-    <import resource="classpath:spring-source-finance.xml" />
-    
-	<!-- 引入配置文件 -->
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:jdbc.properties" />
-	</bean>
+		       						
+	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
+	<context:component-scan base-package="com.loris.old.soccer" />
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<bean id="financeDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}" />
+		<property name="url" value="${finance_url}" />
 		<property name="username" value="${username}" />
 		<property name="password" value="${password}" />
 		<property name="initialSize" value="${initialSize}"></property>		<!-- 初始化连接大小 -->
@@ -43,20 +36,20 @@
 		<property name="removeAbandonedTimeout" value="6000000"/>
 	</bean>
 	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="dataSource"></property>
+	<bean id="financeJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="financeDataSource"></property>
 	</bean>
 
-	<bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+	<bean id="financeSqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+		<property name="dataSource" ref="financeDataSource" />
 		<!-- 自动扫描Mapping.xml文件 -->
 		<property name="mapperLocations">
 			<list>
-			    <value>classpath*:com/loris/auth/dao/mapper/*Mapper.xml</value>
+			    <value>classpath*:com/loris/old/soccer/dao/mapper/*Mapper.xml</value>
 			</list>
 		</property>
 		<property name="configLocation" value="classpath:/conf/mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.loris.client, com.loris.soccer, com.loris.auth" />
+		<property name="typeAliasesPackage" value="com.loris.old.soccer" />
 		<property name="plugins">
 			<array>
 				<!-- 分页插件配置 -->
@@ -74,39 +67,14 @@
 	</bean>
     
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
-	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="
-		    com.loris.common.dao,
-		    com.loris.client.dao,
-		    com.loris.auth.dao,
-		    com.loris.soccer.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	<bean id="financeMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.loris.old.soccer.dao" />
+		<property name="sqlSessionFactoryBeanName" value="financeSqlSessionFactory"></property>
 	</bean>
 
-	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
-	<!-- 验证码数据配置 -->
-    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
-        <property name="config">
-            <bean class="com.google.code.kaptcha.util.Config">
-                <constructor-arg>
-                    <props>
-                        <prop key="kaptcha.border">yes</prop>
-                        <prop key="kaptcha.border.color">105,179,90</prop>
-                        <prop key="kaptcha.textproducer.font.color">blue</prop>
-                        <prop key="kaptcha.image.width">125</prop>
-                        <prop key="kaptcha.image.height">45</prop>
-                        <prop key="kaptcha.textproducer.font.size">45</prop>
-                        <prop key="kaptcha.session.key">code</prop>
-                        <prop key="kaptcha.textproducer.char.length">4</prop>
-                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
-                    </props>
-                </constructor-arg>
-            </bean>
-        </property>
-    </bean>
+	</bean> -->
 </beans>

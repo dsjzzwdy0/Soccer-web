@@ -51,6 +51,8 @@ import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.web.wrapper.Rest;
+import com.loris.old.soccer.bean.OldMatch;
+import com.loris.old.soccer.service.OldMatchService;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
@@ -121,8 +123,9 @@ public class App
 			// testUpdate();
 			// testLeagueCenterPage();
 			// testMatchResult();
+			// testUpload();
 			
-			testUpload();
+			testSourceFinance();
 			
 			// testMariaDB();
 			// testDateString();
@@ -165,6 +168,14 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testSourceFinance() throws Exception
+	{
+		String mid = "1788379";
+		OldMatchService matchService = (OldMatchService) context.getBean("oldMatchService");
+		OldMatch match = matchService.getMatch(mid);
+		logger.info(match);
 	}
 	
 	public static void testUpload() throws Exception

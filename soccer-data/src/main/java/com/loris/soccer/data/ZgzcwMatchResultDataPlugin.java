@@ -136,9 +136,8 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 		{
 			String lid = matchInfo.getLid();
 			String season = matchInfo.getSeason();
-			String round = matchInfo.getRound();
 			
-			if(StringUtils.isEmpty(lid) || StringUtils.isEmpty(round) || StringUtils.isEmpty(season))
+			if(StringUtils.isEmpty(lid) || StringUtils.isEmpty(season))
 			{
 				continue;
 			}
@@ -152,7 +151,7 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 			//杯赛数据
 			if(StringUtils.equals(league.getType(), SoccerConstants.LEAGUE_TYPE_CUP))
 			{
-				if(createLeagueCenterTask(league, false))
+				if(createLeagueCenterTask(league, season, false))
 				{
 					taskSize ++;
 					if(taskSize >= maxSize)
@@ -164,6 +163,11 @@ public class ZgzcwMatchResultDataPlugin extends ZgzcwBasePlugin
 			}			
 			else 
 			{
+				String round = matchInfo.getRound();
+				if(StringUtils.isEmpty(round))
+				{
+					continue;
+				}
 				//联赛轮次数据
 				RoundInfo roundInfo = new RoundInfo();
 				roundInfo.setLid(lid);

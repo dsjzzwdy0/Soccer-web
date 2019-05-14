@@ -18,6 +18,9 @@
         <dependent-module archiveName="soccer-data-1.0.0-RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-data/soccer-data">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="soccer-old-1.0.0-RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soccer-old/soccer-old">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="soccer"/>
         <property name="java-output-path" value="/soccer/target/classes"/>
     </wb-module>
