@@ -11,6 +11,8 @@
  */
 package com.loris.old.soccer.transfer.impl;
 
+import com.loris.common.util.DateUtil;
+import com.loris.common.util.NumberUtil;
 import com.loris.old.soccer.bean.JcMatch;
 import com.loris.old.soccer.transfer.Transfer;
 import com.loris.soccer.model.MatchJc;
@@ -26,11 +28,30 @@ import com.loris.soccer.model.MatchJc;
  */
 public class JcMatchToMatchJc implements Transfer<MatchJc, JcMatch>
 {
-
 	@Override
 	public MatchJc mapping(JcMatch source)
 	{
 		MatchJc jc = new MatchJc();
+		jc.setMid(source.getMid());
+		jc.setOrdinary(source.getOrdinary());
+		jc.setMatchtime(DateUtil.tryToParseDate(source.getMatchtime()));
+		jc.setClosetime(DateUtil.tryToParseDate(source.getClosetime()));
+		jc.setIssue(source.getIssue());
+		jc.setOpened(source.isIsopen());
+		if(jc.isOpened())
+		{
+			jc.setWinodds(NumberUtil.parseFloat(source.getWinodds()));
+			jc.setDrawodds(NumberUtil.parseFloat(source.getDrawodds()));
+			jc.setLoseodds(NumberUtil.parseFloat(source.getLoseodds()));
+		}
+		jc.setRqopened(source.isIsrqopen());
+		if(jc.isRqopened())
+		{
+			jc.setRqnum(NumberUtil.parseInt(source.getRangqiu()));
+			jc.setRqwinodds(NumberUtil.parseFloat(source.getRqwinodds()));
+			jc.setRqdrawodds(NumberUtil.parseFloat(source.getRqdrawodds()));
+			jc.setRqloseodds(NumberUtil.parseFloat(source.getRqloseodds()));
+		}
 		return jc;
 	}
 
