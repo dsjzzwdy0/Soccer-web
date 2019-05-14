@@ -1,7 +1,7 @@
 /**  
  * All rights Reserved, Designed By www.loris.com
- * @Title:  OpMapper.java   
- * @Package com.loris.old.soccer.transfer.impl   
+ * @Title:  Wrapper.java   
+ * @Package com.loris.old.soccer.transfer   
  * @Description: 本项目用于天津东方足彩数据的存储、共享、处理等   
  * @author: 东方足彩    
  * @date:   2019年1月28日 下午8:59:32   
@@ -9,33 +9,23 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.old.soccer.transfer.impl;
-
-import java.util.List;
-
-import com.loris.old.soccer.bean.Op;
-import com.loris.old.soccer.transfer.Mapper;
-import com.loris.soccer.model.OddsOp;
+package com.loris.old.soccer.transfer;
 
 /**   
- * @ClassName:  OpMapper    
- * @Description: 欧赔数据转换   
+ * @ClassName:  Wrapper    
+ * @Description: 数据包装器  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class OpMapper implements Mapper<List<OddsOp>, Op>
+public interface Transfer<T, K>
 {
 	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.old.soccer.transfer.Mapper#mapping(java.lang.Object)
+	 * 数据映射，从一种数据类型转换到另一种类型
+	 * @param source
+	 * @return
 	 */
-	@Override
-	public List<OddsOp> mapping(Op source)
-	{
-		return null;
-	}
-
+	T mapping(K source);
 }
