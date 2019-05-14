@@ -11,15 +11,19 @@
  */
 package com.loris.old.soccer.transfer.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.loris.common.util.DateUtil;
 import com.loris.old.soccer.bean.Yp;
 import com.loris.old.soccer.transfer.Mapper;
+import com.loris.soccer.dict.HandicapDict;
 import com.loris.soccer.model.OddsYp;
 
 /**   
  * @ClassName:  YpMapper    
- * @Description: 原始数据亚盘转换为新的亚盘数据 
+ * @Description: 原始亚盘数据转换为新的亚盘数据 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -35,6 +39,36 @@ public class YpMapper implements Mapper<List<OddsYp>, Yp>
 	@Override
 	public List<OddsYp> mapping(Yp source)
 	{
-		return null;
+		OddsYp first = new OddsYp();
+		OddsYp last = new OddsYp();
+		
+		first.setCorpid(source.getGid());
+		first.setCorpname(source.getGname());
+		first.setOpentime(DateUtil.tryToParseDate(source.getFirsttime()));
+		first.setWinodds(source.getFirstwinodds());
+		first.setHandicap(HandicapDict.getHandicapValue(source.getFirsthandicap()));
+		first.setLoseodds(source.getFirstloseodds());
+		first.setWinkelly(source.getWinkelly());
+		first.setLosekelly(source.getLosekelly());
+		first.setWinprob(source.getWinprob());
+		first.setLoseprob(source.getLoseprob());
+		first.setLossratio(source.getLossratio());
+		
+		last.setCorpid(source.getGid());
+		last.setCorpname(source.getGname());
+		last.setOpentime(new Date(source.getLastTimeValue()));
+		last.setWinodds(source.getWinodds());
+		last.setHandicap(HandicapDict.getHandicapValue(source.getHandicap()));
+		last.setLoseodds(source.getLoseodds());
+		last.setWinkelly(source.getWinkelly());
+		last.setLosekelly(source.getLosekelly());
+		last.setWinprob(source.getWinprob());
+		last.setLoseprob(source.getLoseprob());
+		last.setLossratio(source.getLossratio());
+		
+		List<OddsYp> yps = new ArrayList<>();
+		yps.add(first);
+		yps.add(last);
+		return yps;
 	}
 }
