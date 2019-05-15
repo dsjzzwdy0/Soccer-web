@@ -85,4 +85,10 @@ public class Match extends MatchItem
 	{
 		this.clientid = clientid;
 	}
+	@Override
+	public String toString()
+	{
+		return "Match [lid=" + lid + ", round=" + round + ", season=" + season + ", homeid=" + homeid + ", clientid="
+				+ clientid + ", mid=" + mid + ", matchtime=" + matchtime + ", id=" + id + "]";
+	}
 }

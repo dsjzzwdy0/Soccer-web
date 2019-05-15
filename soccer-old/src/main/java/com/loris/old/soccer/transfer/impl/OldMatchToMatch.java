@@ -34,7 +34,7 @@ public class OldMatchToMatch implements Transfer<Match, OldMatch>
 		match.setLid(source.getLid());
 		match.setHomeid(source.getHomeid());
 		match.setClientid(source.getClientid());
-		match.setSeason(match.getSeason());
+		match.setSeason(source.getSeason());
 		match.setRound(source.getRound());
 		return match;
 	}

@@ -136,6 +136,13 @@ public class MatchResult extends AutoIdEntity
 		return StringUtils.equals(mid, other.mid);
 	}
 	
+	@Override
+	public String toString()
+	{
+		return "MatchResult [mid=" + mid + ", result=" + result + ", homegoal=" + homegoal + ", clientgoal="
+				+ clientgoal + "]";
+	}
+
 	/**
 	 * 检测是否是一个比赛结果数据
 	 * @param score 比赛结果字符串

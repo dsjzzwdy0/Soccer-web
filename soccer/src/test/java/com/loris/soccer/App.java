@@ -53,6 +53,8 @@ import com.loris.common.util.KeyMap;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.old.soccer.bean.OldMatch;
 import com.loris.old.soccer.service.OldMatchService;
+import com.loris.old.soccer.transfer.impl.MatchToMatchResult;
+import com.loris.old.soccer.transfer.impl.OldMatchToMatch;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.collection.MatchList;
@@ -176,6 +178,14 @@ public class App
 		OldMatchService matchService = (OldMatchService) context.getBean("oldMatchService");
 		OldMatch match = matchService.getMatch(mid);
 		logger.info(match);
+		
+		OldMatchToMatch matchTransfer = new OldMatchToMatch();
+		MatchToMatchResult resultTransfer = new MatchToMatchResult();
+		Match match2 = matchTransfer.mapping(match);
+		MatchResult result = resultTransfer.mapping(match);
+		
+		logger.info("New Match: " + match2);
+		logger.info("Match Result: " + result);
 	}
 	
 	public static void testUpload() throws Exception
