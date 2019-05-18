@@ -212,11 +212,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.loris</groupId>
-			<artifactId>soccer-client</artifactId>
-			<version>${soccer.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.loris</groupId>
 			<artifactId>soccer-auth</artifactId>
 			<version>${soccer.version}</version>
 		</dependency>
