@@ -30,6 +30,7 @@ public class DfzcMatchTrade implements MatchTrade
 {
 
 	/**
+	 * 按照量化类型，对比赛数据进行排序，并返回排序之后的比赛列表
 	 *  (non-Javadoc)
 	 * @see com.loris.soccer.quant.MatchTrade#sort(java.util.List, com.loris.soccer.quant.type.QuantType)
 	 */
@@ -38,5 +39,4 @@ public class DfzcMatchTrade implements MatchTrade
 	{
 		return null;
 	}
-
 }
