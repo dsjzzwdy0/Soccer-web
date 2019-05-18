@@ -34,9 +34,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.loris.common.constant.Enviroment;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.JobInfo;
-import com.loris.common.quartz.BaseJob;
 import com.loris.common.service.JobInfoService;
 import com.loris.common.web.wrapper.Rest;
+import com.loris.soccer.quartz.BaseJob;
 import com.loris.soccer.quartz.DataPluginJob;
 
 /**   

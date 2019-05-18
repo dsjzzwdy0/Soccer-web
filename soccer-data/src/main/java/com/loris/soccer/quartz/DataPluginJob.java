@@ -22,7 +22,6 @@ import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.factory.SchedulerFactory;
 import com.loris.client.service.SchedulerInfoService;
 import com.loris.common.context.ApplicationContextHelper;
-import com.loris.common.quartz.BaseJob;
 
 /**
  * @ClassName: DataPluginJob
