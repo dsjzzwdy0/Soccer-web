@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
@@ -275,5 +277,55 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 			queryWrapper.lt("matchtime", end);
 		}
 		return matchJcMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.lang.String, java.lang.String, java.lang.Boolean)
+	 */
+	@Override
+	public List<MatchInfo> getMatchInfos(List<String> lids, List<String> tids, Boolean hasResult)
+	{
+		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
+		if(ToolUtil.isNotEmpty(hasResult))
+		{
+			if(!hasResult)
+			{
+				queryWrapper.isNull("result");
+			}
+			else
+			{
+				queryWrapper.isNotNull("result");
+				queryWrapper.and(wrapper->wrapper.lt("matchtime", new Date()));
+			}
+		}
+		if(lids != null && lids.size() > 0)
+		{
+			queryWrapper.in("lid", lids);
+		}
+		if(tids != null && tids.size() > 0)
+		{
+			queryWrapper.and(wrapper->wrapper.in("homeid", tids).or().in("clientid", tids));
+		}
+		
+		return matchInfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getTeamGrades(java.util.List, int, boolean)
+	 */
+	@Override
+	public List<TeamGrade> getTeamGrades(List<? extends Match> matchs, int maxMatchNum, boolean sameLeague)
+	{
+		List<String> lids = new ArrayList<>();
+		List<String> tids = new ArrayList<>();
+		for (Match match : matchs)
+		{
+			lids.add(match.getLid());
+			tids.add(match.getHomeid());
+			tids.add(match.getClientid());
+		}
+		return null;
 	}
 }

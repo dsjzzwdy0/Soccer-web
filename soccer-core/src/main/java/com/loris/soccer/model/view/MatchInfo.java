@@ -13,6 +13,7 @@ package com.loris.soccer.model.view;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.model.Match;
+import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.MatchResult.ResultType;
 
 /**   
@@ -60,5 +61,54 @@ public class MatchInfo extends Match
 	public void setClientname(String clientname)
 	{
 		this.clientname = clientname;
+	}
+	/**
+	 * @return the result
+	 */
+	public ResultType getResult()
+	{
+		return result;
+	}
+	/**
+	 * @param result the result to set
+	 */
+	public void setResult(ResultType result)
+	{
+		this.result = result;
+	}
+	/**
+	 * @return the homegoal
+	 */
+	public Integer getHomegoal()
+	{
+		return homegoal;
+	}
+	/**
+	 * @param homegoal the homegoal to set
+	 */
+	public void setHomegoal(Integer homegoal)
+	{
+		this.homegoal = homegoal;
+	}
+	/**
+	 * @return the clientgoal
+	 */
+	public Integer getClientgoal()
+	{
+		return clientgoal;
+	}
+	/**
+	 * @param clientgoal the clientgoal to set
+	 */
+	public void setClientgoal(Integer clientgoal)
+	{
+		this.clientgoal = clientgoal;
+	}
+	public MatchResult getMatchResult()
+	{
+		MatchResult r = new MatchResult();
+		r.setMid(mid);
+		r.setScore(homegoal, clientgoal);
+		return r;
 	}
 }

@@ -19,6 +19,7 @@ import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
+import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
@@ -63,9 +64,26 @@ public interface MatchService extends IService<Match>
 	 * @param start
 	 * @param end
 	 * @param hasResult
-	 * @return
+	 * @return 比赛列表
 	 */
 	List<MatchInfo> getMatchInfos(Date start, Date end, Boolean hasResult);
+	
+	/**
+	 * 查询比赛数据
+	 * @param lids 联赛编号
+	 * @param tids 球队编号
+	 * @param hasResult
+	 * @return 比赛列表
+	 */
+	List<MatchInfo> getMatchInfos(List<String> lids, List<String> tids, Boolean hasResult);
+	
+	/**
+	 * 获得球队的战线信息
+	 * @param matchs 比赛数据
+	 * @param sameLeague 是否同一联赛
+	 * @return 战线数据
+	 */
+	List<TeamGrade> getTeamGrades(List<? extends Match> matchs, int maxMatchNum, boolean sameLeague);
 	
 	/**
 	 * 添加北单比赛的数据

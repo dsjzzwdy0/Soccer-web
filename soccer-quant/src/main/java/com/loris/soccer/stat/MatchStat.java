@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.stat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +19,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.loris.common.context.ApplicationContextHelper;
 import com.loris.soccer.model.complex.OddsOpRecord;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
+import com.loris.soccer.stat.filter.StatMatchFilter;
+import com.loris.soccer.stat.model.CorpFreq;
+import com.loris.soccer.stat.service.QuantService;
 
 /**   
  * @ClassName:  MatchStat.java   
@@ -37,10 +42,13 @@ public class MatchStat
 	private static Logger logger = Logger.getLogger(MatchStat.class);
 	
 	/** 赔率服务 */
-	OddsService oddsService;
+	private OddsService oddsService;
 	
 	/** 比赛服务 */
-	MatchService matchService;
+	private MatchService matchService;
+	
+	/** 量化服务数据 */
+	private QuantService quantService;
 	
 	/**
 	 * Create a new instance of MatchStat
@@ -51,6 +59,13 @@ public class MatchStat
 	{
 		this.matchService = matchService;
 		this.oddsService = oddsService;
+	}
+	
+	public MatchStat()
+	{
+		oddsService = ApplicationContextHelper.getBean(OddsService.class);
+		matchService = ApplicationContextHelper.getBean(MatchService.class);
+		quantService = ApplicationContextHelper.getBean(QuantService.class);
 	}
 	
 	/**
@@ -107,13 +122,22 @@ public class MatchStat
 	public void computeCorpFreq(Date start, Date end)
 	{
 		List<MatchInfo> matchInfos = matchService.getMatchInfos(start, end, true);
+		StatMatchFilter filter = new StatMatchFilter();
+		filter.addRefuseLid("41");
 		
 		Map<String, Integer> totalRecords = new HashMap<>();
+		Map<String, CorpFreq> corpFreqs = new HashMap<>();
+		int matchNum = 0;
+		int index = 0;
 		for (MatchInfo matchInfo : matchInfos)
 		{
-			logger.info(matchInfo);
+			if(!filter.accept(matchInfo))
+			{
+				continue;
+			}
+			//logger.info(matchInfo);
 			String lid = matchInfo.getLid();
-			
+
 			Integer num = totalRecords.get(lid);
 			if(num == null)
 			{
@@ -123,12 +147,57 @@ public class MatchStat
 			{
 				totalRecords.put(lid, num +1);
 			}
+			
+			logger.info("Processing " + (index ++) + " of " + matchInfos.size() + "...");
+			List<OddsOpRecord> records = oddsService.selectOddsOpRecords(matchInfo.getMid());
+			if(records == null || records.size() == 0)
+			{
+				logger.warn("There are no OddsOpRecord in database: " + matchInfo.getMid());
+				continue;
+			}
+			
+			matchNum ++;
+			for (OddsOpRecord oddsOpRecord : records)
+			{
+				String corpid = oddsOpRecord.getCorpid();
+				CorpFreq freq = corpFreqs.get(corpid);
+				if(freq == null)
+				{
+					freq = new CorpFreq(corpid);
+					freq.setName(oddsOpRecord.getCorpname());
+					freq.addFreq();
+					corpFreqs.put(corpid, freq);
+				}
+				else
+				{
+					freq.addFreq();
+				}
+				//logger.info(oddsOpRecord);
+			}
+			
+			/*if(StringUtils.equals(lid, "25"))
+			{
+				logger.info(matchInfo);
+			}*/
 		}
 		
+		logger.info("There are total " + matchNum + " matchs in database.");
+		for (String corpid : corpFreqs.keySet())
+		{
+			CorpFreq freq = corpFreqs.get(corpid);
+			freq.setTotal(matchNum);
+			logger.info(freq);
+		}
+		
+		List<CorpFreq> freqList = new ArrayList<>();
+		freqList.addAll(corpFreqs.values());
+		quantService.insertCorpFreqs(freqList);
+		
+		/*logger.info("There are total " + matchNum + " matchs in database.");
 		int i = 1;
 		for (String lid : totalRecords.keySet())
 		{
-			logger.info(i +++ ": " + totalRecords.get(lid));
-		}
+			logger.info(i+++ "： [" + lid + "] " + totalRecords.get(lid));
+		}*/
 	}
 }

@@ -341,6 +341,19 @@ create table soccer_job_info(
 	INDEX `index_jobname` (`jobname`) USING BTREE
 );
 
+create table soccer_stat_corp_freq(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	corpid varchar(20),
+	name varchar(50),
+	keyvalue varchar(30),
+	type varchar(10),
+	total int,
+	freq int,
+	params varchar(100),
+	PRIMARY KEY (`id`),
+	INDEX `index_corpid` (`corpid`) USING BTREE
+);
+
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 

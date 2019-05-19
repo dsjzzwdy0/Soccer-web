@@ -31,7 +31,29 @@ public class StatMatchFilter extends ObjectFilter<Match>
 	
 	List<String> refuseLids = new ArrayList<>();
 	
+	/**
+	 * 添加可接受的联赛类型
+	 * @param lid 联赛
+	 */
+	public void addAcceptLid(String lid)
+	{
+		acceptLids.add(lid);
+	}
 	
+	public void removeAcceptLid(String lid)
+	{
+		acceptLids.remove(lid);
+	}
+	
+	public void addRefuseLid(String lid)
+	{
+		refuseLids.add(lid);
+	}
+	
+	public void removeRefuseLid(String lid)
+	{
+		refuseLids.remove(lid);
+	}
 	
 	/**
 	 * 比赛过滤器，默认为包含

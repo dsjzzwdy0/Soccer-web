@@ -176,11 +176,11 @@ public class App
 	
 	public static void testStat() throws Exception
 	{
-		MatchService matchService = (MatchService)context.getBean("matchService");
-		OddsService oddsService = (OddsService)context.getBean("oddsService");
+		//MatchService matchService = (MatchService)context.getBean("matchService");
+		//OddsService oddsService = (OddsService)context.getBean("oddsService");
 		Date start = DateUtil.tryToParseDate("2019-03-02");
 		
-		MatchStat stat = new MatchStat(oddsService, matchService);
+		MatchStat stat = new MatchStat();
 		stat.computeCorpFreq(start, new Date());
 	}
 	

@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.stat.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.bean.AutoIdEntity;
 
 /**
@@ -22,6 +23,7 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
+@TableName("soccer_stat_corp_freq")
 public class CorpFreq extends AutoIdEntity
 {
 	/**
@@ -31,11 +33,21 @@ public class CorpFreq extends AutoIdEntity
 	
 	protected String corpid;
 	protected String name;
-	protected String key;
+	protected String keyvalue;
 	protected String type;
 	protected int total;
 	protected int freq;
 	protected String params;
+	
+	public CorpFreq()
+	{
+	}
+	
+	public CorpFreq(String corpid)
+	{
+		this.corpid = corpid;
+	}
+	
 	public String getCorpid()
 	{
 		return corpid;
@@ -52,14 +64,23 @@ public class CorpFreq extends AutoIdEntity
 	{
 		this.name = name;
 	}
-	public String getKey()
+	
+	/**
+	 * @return the keyvalue
+	 */
+	public String getKeyvalue()
 	{
-		return key;
+		return keyvalue;
 	}
-	public void setKey(String key)
+
+	/**
+	 * @param keyvalue the keyvalue to set
+	 */
+	public void setKeyvalue(String keyvalue)
 	{
-		this.key = key;
+		this.keyvalue = keyvalue;
 	}
+
 	public String getType()
 	{
 		return type;
@@ -91,5 +112,24 @@ public class CorpFreq extends AutoIdEntity
 	public void setParams(String params)
 	{
 		this.params = params;
+	}
+	
+	public void addFreq()
+	{
+		freq ++;
+	}
+	public void addFreq(int freq)
+	{
+		this.freq += freq;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "CorpFreq [corpid=" + corpid + ", name=" + name + ", key=" + keyvalue + ", type=" + type + ", total=" + total
+				+ ", freq=" + freq + ", params=" + params + "]";
 	}
 }

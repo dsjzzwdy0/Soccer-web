@@ -86,6 +86,7 @@
 		    com.loris.client.dao,
 		    com.loris.auth.dao,
 		    com.loris.quartz.dao,
+		    com.loris.soccer.stat.dao,
 		    com.loris.soccer.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
