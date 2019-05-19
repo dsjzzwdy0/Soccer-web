@@ -96,6 +96,7 @@ import com.loris.soccer.model.view.MatchJcInfo;
 import com.loris.soccer.service.DataService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
+import com.loris.soccer.stat.MatchStat;
 
 
 /**
@@ -126,8 +127,9 @@ public class App
 			// testLeagueCenterPage();
 			// testMatchResult();
 			// testUpload();
+			// testSourceFinance();
 			
-			testSourceFinance();
+			testStat();
 			
 			// testMariaDB();
 			// testDateString();
@@ -170,6 +172,16 @@ public class App
 			}
 			context = null;
 		}
+	}
+	
+	public static void testStat() throws Exception
+	{
+		MatchService matchService = (MatchService)context.getBean("matchService");
+		OddsService oddsService = (OddsService)context.getBean("oddsService");
+		Date start = DateUtil.tryToParseDate("2019-03-02");
+		
+		MatchStat stat = new MatchStat(oddsService, matchService);
+		stat.computeCorpFreq(start, new Date());
 	}
 	
 	public static void testSourceFinance() throws Exception

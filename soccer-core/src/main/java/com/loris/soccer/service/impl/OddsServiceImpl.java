@@ -43,7 +43,7 @@ import com.loris.soccer.wrapper.OddsOpListWrapper;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@Service("oddsOpService")
+@Service("oddsService")
 public class OddsServiceImpl implements OddsService
 {	
 	@Autowired

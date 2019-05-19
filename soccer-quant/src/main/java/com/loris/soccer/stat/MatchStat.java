@@ -11,8 +11,10 @@
  */
 package com.loris.soccer.stat;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -39,6 +41,17 @@ public class MatchStat
 	
 	/** 比赛服务 */
 	MatchService matchService;
+	
+	/**
+	 * Create a new instance of MatchStat
+	 * @param oddsService
+	 * @param matchService
+	 */
+	public MatchStat(OddsService oddsService, MatchService matchService)
+	{
+		this.matchService = matchService;
+		this.oddsService = oddsService;
+	}
 	
 	/**
 	 * 计算联赛的统计分析数据
@@ -83,6 +96,39 @@ public class MatchStat
 			{
 				logger.info(oddsOpRecord);
 			}
+		}
+	}
+	
+	/**
+	 * 统计博彩公司的频率数据
+	 * @param start 开始日期
+	 * @param end 结束日期
+	 */
+	public void computeCorpFreq(Date start, Date end)
+	{
+		List<MatchInfo> matchInfos = matchService.getMatchInfos(start, end, true);
+		
+		Map<String, Integer> totalRecords = new HashMap<>();
+		for (MatchInfo matchInfo : matchInfos)
+		{
+			logger.info(matchInfo);
+			String lid = matchInfo.getLid();
+			
+			Integer num = totalRecords.get(lid);
+			if(num == null)
+			{
+				totalRecords.put(lid, 1);
+			}
+			else
+			{
+				totalRecords.put(lid, num +1);
+			}
+		}
+		
+		int i = 1;
+		for (String lid : totalRecords.keySet())
+		{
+			logger.info(i +++ ": " + totalRecords.get(lid));
 		}
 	}
 }
