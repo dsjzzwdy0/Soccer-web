@@ -225,11 +225,6 @@
 			<artifactId>soccer-data</artifactId>
 			<version>${soccer.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.loris</groupId>
-			<artifactId>soccer-old</artifactId>
-			<version>${soccer.version}</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<finalName>soccer</finalName>
