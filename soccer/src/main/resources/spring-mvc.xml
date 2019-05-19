@@ -15,7 +15,7 @@
 	<mvc:annotation-driven />
 	
 	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
-	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.soccer, com.loris.auth, com.loris.old" />
+	<context:component-scan base-package="com.loris.common, com.loris.client, com.loris.quartz, com.loris.soccer, com.loris.auth, com.loris.old" />
 	
 	<!-- 基础数据所需的运行环境类 -->
 	<bean id="applicationContext" class="com.loris.common.context.ApplicationContextHelper"/>

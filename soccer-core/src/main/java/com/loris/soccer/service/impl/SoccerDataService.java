@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loris.common.model.TableRecords;
-import com.loris.common.service.DataService;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.LogoList;
 import com.loris.soccer.collection.MatchItemList;
@@ -48,6 +47,7 @@ import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.service.DataService;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
@@ -83,7 +83,7 @@ public class SoccerDataService implements DataService
 	/**
 	 * 保存数据页面解析得到的内容
 	 * 
-	 * @see com.loris.common.service.DataService#saveTableRecords(com.loris.common.model.TableRecords)
+	 * @see com.loris.soccer.service.DataService#saveTableRecords(com.loris.common.model.TableRecords)
 	 */
 	@Override
 	@Transactional
