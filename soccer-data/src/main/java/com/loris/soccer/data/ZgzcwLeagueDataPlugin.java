@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
+import com.loris.soccer.filter.WebPageFilter;
 /**   
  * @ClassName: ZgzcwLeagueDataPlugin   
  * @Description: 联赛数据中心页面下载 

@@ -24,9 +24,9 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
+import com.loris.soccer.filter.WebPageFilter;
 
 import cn.hutool.core.thread.ThreadUtil;
 

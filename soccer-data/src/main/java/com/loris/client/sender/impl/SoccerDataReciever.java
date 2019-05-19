@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.reciever;
+package com.loris.client.sender.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.loris.client.sender.impl.JsonDataReciever;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;

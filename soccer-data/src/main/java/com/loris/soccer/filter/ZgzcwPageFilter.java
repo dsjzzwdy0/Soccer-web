@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.data.filter.page;
+package com.loris.soccer.filter;
 
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.loris.client.model.WebPage;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.data.filter.WebPageFilter;
 import com.loris.soccer.model.base.MatchItem;
 
 import static com.loris.soccer.data.zgzcw.ZgzcwConstants.*;
@@ -60,7 +59,7 @@ public class ZgzcwPageFilter extends WebPageFilter
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.data.filter.WebPageFilter#accept(com.loris.client.model.WebPage, java.lang.Object)
+	 * @see com.loris.soccer.filter.WebPageFilter#accept(com.loris.client.model.WebPage, java.lang.Object)
 	 */
 	@Override
 	public <T> boolean accept(WebPage page, T source)
