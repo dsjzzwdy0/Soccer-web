@@ -30,7 +30,9 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.complex.OddsOpRecord;
 import com.loris.soccer.service.OddsService;
+import com.loris.soccer.wrapper.OddsOpListWrapper;
 
 /**   
  * @ClassName:  OddsOpServiceImpl   
@@ -207,5 +209,20 @@ public class OddsServiceImpl implements OddsService
 		ObjectFilter<OddsScore> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(oddsScores, OddsScore.class, oddsScoreMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#selectOddsOpRecords(java.lang.String)
+	 */
+	@Override
+	public List<OddsOpRecord> selectOddsOpRecords(String mid)
+	{
+		List<OddsOp> ops = selectOddsOp(mid);
+		if(ops == null || ops.size() == 0)
+		{
+			return null;
+		}
+		return new OddsOpListWrapper().wrap(ops);
 	}
 }

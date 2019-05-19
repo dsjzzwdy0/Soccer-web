@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.loris.soccer.model.complex.OddsOpRecord;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
@@ -71,6 +72,17 @@ public class MatchStat
 		for (MatchInfo matchInfo : matchInfos)
 		{
 			logger.info(matchInfo);
+			List<OddsOpRecord> records = oddsService.selectOddsOpRecords(matchInfo.getMid());
+			if(records == null)
+			{
+				logger.warn("There are no OddsOpRecord in database: " + matchInfo.getMid());
+				continue;
+			}
+			
+			for (OddsOpRecord oddsOpRecord : records)
+			{
+				logger.info(oddsOpRecord);
+			}
 		}
 	}
 }

@@ -60,9 +60,6 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	private SqlHelper sqlHelper;
 	
 	@Autowired
-	private TeamMapper teamMapper;
-	
-	@Autowired
 	private SeasonMapper seasonMapper;
 	
 	@Autowired
@@ -70,6 +67,9 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	
 	@Autowired
 	private RoundInfoMapper roundInfoMapper;
+	
+	@Autowired
+	private TeamMapper teamMapper;
 	
 	@Autowired
 	private LogoMapper logoMapper;
@@ -130,28 +130,6 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 	public List<League> list()
 	{
 		return baseMapper.selectList(new QueryWrapper<League>());
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.LeagueService#insertTeams(java.util.List)
-	 */
-	@Override
-	public boolean insertTeams(List<Team> teams)
-	{
-		return insertTeams(teams, false);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.LeagueService#insertTeams(java.util.List, boolean)
-	 */
-	@Override
-	public boolean insertTeams(List<Team> teams, boolean overwrite)
-	{
-		ObjectFilter<Team> filter = new ObjectFilter<>();	
-		return SqlHelper.insertList(teams, Team.class, teamMapper, filter, SoccerConstants.NAME_FIELD_TID,
-				sqlHelper, overwrite);
 	}
 
 	/**
@@ -333,5 +311,27 @@ public class LeagueServiceImpl extends ServiceImpl<LeagueMapper, League> impleme
 			queryWrapper.and(wrapper->wrapper.eq("season", endSeason).or().lt("season", endSeason));
 		}
 		return seasonInfoMapper.selectList(queryWrapper);
+	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertTeams(java.util.List)
+	 */
+	@Override
+	public boolean insertTeams(List<Team> teams)
+	{
+		return insertTeams(teams, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.LeagueService#insertTeams(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertTeams(List<Team> teams, boolean overwrite)
+	{
+		ObjectFilter<Team> filter = new ObjectFilter<>();	
+		return SqlHelper.insertList(teams, Team.class, teamMapper, filter, SoccerConstants.NAME_FIELD_TID,
+				sqlHelper, overwrite);
 	}
 }

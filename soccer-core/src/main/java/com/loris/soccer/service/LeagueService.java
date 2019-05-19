@@ -61,21 +61,6 @@ public interface LeagueService extends IService<League>
 	League getLeague(String name);
 	
 	/**
-	 * 保存球队数据
-	 * @param teams 球队数据列表
-	 * @return 是否成功的标志
-	 */
-	boolean insertTeams(List<Team> teams);
-	
-	/**
-	 * 保存球队数据
-	 * @param teams 球队数据列表
-	 * @param overwrite 是否覆盖原有数据
-	 * @return 是否成功的标志
-	 */
-	boolean insertTeams(List<Team> teams, boolean overwrite);
-	
-	/**
 	 * 保存赛季数据
 	 * @param seasons
 	 * @return 是否成功的标志
@@ -166,6 +151,21 @@ public interface LeagueService extends IService<League>
 	 * @return 成功的标志
 	 */
 	boolean insertLogos(List<Logo> logos, boolean overwrite);
+	
+	/**
+	 * 保存球队数据
+	 * @param teams 球队数据列表
+	 * @return 是否成功的标志
+	 */
+	boolean insertTeams(List<Team> teams);
+	
+	/**
+	 * 保存球队数据
+	 * @param teams 球队数据列表
+	 * @param overwrite 是否覆盖原有数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertTeams(List<Team> teams, boolean overwrite);
 	
 	/**
 	 * 插入球队与联赛比赛的数据关系

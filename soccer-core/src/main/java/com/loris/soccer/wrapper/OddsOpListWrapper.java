@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.wrapper.list;
+package com.loris.soccer.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,8 @@ import java.util.List;
 import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.base.OddsValue;
-import com.loris.soccer.wrapper.Wrapper;
+import com.loris.soccer.model.complex.OddsOpRecord;
 import com.loris.soccer.wrapper.filter.OddsValueFilter;
-import com.loris.soccer.wrapper.model.OddsOpRecord;
 
 /**   
  * @ClassName:  OddsOpListWrapper.java   
@@ -30,10 +29,10 @@ import com.loris.soccer.wrapper.model.OddsOpRecord;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class OddsOpListWrapper implements Wrapper<List<OddsOp>>
+public class OddsOpListWrapper implements Wrapper<List<OddsOp>, List<OddsOpRecord>>
 {
 	@Override
-	public Object wrap(List<OddsOp> source)
+	public List<OddsOpRecord> wrap(List<OddsOp> source)
 	{
 		List<OddsOpRecord> list = new ArrayList<>();
 		OddsValueFilter filter = new OddsValueFilter();

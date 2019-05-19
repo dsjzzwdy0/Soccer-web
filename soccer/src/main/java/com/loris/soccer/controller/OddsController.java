@@ -22,7 +22,7 @@ import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.service.OddsService;
-import com.loris.soccer.wrapper.list.OddsOpListWrapper;
+import com.loris.soccer.wrapper.OddsOpListWrapper;
 
 /**   
  * @ClassName:  OddsController.java   
