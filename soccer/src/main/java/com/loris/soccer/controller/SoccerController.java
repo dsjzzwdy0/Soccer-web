@@ -228,23 +228,6 @@ public class SoccerController extends BaseController
 	}
 
 	/**
-	 * 解析分析数据页面
-	 * 
-	 * @param type
-	 *            页面类型
-	 * @return 页面名称
-	 * 
-	 *         protected String getAnalysisPageName(String type) {
-	 *         if(StringUtils.isEmpty(type)) { return ANALYSIS_PAGE_TYPES[0][0];
-	 *         } for (String string : ANALYSIS_PAGE_TYPES[]) {
-	 *         if(type.equalsIgnoreCase(string)) { return string; } } try { int
-	 *         index = Integer.parseInt(type); if(index >=
-	 *         ANALYSIS_PAGE_TYPES.length) { index = 0; } return
-	 *         ANALYSIS_PAGE_TYPES[index][0]; } catch(Exception e) { return
-	 *         ANALYSIS_PAGE_TYPES[0][0]; } }
-	 */
-
-	/**
 	 * 获得最近的几期数据
 	 * 
 	 * @param size
