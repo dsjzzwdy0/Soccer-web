@@ -14,4 +14,15 @@
     	<put-attribute name="body" value="/WEB-INF/views/system/{1}.jsp" />
     </definition>
     
+    <definition name="soccer.tiles.definition">
+    	<put-attribute name="meta" value="/WEB-INF/views/soccer/shared/basic.jsp" />
+    	<put-attribute name="header" value="/WEB-INF/views/soccer/shared/header.jsp" />
+    	<put-attribute name="footer" value="/WEB-INF/views/soccer/shared/footer.jsp" />
+    </definition>
+    
+    <definition name="*.soccer" extends="soccer.tiles.definition" 
+    	template="/WEB-INF/views/soccer/shared/layout.jsp">
+    	<put-attribute name="body" value="/WEB-INF/views/soccer/{1}.jsp" />
+    </definition>
+    
 </tiles-definitions>

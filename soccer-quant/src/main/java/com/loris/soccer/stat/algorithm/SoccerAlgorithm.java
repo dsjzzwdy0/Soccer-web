@@ -14,6 +14,8 @@ package com.loris.soccer.stat.algorithm;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.common.filter.ObjectFilter;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchInfo;
@@ -31,29 +33,52 @@ import com.loris.soccer.stat.algorithm.sorter.MatchComparator;
 public class SoccerAlgorithm
 {
 	/**
+	 * 计算球队的成绩，其中Grades作为原始的数据
+	 * @param grades 球队数据
+	 * @param matchinfos 比赛数据
+	 * @param filter 过滤器
+	 * @param maxMatchNum 最大的比赛数
+	 * @return
+	 */
+	public static List<TeamGrade> computeTeamGrades(List<TeamGrade> grades, List<MatchInfo> matchInfos,
+			ObjectFilter<MatchInfo> filter, int maxMatchNum)
+	{
+		for (TeamGrade grade : grades)
+		{
+			computeTeamGrade(grade, matchInfos, filter, maxMatchNum);
+		}
+		return grades;
+	}
+	
+	/**
 	 * 计算球队的成绩数据
-	 * @param tid 球队编号
-	 * @param name 球队成绩的名称
+	 * @param grade 球队数据
 	 * @param matchInfos 比赛列表
 	 * @param filter 过滤器
 	 * @param maxMatchNum 最大比赛数
 	 * @return 球队战绩
 	 */
-	public static TeamGrade computeTeamGrade(String tid, String name, List<MatchInfo> matchInfos, ObjectFilter<MatchInfo> filter, int maxMatchNum)
+	public static TeamGrade computeTeamGrade(TeamGrade grade, List<MatchInfo> matchInfos, ObjectFilter<MatchInfo> filter, int maxMatchNum)
 	{
 		MatchComparator comparator = new MatchComparator(false);
 		MatchInfo[] ms = new MatchInfo[matchInfos.size()];
 		ms = matchInfos.toArray(ms);
 		Arrays.sort(ms, comparator);
 		
-		TeamGrade grade = new TeamGrade(tid);
-		grade.setName(name);
 		int num = 0;
 		for (MatchInfo match : ms)
 		{
+			if((!StringUtils.equals(grade.getTid(), match.getHomeid())
+					&& !StringUtils.equals(grade.getTid(), match.getClientid()))
+					|| match.getResult() == null)
+			{
+				continue;
+			}
 			if(filter == null || filter.accept(match))
 			{
-				grade.addMatchInfo(match);
+				if(!grade.addMatchInfo(match))
+					continue;
+				
 				//计数
 				num ++;
 				if(num >= maxMatchNum)

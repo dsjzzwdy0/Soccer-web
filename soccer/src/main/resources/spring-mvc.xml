@@ -10,13 +10,14 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+	<!-- 引入Spring -->
+    <import resource="classpath:spring-mybatis.xml" />
+    <import resource="classpath:spring-shiro.xml" />
+    
 	<!-- 支持 静态资源与springMVC的动态资源访问，两个缺一不可，缺少都无法支持访问 -->
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven />
 	
-	<!-- 引入Spring -->
-    <import resource="classpath:spring-mybatis.xml" />
-    <import resource="classpath:spring-shiro.xml" />
 	
 	<!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
