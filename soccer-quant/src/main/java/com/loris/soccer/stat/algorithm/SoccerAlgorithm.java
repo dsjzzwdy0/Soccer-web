@@ -39,7 +39,8 @@ public class SoccerAlgorithm
 	 * @param maxMatchNum 最大比赛数
 	 * @return 球队战绩
 	 */
-	public static TeamGrade computeTeamGrade(String tid, String name, List<MatchInfo> matchInfos, ObjectFilter<MatchInfo> filter, int maxMatchNum)
+	public static TeamGrade computeTeamGrade(String tid, String name, List<MatchInfo> matchInfos, 
+			ObjectFilter<MatchInfo> filter, int maxMatchNum)
 	{
 		MatchComparator comparator = new MatchComparator(false);
 		MatchInfo[] ms = new MatchInfo[matchInfos.size()];
