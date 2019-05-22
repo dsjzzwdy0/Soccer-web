@@ -23,9 +23,11 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.OddsNum;
 
 /**   
@@ -72,11 +74,13 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		Date time = DateUtil.tryToParseDate(mathTime);
 
 		OddsNumList nums = new OddsNumList();
+		CasinoCompList comps = new CasinoCompList();
 		for (Element element2 : elements)
 		{
-			parseNum(document, element2, mid, time, nums);
+			parseNum(document, element2, mid, time, nums, comps);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST, nums);
+		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
 		return results;
 	}
 	
@@ -87,7 +91,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 	 * @param matchTime 比赛时间
 	 * @param nums 大小球列表
 	 */
-	protected void parseNum(Document document, Element element, String mid, Date matchTime, List<OddsNum> nums)
+	protected void parseNum(Document document, Element element, String mid, Date matchTime, List<OddsNum> nums, CasinoCompList comps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
@@ -120,11 +124,15 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		{
 			OddsNum firstOdds = new OddsNum(mid);
 			OddsNum odds = new OddsNum(mid);
+			CasinoComp comp = new CasinoComp();
 	
 			firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setType(SoccerConstants.ODDS_TYPE_NUM);
+			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			
 			firstOdds.setCorpid(compid);
-			firstOdds.setCorpname(name);
+			//firstOdds.setCorpname(name);
 			firstOdds.setOpentime(firstTime);
 			firstOdds.setWinodds(firstwinyp);
 			firstOdds.setGoalnum(getGoalNum(firstGoal));
@@ -136,7 +144,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			firstOdds.setLossratio(lossratio);
 	
 			odds.setCorpid(compid);
-			odds.setCorpname(name);
+			//odds.setCorpname(name);
 			odds.setOpentime(getOpenTime(matchTime, updatetime));
 			odds.setWinodds(lastwinyp);
 			odds.setGoalnum(getGoalNum(lastGoal));
@@ -146,13 +154,18 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			odds.setWinkelly(homekelly);
 			odds.setLosekelly(guestkelly);
 			odds.setLossratio(lossratio);
+			
+			comp.setCorpid(compid);
+			comp.setName(name);
+			comp.setIsmain(false);
 	
 			nums.add(firstOdds);
 			nums.add(odds);
+			comps.add(comp);
 		}
 		else
 		{
-			parseCorpNums(nums, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+			parseCorpNums(nums, comps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
 		}
 	}
 	
@@ -167,7 +180,7 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 	 * @param losekelly
 	 * @param lossratio
 	 */
-	protected void parseCorpNums(List<OddsNum> nums, Element element, String mid, String compid, String name, 
+	protected void parseCorpNums(List<OddsNum> nums, List<CasinoComp> comps, Element element, String mid, String compid, String name, 
 			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
 	{
 		Elements elements = element.select("li");
@@ -185,10 +198,14 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
 			
 			OddsNum odds = new OddsNum(mid);
+			CasinoComp comp = new CasinoComp();
+			comp.setType(SoccerConstants.ODDS_TYPE_NUM);
+			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			odds.setOpentime(new Date(opemtime));
 			odds.setCorpid(compid);
-			odds.setCorpname(name);
+			//odds.setCorpname(name);
 			odds.setWinodds(winodds);
 			odds.setGoalnum(getGoalNum(goal));
 			odds.setLoseodds(loseodds);
@@ -198,7 +215,12 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			odds.setLosekelly(guestkelly);
 			odds.setLossratio(lossratio);
 			
+			comp.setCorpid(compid);
+			comp.setName(name);
+			comp.setIsmain(false);
+			
 			nums.add(odds);
+			comps.add(comp);
 		}
 	}
 	

@@ -82,7 +82,7 @@ public class OddsOpRecord extends OddsOp
 	
 	public void addOddsOp(OddsOp oddsOp)
 	{
-		if(StringUtils.isBlank(corpid) || StringUtils.isBlank(corpname))
+		if(StringUtils.isBlank(corpid))
 		{
 			this.setFirstOddsOp(oddsOp);
 			this.setLastOddsOp(oddsOp);
@@ -127,7 +127,7 @@ public class OddsOpRecord extends OddsOp
 	{
 		this.mid = oddsOp.getMid();
 		this.corpid = oddsOp.getCorpid();
-		this.corpname = oddsOp.getCorpname();
+		//this.corpname = oddsOp.getCorpname();
 		this.source = oddsOp.getSource();
 	}
 }

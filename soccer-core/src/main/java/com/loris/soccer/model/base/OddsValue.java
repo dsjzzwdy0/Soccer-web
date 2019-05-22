@@ -33,7 +33,7 @@ public class OddsValue extends AutoIdEntity
 
 	protected String mid;				//比赛编号
 	protected String corpid;			//博彩公司
-	protected String corpname;			//博彩公司名称
+	//protected String corpname;			//博彩公司名称
 	protected Date opentime;			//开盘时间
 	protected float winodds;
 	protected float loseodds;
@@ -59,14 +59,6 @@ public class OddsValue extends AutoIdEntity
 	public void setCorpid(String corpid)
 	{
 		this.corpid = corpid;
-	}
-	public String getCorpname()
-	{
-		return corpname;
-	}
-	public void setCorpname(String corpname)
-	{
-		this.corpname = corpname;
 	}
 	public Date getOpentime()
 	{

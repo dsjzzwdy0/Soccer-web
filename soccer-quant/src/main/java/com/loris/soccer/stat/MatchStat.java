@@ -164,7 +164,7 @@ public class MatchStat
 				if(freq == null)
 				{
 					freq = new CorpFreq(corpid);
-					freq.setName(oddsOpRecord.getCorpname());
+					//freq.setName(oddsOpRecord.getCorpname());
 					freq.addFreq();
 					corpFreqs.put(corpid, freq);
 				}

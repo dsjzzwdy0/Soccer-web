@@ -24,11 +24,13 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
 import com.loris.soccer.dict.HandicapDict;
+import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.OddsYp;
 
 /**
@@ -106,11 +108,14 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		Date time = DateUtil.tryToParseDate(matchTime);
 
 		OddsYpList yps = new OddsYpList();
+		CasinoCompList comps = new CasinoCompList();
+		
 		for (Element corpElement : elements)
 		{
-			parseYp(document, corpElement, mid, time, yps);
+			parseYp(document, corpElement, mid, time, yps, comps);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_YP_LIST, yps);
+		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
 		return results;
 	}
 
@@ -121,7 +126,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param matchTime 比赛时间
 	 * @param yps 亚盘数据列表
 	 */
-	protected void parseYp(Document document, Element element, String mid, Date matchTime, List<OddsYp> yps)
+	protected void parseYp(Document document, Element element, String mid, Date matchTime, List<OddsYp> yps, List<CasinoComp> comps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
@@ -157,8 +162,12 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 			
+			CasinoComp comp = new CasinoComp();
+			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setType(SoccerConstants.ODDS_TYPE_YP);
+			
 			firstOdds.setCorpid(compid);
-			firstOdds.setCorpname(name);
+			//firstOdds.setCorpname(name);
 			firstOdds.setOpentime(firstTime);		
 			firstOdds.setWinodds(firstwinyp);
 			firstOdds.setHandicap(HandicapDict.getHandicapValue(firsthandicap));
@@ -170,7 +179,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			firstOdds.setLossratio(lossratio);
 	
 			odds.setCorpid(compid);
-			odds.setCorpname(name);
+			//odds.setCorpname(name);
 			odds.setOpentime(getOpenTime(matchTime, updatetime));
 			odds.setWinodds(lastwinyp);
 			odds.setHandicap(HandicapDict.getHandicapValue(lasthandicap));
@@ -180,13 +189,19 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			odds.setWinkelly(homekelly);
 			odds.setLosekelly(guestkelly);
 			odds.setLossratio(lossratio);
+			
+			comp.setCorpid(compid);
+			comp.setName(name);
+			comp.setIsmain(false);
 	
 			yps.add(firstOdds);
 			yps.add(odds);
+			
+			comps.add(comp);
 		}
 		else
 		{
-			parseCorpYps(yps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+			parseCorpYps(yps, comps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
 		}
 	}
 	
@@ -201,7 +216,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param losekelly
 	 * @param lossratio
 	 */
-	protected void parseCorpYps(List<OddsYp> yps, Element element, String mid, String compid, String name, 
+	protected void parseCorpYps(List<OddsYp> yps, List<CasinoComp> comps, Element element, String mid, String compid, String name, 
 			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
 	{
 		Elements elements = element.select("li");
@@ -220,9 +235,14 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			
 			OddsYp odds = new OddsYp(mid);
 			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			
+			CasinoComp comp = new CasinoComp();
+			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setType(SoccerConstants.ODDS_TYPE_YP);
+			
 			odds.setOpentime(new Date(opemtime));
 			odds.setCorpid(compid);
-			odds.setCorpname(name);
+			//odds.setCorpname(name);
 			odds.setWinodds(winodds);
 			odds.setHandicap(HandicapDict.getHandicapValue(handicap));
 			odds.setLoseodds(loseodds);
@@ -232,7 +252,12 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			odds.setLosekelly(guestkelly);
 			odds.setLossratio(lossratio);
 			
+			comp.setCorpid(compid);
+			comp.setName(name);
+			comp.setIsmain(false);
+				
 			yps.add(odds);
+			comps.add(comp);
 		}
 	}
 	

@@ -49,7 +49,7 @@ public class OpToOddsOp implements Transfer<List<OddsOp>, Op>
 			
 			first.setMid(source.getMid());
 			first.setCorpid(source.getGid());
-			first.setCorpname(source.getGname());
+			//first.setCorpname(source.getGname());
 			first.setOpentime(DateUtil.tryToParseDate(source.getFirsttime()));
 			
 			first.setWinodds(source.getFirstwinodds());
@@ -69,7 +69,7 @@ public class OpToOddsOp implements Transfer<List<OddsOp>, Op>
 		
 		last.setMid(source.getMid());
 		last.setCorpid(source.getGid());
-		last.setCorpname(source.getGname());
+		//last.setCorpname(source.getGname());
 		last.setOpentime(new Date(source.getLastTimeValue()));
 		last.setWinodds(source.getWinodds());
 		last.setDrawodds(source.getDrawodds());

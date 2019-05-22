@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loris.common.model.TableRecords;
+import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.LogoList;
 import com.loris.soccer.collection.MatchItemList;
@@ -31,6 +32,7 @@ import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.collection.TeamList;
 import com.loris.soccer.collection.TeamRfSeasonList;
+import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
@@ -47,6 +49,7 @@ import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
 import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.DataService;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
@@ -79,6 +82,9 @@ public class SoccerDataService implements DataService
 	
 	@Autowired
 	private OddsService oddsService;
+	
+	@Autowired
+	private CompService compService;
 
 	/**
 	 * 保存数据页面解析得到的内容
@@ -292,6 +298,18 @@ public class SoccerDataService implements DataService
 				scores = (List<OddsScore>) value;
 			}
 			return oddsService.insertOddsScores(scores, overwrite);
+		case SOCCER_DATA_CASINO_COMP_LIST:
+			List<CasinoComp> comps = null;
+			if(value instanceof CasinoCompList)
+			{
+				comps = (CasinoCompList)value;
+				overwrite = ((CasinoCompList)value).isOverwrite();
+			}
+			else 
+			{
+				comps = (List<CasinoComp>)value;
+			}
+			return compService.insertCasinoComps(comps, overwrite);
 		default:
 			// No nothing.
 			logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");

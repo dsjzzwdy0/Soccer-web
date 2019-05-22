@@ -24,10 +24,12 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.common.util.URLParser;
+import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
+import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.OddsOp;
 
 /**   
@@ -69,12 +71,15 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 		
 		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
-		OddsOpList ops = new OddsOpList();		
+		OddsOpList ops = new OddsOpList();
+		CasinoCompList comps = new CasinoCompList();
+		
 		for (Element element2 : elements)
 		{
-			parseOdds(element2, mid, ops);
+			parseOdds(element2, mid, ops, comps);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_OP_LIST, ops);
+		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
 		return results;
 	}
 	
@@ -84,11 +89,14 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param element
 	 * @throws DateParseException 
 	 */
-	protected void parseOdds(Element element, String mid, OddsOpList ops)
+	protected void parseOdds(Element element, String mid, OddsOpList ops, CasinoCompList comps)
 	{
 		OddsOp firstOdds = new OddsOp(mid);
 		OddsOp odds = new OddsOp(mid);
+		CasinoComp comp = new CasinoComp();
 		
+		comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		comp.setType(SoccerConstants.ODDS_TYPE_OP);
 		firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 		odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
 		
@@ -104,7 +112,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		int size = elements.size();
 		
 		//单位
-		parseGamingCompany(firstOdds, odds, elements.get(0), elements.get(1), elements.get(5));
+		parseGamingCompany(comp, firstOdds, odds, elements.get(0), elements.get(1), elements.get(5));
 		
 		Element[] els = new Element[6];
 		els[0] = elements.get(2);
@@ -143,6 +151,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		
 		ops.add(firstOdds);
 		ops.add(odds);
+		comps.add(comp);
 	}
 	
 	/**
@@ -152,19 +161,24 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param name
 	 * @param id
 	 */
-	private void parseGamingCompany(OddsOp firstOdds, OddsOp odds, Element idx, Element name, Element id)
+	private void parseGamingCompany(CasinoComp comp, OddsOp firstOdds, OddsOp odds, Element idx, Element name, Element id)
 	{
 		String gname;
-		String gid;
+		String corpid;
+		boolean isMain = false;
 		
 		gname = name.text();
-		gid = getGid(id.select("a").first());
-		firstOdds.setCorpid(gid);
-		firstOdds.setCorpname(gname);
-		odds.setCorpid(gid);
-		odds.setCorpname(gname);
+		corpid = getGid(id.select("a").first());
+		isMain = isMainCompany(name);
 		
+		firstOdds.setCorpid(corpid);
+		//firstOdds.setCorpname(gname);
+		odds.setCorpid(corpid);
+		//odds.setCorpname(gname);
 		
+		comp.setCorpid(corpid);
+		comp.setName(gname);
+		comp.setIsmain(isMain);
 		//odds.setOrdinary(index);
 		//odds.setGid(gid);
 		//odds.setIsmain(isMain);
@@ -253,6 +267,18 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			return NumberUtil.parseFloat(el.attr(dataAttr));
 		}
 		return 0.0f;
+	}
+	
+	/**
+	 * Check there are the hot label.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private boolean isMainCompany(Element element)
+	{
+		Element el = element.select(".hot").first();
+		return el == null ? false : true;
 	}
 	
 	/**

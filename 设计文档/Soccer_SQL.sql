@@ -354,6 +354,30 @@ create table soccer_stat_corp_freq(
 	INDEX `index_corpid` (`corpid`) USING BTREE
 );
 
+create table soccer_comp_casino(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	corpid varchar(20),
+	name varchar(50),
+	ismain tinyint(1),
+	type varchar(15),
+	source varchar(20),
+	PRIMARY KEY (`id`),
+	INDEX `index_corpid` (`corpid`) USING BTREE
+);
+
+create table soccer_comp_setting(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	sid varchar(50),
+	name varchar(50),
+	user varchar(30),
+	createtime timestamp NULL,
+	modifytime timestamp NULL,
+	source varchar(20),
+	params text,
+	PRIMARY KEY (`id`),
+	INDEX `index_sid` (`sid`) USING BTREE
+);
+
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 

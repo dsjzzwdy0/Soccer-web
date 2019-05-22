@@ -47,7 +47,7 @@ public class YpToOddsYp implements Transfer<List<OddsYp>, Yp>
 			OddsYp first = new OddsYp();
 			first.setMid(source.getMid());
 			first.setCorpid(source.getGid());
-			first.setCorpname(source.getGname());
+			//first.setCorpname(source.getGname());
 			first.setOpentime(DateUtil.tryToParseDate(source.getFirsttime()));
 			first.setWinodds(source.getFirstwinodds());
 			first.setHandicap(HandicapDict.getHandicapValue(source.getFirsthandicap()));
@@ -63,7 +63,7 @@ public class YpToOddsYp implements Transfer<List<OddsYp>, Yp>
 		OddsYp last = new OddsYp();
 		last.setMid(source.getMid());
 		last.setCorpid(source.getGid());
-		last.setCorpname(source.getGname());
+		//last.setCorpname(source.getGname());
 		last.setOpentime(new Date(source.getLastTimeValue()));
 		last.setWinodds(source.getWinodds());
 		last.setHandicap(HandicapDict.getHandicapValue(source.getHandicap()));
