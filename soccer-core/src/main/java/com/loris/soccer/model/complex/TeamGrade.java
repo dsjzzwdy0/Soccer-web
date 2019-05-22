@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model.complex;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.soccer.model.MatchResult.ResultType;
 import com.loris.soccer.model.view.MatchInfo;
 
@@ -130,22 +132,27 @@ public class TeamGrade
 	 * 加入比赛信息
 	 * @param matchInfo
 	 */
-	public void addMatchInfo(MatchInfo matchInfo)
+	public boolean addMatchInfo(MatchInfo matchInfo)
 	{
 		ResultType result = matchInfo.getResult();
-		if(result == null) return;
+		if(result == null) return false;
+		if(!StringUtils.equals(tid, matchInfo.getHomeid())
+				&& StringUtils.equals(tid, matchInfo.getClientid()))
+			return false;
+		boolean isHomeTeam = StringUtils.equals(tid, matchInfo.getHomeid());
+		return addMatchResult(result, isHomeTeam) > 0;
+	}
+	
+	protected int addMatchResult(ResultType result, boolean homeTeam)
+	{
 		total ++;
 		if(result == ResultType.WIN)
-		{
-			winnum ++;
-		}
+			return homeTeam ? winnum ++ : losenum ++;
 		else if(result == ResultType.DRAW)
-		{
-			drawnum ++;
-		}
-		else
-		{
-			losenum ++;			
-		}
+			return drawnum ++;
+		else if(result == ResultType.LOSE)
+			return homeTeam ? losenum ++ : winnum ++;
+		else 
+			return -1;
 	}
 }

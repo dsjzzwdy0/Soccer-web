@@ -45,10 +45,17 @@ public class LoginController extends BaseController
 	/**
 	 * 跳转到主页
 	 */
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String index(Model model)
 	{
 		// 获取菜单列表
+		ShiroUser shiroUser = ShiroKit.getUser();
+		if (shiroUser == null)
+		{
+			ShiroKit.getSubject().logout();
+			model.addAttribute("tips", "该用户没有角色，无法登陆");
+			return "/login";
+		}
 		List<Integer> roleList = ShiroKit.getUser().getRoleList();
 		if (roleList == null || roleList.size() == 0)
 		{
@@ -66,7 +73,7 @@ public class LoginController extends BaseController
 		String avatar = user.getAvatar();
 		model.addAttribute("avatar", avatar);
 
-		return "/index";
+		return "/main";
 	}
 
 	/**
