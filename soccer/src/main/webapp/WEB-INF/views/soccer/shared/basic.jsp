@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=9">
@@ -8,19 +10,19 @@
 <meta name="description" content="超过200家免费提供竞彩胜平负开奖、竞彩胜平负推荐、竞彩胜平负数据等内容，方便彩民在线购买竞彩足球胜平负">
 <meta name="robots" content="all">
 <meta name="copyright" content="东方足球网">
-<link rel="Shortcut Icon" href="../content/images/loris_favicon_2.ico">
-<link rel="stylesheet" type="text/css" href="../content/scripts/bootstrap/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="../content/fonts/css/font-awesome.min.css" />
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/headernew.css" />
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/soccer_public.css" />
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/build.css" />
-<link rel="stylesheet" type="text/css" href="../content/scripts/bootstrap/bootstrap-datepicker.css" />
-<link rel="stylesheet" type="text/css" href="../content/scripts/bootstrap-select/bootstrap-select.min.css" />
-<script type="text/javascript" src="../content/scripts/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="../content/scripts/layer/layer.js"></script>
-<script type="text/javascript" src="../content/scripts/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="../content/scripts/bootstrap/bootstrap-table.js"></script>
-<script type="text/javascript" src="../content/scripts/bootstrap/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="../content/scripts/bootstrap-select/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="../content/scripts/bootstrap/locale/bootstrap-table-zh-CN.js"></script>
-<script type="text/javascript" src="../content/scripts/public/learun-ui.js"></script>
+<link rel="Shortcut Icon" href="${ctxPath}/content/images/loris_favicon_2.ico">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-4.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/fonts/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/headernew.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/public.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/build.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-datepicker/bootstrap-datepicker.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-select/bootstrap-select.min.css" />
+<script type="text/javascript" src="${ctxPath}/content/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/layer/layer.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-4.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/scripts/soccer/public.js"></script>

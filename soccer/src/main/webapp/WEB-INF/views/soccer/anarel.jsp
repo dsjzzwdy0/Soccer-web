@@ -3,6 +3,8 @@
 <%@page import="com.loris.soccer.model.League"%>
 <%@page import="com.loris.soccer.util.IssueMatchUtil" %>
 <%@page import="org.apache.commons.lang3.StringUtils" %>
+<c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
+
 <%
     String issue = request.getParameter("issue");
 	String sid = request.getParameter("sid");		//配置编号
@@ -20,9 +22,9 @@
 		type = "bd";
 	}
 %>
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/datacenter.css" />
-<link rel="stylesheet" type="text/css" href="../content/scripts/soccer/soccer-table.css" />
-<script type="text/javascript" src="../content/scripts/soccer/soccer-table.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/datacenter.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/scripts/soccer/soccer-table.css" />
+<script type="text/javascript" src="${ctxPath}/content/scripts/soccer/soccer-table.js"></script>
 
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/anatoolbar.jsp"%>

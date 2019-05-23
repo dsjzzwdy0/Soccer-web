@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
 
 <div id="login_bg"></div>
 <div class="Newheader_box">
@@ -48,7 +49,7 @@
 	<a href="#">
 		<div class="indexLogo_box">
 			<div class="indexLogo_img">
-				<img src="../content/images/soccer4.png" alt="东方足彩网"
+				<img src="${ctxPath }/content/images/soccer4.png" alt="东方足彩网"
 					class="searchbox_logo float_l">
 			</div>
 		</div>

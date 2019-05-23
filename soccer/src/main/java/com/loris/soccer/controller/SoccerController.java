@@ -99,7 +99,7 @@ public class SoccerController extends BaseController
 	 *            分析页面的类型
 	 * @return
 	 */
-	@RequestMapping("/analysis")
+	@RequestMapping("/analysis/{type}")
 	public ModelAndView getAnalysisPage(String type)
 	{
 		int index = getAnalysisPageIndex(type);
