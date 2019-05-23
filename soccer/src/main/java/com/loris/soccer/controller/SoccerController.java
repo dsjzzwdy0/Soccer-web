@@ -20,12 +20,14 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.loris.auth.model.User;
 import com.loris.common.constant.Constants;
 import com.loris.common.util.DateUtil;
 import com.loris.common.web.BaseController;
+import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.service.CompService;
 
@@ -45,9 +47,9 @@ public class SoccerController extends BaseController
 
 	// 开盘基础数据
 	public final static String[][] ISSUE_PAGE_TYPES = { 
-			{ "danchang", "北京单场" }, // 北京单场数据
-			{ "jingcai", "竞彩足球" }, // 竞彩数据
-			{ "listvars", "" } // 所有单场欧赔分析
+			{ "danchang", "北京单场" }, 	// 北京单场数据
+			{ "jingcai", "竞彩足球" }, 	// 竞彩数据
+			{ "listvars", "欧赔分析" } 	// 所有单场欧赔分析
 	};
 
 	// 当日开盘分析页面类型
@@ -111,6 +113,26 @@ public class SoccerController extends BaseController
 
 		setUserObject(view);
 		return view;
+	}
+	
+	/**
+	 * 获得配置数据
+	 * @param sid 数据编号
+	 * @return 数据列表
+	 */
+	@ResponseBody
+	@RequestMapping("/getCompSetting")
+	public Rest getCompSetting(String sid)
+	{
+		CompSetting setting = compService.getCompSetting(sid);
+		if(setting == null)
+		{
+			return Rest.failure("There are no CompSetting of sid='" + sid + "'");
+		}
+		else
+		{
+			return Rest.okData(setting);
+		}
 	}
 	
 	/**

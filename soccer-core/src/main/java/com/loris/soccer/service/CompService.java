@@ -53,4 +53,11 @@ public interface CompService extends IService<CompSetting>
 	 * @return
 	 */
 	List<CasinoComp> getCasinoComps(String type);
+	
+	/**
+	 * 获得配置数据
+	 * @param sid 编号
+	 * @return 配置数据
+	 */
+	CompSetting getCompSetting(String sid);
 }

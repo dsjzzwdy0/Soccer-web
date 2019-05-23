@@ -93,4 +93,16 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 		return casinoCompMapper.selectList(queryWrapper);
 	}
 
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.CompService#getCompSetting(java.lang.String)
+	 */
+	@Override
+	public CompSetting getCompSetting(String sid)
+	{
+		QueryWrapper<CompSetting> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("sid", sid);
+		return baseMapper.selectOne(queryWrapper);
+	}
+
 }
