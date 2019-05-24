@@ -46,7 +46,6 @@ import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.constant.Enviroment;
 import com.loris.common.model.TableRecords;
-import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.web.wrapper.Rest;
@@ -128,12 +127,10 @@ public class App
 			// testMatchResult();
 			// testUpload();
 			// testSourceFinance();
-			
-			testStat();
+			// testStat();
 			
 			// testMariaDB();
 			// testDateString();
-			// testJcWebPage();
 			// testSchedulerInfo();
 			// testMapEqual();
 			// testMainThreadScheduler();
@@ -146,7 +143,7 @@ public class App
 			// testZgzcwYpWebPage();
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
-			// testJcWebPage();
+			testJcWebPage();
 			// testWebPageService();
 			// testLeagueRoundWebPage();
 			// testZgzcwCupWebPage();
@@ -273,7 +270,7 @@ public class App
 		logger.info("START: " + start);
 		logger.info("END: " + end);
 		MatchService matchService = context.getBean(MatchService.class);
-		List<IssueMatch> matchBdInfos = matchService.getMatchBds(start, end);
+		List<IssueMatch> matchBdInfos = matchService.getIssueMatchs(SoccerConstants.LOTTERY_BD, start, end);
 		int i = 1;
 		for (IssueMatch matchBdInfo : matchBdInfos)
 		{
@@ -783,16 +780,6 @@ public class App
 			return;
 		}
 		logger.info("Match Jc data list size is " + matchJcs.size());
-		
-		MatchList matchList = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
-		if(matchList != null && matchList.size() > 0)
-		{		
-			List<String> leagues = ArraysUtil.getObjectFieldValue(matchList, Match.class, SoccerConstants.NAME_FIELD_LID);
-			for (String string : leagues)
-			{
-				logger.info(string);
-			}
-		}
 		
 		saveTableRecords(records);
 	}

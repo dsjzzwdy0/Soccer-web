@@ -106,7 +106,13 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 	{
 		QueryWrapper<CompSetting> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("sid", sid);
-		return baseMapper.selectOne(queryWrapper);
+		CompSetting setting = baseMapper.selectOne(queryWrapper);
+		if(setting != null)
+		{
+			updateCompSetting(setting);
+		}
+		return setting;
+		
 	}
 
 	/**
@@ -119,6 +125,10 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 		if(defaultSetting == null)
 		{
 			defaultSetting = baseMapper.selectOne(new QueryWrapper<CompSetting>().eq("sid", Enviroment.defaultCompSettingId));
+			if(defaultSetting != null)
+			{
+				updateCompSetting(defaultSetting);
+			}
 		}
 		return defaultSetting;
 	}
@@ -135,7 +145,32 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 		{
 			setting = getDefaultSetting();
 		}
+		else
+		{
+			updateCompSetting(setting);
+		}
 		return setting;
+	}
+	
+	/**
+	 * 更新博彩公司信息
+	 * @param compSetting
+	 */
+	protected void updateCompSetting(CompSetting compSetting)
+	{
+		List<String> ids = compSetting.getCorpIds(null);
+		QueryWrapper<CasinoComp> queryWrapper = new QueryWrapper<>();
+		queryWrapper.in("corpid", ids);
+		List<CasinoComp> comps = casinoCompMapper.selectList(queryWrapper);
+		
+		if(comps == null || comps.size() == 0)
+		{
+			return;
+		}
+		for (CasinoComp casinoComp : comps)
+		{
+			compSetting.updateCasinoComp(casinoComp);
+		}
 	}
 
 }

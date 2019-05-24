@@ -108,6 +108,7 @@ public class SoccerDataService implements DataService
 				saveRecord(key, results.get(key));
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				logger.warn("Error occured when save '" + key + "' record.");
 			}
 		}
@@ -313,7 +314,7 @@ public class SoccerDataService implements DataService
 			{
 				betBdOdds = (List<BetBdOdds>)value;
 			}
-			return betOddsService.insertBetBdOdds(betBdOdds);
+			return betOddsService.insertBetBdOdds(betBdOdds, overwrite);
 		case SOCCER_DATA_BETODDS_JC_LIST:
 			List<BetJcOdds> betJcOdds = null;
 			if(value instanceof BetJcOddsList)
@@ -325,7 +326,7 @@ public class SoccerDataService implements DataService
 			{
 				betJcOdds = (List<BetJcOdds>)value;
 			}
-			return betOddsService.insertBetJcOdds(betJcOdds);
+			return betOddsService.insertBetJcOdds(betJcOdds, overwrite);
 		default:
 			// No nothing.
 			logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");

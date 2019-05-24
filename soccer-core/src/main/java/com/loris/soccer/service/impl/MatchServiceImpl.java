@@ -29,6 +29,7 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.IssueMatchMapper;
 import com.loris.soccer.dao.MatchMapper;
 import com.loris.soccer.dao.MatchResultMapper;
+import com.loris.soccer.dao.view.IssueMatchInfoMapper;
 import com.loris.soccer.dao.view.MatchBdInfoMapper;
 import com.loris.soccer.dao.view.MatchInfoMapper;
 import com.loris.soccer.dao.view.MatchJcInfoMapper;
@@ -36,6 +37,7 @@ import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.complex.TeamGrade;
+import com.loris.soccer.model.view.IssueMatchInfo;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
@@ -61,6 +63,9 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 
 	@Autowired
 	private MatchResultMapper matchResultMapper;
+	
+	@Autowired
+	private IssueMatchInfoMapper issueMatchInfoMapper;
 	
 	@Autowired
 	private MatchBdInfoMapper matchBdInfoMapper;
@@ -265,13 +270,51 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 *  (non-Javadoc)
 	 * @see com.loris.soccer.service.MatchService#getMatchBds(java.util.Date, java.util.Date)
 	 */
 	@Override
-	public List<IssueMatch> getMatchBds(Date start, Date end)
+	public List<IssueMatch> getIssueMatchs(String type, Date start, Date end)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		QueryWrapper<IssueMatch> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotEmpty(type))
+		{
+			queryWrapper.eq("type", type);
+		}
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("matchtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("matchtime", end);
+		}
+		return issueMatchMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getIssueMatchs(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<IssueMatch> getIssueMatchs(String issue, String type)
+	{
+		QueryWrapper<IssueMatch> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("type", type);
+		queryWrapper.eq("issue", issue);
+		return issueMatchMapper.selectList(queryWrapper);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getIssueMatchsInfo(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<IssueMatchInfo> getIssueMatchsInfo(String issue, String type)
+	{
+		QueryWrapper<IssueMatchInfo> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("type", type);
+		queryWrapper.eq("issue", issue);
+		return issueMatchInfoMapper.selectList(queryWrapper);
 	}
 }

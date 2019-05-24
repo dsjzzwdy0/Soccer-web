@@ -58,6 +58,7 @@ public abstract class AbstractLotteryMatchWebPageParser extends AbstractLotteryW
 		}
 		IssueMatchList lotterMatches = new IssueMatchList();			//投注的比赛数据
 		MatchList baseMatchs = new MatchList();							//基本比赛数据
+		baseMatchs.setOverwrite(false);
 		
 		parseMatchList(document, issue, baseMatchs, lotterMatches, results);
 		

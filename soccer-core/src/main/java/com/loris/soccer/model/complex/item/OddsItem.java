@@ -44,6 +44,13 @@ public class OddsItem
 		this.type = type;
 	}
 	
+	public OddsItem(OddsValue odds, String type)
+	{
+		this.corpid = odds.getCorpid();
+		this.type = type;
+		addOdds(odds, type);
+	}
+	
 	public String getCorpid()
 	{
 		return corpid;
@@ -84,41 +91,47 @@ public class OddsItem
 	{
 		this.values = values;
 	}
+	
+	public void addOdds(OddsValue oddsValue, String type)
+	{
+		if(StringUtils.equals(SoccerConstants.ODDS_TYPE_OP, type))
+		{
+			OddsOp op = (OddsOp)oddsValue;
+			if(firsttime == null || DateUtil.compareDate(firsttime, op.getOpentime()) > 0)
+			{
+				firsttime = op.getOpentime();
+				setOp(op, 0);
+			}
+			if(lasttime == null || DateUtil.compareDate(lasttime, op.getOpentime()) < 0)
+			{
+				lasttime = op.getOpentime();
+				setOp(op,  3);
+			}
+		}
+		else if(StringUtils.equals(SoccerConstants.ODDS_TYPE_YP, type))
+		{
+			OddsYp yp = (OddsYp) oddsValue;
+			if(firsttime == null || DateUtil.compareDate(firsttime, yp.getOpentime()) > 0)
+			{
+				firsttime = yp.getOpentime();
+				setYp(yp, 0);
+			}
+			if(lasttime == null || DateUtil.compareDate(lasttime, yp.getOpentime()) < 0)
+			{
+				lasttime = yp.getOpentime();
+				setYp(yp,  3);
+			}
+		}
+	}
 	public void addOdds(OddsValue oddsValue)
 	{
 		if(oddsValue instanceof OddsOp)
 		{
-			if(StringUtils.equals(SoccerConstants.ODDS_TYPE_OP, type))
-			{
-				OddsOp op = (OddsOp)oddsValue;
-				if(firsttime == null || DateUtil.compareDate(firsttime, op.getOpentime()) > 0)
-				{
-					firsttime = op.getOpentime();
-					setOp(op, 0);
-				}
-				if(lasttime == null || DateUtil.compareDate(lasttime, op.getOpentime()) < 0)
-				{
-					lasttime = op.getOpentime();
-					setOp(op,  3);
-				}
-			}
+			addOdds(oddsValue, SoccerConstants.ODDS_TYPE_OP);
 		}
 		else if(oddsValue instanceof OddsYp)
 		{
-			if(StringUtils.equals(SoccerConstants.ODDS_TYPE_YP, type))
-			{
-				OddsYp yp = (OddsYp) oddsValue;
-				if(firsttime == null || DateUtil.compareDate(firsttime, yp.getOpentime()) > 0)
-				{
-					firsttime = yp.getOpentime();
-					setYp(yp, 0);
-				}
-				if(lasttime == null || DateUtil.compareDate(lasttime, yp.getOpentime()) < 0)
-				{
-					lasttime = yp.getOpentime();
-					setYp(yp,  3);
-				}
-			}
+			addOdds(oddsValue, SoccerConstants.ODDS_TYPE_YP);
 		}
 	}
 	

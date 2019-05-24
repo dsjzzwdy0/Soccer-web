@@ -13,6 +13,8 @@ package com.loris.soccer.model;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.soccer.model.base.MatchItem;
 
@@ -93,5 +95,19 @@ public class IssueMatch extends MatchItem
 	public void setDelaytime(Date delaytime)
 	{
 		this.delaytime = delaytime;
+	}
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null || !(obj instanceof IssueMatch)) return false;
+		IssueMatch other = (IssueMatch) obj;
+		return StringUtils.equals(mid, other.mid) &&
+				StringUtils.equals(type, other.type);
+	}
+	@Override
+	public String toString()
+	{
+		return "IssueMatch [issue=" + issue + ", issueno=" + issueno + ", ordinary=" + ordinary + ", closetime="
+				+ closetime + ", type=" + type + ", isdelay=" + isdelay + ", delaytime=" + delaytime + "]";
 	}
 }

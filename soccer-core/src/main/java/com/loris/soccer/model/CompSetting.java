@@ -185,6 +185,26 @@ public class CompSetting extends AutoIdEntity
 		}
 	}
 	
+	/**
+	 * 更新博彩公司信息
+	 * @param comp
+	 */
+	public void updateCasinoComp(CasinoComp comp)
+	{
+		for (CasinoComp casinoComp : casinoComps)
+		{
+			if(casinoComp.equals(comp))
+			{
+				casinoComp.setId(comp.getId());
+				casinoComp.setCorpid(comp.getCorpid());
+				casinoComp.setName(comp.getName());
+				casinoComp.setSource(comp.getSource());
+				casinoComp.setType(comp.getType());
+				casinoComp.setIsmain(comp.isIsmain());
+			}
+		}
+	}
+	
 	public void addCasinoComp(CasinoComp comp)
 	{
 		addCasinoCompInfo(comp.getCorpid(), comp.getType());
@@ -258,14 +278,16 @@ public class CompSetting extends AutoIdEntity
      * @param type
      * @return
      */
-	protected List<String> getCorpIds(String type)
+    @JsonIgnore
+	public List<String> getCorpIds(String type)
 	{
 		List<String> ids = new ArrayList<>();
 		for (CasinoComp casinoComp : casinoComps)
 		{
-			if(StringUtils.equals(type, casinoComp.getType()))
+			if(StringUtils.isEmpty(type) || StringUtils.equals(type, casinoComp.getType()))
 			{
-				ids.add(casinoComp.getCorpid());
+				if(!ids.contains(casinoComp.getCorpid()))
+					ids.add(casinoComp.getCorpid());
 			}
 		}
 		return ids;

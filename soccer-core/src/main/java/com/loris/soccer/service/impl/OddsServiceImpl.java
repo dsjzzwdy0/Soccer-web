@@ -225,4 +225,42 @@ public class OddsServiceImpl implements OddsService
 		}
 		return new OddsOpListWrapper().wrap(ops);
 	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#selectOddsOps(java.util.List, java.util.List)
+	 */
+	@Override
+	public List<OddsOp> selectOddsOps(List<String> mids, List<String> corpids)
+	{
+		QueryWrapper<OddsOp> queryWrapper = new QueryWrapper<>();
+		if(mids != null && mids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_MID, mids);
+		}
+		if(corpids != null && corpids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_CORPID, corpids);
+		}
+		return oddsOpMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#selectOddsYps(java.util.List, java.util.List)
+	 */
+	@Override
+	public List<OddsYp> selectOddsYps(List<String> mids, List<String> corpids)
+	{
+		QueryWrapper<OddsYp> queryWrapper = new QueryWrapper<>();
+		if(mids != null && mids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_MID, mids);
+		}
+		if(corpids != null && corpids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_CORPID, corpids);
+		}
+		return oddsYpMapper.selectList(queryWrapper);
+	}
 }

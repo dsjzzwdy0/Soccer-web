@@ -17,7 +17,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.complex.item.OddsItem;
+import com.loris.soccer.model.view.IssueMatchInfo;
 
 /**   
  * @ClassName:  MatchOdds.java   
@@ -46,6 +50,16 @@ public class MatchOdds
 	protected Date matchtime;
 	protected Date closetime;
 	protected List<OddsItem> odds = new ArrayList<>();
+	
+	public MatchOdds()
+	{
+	}
+	
+	public MatchOdds(IssueMatchInfo matchInfo)
+	{
+		this.setIssueMatchInfo(matchInfo);
+	}
+	
 	public String getOrdinary()
 	{
 		return ordinary;
@@ -185,5 +199,49 @@ public class MatchOdds
 			}
 		}
 		return null;
+	}
+	
+	public void addOddsOp(OddsOp op)
+	{
+		OddsItem item = getOddsItem(op.getCorpid(), SoccerConstants.ODDS_TYPE_OP);
+		if(item == null)
+		{
+			item = new OddsItem(op, SoccerConstants.ODDS_TYPE_OP);
+			odds.add(item);
+		}
+		else
+		{
+			item.addOdds(op, SoccerConstants.ODDS_TYPE_OP);
+		}
+	}
+	public void addOddsYp(OddsYp yp)
+	{
+		OddsItem item = getOddsItem(yp.getCorpid(), SoccerConstants.ODDS_TYPE_YP);
+		if(item == null)
+		{
+			item = new OddsItem(yp, SoccerConstants.ODDS_TYPE_YP);
+			odds.add(item);
+		}
+		else
+		{
+			item.addOdds(yp, SoccerConstants.ODDS_TYPE_YP);
+		}
+	}
+	
+	protected void setIssueMatchInfo(IssueMatchInfo matchInfo)
+	{
+		this.ordinary = matchInfo.getOrdinary();
+		this.issue = matchInfo.getIssue();
+		this.mid = matchInfo.getMid();
+		this.lid = matchInfo.getLid();
+		this.leaguename = matchInfo.getLeaguename();
+		this.matchtime = matchInfo.getMatchtime();
+		this.homeid = matchInfo.getHomeid();
+		this.homename = matchInfo.getHomename();
+		this.clientid = matchInfo.getClientid();
+		this.clientname = matchInfo.getClientname();
+		this.season = matchInfo.getSeason();
+		this.round = matchInfo.getRound();
+		this.closetime = matchInfo.getClosetime();
 	}
 }

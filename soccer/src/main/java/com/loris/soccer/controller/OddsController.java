@@ -13,15 +13,22 @@ package com.loris.soccer.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loris.common.util.ArraysUtil;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.complex.MatchOddsList;
+import com.loris.soccer.model.view.IssueMatchInfo;
 import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
@@ -40,6 +47,8 @@ import com.loris.soccer.wrapper.OddsOpListWrapper;
 @RequestMapping("/odds")
 public class OddsController extends BaseController
 {
+	private static Logger logger = Logger.getLogger(OddsController.class);
+	
 	@Autowired
 	private OddsService oddsService;
 	
@@ -94,6 +103,60 @@ public class OddsController extends BaseController
 		{
 			return Rest.failure("There are no CompSetting of '" + sid + "' set or there are not default CompSetting.");
 		}
-		return Rest.ok();
+		if(StringUtils.isAllBlank(type))
+		{
+			type = SoccerConstants.LOTTERY_BD;
+		}
+		
+		List<IssueMatchInfo> issueMatchs = matchService.getIssueMatchsInfo(issue, type);
+		if(issueMatchs == null || issueMatchs.size() == 0)
+		{
+			return Rest.failure("There are no IssueMatch in database of '" + issue + "'.");
+		}
+		MatchOddsList matchOddsList = new MatchOddsList(setting, issueMatchs);
+		matchOddsList.setIssue(issue);
+		
+		//处理赔率数据
+		List<String> mids = ArraysUtil.getObjectFieldValue(issueMatchs, IssueMatchInfo.class, SoccerConstants.NAME_FIELD_MID);
+		List<String> opcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_OP);
+		if(opcorpids != null && opcorpids.size() > 0)
+		{
+			List<OddsOp> ops = oddsService.selectOddsOps(mids, opcorpids);
+			logger.info("总共的欧赔数据的量为： " + ops.size());
+			matchOddsList.addOddsOpList(ops);
+		}
+		
+		List<String> ypcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_YP);
+		if(ypcorpids != null && ypcorpids.size() > 0)
+		{
+			List<OddsYp> yps = oddsService.selectOddsYps(mids, ypcorpids);
+			logger.info("总共的欧赔数据的量为： " + yps.size());
+			matchOddsList.addOddsYpList(yps);
+		}
+		
+		return Rest.okData(matchOddsList);
+	}
+	
+	/**
+	 * 获得配置数据
+	 * @param sid 数据编号
+	 * @return 数据列表
+	 */
+	@ResponseBody
+	@RequestMapping("/getCompSetting")
+	public Rest getCompSetting(String sid)
+	{
+		long st = System.currentTimeMillis();
+		CompSetting setting = compService.getCompSetting(sid);
+		long en = System.currentTimeMillis();
+		logger.info("Total spend time to load CompSetting '" + sid + "' is " + (en - st) + " ms.");
+		if(setting == null)
+		{
+			return Rest.failure("There are no CompSetting of sid='" + sid + "'");
+		}
+		else
+		{
+			return Rest.okData(setting);
+		}
 	}
 }

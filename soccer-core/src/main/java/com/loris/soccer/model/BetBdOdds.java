@@ -103,7 +103,12 @@ public class BetBdOdds extends AutoIdEntity
 		if(obj == null) return false;
 		if(obj.getClass() != this.getClass()) return false;
 		BetBdOdds other = (BetBdOdds) obj;
-		return StringUtils.equals(mid, other.mid)
-				&& opentime == other.getOpentime();
+		if(!StringUtils.equals(mid, other.mid))
+			return false;
+		if(opentime == other.getOpentime()) return true;
+		if(rqnum == other.rqnum && winodds == other.winodds && drawodds == other.drawodds &&
+				loseodds == other.loseodds)
+			return true;
+		return false;
 	}
 }

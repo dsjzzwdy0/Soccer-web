@@ -144,49 +144,55 @@ create table soccer_league_rank(
 	INDEX `index_round` (`round`) USING BTREE
 );
 
-create table soccer_match_bd(
+create table soccer_bet_bd_odds(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10) NOT NULL,
-	bdno varchar(10),
-	issue varchar(10),
-	ordinary varchar(5),
-	matchtime timestamp,
-	closetime timestamp,
+	type varchar(5),
+	opentime timestamp,
 	winodds float,
 	drawodds float,
 	loseodds float,
 	rqnum int,
-	rqopened tinyint(1),
-	isdelayed tinyint(1),
-	delaytime timestamp,
 	PRIMARY KEY (`id`),	
 	INDEX `index_mid` (`mid`) USING BTREE,
-	INDEX `index_bdno` (`bdno`) USING BTREE,
-	INDEX `index_issue` (`issue`) USING BTREE
+	INDEX `index_type` (`type`) USING BTREE
 );
 
-create table soccer_match_jc(
+create table soccer_bet_jc_odds(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10) NOT NULL,
-	issue varchar(10),
-	ordinary varchar(5),
-	matchtime timestamp,
-	closetime timestamp,
+	type varchar(5),
+	opentime timestamp NULL,
 	winodds float,
 	drawodds float,
 	loseodds float,
-	opened tinyint(1),
-	danguan tinyint(1),
+	isopen tinyint(1),
+	isdanguan tinyint(1),
 	rqnum int,
-	rqopened tinyint(1),
+	isrqopen tinyint(1),
 	rqwinodds float,
 	rqdrawodds float,
 	rqloseodds float,
-	isdelayed tinyint(1),
-	delaytime timestamp,
 	PRIMARY KEY (`id`),	
 	INDEX `index_mid` (`mid`) USING BTREE,
-	INDEX `index_issue` (`issue`) USING BTREE
+	INDEX `index_type` (`type`) USING BTREE
+);
+
+create table soccer_match_issue(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10) NOT NULL,
+	issue varchar(10),
+	type varchar(5),
+	issueno varchar(10),
+	ordinary varchar(5),
+	matchtime timestamp NULL,
+	closetime timestamp NULL,
+	isdelay tinyint(1),
+	delaytime timestamp NULL,
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
+	INDEX `index_issue` (`issue`) USING BTREE,
+	INDEX `index_type` (`type`) USING BTREE
 );
 
 
@@ -434,5 +440,15 @@ SQL SECURITY DEFINER
 VIEW `soccer_league_season_info`AS 
 select `a`.`id` AS `id`,`a`.`lid` AS `lid`,`a`.`season` AS `season`,`b`.`name` AS `name`,`b`.`type` AS `leaguetype` from (`soccer_league_season` `a` 
 	left join `soccer_league` `b` on((`a`.`lid` = `b`.`lid`))) ;
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_match_issue_info`AS 
+select `a`.`id` AS `id`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.`season` AS `season`,`b`.`round` AS `round`,`a`.`mid` AS `mid`,
+	`a`.`issue` AS `issue`,`a`.`issueno` AS `issueno`,`a`.`ordinary` AS `ordinary`,`a`.`type` AS `type`,`b`.`homeid` AS `homeid`,
+	`b`.`homename` AS `homename`,`b`.`clientid` AS `clientid`,`b`.`clientname` AS `clientname`,`b`.`matchtime` AS `matchtime`,
+	`a`.`closetime` AS `closetime`,`a`.`isdelay` AS `isdelay`,`a`.`delaytime` AS `delaytime` from (`soccer_match_issue` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
 
 

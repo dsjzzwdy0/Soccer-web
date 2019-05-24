@@ -17,6 +17,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.CompSetting;
+import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.view.IssueMatchInfo;
 
 /**   
  * @ClassName:  MatchOddsList    
@@ -27,17 +31,30 @@ import com.loris.soccer.model.CasinoComp;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class MatchOddsList extends ArrayList<MatchOdds>
+public class MatchOddsList
 {
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	protected String issue;
 	protected String type;
 	protected String sid;				//配置数据与信息
 	protected String sname;				//配置名称
 	protected List<CasinoComp> comps = new ArrayList<>();
 	protected List<MatchOdds> matchOdds = new ArrayList<>();
+	public MatchOddsList()
+	{
+	}
+	public MatchOddsList(CompSetting setting)
+	{
+		this.sid = setting.getSid();
+		this.comps = setting.getCasinoComps();
+		this.sname = setting.getName();
+	}
+	
+	public MatchOddsList(CompSetting setting, List<IssueMatchInfo> matchInfos)
+	{
+		this(setting);
+		initFromIssueMatchs(matchInfos);
+	}
+	
 	public String getIssue()
 	{
 		return issue;
@@ -90,15 +107,58 @@ public class MatchOddsList extends ArrayList<MatchOdds>
 	{
 		this.matchOdds.add(matchOdd);
 	}
-	public MatchOdds getMatchOdds(String mid)
+	public MatchOdds getMatchOddsByMid(String mid)
 	{
-		for (MatchOdds matchOdds : matchOdds)
+		for (MatchOdds m : matchOdds)
 		{
-			if(StringUtils.equals(mid, matchOdds.getMid()))
+			if(StringUtils.equals(mid, m.getMid()))
 			{
-				return matchOdds;
+				return m;
 			}
 		}
 		return null;
+	}
+	public void initFromIssueMatchs(List<IssueMatchInfo> matchs)
+	{
+		for (IssueMatchInfo match : matchs)
+		{
+			if(getMatchOddsByMid(match.getMid()) != null)
+			{
+				continue;
+			}
+			MatchOdds m = new MatchOdds(match);
+			matchOdds.add(m);
+		}
+	}
+	
+	public void addOddsOpList(List<OddsOp> ops)
+	{
+		for (OddsOp op : ops)
+		{
+			addOddsOp(op);
+		}
+	}
+	public void addOddsYpList(List<OddsYp> yps)
+	{
+		for (OddsYp yp : yps)
+		{
+			addOddsYp(yp);
+		}
+	}
+	public void addOddsOp(OddsOp op)
+	{
+		MatchOdds m = getMatchOddsByMid(op.getMid());
+		if(m != null)
+		{
+			m.addOddsOp(op);
+		}
+	}
+	public void addOddsYp(OddsYp yp)
+	{
+		MatchOdds m = getMatchOddsByMid(yp.getMid());
+		if(m != null)
+		{
+			m.addOddsYp(yp);
+		}
 	}
 }

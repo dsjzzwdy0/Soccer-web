@@ -75,9 +75,11 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 			
 			odds.setType(SoccerConstants.LOTTERY_JC);
 			odds.setOpentime(new Date());
+			
 			match.setType(SoccerConstants.LOTTERY_JC);
 			match.setClosetime(closeTime);
 			match.setIssue(issue);
+			match.setIssueno(issue);
 			parseMatchInfo(element, baseMatch, match, odds);
 			
 			if(StringUtils.isNotBlank(match.getMid()) && !"0".equals(match.getMid()))

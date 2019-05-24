@@ -19,6 +19,7 @@ import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.complex.TeamGrade;
+import com.loris.soccer.model.view.IssueMatchInfo;
 import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.model.view.MatchJcInfo;
@@ -105,7 +106,23 @@ public interface MatchService extends IService<Match>
 	 * @param end 结束时间
 	 * @return 比赛列表
 	 */
-	List<IssueMatch> getMatchBds(Date start, Date end);
+	List<IssueMatch> getIssueMatchs(String type, Date start, Date end);
+	
+	/**
+	 * 查询股注的比赛数据
+	 * @param issue
+	 * @param type
+	 * @return
+	 */
+	List<IssueMatch> getIssueMatchs(String issue, String type);
+	
+	/**
+	 * 查询投注比赛的数据列表
+	 * @param issue
+	 * @param type
+	 * @return
+	 */
+	List<IssueMatchInfo> getIssueMatchsInfo(String issue, String type);
 	
 	/**
 	 * 插入比赛结果数据记录

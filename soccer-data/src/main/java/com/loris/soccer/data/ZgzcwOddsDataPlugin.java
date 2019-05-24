@@ -106,7 +106,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 		if(baseMatchs != null && baseMatchs.size() > 0)
 			addMatchItems(matchs, baseMatchs);
 		
-		List<IssueMatch> issueMatchs = matchService.getMatchBds(start, end);
+		List<IssueMatch> issueMatchs = matchService.getIssueMatchs("", start, end);
 		if(issueMatchs != null && issueMatchs.size() > 0)
 			addMatchItems(matchs, issueMatchs);
 	}

@@ -53,6 +53,14 @@ public interface OddsService
 	List<OddsOp> selectOddsOp(String mid, String corpid);
 	
 	/**
+	 * 获得所有的欧赔数据
+	 * @param mids 比赛编号
+	 * @param corpids 博彩公司编号
+	 * @return
+	 */
+	List<OddsOp> selectOddsOps(List<String> mids, List<String> corpids);
+	
+	/**
 	 * 通过比赛编号获得欧赔数据的列表
 	 * @param mid 比赛编号
 	 * @return 数据列表
@@ -88,6 +96,14 @@ public interface OddsService
 	 * @return 是否成功
 	 */
 	boolean insertOddsYps(List<OddsYp> oddsYps, boolean overwrite);
+	
+	/**
+	 * 获得所有的欧赔数据
+	 * @param mids 比赛编号
+	 * @param corpids 公司编号
+	 * @return
+	 */
+	List<OddsYp> selectOddsYps(List<String> mids, List<String> corpids);
 	
 	
 	/**
