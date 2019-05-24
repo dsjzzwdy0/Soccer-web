@@ -44,7 +44,7 @@ import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.IssueMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
@@ -573,7 +573,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 				createLeagueCenterTasksFromMatchs(matchList, null);
 			}
 			Filter<MatchItem> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_MATCH);
-			createMatchTasks((MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), filter);
+			createMatchTasks((IssueMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST), filter);
 			break;
 		}
 		case ZgzcwConstants.PAGE_LOTTERY_JC:
@@ -585,7 +585,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			}
 			
 			Filter<MatchItem> filter = getSourceFilter(SoccerConstants.SOCCER_DATA_MATCH);
-			createMatchTasks((MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), filter);
+			createMatchTasks((IssueMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST), filter);
 			break;
 		}
 		case ZgzcwConstants.PAGE_CENTER:

@@ -55,7 +55,7 @@ import com.loris.old.soccer.service.OldMatchService;
 import com.loris.old.soccer.transfer.impl.MatchToMatchResult;
 import com.loris.old.soccer.transfer.impl.OldMatchToMatch;
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.IssueMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsNumList;
@@ -79,10 +79,10 @@ import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsYpWebPageParser;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.MatchResult.ResultType;
 import com.loris.soccer.model.OddsNum;
@@ -273,9 +273,9 @@ public class App
 		logger.info("START: " + start);
 		logger.info("END: " + end);
 		MatchService matchService = context.getBean(MatchService.class);
-		List<MatchBd> matchBdInfos = matchService.getMatchBds(start, end);
+		List<IssueMatch> matchBdInfos = matchService.getMatchBds(start, end);
 		int i = 1;
-		for (MatchBd matchBdInfo : matchBdInfos)
+		for (IssueMatch matchBdInfo : matchBdInfos)
 		{
 			logger.info(i +++ ": " + matchBdInfo);
 		}
@@ -776,7 +776,7 @@ public class App
 		 * int i = 1; for (MatchItem match : matchJcs) { logger.info(i +++ ": "
 		 * + match); }
 		 */
-		MatchItemList matchJcs = (MatchItemList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		IssueMatchList matchJcs = (IssueMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
 		if (matchJcs == null)
 		{
 			logger.info("Error: no Match JC data.");

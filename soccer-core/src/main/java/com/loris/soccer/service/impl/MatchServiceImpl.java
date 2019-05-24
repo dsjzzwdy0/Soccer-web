@@ -26,16 +26,14 @@ import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.dao.MatchBdMapper;
-import com.loris.soccer.dao.MatchJcMapper;
+import com.loris.soccer.dao.IssueMatchMapper;
 import com.loris.soccer.dao.MatchMapper;
 import com.loris.soccer.dao.MatchResultMapper;
 import com.loris.soccer.dao.view.MatchBdInfoMapper;
 import com.loris.soccer.dao.view.MatchInfoMapper;
 import com.loris.soccer.dao.view.MatchJcInfoMapper;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
-import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchBdInfo;
@@ -59,10 +57,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	SqlHelper sqlHelper;
 	
 	@Autowired
-	private MatchBdMapper matchBdMapper;
-	
-	@Autowired
-	private MatchJcMapper matchJcMapper;
+	private IssueMatchMapper issueMatchMapper;
 
 	@Autowired
 	private MatchResultMapper matchResultMapper;
@@ -129,47 +124,26 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchBdService#insertMatchBds(java.util.List)
+	 * @see com.loris.soccer.service.MatchBdService#insertIssueMatchs(java.util.List)
 	 */
 	@Override
-	public boolean insertMatchBds(List<MatchBd> matchBds)
+	public boolean insertIssueMatchs(List<IssueMatch> issueMatchs)
 	{
-		return insertMatchBds(matchBds, false);
+		return insertIssueMatchs(issueMatchs, false);
 	}
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchBdService#insertMatchBds(java.util.List, boolean)
+	 * @see com.loris.soccer.service.MatchBdService#insertIssueMatchs(java.util.List, boolean)
 	 */
 	@Override
-	public boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite)
+	public boolean insertIssueMatchs(List<IssueMatch> issueMatchs, boolean overwrite)
 	{
-		ObjectFilter<MatchBd> filter = new ObjectFilter<>();		
-		return SqlHelper.insertList(matchBds, MatchBd.class, matchBdMapper, filter,
+		ObjectFilter<IssueMatch> filter = new ObjectFilter<>();		
+		return SqlHelper.insertList(issueMatchs, IssueMatch.class, issueMatchMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#insertMatchJcs(java.util.List)
-	 */
-	@Override
-	public boolean insertMatchJcs(List<MatchJc> matchJcs)
-	{
-		return insertMatchJcs(matchJcs, false);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#insertMatchJcs(java.util.List, boolean)
-	 */
-	@Override
-	public boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite)
-	{
-		ObjectFilter<MatchJc> filter = new ObjectFilter<>();	
-		return SqlHelper.insertList(matchJcs, MatchJc.class, matchJcMapper, filter,
-				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
-	}
+	
 
 	/**
 	 *  (non-Javadoc)
@@ -243,44 +217,6 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#getMatchBds(java.util.Date, java.util.Date)
-	 */
-	@Override
-	public List<MatchBd> getMatchBds(Date start, Date end)
-	{
-		QueryWrapper<MatchBd> queryWrapper = new QueryWrapper<>();
-		if(ToolUtil.isNotEmpty(start))
-		{
-			queryWrapper.gt("matchtime", start);
-		}
-		if(ToolUtil.isNotEmpty(end))
-		{
-			queryWrapper.lt("matchtime", end);
-		}
-		return matchBdMapper.selectList(queryWrapper);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#getMatchJcs(java.util.Date, java.util.Date)
-	 */
-	@Override
-	public List<MatchJc> getMatchJcs(Date start, Date end)
-	{
-		QueryWrapper<MatchJc> queryWrapper = new QueryWrapper<>();
-		if(ToolUtil.isNotEmpty(start))
-		{
-			queryWrapper.gt("matchtime", start);
-		}
-		if(ToolUtil.isNotEmpty(end))
-		{
-			queryWrapper.lt("matchtime", end);
-		}
-		return matchJcMapper.selectList(queryWrapper);
-	}
-
-	/**
-	 *  (non-Javadoc)
 	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.lang.String, java.lang.String, java.lang.Boolean)
 	 */
 	@Override
@@ -326,6 +262,16 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 			tids.add(match.getHomeid());
 			tids.add(match.getClientid());
 		}
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchBds(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<IssueMatch> getMatchBds(Date start, Date end)
+	{
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

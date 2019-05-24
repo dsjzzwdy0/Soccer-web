@@ -18,16 +18,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.BetJcOddsList;
+import com.loris.soccer.collection.IssueMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryMatchWebPageParser;
+import com.loris.soccer.model.BetJcOdds;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchJc;
 
 /**
  * @ClassName: LotteryJcWebPageParser
@@ -56,26 +59,41 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param matchJcs 数据表
 	 */
 	@Override
-	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchJcs)
+	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, 
+			IssueMatchList matchJcs, TableRecords results)
 	{
+		BetJcOddsList oddsList = new BetJcOddsList();
 		Elements elements = document.select(".tz-wap .tz-body table tbody tr");
 		for (Element element : elements)
 		{
-			MatchJc match = new MatchJc();
+			IssueMatch match = new IssueMatch();
 			Match baseMatch = new Match();
+			BetJcOdds odds = new BetJcOdds();
 			
 			String t = element.attr("t");
 			Date closeTime = DateUtil.tryToParseDate(t);
-
+			
+			odds.setType(SoccerConstants.LOTTERY_JC);
+			odds.setOpentime(new Date());
+			match.setType(SoccerConstants.LOTTERY_JC);
 			match.setClosetime(closeTime);
 			match.setIssue(issue);
-			parseMatchInfo(element, baseMatch, match);
+			parseMatchInfo(element, baseMatch, match, odds);
 			
-			matchJcs.add(match);
 			if(StringUtils.isNotBlank(match.getMid()) && !"0".equals(match.getMid()))
 			{
+				matchJcs.add(match);
 				baseMatchs.add(baseMatch);
+				
+				if(DateUtil.compareDate(match.getMatchtime(), odds.getOpentime()) > 0)
+				{
+					oddsList.add(odds);
+				}
 			}
+		}
+		if(oddsList.size() > 0)
+		{
+			results.put(SoccerConstants.SOCCER_DATA_BETODDS_JC_LIST, oddsList);
 		}
 	}
 
@@ -85,7 +103,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param match
 	 * @param element
 	 */
-	protected void parseMatchInfo(Element el, Match baseMatch, MatchJc match)
+	protected void parseMatchInfo(Element el, Match baseMatch, IssueMatch match, BetJcOdds odds)
 	{
 		Elements elements = el.select("td");
 		for (Element element : elements)
@@ -144,14 +162,15 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 			else if (element.hasClass("wh-8")) // 赔率与让球赔率
 			{
 				Elements els = element.select("div");
-				processOddsValue(els.get(0), 0, match);
-				processOddsValue(els.get(1), 1, match);
+				processOddsValue(els.get(0), 0, odds);
+				processOddsValue(els.get(1), 1, odds);
 			}
 			else if (element.hasClass("wh-10")) // 比赛编号与欧亚盘等
 			{
 				String mid = element.attr("newPlayid");
 				match.setMid(mid); // 比赛的ID编号
 				baseMatch.setMid(mid);
+				odds.setMid(mid);
 			}
 			else if (element.hasClass("wh-11")) // 主队信息
 			{
@@ -165,7 +184,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param type 类型，0表示未让球、1表示让球的赔率
 	 * @param element DOM元素
 	 */
-	protected void processOddsValue(Element element, int type, MatchJc match)
+	protected void processOddsValue(Element element, int type, BetJcOdds odds)
 	{
 		Element e2 = element.selectFirst("em");
 		String value = e2.text();
@@ -177,11 +196,11 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 		{
 			if (type == 0)
 			{
-				match.setOpened(false);
+				odds.setIsopen(false);
 			}
 			else
 			{
-				match.setRqopened(false);
+				odds.setIsrqopen(false);
 			}
 			return;
 		}
@@ -189,11 +208,11 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 		{
 			if (type == 0)
 			{
-				match.setOpened(true);
+				odds.setIsopen(true);
 			}
 			else
 			{
-				match.setRqopened(true);
+				odds.setIsrqopen(true);
 			}
 		}
 		draw = es.get(1).text();
@@ -202,17 +221,17 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 		if (type == 0)
 		{
 			boolean danguan = (e2 != null) && e2.hasClass("dg");			
-			match.setDanguan(danguan);
-			match.setWinodds(Float.valueOf(win));
-			match.setDrawodds(Float.valueOf(draw));
-			match.setLoseodds(Float.valueOf(lose));
+			odds.setIsdanguan(danguan);
+			odds.setWinodds(Float.valueOf(win));
+			odds.setDrawodds(Float.valueOf(draw));
+			odds.setLoseodds(Float.valueOf(lose));
 		}
 		else
 		{
-			match.setRqnum(Integer.valueOf(value));
-			match.setRqwinodds(Float.valueOf(win));
-			match.setRqdrawodds(Float.valueOf(draw));
-			match.setRqloseodds(Float.valueOf(lose));
+			odds.setRqnum(Integer.valueOf(value));
+			odds.setRqwinodds(Float.valueOf(win));
+			odds.setRqdrawodds(Float.valueOf(draw));
+			odds.setRqloseodds(Float.valueOf(lose));
 		}
 	}
 }

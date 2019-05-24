@@ -18,17 +18,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.BetBdOddsList;
+import com.loris.soccer.collection.IssueMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryMatchWebPageParser;
+import com.loris.soccer.model.BetBdOdds;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
-import com.loris.soccer.model.base.IssueMatch;
 
 /**   
  * @ClassName:  LotteryBdWebPageParser  
@@ -55,8 +57,12 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param document
 	 * @param matchBds
 	 */
-	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, MatchItemList matchBds)
+	@Override
+	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, 
+			IssueMatchList matchBds, TableRecords results)
 	{
+		BetBdOddsList oddsList = new BetBdOddsList();
+		
 		Element element = document.selectFirst("#tw #dcc");
 		Elements childElements = element.children();
 		int childnum = childElements.size() / 2;
@@ -87,23 +93,36 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 				
 				//System.out.println(closeTime);
 
-				MatchBd match = new MatchBd();
+				IssueMatch match = new IssueMatch();
 				Match baseMatch = new Match();
+				BetBdOdds odds = new BetBdOdds();
 				
-				match.setBdno(issue);
+				odds.setType(SoccerConstants.LOTTERY_BD);
+				odds.setOpentime(new Date());
+				match.setType(SoccerConstants.LOTTERY_BD);
+
+				match.setIssueno(issue);
 				match.setOrdinary(ord);
 				match.setIssue(dateStr);
-				match.setRqopened(true);
 				match.setClosetime(closeTime);
 
-				parseMatchInfo(el, baseMatch, match);
+				parseMatchAndBetOdds(el, baseMatch, match, odds);
 				
 				if(StringUtils.isNotBlank(match.getMid()) && !"0".equals(match.getMid()))
 				{
 					matchBds.add(match);
 					baseMatchs.add(baseMatch);
+					
+					if(DateUtil.compareDate(match.getMatchtime(), odds.getOpentime()) > 0)
+					{
+						oddsList.add(odds);
+					}
 				}
 			}
+		}
+		if(oddsList.size() > 0)
+		{
+			results.put(SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST, oddsList);
 		}
 	}
 	
@@ -114,7 +133,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param baseMatch 基础比赛数据
 	 * @param el 数据元素
 	 */
-	protected void parseMatchInfo(Element el, Match baseMatch, IssueMatch match)
+	protected void parseMatchAndBetOdds(Element el, Match baseMatch, IssueMatch match, BetBdOdds odds)
 	{
 		Elements els = el.select("td");
 		for (Element element : els)
@@ -178,16 +197,17 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 				String draw = oddslist.get(1).text();
 				String lose = oddslist.get(2).text();
 				
-				match.setRqnum(Integer.valueOf(rqvalue));
-				match.setWinodds(Float.valueOf(win));
-				match.setDrawodds(Float.valueOf(draw));
-				match.setLoseodds(Float.valueOf(lose));
+				odds.setRqnum(Integer.valueOf(rqvalue));
+				odds.setWinodds(Float.valueOf(win));
+				odds.setDrawodds(Float.valueOf(draw));
+				odds.setLoseodds(Float.valueOf(lose));
 			}
 			else if (element.hasClass("wh-10"))
 			{
 				String mid = element.attr("newplayid");
 				match.setMid(mid);
 				baseMatch.setMid(mid);
+				odds.setMid(mid);
 			}
 			else if (element.hasClass("wh-11"))
 			{

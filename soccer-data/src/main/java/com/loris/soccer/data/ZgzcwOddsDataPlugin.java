@@ -27,9 +27,8 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.filter.WebPageFilter;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
-import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.base.MatchItem;
 
 /**   
@@ -107,13 +106,9 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 		if(baseMatchs != null && baseMatchs.size() > 0)
 			addMatchItems(matchs, baseMatchs);
 		
-		List<MatchBd> matchBds = matchService.getMatchBds(start, end);
-		if(matchBds != null && matchBds.size() > 0)
-			addMatchItems(matchs, matchBds);
-		
-		List<MatchJc> matchJcs = matchService.getMatchJcs(start, end);
-		if(matchBds != null && matchJcs.size() > 0)
-			addMatchItems(matchs, matchJcs);
+		List<IssueMatch> issueMatchs = matchService.getMatchBds(start, end);
+		if(issueMatchs != null && issueMatchs.size() > 0)
+			addMatchItems(matchs, issueMatchs);
 	}
 	
 	/**

@@ -15,9 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
-import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchBdInfo;
@@ -90,7 +89,7 @@ public interface MatchService extends IService<Match>
 	 * @param matchBds 北单比赛数据
 	 * @return 是否更新成功的标志
 	 */
-	boolean insertMatchBds(List<MatchBd> matchBds);
+	boolean insertIssueMatchs(List<IssueMatch> issueMatchs);
 	
 	/**
 	 * 插入北单数据
@@ -98,7 +97,7 @@ public interface MatchService extends IService<Match>
 	 * @param overwrite 是否覆盖已经有的比赛
 	 * @return 是否更新成功的标识
 	 */
-	boolean insertMatchBds(List<MatchBd> matchBds, boolean overwrite);
+	boolean insertIssueMatchs(List<IssueMatch> issueMatchs, boolean overwrite);
 	
 	/**
 	 * 按照日期查询北单数据
@@ -106,31 +105,7 @@ public interface MatchService extends IService<Match>
 	 * @param end 结束时间
 	 * @return 比赛列表
 	 */
-	List<MatchBd> getMatchBds(Date start, Date end);
-	
-	/**
-	 * 插入竞彩比赛数据
-	 * @param matchJcs 竞彩数据
-	 * @return 是否插入成功的标志
-	 */
-	boolean insertMatchJcs(List<MatchJc> matchJcs);
-	
-	/**
-	 * 插入竞彩数据
-	 * @param matchJcs 
-	 * @param overwrite
-	 * @return
-	 */
-	boolean insertMatchJcs(List<MatchJc> matchJcs, boolean overwrite);
-	
-	
-	/**
-	 * 按照日期查询北单数据
-	 * @param start 开始时间
-	 * @param end 结束时间
-	 * @return 比赛列表
-	 */
-	List<MatchJc> getMatchJcs(Date start, Date end);
+	List<IssueMatch> getMatchBds(Date start, Date end);
 	
 	/**
 	 * 插入比赛结果数据记录

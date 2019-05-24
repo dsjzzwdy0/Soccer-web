@@ -13,7 +13,7 @@ package com.loris.soccer.quant;
 
 import java.util.List;
 
-import com.loris.soccer.model.base.IssueMatch;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.quant.type.QuantType;
 
 /**   

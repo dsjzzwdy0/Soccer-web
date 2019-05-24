@@ -22,7 +22,7 @@ import com.loris.soccer.collection.BetJcOddsList;
 import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.LogoList;
-import com.loris.soccer.collection.MatchItemList;
+import com.loris.soccer.collection.IssueMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsNumList;
@@ -37,11 +37,10 @@ import com.loris.soccer.collection.TeamRfSeasonList;
 import com.loris.soccer.model.BetBdOdds;
 import com.loris.soccer.model.BetJcOdds;
 import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
-import com.loris.soccer.model.MatchBd;
-import com.loris.soccer.model.MatchJc;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
@@ -52,7 +51,6 @@ import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.TeamRfSeason;
-import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.BetOddsService;
 import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.DataService;
@@ -218,37 +216,23 @@ public class SoccerDataService implements DataService
 			}
 			return matchService.insertMatchs(matchs, overwrite);
 		case SOCCER_DATA_MATCH_BD_LIST:
-			List<MatchBd> matchBds = null;
-			if(value instanceof MatchItemList)
+		case SOCCER_DATA_MATCH_JC_LIST:
+			List<IssueMatch> matchBds = null;
+			if(value instanceof IssueMatchList)
 			{			
-				MatchItemList matchBdItemList = (MatchItemList) value;
+				IssueMatchList matchBdItemList = (IssueMatchList) value;
 				matchBds = new ArrayList<>();
-				for (MatchItem matchBd : matchBdItemList)
+				for (IssueMatch matchBd : matchBdItemList)
 				{
-					matchBds.add((MatchBd)matchBd);
+					matchBds.add((IssueMatch)matchBd);
 				}
 				overwrite = matchBdItemList.isOverwrite();
 			}
 			else
 			{
-				matchBds = (List<MatchBd>)value;
+				matchBds = (List<IssueMatch>)value;
 			}
-			return matchService.insertMatchBds(matchBds, overwrite);
-		case SOCCER_DATA_MATCH_JC_LIST:
-			List<MatchJc> matchJcs = null;
-			if(value instanceof MatchItemList)
-			{
-				MatchItemList matchJcItemList = (MatchItemList) value;
-				matchJcs = new ArrayList<>();
-				for (MatchItem matchJc : matchJcItemList)
-				{
-					matchJcs.add((MatchJc)matchJc);
-				}
-			}
-			else {
-				matchJcs = (List<MatchJc>)value;
-			}
-			return matchService.insertMatchJcs(matchJcs, overwrite);
+			return matchService.insertIssueMatchs(matchBds, overwrite);
 		case SOCCER_DATA_MATCH_RESULT_LIST:
 			List<MatchResult> matchResults = null;
 			if(value instanceof MatchResultList)

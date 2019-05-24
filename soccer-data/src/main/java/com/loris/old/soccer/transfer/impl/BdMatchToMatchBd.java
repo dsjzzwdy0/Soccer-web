@@ -12,10 +12,9 @@
 package com.loris.old.soccer.transfer.impl;
 
 import com.loris.common.util.DateUtil;
-import com.loris.common.util.NumberUtil;
 import com.loris.old.soccer.bean.BdMatch;
 import com.loris.old.soccer.transfer.Transfer;
-import com.loris.soccer.model.MatchBd;
+import com.loris.soccer.model.IssueMatch;
 
 
 /**   
@@ -27,23 +26,23 @@ import com.loris.soccer.model.MatchBd;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class BdMatchToMatchBd implements Transfer<MatchBd, BdMatch>
+public class BdMatchToMatchBd implements Transfer<IssueMatch, BdMatch>
 {
 	@Override
-	public MatchBd mapping(BdMatch source)
+	public IssueMatch mapping(BdMatch source)
 	{
-		MatchBd bd = new MatchBd();
+		IssueMatch bd = new IssueMatch();
 		bd.setMid(source.getMid());
 		bd.setOrdinary(source.getOrdinary());
-		bd.setBdno(source.getIssue());
+		bd.setIssueno(source.getIssue());
 		bd.setIssue(source.getIssue());
 		bd.setMatchtime(source.getMatchDate());
 		bd.setClosetime(DateUtil.tryToParseDate(source.getClosetime()));
-		bd.setRqnum(NumberUtil.parseInt(source.getRangqiu()));
-		bd.setRqopened((bd.getRqnum() > 0 || bd.getRqnum() < 0));
-		bd.setWinodds(NumberUtil.parseFloat(source.getWinodds()));
-		bd.setDrawodds(NumberUtil.parseFloat(source.getDrawodds()));
-		bd.setLoseodds(NumberUtil.parseFloat(source.getLoseodds()));
+		//bd.setRqnum(NumberUtil.parseInt(source.getRangqiu()));
+		//bd.setRqopened((bd.getRqnum() > 0 || bd.getRqnum() < 0));
+		//bd.setWinodds(NumberUtil.parseFloat(source.getWinodds()));
+		//bd.setDrawodds(NumberUtil.parseFloat(source.getDrawodds()));
+		//bd.setLoseodds(NumberUtil.parseFloat(source.getLoseodds()));
 		bd.setClosetime(DateUtil.tryToParseDate(source.getClosetime()));
 		bd.setDelaytime(null);
 		return bd;
