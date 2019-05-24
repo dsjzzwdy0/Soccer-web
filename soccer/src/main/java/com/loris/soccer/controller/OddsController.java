@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
+import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.service.CompService;
+import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.wrapper.OddsOpListWrapper;
 
@@ -38,7 +41,13 @@ import com.loris.soccer.wrapper.OddsOpListWrapper;
 public class OddsController extends BaseController
 {
 	@Autowired
-	OddsService oddsService;
+	private OddsService oddsService;
+	
+	@Autowired
+	MatchService matchService;
+	
+	@Autowired
+	private CompService compService;
 	
 	/** 欧赔数据的包装管理器 */
 	private OddsOpListWrapper oddsOpListWrapper = new OddsOpListWrapper();
@@ -66,6 +75,25 @@ public class OddsController extends BaseController
 	@RequestMapping("/getMatchCorpOps")
 	public Rest getMatchCorpOddsOp(String mid, String corpid)
 	{
+		return Rest.ok();
+	}
+	
+	/**
+	 * 获得指定期号的比赛与赔率基本信息
+	 * @param issue 比赛期号
+	 * @param sid 配置编号
+	 * @param type 类型
+	 * @return 数据列表
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchesOdds")
+	public Rest getMatchesOdds(String issue, String type, String sid)
+	{
+		CompSetting setting = compService.getCompSettingOrDefault(sid);
+		if(setting == null)
+		{
+			return Rest.failure("There are no CompSetting of '" + sid + "' set or there are not default CompSetting.");
+		}
 		return Rest.ok();
 	}
 }

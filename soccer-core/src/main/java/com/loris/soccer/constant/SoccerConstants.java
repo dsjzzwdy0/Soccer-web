@@ -48,6 +48,8 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_ODDS_NUM_LIST = "numlist";
 	final static public String SOCCER_DATA_ODDS_SCORE_LIST = "scorelist";
 	final static public String SOCCER_DATA_CASINO_COMP_LIST = "casinocomps";
+	final static public String SOCCER_DATA_BETODDS_BD_LIST = "betjcodds";
+	final static public String SOCCER_DATA_BETODDS_JC_LIST = "betbdodds";
 	//final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
 
 

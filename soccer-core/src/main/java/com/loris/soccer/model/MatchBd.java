@@ -48,13 +48,4 @@ public class MatchBd extends IssueMatch
 	{
 		this.bdno = bdno;
 	}
-
-	@Override
-	public String toString()
-	{
-		return "MatchBd [bdno=" + bdno + ", issue=" + issue + ", ordinary=" + ordinary + ", closetime=" + closetime
-				+ ", winodds=" + winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum
-				+ ", rqopened=" + rqopened + ", isdelayed=" + isdelayed + ", delaytime=" + delaytime + ", mid=" + mid
-				+ ", matchtime=" + matchtime + "]";
-	}
 }

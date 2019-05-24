@@ -85,13 +85,4 @@ public class MatchJc extends IssueMatch
 	{
 		this.rqloseodds = rqloseodds;
 	}
-
-	@Override
-	public String toString()
-	{
-		return "MatchJc [opened=" + opened + ", rqwinodds=" + rqwinodds + ", rqdrawodds=" + rqdrawodds + ", rqloseodds="
-				+ rqloseodds + ", issue=" + issue + ", ordinary=" + ordinary + ", closetime=" + closetime + ", winodds="
-				+ winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum + ", rqopened="
-				+ rqopened + ", delayed=" + isdelayed + ", delaytime=" + delaytime + ", mid=" + mid + ", id=" + id + "]";
-	}
 }

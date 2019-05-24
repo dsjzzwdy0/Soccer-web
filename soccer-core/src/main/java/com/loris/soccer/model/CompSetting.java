@@ -18,8 +18,11 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.loris.common.bean.AutoIdEntity;
+import com.loris.soccer.constant.SoccerConstants;
 
 /**   
  * @ClassName:  CorpSetting.java   
@@ -43,6 +46,9 @@ public class CompSetting extends AutoIdEntity
 	protected Date modifytime;				//最后修改时间
 	protected String source; 				//数据来源
 	protected String params = "";   		//配置参数
+	
+	@TableField(exist=false)
+	protected List<CasinoComp> casinoComps = new ArrayList<>();
 	
 	/**
 	 * 创建一个新的配置信息
@@ -164,6 +170,7 @@ public class CompSetting extends AutoIdEntity
 	public void setParams(String params)
 	{
 		this.params = params;
+		setCasinoCompsFromParams(params);
 	}
 
 	/**
@@ -195,10 +202,25 @@ public class CompSetting extends AutoIdEntity
 	 */
 	public List<CasinoComp> getCasinoComps()
 	{
+		if(casinoComps.size() == 0)
+		{
+			setCasinoCompsFromParams(params);
+		}		
+		return casinoComps;
+	}
+	
+	/**
+	 * 从参数中获取博彩公司的数据
+	 * @param params
+	 */
+	private void setCasinoCompsFromParams(String params)
+	{
 		if(StringUtils.isEmpty(params))
-			return null;
+		{
+			return;
+		}
+		
 		String[] strings = params.split(";");
-		List<CasinoComp> comps = new ArrayList<>();
 		for (String string : strings)
 		{
 			String[] str = string.split("=");
@@ -207,8 +229,45 @@ public class CompSetting extends AutoIdEntity
 			CasinoComp comp = new CasinoComp();
 			comp.setType(str[0]);
 			comp.setCorpid(str[1]);
-			comps.add(comp);
+			casinoComps.add(comp);
 		}
-		return comps;
+	}
+	
+	/**
+	 * 获得欧赔公司ID数据的列表
+	 * @return
+	 */
+	 @JsonIgnore
+	public List<String> getOpCorpIds()
+	{
+		return getCorpIds(SoccerConstants.ODDS_TYPE_OP);
+	}
+	 
+	/**
+	 * 获得亚盘公司ID数据的列表
+	 * @return
+	 */
+    @JsonIgnore
+	public List<String> getYpCorpIds()
+	{
+		return getCorpIds(SoccerConstants.ODDS_TYPE_YP);
+	}
+	
+    /**
+     * 按照类型对数据类型集合处理
+     * @param type
+     * @return
+     */
+	protected List<String> getCorpIds(String type)
+	{
+		List<String> ids = new ArrayList<>();
+		for (CasinoComp casinoComp : casinoComps)
+		{
+			if(StringUtils.equals(type, casinoComp.getType()))
+			{
+				ids.add(casinoComp.getCorpid());
+			}
+		}
+		return ids;
 	}
 }

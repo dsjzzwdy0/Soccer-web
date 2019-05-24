@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.loris.common.constant.Enviroment;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
@@ -45,6 +46,9 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 	
 	@Autowired
 	private CasinoCompMapper casinoCompMapper;
+	
+	/** 默认的公司配置 */
+	private CompSetting defaultSetting;
 
 	/**
 	 *  (non-Javadoc)
@@ -103,6 +107,35 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 		QueryWrapper<CompSetting> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("sid", sid);
 		return baseMapper.selectOne(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.CompService#getDefaultSetting()
+	 */
+	@Override
+	public CompSetting getDefaultSetting()
+	{
+		if(defaultSetting == null)
+		{
+			defaultSetting = baseMapper.selectOne(new QueryWrapper<CompSetting>().eq("sid", Enviroment.defaultCompSettingId));
+		}
+		return defaultSetting;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see com.loris.soccer.service.CompService#getCompSettingOrDefault()
+	 */
+	@Override
+	public CompSetting getCompSettingOrDefault(String sid)
+	{
+		CompSetting setting = getCompSetting(sid);
+		if(setting == null)
+		{
+			setting = getDefaultSetting();
+		}
+		return setting;
 	}
 
 }

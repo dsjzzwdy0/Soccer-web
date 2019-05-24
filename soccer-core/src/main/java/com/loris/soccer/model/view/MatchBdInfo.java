@@ -26,9 +26,7 @@ import com.loris.soccer.model.MatchResult.ResultType;
 @TableName("soccer_match_bd_info")
 public class MatchBdInfo extends MatchBd
 {
-	/**
-	 * 
-	 */
+	/**  */
 	private static final long serialVersionUID = 1L;
 
 	protected String lid;				//联赛编号
@@ -130,13 +128,5 @@ public class MatchBdInfo extends MatchBd
 	{
 		this.clientgoal = clientgoal;
 	}
-	@Override
-	public String toString()
-	{
-		return "MatchBdInfo ["  + mid + ", " + lid + ": " + leaguename + ",[ " + round + ", " + season + "] 主:"
-				+ homeid + homename	+ ", 客:" + clientid + ", "	+ clientname + ", bdno=" + bdno 
-				+ ", issue=" + issue + ", ordinary=" + ordinary + ", " + closetime + ", "
-				+ rqnum + "(" + winodds + ", " + drawodds + ", " + loseodds + ") " + ", rqopened=" 
-				+ rqopened + ", " + matchtime+ "]";
-	}
+
 }

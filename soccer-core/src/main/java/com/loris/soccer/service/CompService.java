@@ -60,4 +60,16 @@ public interface CompService extends IService<CompSetting>
 	 * @return 配置数据
 	 */
 	CompSetting getCompSetting(String sid);
+	
+	/**
+	 * 获得默认的赔率
+	 * @return
+	 */
+	CompSetting getDefaultSetting();
+	
+	/**
+	 * 获得配置或者默认的设置的配置
+	 * @return
+	 */
+	CompSetting getCompSettingOrDefault(String sid);
 }
