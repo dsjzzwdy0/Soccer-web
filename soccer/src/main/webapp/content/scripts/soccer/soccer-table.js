@@ -637,7 +637,7 @@ function SoccerTableColumns()
 	function formatCommonOpvalueComlumn(index, match, op, corp, first)
 	{
 		var st = first ? 0 : 3;
-		var title = first ? '初盘时间 ' + op.firsttime : '即时盘时间: ' + op.lasttime;
+		var title = formatOpTitle(first, op);
 		return '<div class="oddsvalue" title="' + (st) + '">' 
 			+ formatValue(op.values[st + j]) + '</div>';
 	}
@@ -661,11 +661,19 @@ function SoccerTableColumns()
 			relateClass += ' relation';
 		}		
 		var vals = op.values;
-		var title = first ? '初盘时间 ' + op.firsttime + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')'
-				: '即时盘时间 ' + op.lasttime + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')';
+		var title = formatOpTitle(first, op);
 		return '<div class="association ' + relateClass + '" title="' + title + '" index="' + relateIndex +
 			'" mid="' + match.mid + '" gid="' + op.gid + '" type="' + first + '">' + formatValue(vals[st + index]) + '</div>'
-	}		
+	}
+	
+	function formatOpTitle(first, op)
+	{
+		var st = first ? 0 : 3;
+		var vals = op.values;
+		return first ? '初盘时间 ' + formatDate(new Date(op.firsttime), 'yyyy-MM-dd hh:mm') + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')'
+				: '即时盘时间 ' + formatDate(new Date(op.lasttime), 'yyyy-MM-dd hh:mm') + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')';
+	}
+	
 	/**
 	 * 格式化比赛的球队信息
 	 * @param match
