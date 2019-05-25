@@ -24,14 +24,17 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
+import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.OddsYpList;
+import com.loris.soccer.collection.RecordOddsYpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
 import com.loris.soccer.dict.HandicapDict;
 import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.RecordOddsYp;
 
 /**
  * @ClassName: League
@@ -108,14 +111,18 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		Date time = DateUtil.tryToParseDate(matchTime);
 
 		OddsYpList yps = new OddsYpList();
+		RecordOddsYpList recordYps = new RecordOddsYpList();
 		CasinoCompList comps = new CasinoCompList();
+		recordYps.setOverwrite(true);
 		
 		for (Element corpElement : elements)
 		{
-			parseYp(document, corpElement, mid, time, yps, comps);
+			parseYp(document, corpElement, mid, time, yps, recordYps, comps);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_YP_LIST, yps);
 		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+		results.put(SoccerConstants.SOCCER_DATA_RECORD_ODDS_YP_LIST, recordYps);
+		
 		return results;
 	}
 
@@ -126,7 +133,8 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param matchTime 比赛时间
 	 * @param yps 亚盘数据列表
 	 */
-	protected void parseYp(Document document, Element element, String mid, Date matchTime, List<OddsYp> yps, List<CasinoComp> comps)
+	protected void parseYp(Document document, Element element, String mid, Date matchTime, 
+			List<OddsYp> yps, RecordOddsYpList recordYps, List<CasinoComp> comps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
@@ -154,8 +162,6 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		float guestkelly = parseDataAttr(elements.get(12));
 		float lossratio = parseDataAttr(elements.get(13));
 		
-		Element detailElement = getCorpElements(document, compid);
-		if(detailElement == null)
 		{
 			OddsYp firstOdds = new OddsYp(mid);
 			OddsYp odds = new OddsYp(mid);
@@ -198,9 +204,17 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			yps.add(odds);
 			
 			comps.add(comp);
+			
+			if(ToolUtil.isNotEmpty(firstOdds.getOpentime()) && ToolUtil.isNotEmpty(odds.getOpentime()))
+			{
+				RecordOddsYp recordYp = new RecordOddsYp();
+				recordYp.setFirstOddsYp(firstOdds);
+				recordYp.setLastOddsYp(odds);
+				recordYps.add(recordYp);
+			}
 		}
-		else
 		{
+			Element detailElement = getCorpElements(document, compid);
 			parseCorpYps(yps, comps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
 		}
 	}

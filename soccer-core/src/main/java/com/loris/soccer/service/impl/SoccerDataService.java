@@ -30,6 +30,8 @@ import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.collection.RankList;
+import com.loris.soccer.collection.RecordOddsOpList;
+import com.loris.soccer.collection.RecordOddsYpList;
 import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.collection.TeamList;
@@ -47,6 +49,8 @@ import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.Rank;
+import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.Round;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
@@ -268,6 +272,22 @@ public class SoccerDataService implements DataService
 				yps = (List<OddsYp>)value;				
 			}
 			return oddsService.insertOddsYps(yps, overwrite);
+		case SOCCER_DATA_RECORD_ODDS_OP_LIST:
+			List<RecordOddsOp> recordOddsOps = (List<RecordOddsOp>)value;
+			overwrite = true;
+			if(value instanceof RecordOddsOpList)
+			{
+				overwrite = ((RecordOddsOpList)value).isOverwrite();
+			}
+			return oddsService.insertRecordOddsOps(recordOddsOps, overwrite);
+		case SOCCER_DATA_RECORD_ODDS_YP_LIST:
+			List<RecordOddsYp> recordOddsYps = (List<RecordOddsYp>)value;
+			overwrite = true;
+			if(value instanceof RecordOddsYpList)
+			{
+				overwrite = ((RecordOddsYpList)value).isOverwrite();
+			}
+			return oddsService.insertRecordOddsYps(recordOddsYps, overwrite);
 		case SOCCER_DATA_ODDS_NUM_LIST:
 			List<OddsNum> nums = null;
 			if(value instanceof OddsNumList)

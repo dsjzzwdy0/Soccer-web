@@ -20,6 +20,8 @@ import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.view.IssueMatchInfo;
 
 /**   
@@ -130,7 +132,20 @@ public class MatchOddsList
 			matchOdds.add(m);
 		}
 	}
-	
+	public void addRecodOddsOpList(List<RecordOddsOp> ops)
+	{
+		for (RecordOddsOp recordOddsOp : ops)
+		{
+			addRecordOddsOp(recordOddsOp);
+		}
+	}
+	public void addRecodOddsYpList(List<RecordOddsYp> yps)
+	{
+		for (RecordOddsYp recordOddsYp : yps)
+		{
+			addRecordOddsYp(recordOddsYp);
+		}
+	}
 	public void addOddsOpList(List<OddsOp> ops)
 	{
 		for (OddsOp op : ops)
@@ -143,6 +158,22 @@ public class MatchOddsList
 		for (OddsYp yp : yps)
 		{
 			addOddsYp(yp);
+		}
+	}
+	public void addRecordOddsOp(RecordOddsOp op)
+	{
+		MatchOdds m = getMatchOddsByMid(op.getMid());
+		if(m != null)
+		{
+			m.addOddsOp(op);
+		}
+	}
+	public void addRecordOddsYp(RecordOddsYp yp)
+	{
+		MatchOdds m = getMatchOddsByMid(yp.getMid());
+		if(m != null)
+		{
+			m.addOddsYp(yp);
 		}
 	}
 	public void addOddsOp(OddsOp op)

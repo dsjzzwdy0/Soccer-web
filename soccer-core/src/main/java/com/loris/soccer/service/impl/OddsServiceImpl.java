@@ -26,9 +26,12 @@ import com.loris.soccer.dao.OddsNumMapper;
 import com.loris.soccer.dao.OddsOpMapper;
 import com.loris.soccer.dao.OddsScoreMapper;
 import com.loris.soccer.dao.OddsYpMapper;
+import com.loris.soccer.dao.RecordOddsOpMapper;
+import com.loris.soccer.dao.RecordOddsYpMapper;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.service.OddsService;
@@ -60,6 +63,12 @@ public class OddsServiceImpl implements OddsService
 	
 	@Autowired
 	private OddsScoreMapper oddsScoreMapper;
+	
+	@Autowired
+	private RecordOddsOpMapper recordOddsOpMapper;
+	
+	@Autowired
+	private RecordOddsYpMapper recordOddsYpMapper;
 	
 	/**
 	 * 通过比赛编号获得欧赔数据列表
@@ -262,5 +271,87 @@ public class OddsServiceImpl implements OddsService
 			queryWrapper.in(SoccerConstants.NAME_FIELD_CORPID, corpids);
 		}
 		return oddsYpMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertRecordOddsOps(java.util.List)
+	 */
+	@Override
+	public boolean insertRecordOddsOps(List<RecordOddsOp> ops)
+	{
+		return insertRecordOddsOps(ops, true);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertRecordOddsOps(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertRecordOddsOps(List<RecordOddsOp> ops, boolean overwrite)
+	{
+		ObjectFilter<RecordOddsOp> filter = new ObjectFilter<>();	
+		return SqlHelper.insertList(ops, RecordOddsOp.class, recordOddsOpMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertRecordOddsYps(java.util.List)
+	 */
+	@Override
+	public boolean insertRecordOddsYps(List<RecordOddsYp> yps)
+	{
+		return insertRecordOddsYps(yps, true);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#insertRecordOddsYps(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertRecordOddsYps(List<RecordOddsYp> yps, boolean overwrite)
+	{
+		ObjectFilter<RecordOddsYp> filter = new ObjectFilter<>();	
+		return SqlHelper.insertList(yps, RecordOddsYp.class, recordOddsYpMapper, filter,
+				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#getRecordOddsOps(java.util.List, java.util.List)
+	 */
+	@Override
+	public List<RecordOddsOp> getRecordOddsOps(List<String> mids, List<String> corpids)
+	{
+		QueryWrapper<RecordOddsOp> queryWrapper = new QueryWrapper<>();
+		if(mids != null && mids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_MID, mids);
+		}
+		if(corpids != null && corpids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_CORPID, corpids);
+		}
+		return recordOddsOpMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#getRecordOddsYps(java.util.List, java.util.List)
+	 */
+	@Override
+	public List<RecordOddsYp> getRecordOddsYps(List<String> mids, List<String> corpids)
+	{
+		QueryWrapper<RecordOddsYp> queryWrapper = new QueryWrapper<>();
+		if(mids != null && mids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_MID, mids);
+		}
+		if(corpids != null && corpids.size() > 0)
+		{
+			queryWrapper.in(SoccerConstants.NAME_FIELD_CORPID, corpids);
+		}
+		return recordOddsYpMapper.selectList(queryWrapper);
 	}
 }

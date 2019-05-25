@@ -46,6 +46,8 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_ODDS_OP_LIST = "oplist";
 	final static public String SOCCER_DATA_ODDS_YP_LIST = "yplist";
 	final static public String SOCCER_DATA_ODDS_NUM_LIST = "numlist";
+	final static public String SOCCER_DATA_RECORD_ODDS_OP_LIST = "recoplist";
+	final static public String SOCCER_DATA_RECORD_ODDS_YP_LIST = "recyplist";
 	final static public String SOCCER_DATA_ODDS_SCORE_LIST = "scorelist";
 	final static public String SOCCER_DATA_CASINO_COMP_LIST = "casinocomps";
 	final static public String SOCCER_DATA_BETODDS_BD_LIST = "betjcodds";

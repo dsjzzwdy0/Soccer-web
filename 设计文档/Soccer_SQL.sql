@@ -287,6 +287,56 @@ create table soccer_odds_num(
 	INDEX `index_soruce` (`source`) USING BTREE
 );
 
+create table soccer_record_odds_op(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10),
+	corpid varchar(10),
+	firsttime timestamp,
+	firstwinodds float,
+	firstdrawodds float,
+	firstloseodds float,
+	opentime timestamp,
+	winodds float,
+	drawodds float,
+	loseodds float,
+	winkelly float,
+	drawkelly float,
+	losekelly float,
+	winprob float,
+	drawprob float,
+	loseprob float,
+	lossratio float,
+	source varchar(10),
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
+	INDEX `index_corpid` (`corpid`) USING BTREE,
+	INDEX `index_soruce` (`source`) USING BTREE
+);
+
+create table soccer_record_odds_yp(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	mid varchar(10),
+	corpid varchar(10),
+	firsttime timestamp,
+	firstwinodds float,
+	firsthandicap float,
+	firstloseodds float,
+	opentime timestamp,
+	winodds float,
+	handicap float,
+	loseodds float,
+	winkelly float,
+	losekelly float,
+	winprob float,
+	loseprob float,
+	lossratio float,
+	source varchar(10),
+	PRIMARY KEY (`id`),	
+	INDEX `index_mid` (`mid`) USING BTREE,
+	INDEX `index_corpid` (`corpid`) USING BTREE,
+	INDEX `index_soruce` (`source`) USING BTREE
+);
+
 create table soccer_odds_score(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10),

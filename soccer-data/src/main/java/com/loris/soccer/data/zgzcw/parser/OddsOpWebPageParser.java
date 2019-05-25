@@ -23,14 +23,17 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
+import com.loris.common.util.ToolUtil;
 import com.loris.common.util.URLParser;
 import com.loris.soccer.collection.CasinoCompList;
 import com.loris.soccer.collection.OddsOpList;
+import com.loris.soccer.collection.RecordOddsOpList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
 import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.RecordOddsOp;
 
 /**   
  * @ClassName:  League   
@@ -73,13 +76,18 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
 		OddsOpList ops = new OddsOpList();
 		CasinoCompList comps = new CasinoCompList();
+		RecordOddsOpList recordOps = new RecordOddsOpList();
+		
+		recordOps.setOverwrite(true);
 		
 		for (Element element2 : elements)
 		{
-			parseOdds(element2, mid, ops, comps);
+			parseOdds(element2, mid, ops, recordOps, comps);
 		}
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_OP_LIST, ops);
 		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+		results.put(SoccerConstants.SOCCER_DATA_RECORD_ODDS_OP_LIST, recordOps);
+		
 		return results;
 	}
 	
@@ -89,7 +97,7 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param element
 	 * @throws DateParseException 
 	 */
-	protected void parseOdds(Element element, String mid, OddsOpList ops, CasinoCompList comps)
+	protected void parseOdds(Element element, String mid, OddsOpList ops, RecordOddsOpList recordOps, CasinoCompList comps)
 	{
 		OddsOp firstOdds = new OddsOp(mid);
 		OddsOp odds = new OddsOp(mid);
@@ -152,6 +160,14 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		ops.add(firstOdds);
 		ops.add(odds);
 		comps.add(comp);
+		
+		if(ToolUtil.isNotEmpty(firstOdds.getOpentime()) && ToolUtil.isNotEmpty(odds.getOpentime()))
+		{
+			RecordOddsOp recordOp = new RecordOddsOp();
+			recordOp.setFirstOddsOp(firstOdds);
+			recordOp.setLastOddsOp(odds);
+			recordOps.add(recordOp);
+		}
 	}
 	
 	/**

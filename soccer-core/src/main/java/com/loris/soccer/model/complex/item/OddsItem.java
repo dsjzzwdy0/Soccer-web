@@ -19,6 +19,8 @@ import com.loris.common.util.DateUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.base.OddsValue;
 
 /**   
@@ -49,6 +51,16 @@ public class OddsItem
 		this.corpid = odds.getCorpid();
 		this.type = type;
 		addOdds(odds, type);
+	}
+	
+	public OddsItem(RecordOddsOp op)
+	{
+		addRecordOddsOp(op);
+	}
+	
+	public OddsItem(RecordOddsYp yp)
+	{
+		addRecordOddsYp(yp);
 	}
 	
 	public String getCorpid()
@@ -90,6 +102,46 @@ public class OddsItem
 	public void setValues(float[] values)
 	{
 		this.values = values;
+	}
+	
+	public void addRecordOddsOp(RecordOddsOp op)
+	{
+		this.corpid = op.getCorpid();
+		this.type = SoccerConstants.ODDS_TYPE_OP;
+		if(firsttime == null || DateUtil.compareDate(firsttime, op.getFirsttime()) > 0)
+		{
+			firsttime = op.getFirsttime();
+			values[0] = op.getFirstwinodds();
+			values[1] = op.getFirstdrawodds();
+			values[2] = op.getFirstloseodds();
+		}
+		if(lasttime == null || DateUtil.compareDate(lasttime, op.getOpentime()) < 0)
+		{
+			lasttime = op.getOpentime();
+			values[3] = op.getWinodds();
+			values[4] = op.getDrawodds();
+			values[5] = op.getLoseodds();
+		}
+	}
+	
+	public void addRecordOddsYp(RecordOddsYp yp)
+	{
+		this.corpid = yp.getCorpid();
+		this.type = SoccerConstants.ODDS_TYPE_YP;
+		if(firsttime == null || DateUtil.compareDate(firsttime, yp.getFirsttime()) > 0)
+		{
+			firsttime = yp.getFirsttime();
+			values[0] = yp.getFirstwinodds();
+			values[1] = yp.getFirsthandicap();
+			values[2] = yp.getFirstloseodds();
+		}
+		if(lasttime == null || DateUtil.compareDate(lasttime, yp.getOpentime()) < 0)
+		{
+			lasttime = yp.getOpentime();
+			values[3] = yp.getWinodds();
+			values[4] = yp.getHandicap();
+			values[5] = yp.getLoseodds();
+		}
 	}
 	
 	public void addOdds(OddsValue oddsValue, String type)

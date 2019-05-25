@@ -16,6 +16,7 @@ import java.util.List;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
 
@@ -135,6 +136,52 @@ public interface OddsService
 	 * @return 是否成功
 	 */
 	boolean insertOddsScores(List<OddsScore> oddsScores, boolean overwrite);
+	
+	/**
+	 * 插入欧赔记录数据
+	 * @param ops 欧赔数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertRecordOddsOps(List<RecordOddsOp> ops);
+	
+	/**
+	 * 插入欧赔数据记录
+	 * @param ops 欧赔数据
+	 * @param overwrite 是否覆盖
+	 * @return
+	 */
+	boolean insertRecordOddsOps(List<RecordOddsOp> ops, boolean overwrite);
+	
+	/**
+	 * 获得欧赔率的值
+	 * @param mids
+	 * @param corpids
+	 * @return
+	 */
+	List<RecordOddsOp> getRecordOddsOps(List<String> mids, List<String> corpids);
+	
+	/**
+	 * 插入亚盘数据记录
+	 * @param yps 亚盘数据
+	 * @return 是不成功的标志
+	 */
+	boolean insertRecordOddsYps(List<RecordOddsYp> yps);
+	
+	/**
+	 * 插入亚盘数据记录
+	 * @param yps 亚盘数据
+	 * @param overwrite 是否覆盖
+	 * @return 是不成功的标志
+	 */
+	boolean insertRecordOddsYps(List<RecordOddsYp> yps, boolean overwrite);
+	
+	/**
+	 * 获得亚盘赔率的值
+	 * @param mids
+	 * @param corpids
+	 * @return
+	 */
+	List<RecordOddsYp> getRecordOddsYps(List<String> mids, List<String> corpids);
 	
 	/**
 	 * 更新数据列表

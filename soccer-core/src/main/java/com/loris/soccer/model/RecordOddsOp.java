@@ -128,4 +128,17 @@ public class RecordOddsOp extends OddsOp
 		this.corpid = oddsOp.getCorpid();
 		this.source = oddsOp.getSource();
 	}
+	/**
+	 * 判断是否相等
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof RecordOddsOp)) return false;
+		RecordOddsOp other = (RecordOddsOp) obj;
+		return StringUtils.equals(mid, other.mid) &&
+				StringUtils.equals(corpid, other.corpid);
+	}
 }

@@ -119,7 +119,7 @@ public class App
 			// testZgzcwIssueScheduler();
 			// testCenterPage();
 			// testOddsOpPage();
-			// testOddsYpPage();
+			testOddsYpPage();
 			// testOddsNumPage();
 			// testJcScoreWebPage();
 			// testUpdate();
@@ -142,7 +142,7 @@ public class App
 			// testZgzcwNumWebPage();
 			// testZgzcwYpWebPage();
 			// testZgzcwLeagueWebPage();
-			testBdWebPage();
+			// testBdWebPage();
 			// testJcWebPage();
 			// testWebPageService();
 			// testLeagueRoundWebPage();
@@ -548,7 +548,7 @@ public class App
 
 	public static void testOddsYpPage() throws Exception
 	{
-		String mid = "2402907";
+		String mid = "2438020";
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, mid);
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-03-12 18:00");
 
@@ -579,7 +579,7 @@ public class App
 
 	public static void testOddsOpPage() throws Exception
 	{
-		String mid = "2402789";
+		String mid = "2438020";
 		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, mid);
 
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_OP, params);

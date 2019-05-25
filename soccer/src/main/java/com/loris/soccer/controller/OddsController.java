@@ -26,7 +26,8 @@ import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
-import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.complex.MatchOddsList;
 import com.loris.soccer.model.view.IssueMatchInfo;
 import com.loris.soccer.service.CompService;
@@ -123,17 +124,17 @@ public class OddsController extends BaseController
 		List<String> opcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_OP);
 		if(opcorpids != null && opcorpids.size() > 0)
 		{
-			List<OddsOp> ops = oddsService.selectOddsOps(mids, opcorpids);
+			List<RecordOddsOp> ops = oddsService.getRecordOddsOps(mids, opcorpids);
 			//logger.info("总共的欧赔数据的量为： " + ops.size());
-			matchOddsList.addOddsOpList(ops);
+			matchOddsList.addRecodOddsOpList(ops);
 		}
 		
 		List<String> ypcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_YP);
 		if(ypcorpids != null && ypcorpids.size() > 0)
 		{
-			List<OddsYp> yps = oddsService.selectOddsYps(mids, ypcorpids);
+			List<RecordOddsYp> yps = oddsService.getRecordOddsYps(mids, ypcorpids);
 			//logger.info("总共的欧赔数据的量为： " + yps.size());
-			matchOddsList.addOddsYpList(yps);
+			matchOddsList.addRecodOddsYpList(yps);
 		}
 		
 		long en = System.currentTimeMillis();		

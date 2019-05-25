@@ -98,25 +98,25 @@ public class RecordOddsYp extends OddsYp
 	{
 		return HandicapDict.getHandicapName(firsthandicap);
 	}
-	public void addOddsOp(OddsYp oddsYp)
+	public void addOddsYp(OddsYp oddsYp)
 	{
 		if(StringUtils.isBlank(corpid))
 		{
-			this.setFirstOddsOp(oddsYp);
-			this.setLastOddsOp(oddsYp);
+			this.setFirstOddsYp(oddsYp);
+			this.setLastOddsYp(oddsYp);
 			return;
 		}
 		if(firsttime == null || this.firsttime.getTime() > oddsYp.getOpentime().getTime())
 		{
-			setFirstOddsOp(oddsYp);
+			setFirstOddsYp(oddsYp);
 		}
 		if(opentime == null || this.opentime.getTime() < oddsYp.getOpentime().getTime())
 		{
-			setLastOddsOp(oddsYp);
+			setLastOddsYp(oddsYp);
 		}
 	}
 	
-	public void setFirstOddsOp(OddsYp oddsYp)
+	public void setFirstOddsYp(OddsYp oddsYp)
 	{
 		setBaseInfo(oddsYp);
 		this.firstwinodds = oddsYp.getWinodds();
@@ -125,7 +125,7 @@ public class RecordOddsYp extends OddsYp
 		this.firsttime = oddsYp.getOpentime();
 	}
 	
-	public void setLastOddsOp(OddsYp oddsYp)
+	public void setLastOddsYp(OddsYp oddsYp)
 	{
 		setBaseInfo(oddsYp);
 		this.opentime = oddsYp.getOpentime();
@@ -144,5 +144,18 @@ public class RecordOddsYp extends OddsYp
 		this.mid = oddsYp.getMid();
 		this.corpid = oddsYp.getCorpid();
 		this.source = oddsYp.getSource();
+	}
+	/**
+	 * 判断是否相等
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof RecordOddsYp)) return false;
+		RecordOddsYp other = (RecordOddsYp) obj;
+		return StringUtils.equals(mid, other.mid) &&
+				StringUtils.equals(corpid, other.corpid);
 	}
 }

@@ -20,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.complex.item.OddsItem;
 import com.loris.soccer.model.view.IssueMatchInfo;
 
@@ -212,6 +214,32 @@ public class MatchOdds
 		else
 		{
 			item.addOdds(op, SoccerConstants.ODDS_TYPE_OP);
+		}
+	}
+	public void addRecordOddsOp(RecordOddsOp op)
+	{
+		OddsItem item = getOddsItem(op.getCorpid(), SoccerConstants.ODDS_TYPE_OP);
+		if(item == null)
+		{
+			item = new OddsItem(op);
+			odds.add(item);
+		}
+		else
+		{
+			item.addRecordOddsOp(op);
+		}
+	}
+	public void addRecordOddsYp(RecordOddsYp yp)
+	{
+		OddsItem item = getOddsItem(yp.getCorpid(), SoccerConstants.ODDS_TYPE_OP);
+		if(item == null)
+		{
+			item = new OddsItem(yp);
+			odds.add(item);
+		}
+		else
+		{
+			item.addRecordOddsYp(yp);
 		}
 	}
 	public void addOddsYp(OddsYp yp)
