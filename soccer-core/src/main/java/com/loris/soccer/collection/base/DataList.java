@@ -44,4 +44,12 @@ public class DataList<T> extends ArrayList<T>
 	{
 		this.overwrite = overwrite;
 	}
+	
+	@Override
+	public boolean add(T obj)
+	{
+		if(this.contains(obj))
+			return false;
+		return super.add(obj);
+	}
 }

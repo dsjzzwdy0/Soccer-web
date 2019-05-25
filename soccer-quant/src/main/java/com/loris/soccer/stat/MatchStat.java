@@ -20,7 +20,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.loris.common.context.ApplicationContextHelper;
-import com.loris.soccer.model.complex.OddsOpRecord;
+import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
@@ -100,14 +100,14 @@ public class MatchStat
 		for (MatchInfo matchInfo : matchInfos)
 		{
 			logger.info(matchInfo);
-			List<OddsOpRecord> records = oddsService.selectOddsOpRecords(matchInfo.getMid());
+			List<RecordOddsOp> records = oddsService.selectOddsOpRecords(matchInfo.getMid());
 			if(records == null)
 			{
 				logger.warn("There are no OddsOpRecord in database: " + matchInfo.getMid());
 				continue;
 			}
 			
-			for (OddsOpRecord oddsOpRecord : records)
+			for (RecordOddsOp oddsOpRecord : records)
 			{
 				logger.info(oddsOpRecord);
 			}
@@ -149,7 +149,7 @@ public class MatchStat
 			}
 			
 			logger.info("Processing " + (index ++) + " of " + matchInfos.size() + "...");
-			List<OddsOpRecord> records = oddsService.selectOddsOpRecords(matchInfo.getMid());
+			List<RecordOddsOp> records = oddsService.selectOddsOpRecords(matchInfo.getMid());
 			if(records == null || records.size() == 0)
 			{
 				logger.warn("There are no OddsOpRecord in database: " + matchInfo.getMid());
@@ -157,7 +157,7 @@ public class MatchStat
 			}
 			
 			matchNum ++;
-			for (OddsOpRecord oddsOpRecord : records)
+			for (RecordOddsOp oddsOpRecord : records)
 			{
 				String corpid = oddsOpRecord.getCorpid();
 				CorpFreq freq = corpFreqs.get(corpid);

@@ -29,5 +29,4 @@ public class CasinoCompList extends DataList<CasinoComp>
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 }

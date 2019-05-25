@@ -9,28 +9,27 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.model.complex;
+package com.loris.soccer.model;
 
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.loris.soccer.model.OddsOp;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * @ClassName: OddsOpRecord
- * @Description: (@Todo)
+ * @Description: 欧赔数据记录
  * @author: 东方足彩
  * @date: 2019年1月28日 下午8:59:32
  * 
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved.
  *             注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目
  */
-public class OddsOpRecord extends OddsOp
+@TableName("soccer_record_odds_op")
+public class RecordOddsOp extends OddsOp
 {
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 	
 	private Date firsttime;
@@ -38,11 +37,11 @@ public class OddsOpRecord extends OddsOp
 	private float firstdrawodds;
 	private float firstloseodds;
 	
-	public OddsOpRecord()
+	public RecordOddsOp()
 	{
 	}
 	
-	public OddsOpRecord(OddsOp oddsOp)
+	public RecordOddsOp(OddsOp oddsOp)
 	{
 		this.addOddsOp(oddsOp);
 	}
@@ -127,7 +126,6 @@ public class OddsOpRecord extends OddsOp
 	{
 		this.mid = oddsOp.getMid();
 		this.corpid = oddsOp.getCorpid();
-		//this.corpname = oddsOp.getCorpname();
 		this.source = oddsOp.getSource();
 	}
 }

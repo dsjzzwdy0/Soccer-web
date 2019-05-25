@@ -16,8 +16,8 @@ import java.util.List;
 
 import com.loris.common.util.ArraysUtil;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.base.OddsValue;
-import com.loris.soccer.model.complex.OddsOpRecord;
 import com.loris.soccer.wrapper.filter.OddsValueFilter;
 
 /**   
@@ -29,12 +29,12 @@ import com.loris.soccer.wrapper.filter.OddsValueFilter;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public class OddsOpListWrapper implements Wrapper<List<OddsOp>, List<OddsOpRecord>>
+public class OddsOpListWrapper implements Wrapper<List<OddsOp>, List<RecordOddsOp>>
 {
 	@Override
-	public List<OddsOpRecord> wrap(List<OddsOp> source)
+	public List<RecordOddsOp> wrap(List<OddsOp> source)
 	{
-		List<OddsOpRecord> list = new ArrayList<>();
+		List<RecordOddsOp> list = new ArrayList<>();
 		OddsValueFilter filter = new OddsValueFilter();
 		for (OddsOp oddsOp : source)
 		{
@@ -42,12 +42,12 @@ public class OddsOpListWrapper implements Wrapper<List<OddsOp>, List<OddsOpRecor
 			OddsValue record = ArraysUtil.getSameObject(list, filter);
 			if(record == null)
 			{
-				OddsOpRecord oddsOpRecord = new OddsOpRecord(oddsOp);
+				RecordOddsOp oddsOpRecord = new RecordOddsOp(oddsOp);
 				list.add(oddsOpRecord);
 			}
 			else
 			{
-				OddsOpRecord oddsOpRecord = (OddsOpRecord) record;
+				RecordOddsOp oddsOpRecord = (RecordOddsOp) record;
 				oddsOpRecord.addOddsOp(oddsOp);
 			}
 		}

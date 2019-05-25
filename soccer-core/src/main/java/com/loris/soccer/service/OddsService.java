@@ -15,9 +15,9 @@ import java.util.List;
 
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
-import com.loris.soccer.model.complex.OddsOpRecord;
 
 /**   
  * @ClassName:  OddsOpService   
@@ -65,7 +65,7 @@ public interface OddsService
 	 * @param mid 比赛编号
 	 * @return 数据列表
 	 */
-	List<OddsOpRecord> selectOddsOpRecords(String mid);
+	List<RecordOddsOp> selectOddsOpRecords(String mid);
 	
 	/**
 	 * 插入欧赔数据列表

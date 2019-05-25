@@ -28,9 +28,9 @@ import com.loris.soccer.dao.OddsScoreMapper;
 import com.loris.soccer.dao.OddsYpMapper;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
+import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
-import com.loris.soccer.model.complex.OddsOpRecord;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.wrapper.OddsOpListWrapper;
 
@@ -216,7 +216,7 @@ public class OddsServiceImpl implements OddsService
 	 * @see com.loris.soccer.service.OddsService#selectOddsOpRecords(java.lang.String)
 	 */
 	@Override
-	public List<OddsOpRecord> selectOddsOpRecords(String mid)
+	public List<RecordOddsOp> selectOddsOpRecords(String mid)
 	{
 		List<OddsOp> ops = selectOddsOp(mid);
 		if(ops == null || ops.size() == 0)
