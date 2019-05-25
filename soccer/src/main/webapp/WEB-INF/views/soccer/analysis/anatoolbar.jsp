@@ -47,7 +47,7 @@
 		</select>
 		<select id="settingSel" class="sel_list" style="display: none;">
 			<c:forEach items="${settings }" var="setting" varStatus="status">
-				<option value="${setting.id }" >${setting.name}</option>
+				<option value="${setting.sid }" >${setting.name}</option>
 			</c:forEach>
 		</select>
 		<div class="pl-wind-b game_select" id="ssxz">

@@ -76,7 +76,7 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 			{
 				continue;
 			}
-			Element dateEl = el0.selectFirst(".fl strong");
+			Element dateEl = el0.selectFirst(".ps strong");
 			String dateStr = "";
 			if (dateEl != null)
 			{

@@ -398,7 +398,8 @@ function SoccerTableColumns()
 			rowspan: rowspan,
 			type: 'base',
 			formatter: function(value, row, index){
-				return '<div title="比赛时间: ' + value + '">' + formatDate(value, 'hh:mm') + '</div>';
+				var d = new Date(value);
+				return '<div title="比赛时间: ' + formatDate(d, 'yyyy-MM-dd hh:mm') + '">' + formatDate(d, 'hh:mm') + '</div>';
 			}			
 		}
 		columns.push(col0);
@@ -428,14 +429,11 @@ function SoccerTableColumns()
 					if($.isNullOrEmpty(odds) || $.isNullOrEmpty(odds.values)) return '无';
 					else if($.isNotNullOrEmpty(table.options.relator))
 					{
-						return formatOpValueColumn(j, row, odds, c, first);
+						return formatRelateOpValueColumn(j, row, odds, c, first);
 					}
 					else
 					{
-						var st = first ? 0 : 3;
-						var title = first ? '初盘时间 ' + odds.firsttime : '即时盘时间 ' + odds.time;
-						return '<div class="oddsvalue" title="' + (st) + '">' 
-							+ formatValue(odds.values[st + j]) + '</div>';
+						return formatCommonOpvalueComlumn(j, row, odds, c, first);						
 					}
 				}
 			}
@@ -636,8 +634,16 @@ function SoccerTableColumns()
 		return value.toFixed(2);
 
 	}
-	//格式化欧赔数据栏目
-	function formatOpValueColumn(index, match, op, corp, first)
+	function formatCommonOpvalueComlumn(index, match, op, corp, first)
+	{
+		var st = first ? 0 : 3;
+		var title = first ? '初盘时间 ' + op.firsttime : '即时盘时间: ' + op.lasttime;
+		return '<div class="oddsvalue" title="' + (st) + '">' 
+			+ formatValue(op.values[st + j]) + '</div>';
+	}
+	
+	//格式化关联欧赔数据栏目
+	function formatRelateOpValueColumn(index, match, op, corp, first)
 	{
 		var relateClass = '';
 		var relateIndex = -1;
@@ -656,7 +662,7 @@ function SoccerTableColumns()
 		}		
 		var vals = op.values;
 		var title = first ? '初盘时间 ' + op.firsttime + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')'
-				: '即时盘时间 ' + op.time + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')';
+				: '即时盘时间 ' + op.lasttime + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')';
 		return '<div class="association ' + relateClass + '" title="' + title + '" index="' + relateIndex +
 			'" mid="' + match.mid + '" gid="' + op.gid + '" type="' + first + '">' + formatValue(vals[st + index]) + '</div>'
 	}		
@@ -707,10 +713,27 @@ function SoccerTableColumns()
 }
 
 //配置类
-function CorpSetting(setting)
+function CorpSetting(comps)
 {
 	this.corps = [];
-	this.params = setting.params;
+	
+	var plen = comps.length;
+	for(var i = 0; i < plen; i ++)
+	{
+		var p = comps[i];
+		var corp = {
+			id: p.id,
+			name: p.name,
+			type: p.type,
+			gid: p.corpid,
+			source: p.source,
+			oddstype: p.type,
+			desc: ''
+		}
+		this.corps.push(corp);
+	}
+	
+	/*this.params = setting.params;
 	this.name = setting.name;
 	this.id = setting.id;
 	this.size = setting.params.length;
@@ -734,7 +757,7 @@ function CorpSetting(setting)
 			}
 			this.corps.push(corp);
 		}
-	}
+	}*/
 	
 	this.addTheoryCorp = function()
 	{
@@ -1553,14 +1576,6 @@ function MatchDoc(matchList)
 			{
 				return i;
 			}
-			
-			/*if(matchRelation.isSameCorp(corp))
-			{
-				if(matchRelation.isMatchRelated(match.mid, index))
-				{
-					return i;
-				}
-			}*/
 		}
 		return -1;
 	}
@@ -1712,11 +1727,11 @@ MatchDoc.getOpMaxProbIndex = function(op, first)
 //获得欧赔数据记录
 MatchDoc.getOpOdds = function(match, gid)
 {
-	var opnum = match.opItems.length;
+	var opnum = match.odds.length;
 	for(var i = 0; i < opnum; i ++)
 	{
-		var op = match.opItems[i];
-		if(op.gid == gid)
+		var op = match.odds[i];
+		if(op.corpid == gid && op.type == 'op')
 		{
 			return op;
 		}
@@ -1727,11 +1742,11 @@ MatchDoc.getOpOdds = function(match, gid)
 //获得亚盘数据记录
 MatchDoc.getYpOdds = function(match, gid)
 {
-	var ypnum = match.ypItems.length;
+	var ypnum = match.odds.length;
 	for(var i = 0; i < ypnum; i ++)
 	{
-		var yp = match.ypItems[i];
-		if(yp.gid == gid)
+		var yp = match.odds[i];
+		if(yp.corpid == gid && yp.type == 'yp')
 		{
 			return yp;
 		}

@@ -42,7 +42,7 @@
 
 <script type="text/javascript">
 
-var url = "../soccerdata/getMatchesOdds";
+var url = "${ctxPath}/odds/getMatchesOdds";
 //系统参数
 var issue = "<%=issue%>";
 var type = "<%=type%>";
@@ -90,6 +90,7 @@ var options = {
 //用于获得配置数据
 function createMatchOddsTable(conf)
 {
+	//if($.isNullOrEmpty(conf.issue)) conf.issue = issue;
 	sid = conf.sid;
 	issue = conf.issue;
 	type = conf.type;
@@ -110,14 +111,20 @@ function createMatchOddsTable(conf)
 		error: null,
 		presuccess: function(json, soccerTable)
 		{
-			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.setting)) {
-				var corpSetting = new CorpSetting(json.data.setting);
+			var data = json.data;
+			if($.isNullOrEmpty(json.data))
+			{
+				return;
+			}
+			if ($.isNotNullOrEmpty(json.data.comps)) {
+				var corpSetting = new CorpSetting(json.data.comps);
 				soccerTable.options.setting = corpSetting;
 				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
 			}
-			if ($.isNotNullOrEmpty(json.data) && $.isNotNullOrEmpty(json.data.matches)) {
-				soccerTable.options.rows = json.data.matches;
-				initLeaguePanel(json.data.matches);
+			if ($.isNotNullOrEmpty(json.data.matchOdds))
+			{
+				soccerTable.options.rows = json.data.matchOdds;
+				initLeaguePanel(json.data.matchOdds);
 			}			
 		},
 		complete: function(){

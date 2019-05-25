@@ -108,6 +108,7 @@ public class OddsController extends BaseController
 			type = SoccerConstants.LOTTERY_BD;
 		}
 		
+		long st = System.currentTimeMillis();		
 		List<IssueMatchInfo> issueMatchs = matchService.getIssueMatchsInfo(issue, type);
 		if(issueMatchs == null || issueMatchs.size() == 0)
 		{
@@ -115,6 +116,7 @@ public class OddsController extends BaseController
 		}
 		MatchOddsList matchOddsList = new MatchOddsList(setting, issueMatchs);
 		matchOddsList.setIssue(issue);
+		matchOddsList.setType(type);
 		
 		//处理赔率数据
 		List<String> mids = ArraysUtil.getObjectFieldValue(issueMatchs, IssueMatchInfo.class, SoccerConstants.NAME_FIELD_MID);
@@ -122,7 +124,7 @@ public class OddsController extends BaseController
 		if(opcorpids != null && opcorpids.size() > 0)
 		{
 			List<OddsOp> ops = oddsService.selectOddsOps(mids, opcorpids);
-			logger.info("总共的欧赔数据的量为： " + ops.size());
+			//logger.info("总共的欧赔数据的量为： " + ops.size());
 			matchOddsList.addOddsOpList(ops);
 		}
 		
@@ -130,9 +132,12 @@ public class OddsController extends BaseController
 		if(ypcorpids != null && ypcorpids.size() > 0)
 		{
 			List<OddsYp> yps = oddsService.selectOddsYps(mids, ypcorpids);
-			logger.info("总共的欧赔数据的量为： " + yps.size());
+			//logger.info("总共的欧赔数据的量为： " + yps.size());
 			matchOddsList.addOddsYpList(yps);
 		}
+		
+		long en = System.currentTimeMillis();		
+		logger.info("Load " + issueMatchs.size() + " " + type + " issue match Total spend time is " + (en - st) + " ms.");
 		
 		return Rest.okData(matchOddsList);
 	}

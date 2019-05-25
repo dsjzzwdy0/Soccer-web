@@ -142,8 +142,8 @@ public class App
 			// testZgzcwNumWebPage();
 			// testZgzcwYpWebPage();
 			// testZgzcwLeagueWebPage();
-			// testBdWebPage();
-			testJcWebPage();
+			testBdWebPage();
+			// testJcWebPage();
 			// testWebPageService();
 			// testLeagueRoundWebPage();
 			// testZgzcwCupWebPage();

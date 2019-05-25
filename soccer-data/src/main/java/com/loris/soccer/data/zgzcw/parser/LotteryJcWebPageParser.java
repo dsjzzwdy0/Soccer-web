@@ -63,7 +63,61 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 			IssueMatchList matchJcs, TableRecords results)
 	{
 		BetJcOddsList oddsList = new BetJcOddsList();
-		Elements elements = document.select(".tz-wap .tz-body table tbody tr");
+		
+		Element element = document.selectFirst("#tw #dcc");
+		Elements childElements = element.children();
+		int childnum = childElements.size() / 2;
+
+		for (int i = 0; i < childnum; i++)
+		{
+			Element el0 = childElements.get(i * 2);
+			Element el1 = childElements.get(i * 2 + 1);
+
+			if (el0 == null || el1 == null)
+			{
+				continue;
+			}
+			Element dateEl = el0.selectFirst(".ps strong");
+			String dateStr = "";
+			if (dateEl != null)
+			{
+				dateStr = dateEl.text();
+				dateStr = DateUtil.findDateFromString(dateStr, dateFormat);
+			}
+			
+			Elements elements = el1.select("tbody tr");
+			for (Element el : elements)
+			{
+				IssueMatch match = new IssueMatch();
+				Match baseMatch = new Match();
+				BetJcOdds odds = new BetJcOdds();
+				
+				String t = el.attr("t");
+				Date closeTime = DateUtil.tryToParseDate(t);
+				
+				odds.setType(SoccerConstants.LOTTERY_JC);
+				odds.setOpentime(new Date());
+				
+				match.setType(SoccerConstants.LOTTERY_JC);
+				match.setClosetime(closeTime);
+				match.setIssue(dateStr);
+				match.setIssueno(dateStr);
+				parseMatchInfo(el, baseMatch, match, odds);
+				
+				if(StringUtils.isNotBlank(match.getMid()) && !"0".equals(match.getMid()))
+				{
+					matchJcs.add(match);
+					baseMatchs.add(baseMatch);
+					
+					if(DateUtil.compareDate(match.getMatchtime(), odds.getOpentime()) > 0)
+					{
+						oddsList.add(odds);
+					}
+				}
+			}
+		}
+		
+		/*Elements elements = document.select(".tz-wap .tz-body table tbody tr");
 		for (Element element : elements)
 		{
 			IssueMatch match = new IssueMatch();
@@ -92,7 +146,7 @@ public class LotteryJcWebPageParser extends AbstractLotteryMatchWebPageParser
 					oddsList.add(odds);
 				}
 			}
-		}
+		}*/
 		if(oddsList.size() > 0)
 		{
 			results.put(SoccerConstants.SOCCER_DATA_BETODDS_JC_LIST, oddsList);
