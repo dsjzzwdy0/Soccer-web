@@ -20,9 +20,7 @@ import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.IssueMatchInfo;
-import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchInfo;
-import com.loris.soccer.model.view.MatchJcInfo;
 
 /**   
  * @ClassName:  League   
@@ -78,6 +76,15 @@ public interface MatchService extends IService<Match>
 	List<MatchInfo> getMatchInfos(List<String> lids, List<String> tids, Boolean hasResult);
 	
 	/**
+	 * 获得比赛信息数据 
+	 * @param lid
+	 * @param season
+	 * @param round
+	 * @return
+	 */
+	List<MatchInfo> getMatchInfos(String lid, String season, String round);
+	
+	/**
 	 * 获得球队的战线信息
 	 * @param matchs 比赛数据
 	 * @param sameLeague 是否同一联赛
@@ -125,6 +132,13 @@ public interface MatchService extends IService<Match>
 	List<IssueMatchInfo> getIssueMatchsInfo(String issue, String type);
 	
 	/**
+	 * 获得比赛的信息
+	 * @param mids
+	 * @return
+	 */
+	List<IssueMatchInfo> getIssueMatchsInfo(List<String> mids);
+	
+	/**
 	 * 插入比赛结果数据记录
 	 * @param results 比赛结果
 	 * @return 是否成功的标志
@@ -138,19 +152,4 @@ public interface MatchService extends IService<Match>
 	 * @return 是否成功标志
 	 */
 	boolean insertMatchResults(List<MatchResult> results, boolean overwrite);
-	
-	/**
-	 * 按照北单的期号查询北单比赛数据
-	 * @param bdno 北单期号
-	 * @param issue 比赛日期
-	 * @return 数据列表
-	 */
-	List<MatchBdInfo> getMatchBdInfos(String issue, String bdno);
-	
-	/**
-	 * 获得竞彩比赛数据的列表
-	 * @param issue 比赛期号
-	 * @return 数据列表
-	 */
-	List<MatchJcInfo> getMatchJcInfos(String issue);
 }

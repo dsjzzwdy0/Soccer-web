@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loris.common.util.ArraysUtil;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.constant.SoccerConstants;
@@ -28,8 +28,10 @@ import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.RecordOddsYp;
+import com.loris.soccer.model.Round;
 import com.loris.soccer.model.complex.MatchOddsList;
 import com.loris.soccer.model.view.IssueMatchInfo;
+import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
@@ -109,7 +111,6 @@ public class OddsController extends BaseController
 			type = SoccerConstants.LOTTERY_BD;
 		}
 		
-		long st = System.currentTimeMillis();		
 		List<IssueMatchInfo> issueMatchs = matchService.getIssueMatchsInfo(issue, type);
 		if(issueMatchs == null || issueMatchs.size() == 0)
 		{
@@ -119,26 +120,67 @@ public class OddsController extends BaseController
 		matchOddsList.setIssue(issue);
 		matchOddsList.setType(type);
 		
-		//处理赔率数据
-		List<String> mids = ArraysUtil.getObjectFieldValue(issueMatchs, IssueMatchInfo.class, SoccerConstants.NAME_FIELD_MID);
-		List<String> opcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_OP);
-		if(opcorpids != null && opcorpids.size() > 0)
-		{
-			List<RecordOddsOp> ops = oddsService.getRecordOddsOps(mids, opcorpids);
-			//logger.info("总共的欧赔数据的量为： " + ops.size());
-			matchOddsList.addRecodOddsOpList(ops);
-		}
+		loadMatchOdds(matchOddsList, setting);
 		
-		List<String> ypcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_YP);
-		if(ypcorpids != null && ypcorpids.size() > 0)
+		return Rest.okData(matchOddsList);
+	}
+	
+	/**
+	 * 获得指定期号的比赛与赔率基本信息
+	 * @param issue 比赛期号
+	 * @param sid 配置编号
+	 * @param type 类型
+	 * @return 数据列表
+	 */
+	@ResponseBody
+	@RequestMapping("/getRoundMatchesOdds")
+	public Rest getRoundMatchesOdds(Round round, String source, String sid)
+	{
+		CompSetting setting = compService.getCompSettingOrDefault(sid);
+		if(setting == null)
 		{
-			List<RecordOddsYp> yps = oddsService.getRecordOddsYps(mids, ypcorpids);
-			//logger.info("总共的欧赔数据的量为： " + yps.size());
-			matchOddsList.addRecodOddsYpList(yps);
+			return Rest.failure("There are no CompSetting of '" + sid + "' set or there are not default CompSetting.");
+		}		
+		List<MatchInfo> matchInfos = matchService.getMatchInfos(round.getLid(), round.getSeason(), round.getRound());
+		if(matchInfos == null || matchInfos.size() == 0)
+		{
+			return Rest.failure("There are no IssueMatch in database of '" + round + "'.");
 		}
+		MatchOddsList matchOddsList = new MatchOddsList(setting);
+		matchOddsList.initFromMatchInfos(matchInfos);
 		
-		long en = System.currentTimeMillis();		
-		logger.info("Load " + issueMatchs.size() + " " + type + " issue match Total spend time is " + (en - st) + " ms.");
+		loadMatchOdds(matchOddsList, setting);
+		
+		return Rest.okData(matchOddsList);
+	}
+	
+	/**
+	 * 获取相关比赛的信息
+	 * @param mids 比赛列表
+	 * @param sid 欧赔配置方案
+	 * @return　比赛信息列表
+	 */
+	@ResponseBody
+	@RequestMapping("/getRelationMatchesOdds")
+	public Rest getRelationMatchesOdds(String mids, String sid)
+	{
+		CompSetting setting = compService.getCompSettingOrDefault(sid);
+		if(setting == null)
+		{
+			return Rest.failure("There are no CompSetting of '" + sid + "' set or there are not default CompSetting.");
+		}
+		List<String> midlist = splitString(mids, ",");
+		if(midlist == null || midlist.isEmpty())
+		{
+			return Rest.failure("There are no matches in the list.");
+		}
+		List<IssueMatchInfo> issueMatchs = matchService.getIssueMatchsInfo(midlist);
+		if(issueMatchs == null || issueMatchs.size() == 0)
+		{
+			return Rest.failure("There are no IssueMatch in database of '" + mids + "'.");
+		}
+		MatchOddsList matchOddsList = new MatchOddsList(setting, issueMatchs);
+		loadMatchOdds(matchOddsList, setting);
 		
 		return Rest.okData(matchOddsList);
 	}
@@ -164,5 +206,56 @@ public class OddsController extends BaseController
 		{
 			return Rest.okData(setting);
 		}
+	}
+	
+	/**
+	 * 加载赔率数据
+	 * @param matchOddsList
+	 * @param setting
+	 * @return
+	 */
+	protected boolean loadMatchOdds(MatchOddsList matchOddsList, CompSetting setting)
+	{
+		long st = System.currentTimeMillis();
+		// 处理赔率数据
+		List<String> mids = matchOddsList.getMids();
+		List<String> opcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_OP);
+		if (opcorpids != null && opcorpids.size() > 0)
+		{
+			List<RecordOddsOp> ops = oddsService.getRecordOddsOps(mids, opcorpids);
+			// logger.info("总共的欧赔数据的量为： " + ops.size());
+			matchOddsList.addRecodOddsOpList(ops);
+		}
+
+		List<String> ypcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_YP);
+		if (ypcorpids != null && ypcorpids.size() > 0)
+		{
+			List<RecordOddsYp> yps = oddsService.getRecordOddsYps(mids, ypcorpids);
+			// logger.info("总共的欧赔数据的量为： " + yps.size());
+			matchOddsList.addRecodOddsYpList(yps);
+		}
+
+		long en = System.currentTimeMillis();
+		logger.info("Load " + matchOddsList.sizeOfMatch() + " match Total spend time is " + (en - st) + " ms.");
+		return true;
+	}
+	
+	/**
+	 * 分割字符串
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
+	protected static List<String> splitString(String str, String regex)
+	{
+		String[] reStrings = str.split(regex);
+		List<String> list = new ArrayList<>();
+		for (String string : reStrings)
+		{
+			string = string.trim();
+			if(StringUtils.isNotEmpty(string))
+				list.add(string);
+		}
+		return list;
 	}
 }

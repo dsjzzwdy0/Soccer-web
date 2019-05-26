@@ -24,6 +24,7 @@ import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.complex.item.OddsItem;
 import com.loris.soccer.model.view.IssueMatchInfo;
+import com.loris.soccer.model.view.MatchInfo;
 
 /**   
  * @ClassName:  MatchOdds.java   
@@ -60,6 +61,11 @@ public class MatchOdds
 	public MatchOdds(IssueMatchInfo matchInfo)
 	{
 		this.setIssueMatchInfo(matchInfo);
+	}
+	
+	public MatchOdds(int index, MatchInfo matchInfo)
+	{
+		this.setMatchInfo(index, matchInfo);
 	}
 	
 	public String getOrdinary()
@@ -271,5 +277,20 @@ public class MatchOdds
 		this.season = matchInfo.getSeason();
 		this.round = matchInfo.getRound();
 		this.closetime = matchInfo.getClosetime();
+	}
+	protected void setMatchInfo(int index, MatchInfo matchInfo)
+	{
+		this.ordinary = index + "";
+		this.issue = matchInfo.getRound();
+		this.mid = matchInfo.getMid();
+		this.lid = matchInfo.getLid();
+		this.leaguename = matchInfo.getLeaguename();
+		this.matchtime = matchInfo.getMatchtime();
+		this.homeid = matchInfo.getHomeid();
+		this.homename = matchInfo.getHomename();
+		this.clientid = matchInfo.getClientid();
+		this.clientname = matchInfo.getClientname();
+		this.season = matchInfo.getSeason();
+		this.round = matchInfo.getRound();
 	}
 }

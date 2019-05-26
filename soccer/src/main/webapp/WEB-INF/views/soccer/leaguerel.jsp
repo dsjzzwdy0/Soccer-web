@@ -1,25 +1,24 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.loris.soccer.model.League"%>
+<%@page import="com.loris.soccer.model.Round"%>
 <%@page import="com.loris.soccer.util.IssueMatchUtil" %>
 <%@page import="org.apache.commons.lang3.StringUtils" %>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
-
 <%
-    String issue = request.getParameter("issue");
+	League league = (League)request.getAttribute("league");
+	Round round = (Round)request.getAttribute("round");
+	String source = request.getParameter("source");
+
 	String sid = request.getParameter("sid");		//配置编号
-	String type = request.getParameter("type");
-	if(StringUtils.isEmpty(issue))
-	{
-		issue = IssueMatchUtil.getCurrentIssue();
-	}
+	String lid = (league != null) ? league.getLid() : (round != null ? round.getLid() : "");
+	String season = round.getSeason();
+	String rid = round.getRound();
+
 	if(StringUtils.isEmpty(sid))
 	{
 		sid = "1011";
-	}
-	if(StringUtils.isEmpty(type))
-	{
-		type = "bd";
 	}
 %>
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/datacenter.css" />
@@ -27,7 +26,7 @@
 <script type="text/javascript" src="${ctxPath}/content/scripts/soccer/soccer-table.js"></script>
 
 <div id="content" class="container_wrapper">
-	<%@include file="./analysis/anatoolbar.jsp"%>
+	<%@include file="./league/leaguetoolbar.jsp"%>
 	
 	<div id="main" class="main_wrapper">
 		<table id="gridTable" class="gridTable table-hover"
@@ -40,13 +39,16 @@
 	</div>
 </div>
 
+
 <script type="text/javascript">
 
-var url = "${ctxPath}/odds/getMatchesOdds";
+var url = "${ctxPath}/odds/getRoundMatchesOdds";
 //系统参数
-var issue = "<%=issue%>";
-var type = "<%=type%>";
-var sid = "<%=sid%>"
+var sid = '<%=sid%>';
+var lid = '<%=lid%>';
+var season = '<%=season%>'
+var round = '<%=rid%>';
+var src = '<%=source%>';
 
 //基础数据
 var table = null;
@@ -56,11 +58,9 @@ var options = {
 	sorter: null,
 	relator: null,
 	rows: null,
-	results: null,
 	columns: null,
 	setting: null,
 	first: true,
-	filter: null,
 	clear: function()
 	{
 		this.columns = null;
@@ -69,18 +69,6 @@ var options = {
 	},
 	postshow: function()
 	{
-		var total = 0;
-		var shownum = 0;
-		if($.isNotNullOrEmpty(this.rows))
-		{
-			total = this.rows.length;
-		}
-		if($.isNotNullOrEmpty(this.results))
-		{
-			shownum = this.results.length;
-		}
-		$('#matchNumAll').text(total);
-		$('#matchNumHide').text(total - shownum);
 		$('#gridTable tbody .relation').off('click').on('click', function(){
 			getRelatedMatch($(this));
 		});
@@ -88,12 +76,9 @@ var options = {
 };
 
 //用于获得配置数据
-function createMatchOddsTable(conf)
+function createLeagueMatchOddsTable(conf)
 {
-	//if($.isNullOrEmpty(conf.issue)) conf.issue = issue;
 	sid = conf.sid;
-	issue = conf.issue;
-	type = conf.type;
 	var relator = new Relator(conf.threshold, conf.sameLeague, false);
 	var sorter = new MatchOddsFieldSorter('ordinary', true);
 	var source = {
@@ -103,8 +88,10 @@ function createMatchOddsTable(conf)
 		dataType : "json",
 		data : {
 			"sid": sid,
-			"issue": issue,
-			"type": type,
+			"lid": lid,
+			"season": season,
+			"round": round,
+			"source": src
 		},
 		jsonp:'callback',
 		success: null,
@@ -124,13 +111,7 @@ function createMatchOddsTable(conf)
 			if ($.isNotNullOrEmpty(json.data.matchOdds))
 			{
 				soccerTable.options.rows = json.data.matchOdds;
-				initLeaguePanel(json.data.matchOdds);
-			}			
-		},
-		complete: function(){
-			/*$('#gridTable tbody .relation').off('click').on('click', function(){
-				getRelatedMatch($(this));
-			});*/
+			}
 		}
 	}	
 	options.source = source;
@@ -140,11 +121,24 @@ function createMatchOddsTable(conf)
 	$('#gridTable').soccerTable(table);
 }
 
-function openLeagueRel(lid, season, round, source)
+function stateChange(state, source, conf)
 {
-	var sid = $('#settingSel').val();
-	window.open('analeague?type=leaguerel&lid=' + lid + '&season=' + season + '&round=' 
-			+ round + '&source=' + source + '&sid=' + sid);
+	options.first = conf.first;
+	if($.isNotNullOrEmpty(options.relator))
+	{
+		options.relator.threshold = conf.threshold;
+		options.relator.sameLeague = conf.sameLeague;
+	}
+	
+	if($(source).attr('id') == 'settingSel')
+	{
+		options.clear();
+		createLeagueMatchOddsTable(conf);
+	}
+	else
+	{
+		table.update();
+	}
 }
 
 //获得比赛的数据
@@ -182,55 +176,17 @@ function getRelatedMatch(element)
 	window.open('../soccer/matchrel?sid=' + sid + '&mids=' + mids.join(','));
 }
 
-function stateChange(state, source, conf)
-{
-	options.first = conf.first;
-	if($.isNotNullOrEmpty(options.relator))
-	{
-		options.relator.threshold = conf.threshold;
-		options.relator.sameLeague = conf.sameLeague;
-	}
-	var sourceId = $(source).attr('id');
-	if(sourceId == 'settingSel' ||
-			sourceId == 'typeSel' ||
-			sourceId == 'issueSel')
-	{
-		options.clear();
-		createMatchOddsTable(conf);
-	}
-	else
-	{		
-		var filter = options.filter;
-		if($.isNullOrEmpty(filter))
-		{
-			filter = new FieldFilter('lid', [], true);
-			options.filter = filter;
-		}
-		filter.clear();
-		if($.isNotNullOrEmpty(conf.lids))
-		{
-			filter.setValues(conf.lids);
-		}		
-		table.update();
-	}
-}
-
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
-	showOddsType();
 	
-	if($.isNotNullOrEmpty(sid))
+	if(!$.isNullOrEmpty(sid))
 	{
 		$('#settingSel').val(sid);
 	}
-	if($.isNotNullOrEmpty(issue))
-	{
-		$('#issueSel').val(issue);
-	}
-
+	$('.top-chosse #settingSel').attr('disabled', 'disabled');
 	var conf = getConfValue();
-	createMatchOddsTable(conf);	
+	createLeagueMatchOddsTable(conf);	
 	stateListeners.add(stateChange);
 	
 	$('#btnRefresh').on('click', function(){

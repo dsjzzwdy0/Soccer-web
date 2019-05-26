@@ -379,7 +379,9 @@ function SoccerTableColumns()
 			rowspan: rowspan,
 			type: 'base',
 			formatter: function(value, row, index){
-				return '<a href="javascript:void(0);" onclick="openLeagueRel(\'' + row.mid + '\', \'' + row.source + '\')" class="leagueInfo">' + value + '</a>';
+				return '<a href="javascript:void(0);" onclick="openLeagueRel(\'' 
+					+ row.lid + '\', \'' + row.season + '\', \'' + row.round + '\', \'' 
+					+ row.source + '\')" class="leagueInfo">' + value + '</a>';
 			},
 		}
 		var col2 = {

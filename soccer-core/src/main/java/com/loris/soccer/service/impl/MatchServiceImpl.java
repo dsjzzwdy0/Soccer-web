@@ -30,17 +30,13 @@ import com.loris.soccer.dao.IssueMatchMapper;
 import com.loris.soccer.dao.MatchMapper;
 import com.loris.soccer.dao.MatchResultMapper;
 import com.loris.soccer.dao.view.IssueMatchInfoMapper;
-import com.loris.soccer.dao.view.MatchBdInfoMapper;
 import com.loris.soccer.dao.view.MatchInfoMapper;
-import com.loris.soccer.dao.view.MatchJcInfoMapper;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.IssueMatchInfo;
-import com.loris.soccer.model.view.MatchBdInfo;
 import com.loris.soccer.model.view.MatchInfo;
-import com.loris.soccer.model.view.MatchJcInfo;
 import com.loris.soccer.service.MatchService;
 
 /**
@@ -66,12 +62,6 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	
 	@Autowired
 	private IssueMatchInfoMapper issueMatchInfoMapper;
-	
-	@Autowired
-	private MatchBdInfoMapper matchBdInfoMapper;
-	
-	@Autowired
-	private MatchJcInfoMapper matchJcInfoMapper;
 	
 	@Autowired
 	private MatchInfoMapper matchInfoMapper;
@@ -170,35 +160,6 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		ObjectFilter<MatchResult> filter = new ObjectFilter<>();	
 		return SqlHelper.insertList(results, MatchResult.class, matchResultMapper, filter, 
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#getMatchBdInfos(java.lang.String)
-	 */
-	@Override
-	public List<MatchBdInfo> getMatchBdInfos(String issue, String bdno)
-	{
-		QueryWrapper<MatchBdInfo> queryWrapper = new QueryWrapper<>();
-		if(StringUtils.isNotBlank(issue))
-			queryWrapper.eq("issue", issue);
-		if(StringUtils.isNotBlank(bdno))
-			queryWrapper.eq("bdno", bdno);
-		queryWrapper.orderByAsc("issue, ordinary+0");
-		return matchBdInfoMapper.selectList(queryWrapper);
-	}
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#getMatchJcInfos(java.lang.String)
-	 */
-	@Override
-	public List<MatchJcInfo> getMatchJcInfos(String issue)
-	{
-		QueryWrapper<MatchJcInfo> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("issue", issue);
-		queryWrapper.orderByAsc("issue, ordinary+0");
-		return matchJcInfoMapper.selectList(queryWrapper);
 	}
 
 	/**
@@ -315,6 +276,41 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		QueryWrapper<IssueMatchInfo> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("type", type);
 		queryWrapper.eq("issue", issue);
+		return issueMatchInfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<MatchInfo> getMatchInfos(String lid, String season, String round)
+	{
+		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotEmpty(lid))
+		{
+			queryWrapper.eq(SoccerConstants.NAME_FIELD_LID, lid);
+		}
+		if(StringUtils.isNotEmpty(season))
+		{
+			queryWrapper.eq(SoccerConstants.NAME_FIELD_SEASON, season);
+		}
+		if(StringUtils.isNotEmpty(round))
+		{
+			queryWrapper.eq(SoccerConstants.NAME_FIELD_ROUND, round);
+		}
+		return matchInfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getIssueMatchsInfo(java.util.List)
+	 */
+	@Override
+	public List<IssueMatchInfo> getIssueMatchsInfo(List<String> mids)
+	{
+		QueryWrapper<IssueMatchInfo> queryWrapper = new QueryWrapper<>();
+		queryWrapper.in(SoccerConstants.NAME_FIELD_MID, mids);
 		return issueMatchInfoMapper.selectList(queryWrapper);
 	}
 }

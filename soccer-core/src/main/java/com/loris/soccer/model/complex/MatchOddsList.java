@@ -12,10 +12,12 @@
 package com.loris.soccer.model.complex;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.loris.common.util.DateUtil;
 import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
@@ -23,6 +25,7 @@ import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.view.IssueMatchInfo;
+import com.loris.soccer.model.view.MatchInfo;
 
 /**   
  * @ClassName:  MatchOddsList    
@@ -109,6 +112,21 @@ public class MatchOddsList
 	{
 		this.matchOdds.add(matchOdd);
 	}
+	public int sizeOfMatch()
+	{
+		return matchOdds.size();
+	}
+	
+	public List<String> getMids()
+	{
+		List<String> mids = new ArrayList<>();
+		for (MatchOdds match : matchOdds)
+		{
+			if(!mids.contains(match.getMid()))
+				mids.add(match.getMid());
+		}
+		return mids;
+	}
 	public MatchOdds getMatchOddsByMid(String mid)
 	{
 		for (MatchOdds m : matchOdds)
@@ -129,6 +147,28 @@ public class MatchOddsList
 				continue;
 			}
 			MatchOdds m = new MatchOdds(match);
+			matchOdds.add(m);
+		}
+	}
+	public void initFromMatchInfos(List<MatchInfo> matchInfos)
+	{
+		matchInfos.sort(new Comparator<MatchInfo>()
+		{
+			@Override
+			public int compare(MatchInfo o1, MatchInfo o2)
+			{
+				return DateUtil.compareDate(o1.getMatchtime(), o2.getMatchtime());
+			}
+		});
+		
+		int i = 1;
+		for (MatchInfo match : matchInfos)
+		{
+			if(getMatchOddsByMid(match.getMid()) != null)
+			{
+				continue;
+			}
+			MatchOdds m = new MatchOdds(i ++, match);
 			matchOdds.add(m);
 		}
 	}
@@ -165,7 +205,7 @@ public class MatchOddsList
 		MatchOdds m = getMatchOddsByMid(op.getMid());
 		if(m != null)
 		{
-			m.addOddsOp(op);
+			m.addRecordOddsOp(op);
 		}
 	}
 	public void addRecordOddsYp(RecordOddsYp yp)
@@ -173,7 +213,7 @@ public class MatchOddsList
 		MatchOdds m = getMatchOddsByMid(yp.getMid());
 		if(m != null)
 		{
-			m.addOddsYp(yp);
+			m.addRecordOddsYp(yp);
 		}
 	}
 	public void addOddsOp(OddsOp op)

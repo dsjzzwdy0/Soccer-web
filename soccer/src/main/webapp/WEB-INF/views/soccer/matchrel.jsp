@@ -4,27 +4,19 @@
 <%@page import="com.loris.soccer.util.IssueMatchUtil" %>
 <%@page import="org.apache.commons.lang3.StringUtils" %>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
-
 <%
-    String issue = request.getParameter("issue");
+	String mids = request.getParameter("mids");
 	String sid = request.getParameter("sid");		//配置编号
-	String type = request.getParameter("type");
-	if(StringUtils.isEmpty(issue))
-	{
-		issue = IssueMatchUtil.getCurrentIssue();
-	}
+
 	if(StringUtils.isEmpty(sid))
 	{
 		sid = "1011";
 	}
-	if(StringUtils.isEmpty(type))
-	{
-		type = "bd";
-	}
+
 %>
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/datacenter.css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/scripts/soccer/soccer-table.css" />
-<script type="text/javascript" src="${ctxPath}/content/scripts/soccer/soccer-table.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctxPath }/content/css/soccer/datacenter.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath }/content/scripts/soccer/soccer-table.css" />
+<script type="text/javascript" src="${ctxPath }/content/scripts/soccer/soccer-table.js"></script>
 
 <div id="content" class="container_wrapper">
 	<%@include file="./analysis/anatoolbar.jsp"%>
@@ -42,10 +34,9 @@
 
 <script type="text/javascript">
 
-var url = "${ctxPath}/odds/getMatchesOdds";
+var url = "${ctxPath}/odds/getRelationMatchesOdds";
 //系统参数
-var issue = "<%=issue%>";
-var type = "<%=type%>";
+var mids = "<%=mids%>";
 var sid = "<%=sid%>"
 
 //基础数据
@@ -61,6 +52,7 @@ var options = {
 	setting: null,
 	first: true,
 	filter: null,
+	firstWithLast: true,
 	clear: function()
 	{
 		this.columns = null;
@@ -81,16 +73,12 @@ var options = {
 		}
 		$('#matchNumAll').text(total);
 		$('#matchNumHide').text(total - shownum);
-		$('#gridTable tbody .relation').off('click').on('click', function(){
-			getRelatedMatch($(this));
-		});
 	}
 };
 
 //用于获得配置数据
 function createMatchOddsTable(conf)
 {
-	//if($.isNullOrEmpty(conf.issue)) conf.issue = issue;
 	sid = conf.sid;
 	issue = conf.issue;
 	type = conf.type;
@@ -103,8 +91,7 @@ function createMatchOddsTable(conf)
 		dataType : "json",
 		data : {
 			"sid": sid,
-			"issue": issue,
-			"type": type,
+			"mids": mids,
 		},
 		jsonp:'callback',
 		success: null,
@@ -125,12 +112,26 @@ function createMatchOddsTable(conf)
 			{
 				soccerTable.options.rows = json.data.matchOdds;
 				initLeaguePanel(json.data.matchOdds);
-			}			
+			}
+			/*
+			if($.isNullOrEmpty(json.data))
+			{
+				return;
+			}
+			if ($.isNotNullOrEmpty(json.data.setting)) {
+				var corpSetting = new CorpSetting(json.data.setting);
+				soccerTable.options.setting = corpSetting;
+				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
+			}
+			if ($.isNotNullOrEmpty(json.data.matches)) {
+				soccerTable.options.rows = json.data.matches;
+				initLeaguePanel(json.data.matches);
+			}*/
 		},
 		complete: function(){
-			/*$('#gridTable tbody .relation').off('click').on('click', function(){
-				getRelatedMatch($(this));
-			});*/
+			//$('#gridTable tbody').on('click', '.relation', function(){
+			//	getRelatedMatch($(this));
+			//});
 		}
 	}	
 	options.source = source;
@@ -138,13 +139,6 @@ function createMatchOddsTable(conf)
 	options.sorter = sorter;
 	table = new SoccerTable(options);
 	$('#gridTable').soccerTable(table);
-}
-
-function openLeagueRel(lid, season, round, source)
-{
-	var sid = $('#settingSel').val();
-	window.open('analeague?type=leaguerel&lid=' + lid + '&season=' + season + '&round=' 
-			+ round + '&source=' + source + '&sid=' + sid);
 }
 
 //获得比赛的数据
@@ -173,13 +167,13 @@ function getRelatedMatch(element)
 				var idx = $(div[i]).attr('index');
 				if(idx == index)
 					mids.push(mid);
-			}			
+			}
+			
 		}	
 	});
 	
-	var sid = $('#settingSel').val();
 	//layer.msg(mid + ': ' + gid + ', ' + val + ': ' + mids.join(';'));
-	window.open('../soccer/matchrel?sid=' + sid + '&mids=' + mids.join(','));
+	window.open('../soccer/ralation?mids=' + mids.join(','));
 }
 
 function stateChange(state, source, conf)
@@ -218,15 +212,14 @@ function stateChange(state, source, conf)
 $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
-	showOddsType();
+	$('#issueSel').hide();
+	$('#typeSel').hide();
+	$('#sameLeague').attr('checked', false);
+	$('.top-chosse #settingSel').attr('disabled', 'disabled');
 	
 	if($.isNotNullOrEmpty(sid))
 	{
 		$('#settingSel').val(sid);
-	}
-	if($.isNotNullOrEmpty(issue))
-	{
-		$('#issueSel').val(issue);
 	}
 
 	var conf = getConfValue();

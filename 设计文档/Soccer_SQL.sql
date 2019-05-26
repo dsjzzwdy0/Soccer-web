@@ -144,6 +144,29 @@ create table soccer_league_rank(
 	INDEX `index_round` (`round`) USING BTREE
 );
 
+create table soccer_league_rank_latest(
+	`id`  int(11) NOT NULL AUTO_INCREMENT,
+	lid varchar(10),
+	tid varchar(10),
+	type varchar(15),
+	season varchar(20),
+	round varchar(20),
+	rank int,
+	gamenum int,
+	winnum int,
+	drawnum int,
+	losenum int,
+	score int,
+	wingoal int,
+	losegoal int,
+	ranktime timestamp,
+	PRIMARY KEY (`id`),
+	INDEX `index_tid` (`tid`) USING BTREE ,
+	INDEX `index_lid` (`lid`) USING BTREE,
+	INDEX `index_season` (`season`) USING BTREE,
+	INDEX `index_round` (`round`) USING BTREE
+);
+
 create table soccer_bet_bd_odds(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	mid varchar(10) NOT NULL,
@@ -499,3 +522,25 @@ select `a`.`id` AS `id`,`b`.`lid` AS `lid`,`b`.`leaguename` AS `leaguename`,`b`.
 	`a`.`closetime` AS `closetime`,`a`.`isdelay` AS `isdelay`,`a`.`delaytime` AS `delaytime` from (`soccer_match_issue` `a` left join `soccer_match_info` `b` on((`a`.`mid` = `b`.`mid`))) ;
 
 
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_league_rank_info`AS 
+select `b`.`id` AS `id`,`b`.`lid` AS `lid`,`c`.`name` AS `leaguename`,`a`.`tid` AS `tid`,`d`.`name` AS `teamname`,`a`.`type` AS `type`,`a`.`maxseason` AS `season`,`a`.`maxround` AS `round`,`b`.`gamenum` AS `gamenum`,`b`.`rank` AS `rank`,`b`.`winnum` AS `winnum`,`b`.`drawnum` AS `drawnum`,`b`.`losenum` AS `losenum`,`b`.`score` AS `score`,`b`.`wingoal` AS `wingoal`,`b`.`losegoal` AS `losegoal`,`b`.`ranktime` AS `ranktime` from (((((select `soccer`.`soccer_league_rank`.`tid` AS `tid`,`soccer`.`soccer_league_rank`.`type` AS `type`,max(`soccer`.`soccer_league_rank`.`season`) AS `maxseason`,max(`soccer`.`soccer_league_rank`.`round`) AS `maxround` from `soccer`.`soccer_league_rank` group by `soccer`.`soccer_league_rank`.`tid`,`soccer`.`soccer_league_rank`.`type`)) `a` join `soccer`.`soccer_league_rank` `b` on(((`a`.`tid` = `b`.`tid`) and (`a`.`type` = `b`.`type`) and (`a`.`maxseason` = `b`.`season`) and (`a`.`maxround` = `b`.`round`)))) left join `soccer`.`soccer_league` `c` on((`b`.`lid` = `c`.`lid`))) left join `soccer`.`soccer_league_team` `d` on((`a`.`tid` = `d`.`tid`))) ;
+
+DELIMITER $$
+CREATE TRIGGER soccer_league_rank_add_trigger AFTER INSERT ON soccer_league_rank FOR EACH ROW 
+BEGIN
+	SET @count = (SELECT COUNT(*) FROM soccer_league_rank_latest WHERE soccer_league_rank_latest.`tid`=new.tid AND soccer_league_rank_latest.`type`=new.type);
+	IF  @count = 0 THEN
+		INSERT INTO soccer_league_rank_latest(lid, tid, type, season, round, rank, gamenum, winnum, drawnum, losenum, score, wingoal, losegoal) VALUES 
+			(new.lid, new.tid, new.type, new.season, new.round, new.rank, new.gamenum, new.winnum, new.drawnum, new.losenum, new.score, new.wingoal,  new.losegoal);
+	ELSE
+		UPDATE soccer_league_rank_latest SET 
+			season=new.season, round=new.round, rank=new.rank, gamenum=new.gamenum, winnum=new.winnum, drawnum=new.drawnum, losenum=new.losenum, score=new.score, 
+			wingoal=new.wingoal, losegoal=new.losegoal
+     WHERE tid=new.tid AND type=new.type AND (season < new.season or (season=new.season and round < new.round));
+	END IF;
+END $$
+DELIMITER ;

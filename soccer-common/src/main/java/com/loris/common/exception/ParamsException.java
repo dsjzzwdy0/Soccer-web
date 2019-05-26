@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**   
  * @ClassName: ParamsException   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 错误的参数  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
@@ -32,8 +32,14 @@ public class ParamsException extends RuntimeException
 	{
 	}
 	
+	public ParamsException(String info)
+	{
+		super(info);
+	}
+	
 	public ParamsException(Map<String, String> infos)
 	{
 		super(infos.toString());
 	}
+	
 }

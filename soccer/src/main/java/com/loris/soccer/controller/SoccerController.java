@@ -24,10 +24,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.loris.auth.model.User;
 import com.loris.common.constant.Constants;
+import com.loris.common.exception.ParamsException;
 import com.loris.common.util.DateUtil;
 import com.loris.common.web.BaseController;
 import com.loris.soccer.model.CompSetting;
+import com.loris.soccer.model.League;
+import com.loris.soccer.model.Round;
 import com.loris.soccer.service.CompService;
+import com.loris.soccer.service.LeagueService;
 
 /**   
  * @ClassName:  SoccerController.java   
@@ -90,6 +94,9 @@ public class SoccerController extends BaseController
 	@Autowired
 	private CompService compService;
 	
+	@Autowired
+	private LeagueService leagueService;
+	
 	/**
 	 * 获得数据分析页面
 	 * 
@@ -97,7 +104,7 @@ public class SoccerController extends BaseController
 	 *            分析页面的类型
 	 * @return
 	 */
-	@RequestMapping("/analysis/{type}")
+	@RequestMapping("/analysis")
 	public ModelAndView getAnalysisPage(String type)
 	{
 		int index = getAnalysisPageIndex(type);
@@ -106,6 +113,54 @@ public class SoccerController extends BaseController
 		view.addObject("type", "analysis");
 		view.addObject("page", ANALYSIS_PAGE_TYPES[index][0]);
 		view.addObject("title", ANALYSIS_PAGE_TYPES[index][1]);
+		view.addObject("issues", getLatestIssues(10));
+		view.addObject("settings", settings);
+
+		setUserObject(view);
+		return view;
+	}
+	
+	/**
+	 * 联赛数据分析页面
+	 * @param type 分析类型
+	 * @param round
+	 *            赛事轮次
+	 * @return
+	 */
+	@RequestMapping("/analeague")
+	public ModelAndView getLeagueAnalysisPage(String type, Round round, String source)
+	{
+		if(StringUtils.isEmpty(round.getLid()) || StringUtils.isEmpty(round.getSeason()) ||
+				StringUtils.isEmpty(round.getRound()))
+		{
+			throw new ParamsException("Illegal params be set.");
+		}
+		int index = getLeaguePageIndex(type);
+		List<CompSetting> settings = compService.list();
+		League league = leagueService.getLeague(round.getLid());
+		ModelAndView view = new ModelAndView(LEAGUE_PAGE_TYPES[index][0] + ".soccer");
+		view.addObject("type", "league");
+		view.addObject("page", LEAGUE_PAGE_TYPES[index][0]);
+		view.addObject("title", LEAGUE_PAGE_TYPES[index][1]);
+		view.addObject("league", league);
+		view.addObject("round", round);
+		view.addObject("settings", settings);
+
+		setUserObject(view);
+		return view;
+	}
+	
+	/**
+	 * 查看关联的比赛
+	 * 
+	 * @return
+	 */
+	@RequestMapping("matchrel")
+	public ModelAndView getMatchRelation()
+	{
+		List<CompSetting> settings = compService.list();
+		ModelAndView view = new ModelAndView("matchrel.soccer");
+		view.addObject("type", "analysis");
 		view.addObject("issues", getLatestIssues(10));
 		view.addObject("settings", settings);
 
