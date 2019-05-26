@@ -33,7 +33,9 @@ public class MatchInfo extends Match
 	
 	protected String leaguename;		//联赛名称
 	protected String homename;			//主队名称
+	protected String homerank;
 	protected String clientname;		//客队名称
+	protected String clientrank;
 	protected ResultType result;		//比赛结果
 	protected Integer homegoal;			//主队进球数
 	protected Integer clientgoal;		//客队进球数
@@ -96,6 +98,34 @@ public class MatchInfo extends Match
 	public Integer getClientgoal()
 	{
 		return clientgoal;
+	}
+	/**
+	 * @return the homerank
+	 */
+	public String getHomerank()
+	{
+		return homerank;
+	}
+	/**
+	 * @param homerank the homerank to set
+	 */
+	public void setHomerank(String homerank)
+	{
+		this.homerank = homerank;
+	}
+	/**
+	 * @return the clientrank
+	 */
+	public String getClientrank()
+	{
+		return clientrank;
+	}
+	/**
+	 * @param clientrank the clientrank to set
+	 */
+	public void setClientrank(String clientrank)
+	{
+		this.clientrank = clientrank;
 	}
 	/**
 	 * @param clientgoal the clientgoal to set

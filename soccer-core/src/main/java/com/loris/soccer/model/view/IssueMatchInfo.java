@@ -36,8 +36,10 @@ public class IssueMatchInfo extends IssueMatch
 	protected String round;
 	protected String homeid;
 	protected String homename;			//主队名称
+	protected String homerank;			//主队排名
 	protected String clientid;
 	protected String clientname;		//客队名称
+	protected String clientrank;		//客队排名
 	public String getLid()
 	{
 		return lid;
@@ -101,5 +103,33 @@ public class IssueMatchInfo extends IssueMatch
 	public void setClientname(String clientname)
 	{
 		this.clientname = clientname;
+	}
+	/**
+	 * @return the homerank
+	 */
+	public String getHomerank()
+	{
+		return homerank;
+	}
+	/**
+	 * @param homerank the homerank to set
+	 */
+	public void setHomerank(String homerank)
+	{
+		this.homerank = homerank;
+	}
+	/**
+	 * @return the clientrank
+	 */
+	public String getClientrank()
+	{
+		return clientrank;
+	}
+	/**
+	 * @param clientrank the clientrank to set
+	 */
+	public void setClientrank(String clientrank)
+	{
+		this.clientrank = clientrank;
 	}
 }

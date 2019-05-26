@@ -76,6 +76,13 @@ var options = {
 	}
 };
 
+function openLeagueRel(lid, season, round, source)
+{
+	var sid = $('#settingSel').val();
+	window.open('analeague?type=leaguerel&lid=' + lid + '&season=' + season + '&round=' 
+			+ round + '&source=' + source + '&sid=' + sid);
+}
+
 //用于获得配置数据
 function createMatchOddsTable(conf)
 {

@@ -272,8 +272,10 @@ public class MatchOdds
 		this.matchtime = matchInfo.getMatchtime();
 		this.homeid = matchInfo.getHomeid();
 		this.homename = matchInfo.getHomename();
+		this.homerank = matchInfo.getHomerank();
 		this.clientid = matchInfo.getClientid();
 		this.clientname = matchInfo.getClientname();
+		this.clientrank = matchInfo.getClientrank();
 		this.season = matchInfo.getSeason();
 		this.round = matchInfo.getRound();
 		this.closetime = matchInfo.getClosetime();
@@ -288,8 +290,10 @@ public class MatchOdds
 		this.matchtime = matchInfo.getMatchtime();
 		this.homeid = matchInfo.getHomeid();
 		this.homename = matchInfo.getHomename();
+		this.homerank = matchInfo.getHomerank();
 		this.clientid = matchInfo.getClientid();
 		this.clientname = matchInfo.getClientname();
+		this.clientrank = matchInfo.getClientrank();
 		this.season = matchInfo.getSeason();
 		this.round = matchInfo.getRound();
 	}
