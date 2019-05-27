@@ -540,7 +540,7 @@ BEGIN
 		UPDATE soccer_league_rank_latest SET 
 			season=new.season, round=new.round, rank=new.rank, gamenum=new.gamenum, winnum=new.winnum, drawnum=new.drawnum, losenum=new.losenum, score=new.score, 
 			wingoal=new.wingoal, losegoal=new.losegoal
-     WHERE tid=new.tid AND type=new.type AND (season < new.season or (season=new.season and round < new.round));
+     WHERE tid=new.tid AND type=new.type AND (season < new.season or (season=new.season and round+0 < new.round+0));
 	END IF;
 END $$
 DELIMITER ;
