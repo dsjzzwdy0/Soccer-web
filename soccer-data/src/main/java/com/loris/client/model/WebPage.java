@@ -376,24 +376,14 @@ public class WebPage extends AutoIdEntity implements Task
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj == this)
-		{
-			return true;
-		}
-		if (obj == null)
-		{
-			return false;
-		}
-		if (getClass() != obj.getClass())
-		{
-			return false;
-		}
+		if (obj == this) return true;
+		if (obj == null) return false; 
+		if (getClass() != obj.getClass()) return false;
 		WebPage other = (WebPage) obj;
-		return StringUtils.equals(type, other.getType()) && 
-				StringUtils.equals(url, other.getUrl())
-				&& StringUtils.equals(method, other.getMethod()) && 
-				((params == null && other.getParams() == null) || 
-				 (params != null && params.equals(other.getParams())));
+		return StringUtils.equals(type, other.type) && 
+				StringUtils.equals(url, other.url)
+				&& StringUtils.equals(method, other.method) && 
+				((params == other.params) || (params != null && params.equals(other.params)));
 	}
 
 	/**
