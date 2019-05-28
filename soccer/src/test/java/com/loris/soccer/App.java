@@ -95,7 +95,7 @@ import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.stat.MatchStat;
-import com.loris.soccer.stat.algorithm.TeamRating;
+import com.loris.soccer.stat.TeamRating;
 import com.loris.soccer.stat.model.TeamCapability;
 
 

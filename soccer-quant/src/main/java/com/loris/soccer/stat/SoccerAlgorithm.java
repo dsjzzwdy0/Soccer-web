@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.stat.algorithm;
+package com.loris.soccer.stat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchInfo;
-import com.loris.soccer.stat.algorithm.sorter.MatchComparator;
+import com.loris.soccer.stat.sorter.MatchComparator;
 
 /**   
  * @ClassName:  SoccerAlgorithm.java   

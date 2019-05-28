@@ -9,7 +9,7 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.stat.algorithm;
+package com.loris.soccer.stat;
 
 import java.util.Date;
 import java.util.List;
@@ -84,9 +84,7 @@ public class TeamRating
 		TeamCapabilityList teams = new TeamCapabilityList();
 		
 		computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
-		
 		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
-		
 		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
 		return teams;
 	}
