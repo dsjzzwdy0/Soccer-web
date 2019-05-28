@@ -48,9 +48,8 @@ public class TeamRating
 	public static float TEAM_BASE_CAPABILITY = 1000.0f;		//基础分值
 	
 	protected float baseCapability = TEAM_BASE_CAPABILITY;
-	protected float homeKitty = 0.07f;
+	protected float homeKitty = 0.06f;
 	protected float clientKitty = 0.05f;
-	protected float goalWinPercent = 0.6f;
 	
 	/** 比赛数据服务 */
 	protected MatchService matchService;
@@ -73,7 +72,7 @@ public class TeamRating
 	 * @param matchs
 	 * @return
 	 */
-	public List<TeamCapability> rating(String lid, Date start, Date end)
+	public List<TeamCapability> rating(String lid, Date start, Date end, float goalWinPercent)
 	{
 		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, start, end, true);
 		if(matchInfos == null || matchInfos.size() == 0)
@@ -83,7 +82,28 @@ public class TeamRating
 		}
 		logger.info("Total match size is : " + matchInfos.size());
 		TeamCapabilityList teams = new TeamCapabilityList();
-		for (MatchInfo match : matchInfos)
+		
+		computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
+		
+		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
+		
+		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
+		return teams;
+	}
+	
+	/**
+	 * 计算球队实力的函数
+	 * @param teams
+	 * @param lid
+	 * @param matchs
+	 * @param homeKitty
+	 * @param clietnKitty
+	 * @param goalWinPercent
+	 */
+	public void computeTeamCapability(TeamCapabilityList teams, String lid, List<MatchInfo> matchs, 
+			float homeKitty, float clietnKitty, float goalWinPercent)
+	{
+		for (MatchInfo match : matchs)
 		{
 			TeamCapability homeTeam = teams.geTeamCapability(lid, match.getHomeid());
 			TeamCapability clientTeam = teams.geTeamCapability(lid, match.getClientid());
@@ -101,10 +121,30 @@ public class TeamRating
 				teams.add(clientTeam);
 			}
 			
-			computeNewRating(homeTeam, clientTeam, match.getMatchResult());
+			computeDynamicTeamRating(homeTeam, homeKitty, clientTeam, clientKitty, match.getMatchResult(), goalWinPercent);
 		}
+	}
+	
+	/**
+	 * 计算动态球队实力数据
+	 * @param homeTeam
+	 * @param homeKitty
+	 * @param clientTeam
+	 * @param clientKitty
+	 * @param result
+	 * @param goalWinPercent
+	 */
+	protected void computeDynamicTeamRating(TeamCapability homeTeam, float homeKitty, 
+			TeamCapability clientTeam, float clientKitty,
+			MatchResult result, float goalWinPercent)
+	{
+		float homeCap = homeTeam.getCapability();
+		float clientCap = clientTeam.getCapability();
 		
-		return teams;
+		float newHomeKitty = homeKitty *(float) Math.pow(homeCap / clientCap, 1.60f);
+		float newClientKitty = clientKitty * (float) Math.pow(clientCap / homeCap, 1.60f);
+		
+		computeBasicTeamRating(homeTeam, newHomeKitty, clientTeam, newClientKitty, result, goalWinPercent);
 	}
 	
 	/**
@@ -113,7 +153,9 @@ public class TeamRating
 	 * @param clientTeam 客队
 	 * @param result 比赛结果
 	 */
-	protected void computeNewRating(TeamCapability homeTeam, TeamCapability clientTeam, MatchResult result)
+	protected void computeBasicTeamRating(TeamCapability homeTeam, float homeKitty, 
+			TeamCapability clientTeam, float clientKitty,
+			MatchResult result, float goalWinPercent)
 	{
 		ResultType resultType = result.getResult();
 		
@@ -170,16 +212,6 @@ public class TeamRating
 	public void setClientKitty(float clientKitty)
 	{
 		this.clientKitty = clientKitty;
-	}
-
-	public float getGoalWinPercent()
-	{
-		return goalWinPercent;
-	}
-
-	public void setGoalWinPercent(float goalWinPercent)
-	{
-		this.goalWinPercent = goalWinPercent;
 	}
 
 	public float getBaseCapability()

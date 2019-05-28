@@ -182,7 +182,7 @@ public class App
 		Date start = DateUtil.tryToParseDate("2018-08-01");
 		Date end = new Date();
 		
-		List<TeamCapability> teams = teamRating.rating(lid, start, end);
+		List<TeamCapability> teams = teamRating.rating(lid, start, end, 0.3f);
 		
 		int i = 0;
 		for (TeamCapability teamCapability : teams)

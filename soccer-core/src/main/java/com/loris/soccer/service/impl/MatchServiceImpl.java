@@ -314,6 +314,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 			if(!hasResult) queryWrapper.isNull("result");
 			else queryWrapper.isNotNull("result");
 		}
+		queryWrapper.orderByAsc("matchtime");
 		return matchInfoMapper.selectList(queryWrapper);
 	}
 	
