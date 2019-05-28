@@ -141,8 +141,8 @@ public class TeamRating
 		float homeCap = homeTeam.getCapability();
 		float clientCap = clientTeam.getCapability();
 		
-		float newHomeKitty = homeKitty *(float) Math.pow(homeCap / clientCap, 1.60f);
-		float newClientKitty = clientKitty * (float) Math.pow(clientCap / homeCap, 1.60f);
+		float newHomeKitty = homeKitty *(float) Math.pow(homeCap / baseCapability, 1.60f);
+		float newClientKitty = clientKitty * (float) Math.pow(clientCap / baseCapability, 1.60f);
 		
 		computeBasicTeamRating(homeTeam, newHomeKitty, clientTeam, newClientKitty, result, goalWinPercent);
 	}
