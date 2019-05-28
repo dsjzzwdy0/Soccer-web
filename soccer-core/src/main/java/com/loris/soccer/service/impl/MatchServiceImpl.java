@@ -92,31 +92,6 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
 	}
 	
-
-	/**
-	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.util.Date, java.util.Date, java.lang.Boolean)
-	 */
-	@Override
-	public List<MatchInfo> getMatchInfos(Date start, Date end, Boolean hasResult)
-	{
-		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
-		if(ToolUtil.isNotEmpty(start))
-		{
-			queryWrapper.gt("matchtime", start);
-		}
-		if(ToolUtil.isNotEmpty(end))
-		{
-			queryWrapper.lt("matchtime", end);
-		}
-		if(ToolUtil.isNotEmpty(hasResult))
-		{
-			if(!hasResult) queryWrapper.isNull("result");
-			else queryWrapper.isNotNull("result");
-		}
-		return matchInfoMapper.selectList(queryWrapper);
-	}
-	
 	/**
 	 *  (non-Javadoc)
 	 * @see com.loris.soccer.service.MatchBdService#insertIssueMatchs(java.util.List)
@@ -312,5 +287,44 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 		QueryWrapper<IssueMatchInfo> queryWrapper = new QueryWrapper<>();
 		queryWrapper.in(SoccerConstants.NAME_FIELD_MID, mids);
 		return issueMatchInfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.lang.String, java.util.Date, java.util.Date, boolean)
+	 */
+	@Override
+	public List<MatchInfo> getMatchInfos(String lid, Date start, Date end, boolean hasResult)
+	{
+		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotBlank(lid))
+		{
+			queryWrapper.eq("lid", lid);
+		}
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("matchtime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("matchtime", end);
+		}
+		if(ToolUtil.isNotEmpty(hasResult))
+		{
+			if(!hasResult) queryWrapper.isNull("result");
+			else queryWrapper.isNotNull("result");
+		}
+		return matchInfoMapper.selectList(queryWrapper);
+	}
+	
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.util.Date, java.util.Date, java.lang.Boolean)
+	 */
+	@Override
+	public List<MatchInfo> getMatchInfos(Date start, Date end, Boolean hasResult)
+	{
+		return getMatchInfos(null, start, end, hasResult);
 	}
 }

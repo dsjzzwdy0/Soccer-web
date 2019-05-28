@@ -91,9 +91,12 @@ import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.service.DataService;
+import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.stat.MatchStat;
+import com.loris.soccer.stat.algorithm.TeamRating;
+import com.loris.soccer.stat.model.TeamCapability;
 
 
 /**
@@ -116,8 +119,8 @@ public class App
 			// testSetting();
 			// testZgzcwIssueScheduler();
 			// testCenterPage();
-			testOddsOpPage();
-			//testOddsYpPage();
+			// testOddsOpPage();
+			// testOddsYpPage();
 			// testOddsNumPage();
 			// testJcScoreWebPage();
 			// testUpdate();
@@ -126,7 +129,7 @@ public class App
 			// testUpload();
 			// testSourceFinance();
 			// testStat();
-			
+			testTeamRating();
 			// testMariaDB();
 			// testDateString();
 			// testSchedulerInfo();
@@ -166,6 +169,25 @@ public class App
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	public static void testTeamRating() throws Exception
+	{
+		MatchService matchService = (MatchService)context.getBean("matchService");
+		LeagueService leagueService = (LeagueService)context.getBean("leagueService");
+		
+		TeamRating teamRating = new TeamRating(matchService, leagueService);
+		String lid = "35";
+		Date start = DateUtil.tryToParseDate("2018-08-01");
+		Date end = new Date();
+		
+		List<TeamCapability> teams = teamRating.rating(lid, start, end);
+		
+		int i = 0;
+		for (TeamCapability teamCapability : teams)
+		{
+			logger.info(i +++ ": " + teamCapability);
 		}
 	}
 	
