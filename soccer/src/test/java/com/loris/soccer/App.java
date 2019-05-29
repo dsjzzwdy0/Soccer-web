@@ -90,13 +90,16 @@ import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
+import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.DataService;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.stat.MatchStat;
 import com.loris.soccer.stat.TeamRating;
+import com.loris.soccer.stat.collection.TeamCapabilityList;
 import com.loris.soccer.stat.model.TeamCapability;
+import com.loris.soccer.util.PossionUtil;
 
 
 /**
@@ -180,14 +183,31 @@ public class App
 		TeamRating teamRating = new TeamRating(matchService, leagueService);
 		String lid = "35";
 		Date start = DateUtil.tryToParseDate("2018-08-01");
-		Date end = new Date();
+		Date end = DateUtil.tryToParseDate("2019-05-02");
 		
-		List<TeamCapability> teams = teamRating.rating(lid, start, end, 0.3f);
+		TeamCapabilityList teams = (TeamCapabilityList)teamRating.rating(lid, start, end, 0.3f);
 		
 		int i = 0;
 		for (TeamCapability teamCapability : teams)
 		{
 			logger.info(i +++ ": " + teamCapability);
+		}
+		
+		Date end1 = DateUtil.tryToParseDate("2019-05-10");
+		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, end, end1, null);
+		for (MatchInfo matchInfo : matchInfos)
+		{
+			TeamCapability homeTeam = teams.geTeamCapability(lid, matchInfo.getHomeid());
+			TeamCapability clientTeam = teams.geTeamCapability(lid, matchInfo.getClientid());
+			
+			float winExpectGoal = homeTeam.getWingoal() / homeTeam.getMatchnum();
+			float loseExpectGoal = clientTeam.getWingoal() / clientTeam.getMatchnum();
+			
+			double[] probs = PossionUtil.computeOddsProb(winExpectGoal, loseExpectGoal);
+			logger.info(matchInfo + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
+			
+			//probs = PossionUtil.computeOddsProb(homeTeam.getCapability() / clientTeam.getCapability(), 1.0f);
+			//logger.info(matchInfo + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
 		}
 	}
 	
@@ -226,7 +246,7 @@ public class App
 		
 		MatchResult result = new MatchResult();
 		result.setMid("5656458");
-		result.setResult(ResultType.LOSE);
+		result.setResultType(ResultType.LOSE);
 		result.setHomegoal(3);
 		result.setClientgoal(5);
 		result.setMid("这是管委会");

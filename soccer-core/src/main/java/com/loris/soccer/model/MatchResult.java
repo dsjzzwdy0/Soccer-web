@@ -65,11 +65,11 @@ public class MatchResult extends AutoIdEntity
 	{
 		this.mid = mid;
 	}
-	public ResultType getResult()
+	public ResultType getResultType()
 	{
 		return result;
 	}
-	public void setResult(ResultType result)
+	public void setResultType(ResultType result)
 	{
 		this.result = result;
 	}

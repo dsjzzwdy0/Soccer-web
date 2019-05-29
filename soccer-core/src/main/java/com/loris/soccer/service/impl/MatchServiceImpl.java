@@ -294,7 +294,7 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	 * @see com.loris.soccer.service.MatchService#getMatchInfos(java.lang.String, java.util.Date, java.util.Date, boolean)
 	 */
 	@Override
-	public List<MatchInfo> getMatchInfos(String lid, Date start, Date end, boolean hasResult)
+	public List<MatchInfo> getMatchInfos(String lid, Date start, Date end, Boolean hasResult)
 	{
 		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
 		if(StringUtils.isNotBlank(lid))

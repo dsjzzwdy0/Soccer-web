@@ -34,6 +34,8 @@ public class TeamCapability extends AutoIdEntity
 	private String name;				//球队名称
 	private float capability;			//球队实力
 	private int matchnum;
+	private float wingoal;
+	private float losegoal;
 	
 	public TeamCapability()
 	{
@@ -86,6 +88,54 @@ public class TeamCapability extends AutoIdEntity
 		this.matchnum ++;
 	}
 
+	/**
+	 * @return the wingoal
+	 */
+	public float getWingoal()
+	{
+		return wingoal;
+	}
+
+	/**
+	 * @param wingoal the wingoal to set
+	 */
+	public void setWingoal(float wingoal)
+	{
+		this.wingoal = wingoal;
+	}
+	
+	public void addWingoal(float wingoal)
+	{
+		this.wingoal += wingoal;
+	}
+
+	/**
+	 * @return the losegoal
+	 */
+	public float getLosegoal()
+	{
+		return losegoal;
+	}
+
+	/**
+	 * @param losegoal the losegoal to set
+	 */
+	public void setLosegoal(float losegoal)
+	{
+		this.losegoal = losegoal;
+	}
+	
+	public void addLosegoal(float losegoal)
+	{
+		this.losegoal += losegoal;
+	}
+	
+	public void addGoal(float wingoal, float losegoal)
+	{
+		this.wingoal += wingoal;
+		this.losegoal += losegoal;
+	}
+
 	public int getMatchnum()
 	{
 		return matchnum;
@@ -96,10 +146,14 @@ public class TeamCapability extends AutoIdEntity
 		this.matchnum = matchnum;
 	}
 
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString()
 	{
 		return "TeamCapability [lid=" + lid + ", tid=" + tid + ", name=" + name + ", capability=" + capability
-				+ ", matchnum=" + matchnum + "]";
+				+ ", matchnum=" + matchnum + ", wingoal=" + wingoal + ", losegoal=" + losegoal + "]";
 	}
 }

@@ -74,7 +74,7 @@ public interface MatchService extends IService<Match>
 	 * @param hasResult 是否有比赛结果
 	 * @return 比赛列表
 	 */
-	List<MatchInfo> getMatchInfos(String lid, Date start, Date end, boolean hasResult);
+	List<MatchInfo> getMatchInfos(String lid, Date start, Date end, Boolean hasResult);
 	
 	/**
 	 * 查询比赛数据

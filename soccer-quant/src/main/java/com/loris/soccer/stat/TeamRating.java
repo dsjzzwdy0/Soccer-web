@@ -86,6 +86,8 @@ public class TeamRating
 		computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
 		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
 		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
+		
+		computeTeamGoal(lid, teams, matchInfos);
 		return teams;
 	}
 	
@@ -155,7 +157,7 @@ public class TeamRating
 			TeamCapability clientTeam, float clientKitty,
 			MatchResult result, float goalWinPercent)
 	{
-		ResultType resultType = result.getResult();
+		ResultType resultType = result.getResultType();
 		
 		float homeCap = homeTeam.getCapability();
 		float clientCap = clientTeam.getCapability();
@@ -190,6 +192,36 @@ public class TeamRating
 		
 		homeTeam.addCapability(homeChangeCap);
 		clientTeam.addCapability(clientChangeCap);
+	}
+	
+	/**
+	 * 计算球队的进球数据
+	 * @param lid 联赛编号
+	 * @param teams 球队列表
+	 * @param matchs 比赛数据
+	 */
+	protected void computeTeamGoal(String lid, TeamCapabilityList teams, List<MatchInfo> matchs)
+	{
+		for (MatchInfo matchInfo : matchs)
+		{
+			MatchResult result = matchInfo.getMatchResult();
+			TeamCapability homeTeam = teams.geTeamCapability(lid, matchInfo.getHomeid());
+			TeamCapability clientTeam = teams.geTeamCapability(lid, matchInfo.getClientid());
+			if(homeTeam == null)
+			{
+				continue;
+			}
+			if(clientTeam == null)
+			{
+				continue;
+			}
+			
+			float wingoal = result.getHomegoal() * (clientTeam.getCapability() / homeTeam.getCapability());
+			float losegoal = result.getClientgoal() * (homeTeam.getCapability() / clientTeam.getCapability());
+			
+			homeTeam.addGoal(wingoal, losegoal);
+			clientTeam.addGoal(losegoal, wingoal);
+		}
 	}
 
 	public float getHomeKitty()
