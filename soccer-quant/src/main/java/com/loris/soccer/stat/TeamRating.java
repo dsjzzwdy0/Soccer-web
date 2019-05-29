@@ -253,4 +253,10 @@ public class TeamRating
 	{
 		this.baseCapability = baseCapability;
 	}
+	
+	public void setKittyValue(float homeKitty, float clientKitty)
+	{
+		this.homeKitty = homeKitty;
+		this.clientKitty = clientKitty;
+	}
 }

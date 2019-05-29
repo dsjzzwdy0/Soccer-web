@@ -181,6 +181,7 @@ public class App
 		LeagueService leagueService = (LeagueService)context.getBean("leagueService");
 		
 		TeamRating teamRating = new TeamRating(matchService, leagueService);
+		teamRating.setKittyValue(0.008f, 0.007f);
 		String lid = "35";
 		Date start = DateUtil.tryToParseDate("2018-08-01");
 		Date end = DateUtil.tryToParseDate("2019-05-02");
