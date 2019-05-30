@@ -184,9 +184,9 @@ public class App
 		
 		TeamRating teamRating = new TeamRating();
 		teamRating.setKittyValue(0.008f, 0.007f);
-		String lid = "35";
+		String lid = "36";
 		Date start = DateUtil.tryToParseDate("2018-08-01");
-		Date end = DateUtil.tryToParseDate("2019-05-02");
+		Date end = DateUtil.tryToParseDate("2019-05-7");
 		
 		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, start, end, true);
 		
@@ -198,7 +198,7 @@ public class App
 			logger.info(i +++ ": " + teamCapability);
 		}
 		
-		Date end1 = DateUtil.tryToParseDate("2019-05-10");
+		Date end1 = DateUtil.tryToParseDate("2019-05-22");
 		matchInfos = matchService.getMatchInfos(lid, end, end1, null);
 		List<String> mids = ArraysUtil.getObjectFieldValue(matchInfos, Match.class, SoccerConstants.NAME_FIELD_MID);
 		List<String> corpids = new ArrayList<>();
