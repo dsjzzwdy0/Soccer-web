@@ -11,7 +11,6 @@
  */
 package com.loris.soccer.stat;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,8 +18,6 @@ import org.apache.log4j.Logger;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.MatchResult.ResultType;
 import com.loris.soccer.model.view.MatchInfo;
-import com.loris.soccer.service.LeagueService;
-import com.loris.soccer.service.MatchService;
 import com.loris.soccer.stat.collection.TeamCapabilityList;
 import com.loris.soccer.stat.model.TeamCapability;
 
@@ -51,43 +48,22 @@ public class TeamRating
 	protected float homeKitty = 0.06f;
 	protected float clientKitty = 0.05f;
 	
-	/** 比赛数据服务 */
-	protected MatchService matchService;
-	
-	/** 联赛数据服务 */
-	protected LeagueService leagueService;
-	
-	/**
-	 * Create a new instance of TeamRating
-	 */
-	public TeamRating(MatchService matchService, LeagueService leagueService)
-	{
-		this.matchService = matchService;
-		this.leagueService = leagueService;
-	}
-	
 	/**
 	 * 计算球队的评分系统
 	 * @param teams
+	 * @param lid
 	 * @param matchs
-	 * @return
+	 * @param goalWinPercent
 	 */
-	public List<TeamCapability> rating(String lid, Date start, Date end, float goalWinPercent)
+	public TeamCapabilityList computeTeamCapability(String lid, List<MatchInfo> matchs, float goalWinPercent)
 	{
-		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, start, end, true);
-		if(matchInfos == null || matchInfos.size() == 0)
+		if(matchs == null || matchs.size() == 0)
 		{
-			logger.info("There are no match record in database of lid=" + lid + ", start=" + start + ", end=" + end);
+			logger.info("There are no match record");
 			return null;
 		}
-		logger.info("Total match size is : " + matchInfos.size());
-		TeamCapabilityList teams = new TeamCapabilityList();
-		
-		computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
-		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
-		//computeTeamCapability(teams, lid, matchInfos, homeKitty, clientKitty, goalWinPercent);
-		
-		computeTeamGoal(lid, teams, matchInfos);
+		TeamCapabilityList teams = computeTeamCapability(lid, matchs, homeKitty, clientKitty, goalWinPercent);
+		computeTeamGoal(lid, teams, matchs);
 		return teams;
 	}
 	
@@ -100,9 +76,10 @@ public class TeamRating
 	 * @param clietnKitty
 	 * @param goalWinPercent
 	 */
-	public void computeTeamCapability(TeamCapabilityList teams, String lid, List<MatchInfo> matchs, 
+	public TeamCapabilityList computeTeamCapability(String lid, List<MatchInfo> matchs, 
 			float homeKitty, float clietnKitty, float goalWinPercent)
 	{
+		TeamCapabilityList teams = new TeamCapabilityList(); 
 		for (MatchInfo match : matchs)
 		{
 			TeamCapability homeTeam = teams.geTeamCapability(lid, match.getHomeid());
@@ -123,6 +100,7 @@ public class TeamRating
 			
 			computeDynamicTeamRating(homeTeam, homeKitty, clientTeam, clientKitty, match.getMatchResult(), goalWinPercent);
 		}
+		return teams;
 	}
 	
 	/**

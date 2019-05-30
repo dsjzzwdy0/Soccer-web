@@ -66,7 +66,8 @@ public class Match extends MatchItem
 	public void setSeason(String season)
 	{
 		this.season = season;
-	}public String getHomeid()
+	}
+	public String getHomeid()
 	{
 		return homeid;
 	}

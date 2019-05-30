@@ -78,6 +78,7 @@ public class OddsOp extends OddsValue implements Cloneable
 	@Override
 	public String toString()
 	{
-		return "OddsOp [winodds=" + winodds + ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", id=" + id + "]";
+		return "OddsOp[mid = " + mid + ", winodds=" + winodds + ", drawodds=" + drawodds  + ", loseodds=" + loseodds 
+				  + ", winprob=" + winprob + ", drawprob=" + drawprob+ ", loseprob=" + loseprob + "]";
 	}
 }

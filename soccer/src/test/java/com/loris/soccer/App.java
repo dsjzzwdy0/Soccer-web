@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -46,8 +47,10 @@ import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.util.TaskQueue;
 import com.loris.common.constant.Enviroment;
 import com.loris.common.model.TableRecords;
+import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
+import com.loris.common.util.NumberUtil;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.old.soccer.bean.OldMatch;
 import com.loris.old.soccer.service.OldMatchService;
@@ -92,7 +95,6 @@ import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.DataService;
-import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.stat.MatchStat;
@@ -178,15 +180,17 @@ public class App
 	public static void testTeamRating() throws Exception
 	{
 		MatchService matchService = (MatchService)context.getBean("matchService");
-		LeagueService leagueService = (LeagueService)context.getBean("leagueService");
+		OddsService oddsService = (OddsService)context.getBean("oddsService");
 		
-		TeamRating teamRating = new TeamRating(matchService, leagueService);
+		TeamRating teamRating = new TeamRating();
 		teamRating.setKittyValue(0.008f, 0.007f);
 		String lid = "35";
 		Date start = DateUtil.tryToParseDate("2018-08-01");
 		Date end = DateUtil.tryToParseDate("2019-05-02");
 		
-		TeamCapabilityList teams = (TeamCapabilityList)teamRating.rating(lid, start, end, 0.3f);
+		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, start, end, true);
+		
+		TeamCapabilityList teams = (TeamCapabilityList)teamRating.computeTeamCapability(lid, matchInfos, 0.2f);
 		
 		int i = 0;
 		for (TeamCapability teamCapability : teams)
@@ -195,7 +199,11 @@ public class App
 		}
 		
 		Date end1 = DateUtil.tryToParseDate("2019-05-10");
-		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, end, end1, null);
+		matchInfos = matchService.getMatchInfos(lid, end, end1, null);
+		List<String> mids = ArraysUtil.getObjectFieldValue(matchInfos, Match.class, SoccerConstants.NAME_FIELD_MID);
+		List<String> corpids = new ArrayList<>();
+		corpids.add("0");
+		List<OddsOp> ops = oddsService.selectOddsOps(mids, corpids);
 		for (MatchInfo match : matchInfos)
 		{
 			TeamCapability homeTeam = teams.geTeamCapability(lid, match.getHomeid());
@@ -205,8 +213,16 @@ public class App
 			float loseExpectGoal = clientTeam.getWingoal() / clientTeam.getMatchnum();
 			
 			double[] probs = PossionUtil.computeOddsProb(winExpectGoal, loseExpectGoal);
-			logger.info(match + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
-			
+			logger.info(match.getMid() + ", " + match.getMatchResult() + " winprob: " + NumberUtil.formatDouble(2,  probs[0] * 100) 
+				+ ", drawprob: " + NumberUtil.formatDouble(2,  probs[1] * 100) + ", loseprob: " + NumberUtil.formatDouble(2,  probs[2] * 100));
+			for (OddsOp oddsOp : ops)
+			{
+				if(StringUtils.equals(oddsOp.getMid(), match.getMid()))
+				{
+					logger.info("OddsOp: " + oddsOp);
+					break;
+				}
+			}
 			//probs = PossionUtil.computeOddsProb(homeTeam.getCapability() / clientTeam.getCapability(), 1.0f);
 			//logger.info(matchInfo + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
 		}

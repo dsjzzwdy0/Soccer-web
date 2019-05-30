@@ -12,11 +12,13 @@
 package com.loris.soccer.collection;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.common.filter.ObjectFilter;
+import com.loris.common.util.DateUtil;
 import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.model.Round;
 import com.loris.soccer.model.view.MatchInfo;
@@ -85,6 +87,30 @@ public class MatchInfoList extends DataList<MatchInfo>
 			}
 		};
 		
+		List<MatchInfo> results = new ArrayList<>();
+		for(MatchInfo m: this)
+		{
+			if(filter.accept(m)) results.add(m);
+		}
+		return results;
+	}
+	
+	/**
+	 * 获得比赛列表，在某一时间之前
+	 * @param time
+	 * @return
+	 */
+	public List<MatchInfo> getMatchInfoBeforeTime(Date time)
+	{
+		ObjectFilter<MatchInfo> filter = new ObjectFilter<MatchInfo>()
+		{
+			@Override
+			public boolean accept(MatchInfo match)
+			{
+				Date matchTime = match.getMatchtime();
+				return DateUtil.compareDate(matchTime, time) <= 0;
+			}
+		};
 		List<MatchInfo> results = new ArrayList<>();
 		for(MatchInfo m: this)
 		{
