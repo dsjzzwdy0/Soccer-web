@@ -29,5 +29,20 @@ public class RoundList extends DataList<Round>
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+	 * 通过联赛编号、赛季、轮次等数据获得轮次数据
+	 * @param lid
+	 * @param season
+	 * @param round
+	 * @return
+	 */
+	public Round getRound(String lid, String season, String round)
+	{
+		for(Round r : this)
+		{
+			if(r.equals(lid, season, round)) return r;
+		}
+		return null;
+	}
 }

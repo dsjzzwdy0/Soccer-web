@@ -36,6 +36,18 @@ public class Round extends AutoIdEntity
 	protected String lid;
 	protected String season;
 	protected String round;
+	
+	public Round()
+	{
+	}
+	
+	public Round(String lid, String season, String round)
+	{
+		this.lid = lid;
+		this.season = season;
+		this.round = round;
+	}
+	
 	public String getLid()
 	{
 		return lid;
@@ -74,15 +86,32 @@ public class Round extends AutoIdEntity
 			return false;
 	}
 	
+	/**
+	 * 检测是否为两个相同的数据
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj) return true;
 		if(obj == null || !(obj instanceof Round)) return false;
 		Round other = (Round) obj;
-		return StringUtils.equals(lid, other.lid)
-				&& StringUtils.equals(season, other.season)
-				&& StringUtils.equals(round, other.round);
+		return equals(other.lid, other.season, other.round);
+	}
+	
+	/**
+	 * 检测是否相同的数据
+	 * @param lid 联赛编号
+	 * @param season 赛季
+	 * @param round 轮次
+	 * @return 是否相同
+	 */
+	public boolean equals(String lid, String season, String round)
+	{
+		return StringUtils.equals(lid, this.lid)
+				&& StringUtils.equals(season, this.season)
+				&& StringUtils.equals(round, this.round);
 	}
 	
 	@Override

@@ -16,7 +16,7 @@ import com.loris.soccer.model.Rank;
 
 /**   
  * @ClassName: RankList   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 排名   
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 

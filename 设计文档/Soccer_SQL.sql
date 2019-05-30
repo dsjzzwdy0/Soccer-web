@@ -500,7 +500,7 @@ select `a`.`id` AS `id`,`a`.`lid` AS `lid`,`c`.`type` AS `leaguetype`,`c`.`name`
   min(`soccer`.`soccer_match`.`matchtime`) AS `starttime`,max(`soccer`.`soccer_match`.`matchtime`) AS `endtime`,count(1) AS `matchnum` 
   from `soccer`.`soccer_match` group by `soccer`.`soccer_match`.`lid`,`soccer`.`soccer_match`.`round`) `b` on(((`a`.`lid` = `b`.`lid`) 
   and (`a`.`season` = `b`.`season`) and (`a`.`round` = `b`.`round`)))) 
-  left join `soccer`.`soccer_league` `c` on((`a`.`lid` = `c`.`lid`)))
+  left join `soccer`.`soccer_league` `c` on((`a`.`lid` = `c`.`lid`)));
 
 
 CREATE 
@@ -534,6 +534,20 @@ select `b`.`id` AS `id`,`b`.`lid` AS `lid`,`c`.`name` AS `leaguename`,`a`.`tid` 
 	max(`soccer`.`soccer_league_rank`.`round`+0) AS `maxround` from `soccer`.`soccer_league_rank` group by `soccer`.`soccer_league_rank`.`tid`,`soccer`.`soccer_league_rank`.`type`)) 
 	`a` join `soccer`.`soccer_league_rank` `b` on(((`a`.`tid` = `b`.`tid`) and (`a`.`type` = `b`.`type`) and (`a`.`maxseason` = `b`.`season`) and (`a`.`maxround` = `b`.`round`)))) 
 	left join `soccer`.`soccer_league` `c` on((`b`.`lid` = `c`.`lid`))) left join `soccer`.`soccer_league_team` `d` on((`a`.`tid` = `d`.`tid`))) ;
+	
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_league_rank_latest_info`AS 
+select `b`.`id` AS `id`,`b`.`lid` AS `lid`,`a`.`tid` AS `tid`,`a`.`type` AS `type`,`a`.`maxseason` AS `season`,`a`.`maxround` AS `round`,`b`.`gamenum` AS `gamenum`,
+	`b`.`rank` AS `rank`,`b`.`winnum` AS `winnum`,`b`.`drawnum` AS `drawnum`,`b`.`losenum` AS `losenum`,`b`.`score` AS `score`,`b`.`wingoal` AS `wingoal`,
+	`b`.`losegoal` AS `losegoal` from (((select `soccer`.`soccer_league_rank`.`tid` AS `tid`,`soccer`.`soccer_league_rank`.`type` AS `type`,
+	max(`soccer`.`soccer_league_rank`.`season`) AS `maxseason`,max(`soccer`.`soccer_league_rank`.`round`+0) AS `maxround` 
+	from `soccer`.`soccer_league_rank` where (`soccer`.`soccer_league_rank`.`type` = 'total') group by `soccer`.`soccer_league_rank`.`tid`,`soccer`.`soccer_league_rank`.`type`)) 
+	`a` join `soccer`.`soccer_league_rank` `b` on(((`a`.`tid` = `b`.`tid`) and (`a`.`type` = `b`.`type`) and (`a`.`maxseason` = `b`.`season`) and (`a`.`maxround` = `b`.`round`)))) ;
+
+
 
 DELIMITER $$
 CREATE TRIGGER soccer_league_rank_add_trigger AFTER INSERT ON soccer_league_rank FOR EACH ROW 

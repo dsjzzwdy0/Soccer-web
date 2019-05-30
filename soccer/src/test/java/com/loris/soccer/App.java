@@ -196,16 +196,16 @@ public class App
 		
 		Date end1 = DateUtil.tryToParseDate("2019-05-10");
 		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, end, end1, null);
-		for (MatchInfo matchInfo : matchInfos)
+		for (MatchInfo match : matchInfos)
 		{
-			TeamCapability homeTeam = teams.geTeamCapability(lid, matchInfo.getHomeid());
-			TeamCapability clientTeam = teams.geTeamCapability(lid, matchInfo.getClientid());
+			TeamCapability homeTeam = teams.geTeamCapability(lid, match.getHomeid());
+			TeamCapability clientTeam = teams.geTeamCapability(lid, match.getClientid());
 			
 			float winExpectGoal = homeTeam.getWingoal() / homeTeam.getMatchnum();
 			float loseExpectGoal = clientTeam.getWingoal() / clientTeam.getMatchnum();
 			
 			double[] probs = PossionUtil.computeOddsProb(winExpectGoal, loseExpectGoal);
-			logger.info(matchInfo + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
+			logger.info(match + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
 			
 			//probs = PossionUtil.computeOddsProb(homeTeam.getCapability() / clientTeam.getCapability(), 1.0f);
 			//logger.info(matchInfo + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
