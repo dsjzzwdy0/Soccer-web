@@ -146,10 +146,16 @@ public class TeamCapability extends AutoIdEntity
 		this.matchnum = matchnum;
 	}
 	
-	public float getExpectGoal()
+	public float getExpectWinGoal()
 	{
 		if(matchnum == 0) throw new IllegalArgumentException("There are no match num in TeamCapability.");
 		return wingoal / matchnum;
+	}
+	
+	public float getExpectLoseGoal()
+	{
+		if(matchnum == 0) throw new IllegalArgumentException("There are no match num in TeamCapability.");
+		return losegoal / matchnum;
 	}
 
 	/**

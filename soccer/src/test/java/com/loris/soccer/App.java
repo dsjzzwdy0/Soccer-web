@@ -243,12 +243,12 @@ public class App
 			//for (int k = 0; k < 60 ; k ++)
 			{
 				int k = 0;
-				float homeKitty = 0.008f + k * 0.0001f;
-				float clientKitty = homeKitty * 0.80f;
+				float homeKitty = 0.009f + k * 0.0001f;
+				float clientKitty = homeKitty * 0.90f;
 				param.setHomekitty(homeKitty);
 				param.setClientkitty(clientKitty);
 				
-				param.setUsecapratio(false);
+				param.setUsecapratio(true);
 				teams = (TeamCapabilityList)teamRating.computeTeamCapability(lid, trainMatchInfos, param);
 				
 				logger.info("Params: " + param);

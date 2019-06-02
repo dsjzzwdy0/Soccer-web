@@ -81,10 +81,11 @@ public class MatchProbility extends AutoIdEntity
 	 */
 	public void setTeamCapability(TeamCapability homeTeam, TeamCapability clientTeam)
 	{
-		float winExpectGoal = homeTeam.getExpectGoal();
-		float loseExpectGoal = clientTeam.getExpectGoal();
+		float winExpectGoal = (homeTeam.getExpectWinGoal() + clientTeam.getExpectLoseGoal()) / 2;
+		float loseExpectGoal = (clientTeam.getExpectWinGoal() + homeTeam.getExpectLoseGoal())/ 2;
 		System.out.println("Home: " + homeTeam);
 		System.out.println("Client: " + clientTeam);
+		System.out.println("winExpectGoal: " + winExpectGoal + ", loseExpectGoal: " + loseExpectGoal);
 		this.setExpectGoal(winExpectGoal, loseExpectGoal);
 	}
 	
