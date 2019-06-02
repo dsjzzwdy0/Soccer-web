@@ -28,13 +28,14 @@ import com.loris.soccer.model.Match;
  */
 public class MatchComparator implements Comparator<Match>
 {
-	private boolean asc;
+	private boolean asc = true;
 	
 	/**
 	 * create a new instance of MatchComparator
 	 */
 	public MatchComparator()
 	{
+		this(true);
 	}
 	
 	/**

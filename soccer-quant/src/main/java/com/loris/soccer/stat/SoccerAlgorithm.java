@@ -15,10 +15,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.loris.common.filter.ObjectFilter;
+import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.complex.TeamGrade;
 import com.loris.soccer.model.view.MatchInfo;
+import com.loris.soccer.stat.model.RatingParam;
 import com.loris.soccer.stat.sorter.MatchComparator;
 
 /**   
@@ -32,6 +35,24 @@ import com.loris.soccer.stat.sorter.MatchComparator;
  */
 public class SoccerAlgorithm
 {
+	private static Logger logger = Logger.getLogger(SoccerAlgorithm.class);
+	
+	/**
+	 * 计算最好的数据参数
+	 * @param lid 联赛编号
+	 * @param sourceMatches 原始比赛数据
+	 * @param validateMatches 验证比赛数据
+	 * @param validateOps 验证欧赔数据
+	 */
+	public static void computeBestRatingParam(String lid, List<MatchInfo> sourceMatches,
+			List<MatchInfo> validateMatches, List<OddsOp> validateOps)
+	{
+		RatingParam param = new RatingParam();
+		logger.info(param);
+		
+	}
+	
+	
 	/**
 	 * 计算球队的成绩，其中Grades作为原始的数据
 	 * @param grades 球队数据

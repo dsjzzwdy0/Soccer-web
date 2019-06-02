@@ -12,6 +12,7 @@
 package com.loris.soccer.stat.model;
 
 import com.loris.common.bean.AutoIdEntity;
+import com.loris.soccer.stat.TeamRating;
 
 /**   
  * @ClassName:  TeamCapability    
@@ -24,9 +25,7 @@ import com.loris.common.bean.AutoIdEntity;
  */
 public class TeamCapability extends AutoIdEntity
 {
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 	
 	private String lid;					//联赛编号
@@ -40,6 +39,7 @@ public class TeamCapability extends AutoIdEntity
 	public TeamCapability()
 	{
 		matchnum = 0;
+		this.capability = TeamRating.TEAM_BASE_CAPABILITY;
 	}
 	
 	public TeamCapability(String lid, String tid, String name)
@@ -144,6 +144,12 @@ public class TeamCapability extends AutoIdEntity
 	public void setMatchnum(int matchnum)
 	{
 		this.matchnum = matchnum;
+	}
+	
+	public float getExpectGoal()
+	{
+		if(matchnum == 0) throw new IllegalArgumentException("There are no match num in TeamCapability.");
+		return wingoal / matchnum;
 	}
 
 	/**

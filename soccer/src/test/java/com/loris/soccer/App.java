@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -50,18 +49,19 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
-import com.loris.common.util.NumberUtil;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.old.soccer.bean.OldMatch;
 import com.loris.old.soccer.service.OldMatchService;
 import com.loris.old.soccer.transfer.impl.MatchToMatchResult;
 import com.loris.old.soccer.transfer.impl.OldMatchToMatch;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.MatchInfoList;
 import com.loris.soccer.collection.IssueMatchList;
 import com.loris.soccer.collection.MatchList;
 import com.loris.soccer.collection.MatchResultList;
 import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.collection.OddsOpList;
+import com.loris.soccer.collection.OddsOpList.OddsOpListType;
 import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.collection.SeasonList;
@@ -100,8 +100,7 @@ import com.loris.soccer.service.OddsService;
 import com.loris.soccer.stat.MatchStat;
 import com.loris.soccer.stat.TeamRating;
 import com.loris.soccer.stat.collection.TeamCapabilityList;
-import com.loris.soccer.stat.model.TeamCapability;
-import com.loris.soccer.util.PossionUtil;
+import com.loris.soccer.stat.model.RatingParam;
 
 
 /**
@@ -183,34 +182,87 @@ public class App
 		OddsService oddsService = (OddsService)context.getBean("oddsService");
 		
 		TeamRating teamRating = new TeamRating();
-		teamRating.setKittyValue(0.008f, 0.007f);
-		String lid = "36";
-		Date start = DateUtil.tryToParseDate("2018-08-01");
-		Date end = DateUtil.tryToParseDate("2019-05-7");
+		RatingParam param = new RatingParam();
+		param.setCappownum(1.2f);
 		
+		String lid = "21";
+		String corpid = "0";
+		
+		Date start = DateUtil.tryToParseDate("2018-08-01");
+		Date end = DateUtil.tryToParseDate("2019-06-03");
+		//Date end1 = DateUtil.tryToParseDate("2019-05-07");
+
 		List<MatchInfo> matchInfos = matchService.getMatchInfos(lid, start, end, true);
 		
-		TeamCapabilityList teams = (TeamCapabilityList)teamRating.computeTeamCapability(lid, matchInfos, 0.2f);
+		List<Date> times = new ArrayList<>();
+		times.add(DateUtil.tryToParseDate("2019-05-28"));
+		//times.add(DateUtil.tryToParseDate("2019-05-27"));
 		
-		int i = 0;
+		TeamCapabilityList teams = null;
+		float maxError = 3.0f;
+		
+		List<String> corpids = new ArrayList<>();
+		corpids.add(corpid);
+
+		MatchInfoList matchInfoList = new MatchInfoList(matchInfos);
+		for (int i = 0; i < times.size(); i ++)
+		{
+			Date date = times.get(i);
+			
+			List<MatchInfo> validateMatchInfos = null;
+			List<MatchInfo> trainMatchInfos = matchInfoList.getMatchInfoBeforeTime(date);
+			
+			if(i < times.size() - 1) 
+			{
+				logger.info("Start: " + date +" end " + times.get(i + 1) + ", train set size is " + trainMatchInfos.size());
+				validateMatchInfos = matchInfoList.getMatchInfoBetween(date, times.get(i + 1));
+			}
+			else
+			{
+				logger.info("Start: " + date + " train set size is " + trainMatchInfos.size());
+				validateMatchInfos = matchInfoList.getMatchInfoAfterTime(date);
+			}
+			List<String> mids = ArraysUtil.getObjectFieldValue(validateMatchInfos, Match.class, SoccerConstants.NAME_FIELD_MID);
+			
+			List<OddsOp> ops = oddsService.selectOddsOps(mids, corpids);
+			OddsOpList oddsOpList = new OddsOpList(ops, OddsOpListType.OnlyFirst);
+			
+			//for (int k = 0; k < 60 ; k ++)
+			{
+				int k = 0;
+				float homeKitty = 0.008f + k * 0.0001f;
+				float clientKitty = homeKitty * 0.80f;
+				param.setHomekitty(homeKitty);
+				param.setClientkitty(clientKitty);
+				
+				param.setUsecapratio(true);
+				teams = (TeamCapabilityList)teamRating.computeTeamCapability(lid, trainMatchInfos, param);
+				
+				logger.info("Params: " + param);
+				teamRating.evaluate(teams, validateMatchInfos, oddsOpList, corpid, maxError);
+				
+				/*param.setUsecapratio(false);
+				teams = (TeamCapabilityList)teamRating.computeTeamCapability(lid, trainMatchInfos, param);
+				logger.info("Params: " + param);
+				teamRating.evaluate(teams, validateMatchInfos, oddsOpList, corpid, maxError);*/
+				
+				logger.info("\r\n");
+			}
+		}
+		
+		/*
+		 * int i = 0;
 		for (TeamCapability teamCapability : teams)
 		{
 			logger.info(i +++ ": " + teamCapability);
 		}
-		
-		Date end1 = DateUtil.tryToParseDate("2019-05-22");
-		matchInfos = matchService.getMatchInfos(lid, end, end1, null);
-		List<String> mids = ArraysUtil.getObjectFieldValue(matchInfos, Match.class, SoccerConstants.NAME_FIELD_MID);
-		List<String> corpids = new ArrayList<>();
-		corpids.add("0");
-		List<OddsOp> ops = oddsService.selectOddsOps(mids, corpids);
 		for (MatchInfo match : matchInfos)
 		{
-			TeamCapability homeTeam = teams.geTeamCapability(lid, match.getHomeid());
-			TeamCapability clientTeam = teams.geTeamCapability(lid, match.getClientid());
+			TeamCapability homeTeam = teams.getTeamCapability(lid, match.getHomeid());
+			TeamCapability clientTeam = teams.getTeamCapability(lid, match.getClientid());
 			
-			float winExpectGoal = homeTeam.getWingoal() / homeTeam.getMatchnum();
-			float loseExpectGoal = clientTeam.getWingoal() / clientTeam.getMatchnum();
+			float winExpectGoal = homeTeam.getExpectGoal();
+			float loseExpectGoal = clientTeam.getExpectGoal();
 			
 			double[] probs = PossionUtil.computeOddsProb(winExpectGoal, loseExpectGoal);
 			logger.info(match.getMid() + ", " + match.getMatchResult() + " winprob: " + NumberUtil.formatDouble(2,  probs[0] * 100) 
@@ -225,7 +277,7 @@ public class App
 			}
 			//probs = PossionUtil.computeOddsProb(homeTeam.getCapability() / clientTeam.getCapability(), 1.0f);
 			//logger.info(matchInfo + " winprob: " + probs[0] + ", drawprob: " + probs[1] + ", loseprob: " + probs[2]);
-		}
+		}*/
 	}
 	
 	public static void testStat() throws Exception

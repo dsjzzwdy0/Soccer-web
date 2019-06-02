@@ -15,10 +15,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.loris.common.util.NumberUtil;
+import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.MatchResult.ResultType;
+import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.stat.collection.TeamCapabilityList;
+import com.loris.soccer.stat.model.EveluateResult;
+import com.loris.soccer.stat.model.MatchProbility;
+import com.loris.soccer.stat.model.RatingParam;
 import com.loris.soccer.stat.model.TeamCapability;
 
 /**   
@@ -42,11 +48,14 @@ public class TeamRating
 {
 	private static Logger logger = Logger.getLogger(TeamRating.class);
 	
-	public static float TEAM_BASE_CAPABILITY = 1000.0f;		//基础分值
-	
-	protected float baseCapability = TEAM_BASE_CAPABILITY;
-	protected float homeKitty = 0.06f;
-	protected float clientKitty = 0.05f;
+	public final static float TEAM_BASE_CAPABILITY = 1000.0f;		//基础分值
+		
+	/**
+	 * Create a new instance of TeamRating
+	 */
+	public TeamRating()
+	{
+	}
 	
 	/**
 	 * 计算球队的评分系统
@@ -55,15 +64,16 @@ public class TeamRating
 	 * @param matchs
 	 * @param goalWinPercent
 	 */
-	public TeamCapabilityList computeTeamCapability(String lid, List<MatchInfo> matchs, float goalWinPercent)
+	public TeamCapabilityList computeTeamCapability(String lid, List<MatchInfo> matchs, RatingParam param)
 	{
 		if(matchs == null || matchs.size() == 0)
 		{
 			logger.info("There are no match record");
 			return null;
 		}
-		TeamCapabilityList teams = computeTeamCapability(lid, matchs, homeKitty, clientKitty, goalWinPercent);
-		computeTeamGoal(lid, teams, matchs);
+		TeamCapabilityList teams = computeTeamCapability(lid, matchs, param.getHomekitty(), 
+				param.getClientkitty(), param.getGoalwinpercent(), param.getCappownum());
+		computeTeamGoal(lid, teams, matchs, param.isUsecapratio());
 		return teams;
 	}
 	
@@ -77,28 +87,26 @@ public class TeamRating
 	 * @param goalWinPercent
 	 */
 	public TeamCapabilityList computeTeamCapability(String lid, List<MatchInfo> matchs, 
-			float homeKitty, float clietnKitty, float goalWinPercent)
+			float homeKitty, float clientKitty, float goalWinPercent, float capPowNum)
 	{
 		TeamCapabilityList teams = new TeamCapabilityList(); 
 		for (MatchInfo match : matchs)
 		{
-			TeamCapability homeTeam = teams.geTeamCapability(lid, match.getHomeid());
-			TeamCapability clientTeam = teams.geTeamCapability(lid, match.getClientid());
+			TeamCapability homeTeam = teams.getTeamCapability(lid, match.getHomeid());
+			TeamCapability clientTeam = teams.getTeamCapability(lid, match.getClientid());
 			
 			if(homeTeam == null)
 			{
 				homeTeam = new TeamCapability(lid, match.getHomeid(), "");
-				homeTeam.setCapability(baseCapability);
 				teams.add(homeTeam);
 			}
 			if(clientTeam == null)
 			{
 				clientTeam = new TeamCapability(lid, match.getClientid(), "");
-				clientTeam.setCapability(baseCapability);
 				teams.add(clientTeam);
 			}
 			
-			computeDynamicTeamRating(homeTeam, homeKitty, clientTeam, clientKitty, match.getMatchResult(), goalWinPercent);
+			computeDynamicTeamRating(homeTeam, homeKitty, clientTeam, clientKitty, match.getMatchResult(), goalWinPercent, capPowNum);
 		}
 		return teams;
 	}
@@ -114,13 +122,13 @@ public class TeamRating
 	 */
 	protected void computeDynamicTeamRating(TeamCapability homeTeam, float homeKitty, 
 			TeamCapability clientTeam, float clientKitty,
-			MatchResult result, float goalWinPercent)
+			MatchResult result, float goalWinPercent, float capPowNum)
 	{
 		float homeCap = homeTeam.getCapability();
 		float clientCap = clientTeam.getCapability();
 		
-		float newHomeKitty = homeKitty *(float) Math.pow(homeCap / baseCapability, 1.60f);
-		float newClientKitty = clientKitty * (float) Math.pow(clientCap / baseCapability, 1.60f);
+		float newHomeKitty = homeKitty *(float) Math.pow(homeCap / TEAM_BASE_CAPABILITY, capPowNum);
+		float newClientKitty = clientKitty * (float) Math.pow(clientCap / TEAM_BASE_CAPABILITY, capPowNum);
 		
 		computeBasicTeamRating(homeTeam, newHomeKitty, clientTeam, newClientKitty, result, goalWinPercent);
 	}
@@ -178,13 +186,13 @@ public class TeamRating
 	 * @param teams 球队列表
 	 * @param matchs 比赛数据
 	 */
-	protected void computeTeamGoal(String lid, TeamCapabilityList teams, List<MatchInfo> matchs)
+	protected void computeTeamGoal(String lid, TeamCapabilityList teams, List<MatchInfo> matchs, boolean useCapRatio)
 	{
 		for (MatchInfo matchInfo : matchs)
 		{
 			MatchResult result = matchInfo.getMatchResult();
-			TeamCapability homeTeam = teams.geTeamCapability(lid, matchInfo.getHomeid());
-			TeamCapability clientTeam = teams.geTeamCapability(lid, matchInfo.getClientid());
+			TeamCapability homeTeam = teams.getTeamCapability(lid, matchInfo.getHomeid());
+			TeamCapability clientTeam = teams.getTeamCapability(lid, matchInfo.getClientid());
 			if(homeTeam == null)
 			{
 				continue;
@@ -194,47 +202,68 @@ public class TeamRating
 				continue;
 			}
 			
-			float wingoal = result.getHomegoal() * (clientTeam.getCapability() / homeTeam.getCapability());
-			float losegoal = result.getClientgoal() * (homeTeam.getCapability() / clientTeam.getCapability());
+			float wingoal = 0;
+			float losegoal = 0;
+			if(useCapRatio)
+			{
+				wingoal = result.getHomegoal() * (clientTeam.getCapability() / TEAM_BASE_CAPABILITY);
+				losegoal = result.getClientgoal() * (homeTeam.getCapability() / TEAM_BASE_CAPABILITY);
+			}
+			else
+			{
+				wingoal = result.getHomegoal();
+				losegoal = result.getClientgoal();
+			}
 			
 			homeTeam.addGoal(wingoal, losegoal);
 			clientTeam.addGoal(losegoal, wingoal);
 		}
 	}
-
-	public float getHomeKitty()
-	{
-		return homeKitty;
-	}
-
-	public void setHomeKitty(float homeKitty)
-	{
-		this.homeKitty = homeKitty;
-	}
-
-	public float getClientKitty()
-	{
-		return clientKitty;
-	}
-
-	public void setClientKitty(float clientKitty)
-	{
-		this.clientKitty = clientKitty;
-	}
-
-	public float getBaseCapability()
-	{
-		return baseCapability;
-	}
-
-	public void setBaseCapability(float baseCapability)
-	{
-		this.baseCapability = baseCapability;
-	}
 	
-	public void setKittyValue(float homeKitty, float clientKitty)
+	/**
+	 * 球队战绩评估函数
+	 * @param teams 球队列表
+	 * @param validateMatches 待评估比赛
+	 * @param ops 欧赔数据
+	 */
+	public void evaluate(TeamCapabilityList teams, List<MatchInfo> validateMatches, OddsOpList ops, String corpid, float maxError)
 	{
-		this.homeKitty = homeKitty;
-		this.clientKitty = clientKitty;
+		//double[] errors = new double[3];
+		EveluateResult result = new EveluateResult();
+		result.setTotal(validateMatches.size());
+		for (MatchInfo match : validateMatches)
+		{
+			TeamCapability homeTeam = teams.getTeamCapability(match.getHomeid());
+			TeamCapability clientTeam = teams.getTeamCapability(match.getClientid());
+			
+			if(homeTeam == null || clientTeam ==null)
+				continue;
+			
+			MatchProbility p = new MatchProbility(match.getMid(), homeTeam, clientTeam);
+			logger.info(p);
+			
+			OddsOp op = ops.getOddsOp(match.getMid(), corpid);
+			if(op == null)
+				continue;
+			
+			double winError = p.getWinprob() - op.getWinprob();
+			double drawError = p.getDrawprob() - op.getDrawprob();
+			double loseError = p.getLoseprob() - op.getLoseprob();
+			
+			logger.info(match.getMid() + " winErr=" + NumberUtil.formatDouble(2, winError) 
+				+ ", drawErr=" + NumberUtil.formatDouble(2, drawError)  
+				+ ", loseErr=" + NumberUtil.formatDouble(2, loseError)
+				+ ", " + match.getMatchResult());
+			
+			if(Math.abs(winError) > maxError && Math.abs(drawError) > maxError
+					&& Math.abs(loseError) > maxError)
+			{
+				continue;
+			}
+			
+			result.addError(winError, drawError, loseError);
+		}
+		
+		logger.info(result);
 	}
 }

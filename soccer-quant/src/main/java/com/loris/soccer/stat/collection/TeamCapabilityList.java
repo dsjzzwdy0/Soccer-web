@@ -38,15 +38,29 @@ public class TeamCapabilityList extends DataList<TeamCapability>
 	 * @param tid
 	 * @return
 	 */
-	public TeamCapability geTeamCapability(String lid, String tid)
+	public TeamCapability getTeamCapability(String lid, String tid)
 	{
 		for(TeamCapability team : this)
 		{
-			if(StringUtils.equals(team.getLid(), lid) &&
-					StringUtils.equals(team.getTid(), tid))
+			if (StringUtils.equals(team.getLid(), lid) && StringUtils.equals(team.getTid(), tid))
 			{
 				return team;
 			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 获得球队数据
+	 * @param tid
+	 * @return
+	 */
+	public TeamCapability getTeamCapability(String tid)
+	{
+		for(TeamCapability team : this)
+		{
+			if(StringUtils.equals(team.getTid(), tid))
+				return team;
 		}
 		return null;
 	}

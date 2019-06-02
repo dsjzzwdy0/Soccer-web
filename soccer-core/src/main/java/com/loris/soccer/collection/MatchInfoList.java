@@ -87,12 +87,29 @@ public class MatchInfoList extends DataList<MatchInfo>
 			}
 		};
 		
-		List<MatchInfo> results = new ArrayList<>();
-		for(MatchInfo m: this)
+		return getMatchInfo(filter);
+	}
+	
+	/**
+	 * 
+	 * @param round
+	 * @return
+	 */
+	public List<MatchInfo> getMatchInfoBeforeRound(Round round)
+	{
+		ObjectFilter<MatchInfo> filter = new ObjectFilter<MatchInfo>()
 		{
-			if(filter.accept(m)) results.add(m);
-		}
-		return results;
+			Round r = round;
+			
+			@Override
+			public boolean accept(MatchInfo match)
+			{
+				if(r.compareTo(match.getLid(), match.getSeason(), match.getRound()) > 0)
+					return true;
+				else return false;
+			}
+		};
+		return getMatchInfo(filter);
 	}
 	
 	/**
@@ -111,6 +128,57 @@ public class MatchInfoList extends DataList<MatchInfo>
 				return DateUtil.compareDate(matchTime, time) <= 0;
 			}
 		};
+		return getMatchInfo(filter);
+	}
+	
+	/**
+	 * 获得比赛数据
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<MatchInfo> getMatchInfoBetween(Date start, Date end)
+	{
+		ObjectFilter<MatchInfo> filter = new ObjectFilter<MatchInfo>()
+		{
+			@Override
+			public boolean accept(MatchInfo match)
+			{
+				long t = match.getMatchtime().getTime();
+				long st = start.getTime();
+				long en = end.getTime();
+				return t >= st && t <= en;
+			}
+		};
+		return getMatchInfo(filter);
+	}
+	
+	/**
+	 * 获得某一些场次的比赛
+	 * @param time 时间
+	 * @return 数据集
+	 */
+	public List<MatchInfo> getMatchInfoAfterTime(Date time)
+	{
+		ObjectFilter<MatchInfo> filter = new ObjectFilter<MatchInfo>()
+		{
+			@Override
+			public boolean accept(MatchInfo match)
+			{
+				Date matchTime = match.getMatchtime();
+				return DateUtil.compareDate(matchTime, time) >= 0;
+			}
+		};
+		return getMatchInfo(filter);
+	}
+	
+	/**
+	 * 获得比赛数据列表
+	 * @param filter
+	 * @return
+	 */
+	public List<MatchInfo> getMatchInfo(ObjectFilter<MatchInfo> filter)
+	{
 		List<MatchInfo> results = new ArrayList<>();
 		for(MatchInfo m: this)
 		{
@@ -128,11 +196,13 @@ public class MatchInfoList extends DataList<MatchInfo>
 		RoundList rounds = new RoundList();
 		for(MatchInfo m: this)
 		{
-			String lid = m.getRound();
+			String lid = m.getLid();
 			String season = m.getSeason();
 			String r = m.getRound();
 			
 			Round round = rounds.getRound(lid, season, r);
+			if(round != null) continue;
+			
 			if(StringUtils.isNotEmpty(lid) 
 					&& StringUtils.isNotEmpty(season) 
 					&& StringUtils.isNotEmpty(r))

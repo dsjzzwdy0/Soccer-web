@@ -89,6 +89,17 @@ public class PossionUtil
 	 * 计算各种可能的概率值
 	 * @param lamda1 期望值1
 	 * @param lamda2 期望值2
+	 * @return 概率分布
+	 */
+	public static double[][] computeProb(double lamda1, double lamda2)
+	{
+		return computeProb(lamda1, lamda2, POSSION_K);
+	}
+	
+	/**
+	 * 计算各种可能的概率值
+	 * @param lamda1 期望值1
+	 * @param lamda2 期望值2
 	 * @param k K值
 	 * @return 概率分布
 	 */
