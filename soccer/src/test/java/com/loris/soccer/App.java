@@ -101,6 +101,7 @@ import com.loris.soccer.stat.MatchStat;
 import com.loris.soccer.stat.TeamRating;
 import com.loris.soccer.stat.collection.TeamCapabilityList;
 import com.loris.soccer.stat.model.RatingParam;
+import com.loris.soccer.util.SoccerMath;
 
 
 /**
@@ -134,6 +135,8 @@ public class App
 			// testSourceFinance();
 			// testStat();
 			testTeamRating();
+			
+			// testSigmoid();
 			// testMariaDB();
 			// testDateString();
 			// testSchedulerInfo();
@@ -173,6 +176,16 @@ public class App
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	public static void testSigmoid() throws Exception
+	{
+		for(int i = 0; i < 100; i ++)
+		{
+			double d = -0.5 + i * 0.1;
+			logger.info("sigmoid(" + d + ") = " + SoccerMath.sigmoid(1.0/d));
+			logger.info("tanh(" + d + ") = " + SoccerMath.tanh(1.0/d));
 		}
 	}
 	
@@ -235,7 +248,7 @@ public class App
 				param.setHomekitty(homeKitty);
 				param.setClientkitty(clientKitty);
 				
-				param.setUsecapratio(true);
+				param.setUsecapratio(false);
 				teams = (TeamCapabilityList)teamRating.computeTeamCapability(lid, trainMatchInfos, param);
 				
 				logger.info("Params: " + param);

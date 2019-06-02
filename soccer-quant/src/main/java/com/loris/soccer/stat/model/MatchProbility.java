@@ -83,6 +83,8 @@ public class MatchProbility extends AutoIdEntity
 	{
 		float winExpectGoal = homeTeam.getExpectGoal();
 		float loseExpectGoal = clientTeam.getExpectGoal();
+		System.out.println("Home: " + homeTeam);
+		System.out.println("Client: " + clientTeam);
 		this.setExpectGoal(winExpectGoal, loseExpectGoal);
 	}
 	
