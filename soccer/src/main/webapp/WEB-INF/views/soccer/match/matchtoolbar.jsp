@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<link rel="stylesheet" type="text/css" href="../content/css/soccer/bfyc.css" />
+<link rel="stylesheet" type="text/css" href="content/css/soccer/bfyc.css" />
 
 <div class="minibars">
 	<span class="location">当前位置：</span>
@@ -31,7 +31,7 @@
 		</li>
 		<li class=""><a href="match?type=sfzs&mid=${match.mid}">胜负走势</a></li>
 		<li class=""><a href="match?type=zjtz&mid=${match.mid}">战绩特征</a></li>
-		<li class=""><a href="match?type=zrtj&mid=${match.mid}">阵容统计</a></li>
+		<li class=""><a href="match?type=opseq&mid=${match.mid}">欧赔序列</a></li>
 		</li>
 	</ul>
 </div>
@@ -150,14 +150,14 @@
 			<div class="vs-score">
 				<h1>
 					<c:choose>
-						<c:when test="${match.homescore>match.clientscore}">
-							<span class="h-s bold-r">${match.homescore }</span> <b>-</b> <span class="v-s bold-b">${match.clientscore}</span>
+						<c:when test="${match.homegoal>match.clientgoal}">
+							<span class="h-s bold-r">${match.homegoal }</span> <b>-</b> <span class="v-s bold-b">${match.clientgoal}</span>
 						</c:when>
-						<c:when test="${match.homescore<match.clientscore}">
-							<span class="h-s bold-r">${match.homescore }</span> <b>-</b> <span class="v-s bold-b">${match.clientscore}</span>
+						<c:when test="${match.homegoal<match.clientgoal}">
+							<span class="h-s bold-r">${match.homegoal }</span> <b>-</b> <span class="v-s bold-b">${match.clientgoal}</span>
 						</c:when>
-						<c:when test="${match.homescore==match.clientscore}">
-							<span class="h-s bold-r">${match.homescore }</span> <b>-</b> <span class="v-s bold-r">${match.clientscore}</span>
+						<c:when test="${match.homegoal==match.clientgoal}">
+							<span class="h-s bold-r">${match.homegoal }</span> <b>-</b> <span class="v-s bold-r">${match.clientgoal}</span>
 						</c:when>
 						<c:otherwise>
 							<span class="h-s bold-b"> </span> <b>-</b> <span class="v-s bold-b"> </span>
@@ -165,7 +165,7 @@
 					</c:choose>
 					
 				</h1>
-				<p>(半场：${ match.halfscore})</p>
+				<p>(半场：)</p>
 			</div>
 			<div class="host-logo">
 				<a href="http://saishi.zgzcw.com/soccer/team/${match.homeid }" target="_blank">
@@ -179,16 +179,16 @@
 			</div>
 
 			<div class="team-add-info">
-				<div class="team-add-info-zd">本赛季排名：${rank.htotalrank.rank }</div>
+				<div class="team-add-info-zd">本赛季排名：</div>
 				<div class="zhonglichang">&nbsp;&nbsp;</div>
-				<div class="team-add-info-kd">本赛季排名：${rank.ctotalrank.rank }</div>
+				<div class="team-add-info-kd">本赛季排名：</div>
 			</div>
 			<div class="team-info">
-				<div class="team-info-h">主队：${rank.htotalrank.winnum }胜 ${rank.htotalrank.drawnum }平 ${rank.htotalrank.losenum }负 ${rank.htotalrank.score }分</div>
+				<div class="team-info-h">主队：胜 平 负 分</div>
 				<div class="weather">
 					<span class="weiyu" title="微雨"></span>
 				</div>
-				<div class="team-info-v">客队：${rank.ctotalrank.winnum }胜 ${rank.ctotalrank.drawnum }平 ${rank.ctotalrank.losenum }负 ${rank.ctotalrank.score }分</div>
+				<div class="team-info-v">客队：胜 平 负 分</div>
 			</div>
 
 		</div>

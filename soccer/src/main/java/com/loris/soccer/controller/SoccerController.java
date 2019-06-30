@@ -30,8 +30,10 @@ import com.loris.common.web.BaseController;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Round;
+import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.LeagueService;
+import com.loris.soccer.service.MatchService;
 
 /**   
  * @ClassName:  SoccerController.java   
@@ -84,7 +86,8 @@ public class SoccerController extends BaseController
 			{ "bfyc", "八方预测" }, // 八方预测
 			{ "bsls", "比赛历史" }, // 比赛历史
 			{ "qpql", "球盘球路" }, // 球盘球路
-			{ "opvar", "欧赔分析" } // 欧赔分析
+			{ "opvar", "欧赔分析" },// 欧赔分析
+			{ "opseq", "欧赔序列" } // 欧赔分析
 	};
 
 	public final static String[][] STAT_PAGE_TYPES = { 
@@ -96,6 +99,9 @@ public class SoccerController extends BaseController
 	
 	@Autowired
 	private LeagueService leagueService;
+	
+	@Autowired
+	private MatchService matchService;
 	
 	/**
 	 * 获得数据分析页面
@@ -151,11 +157,45 @@ public class SoccerController extends BaseController
 	}
 	
 	/**
+	 * 获得比赛分析页面
+	 * 
+	 * @param type
+	 *            类型
+	 * @param mid
+	 *            比赛编号
+	 * @return 分析页面
+	 */
+	@RequestMapping("/match")
+	public ModelAndView getMatchPage(String type, String mid)
+	{
+		int index = getMatchPageIndex(type);
+		MatchInfo match = matchService.getMatchInfo(mid);
+		if (match == null)
+		{
+			throw new ParamsException("Illegal params be set, there are no match data in database.");
+		}
+
+		//List<RankInfo> ranks = soccerManager.getMatchTeamLatestRank(match);
+		//RankElement rankElement = new RankElement(match, ranks);
+		// logger.info(ranks);
+		ModelAndView view = new ModelAndView("match" + MATCH_PAGE_TYPES[index][0] + ".soccer");
+		view.addObject("type", "match");
+		view.addObject("page", MATCH_PAGE_TYPES[index][0]);
+		view.addObject("title", MATCH_PAGE_TYPES[index][1]);
+		view.addObject("match", match);
+		//view.addObject("rank", rankElement);
+
+		setUserObject(view);
+
+		return view;
+	}
+	
+	/**
 	 * 查看关联的比赛
 	 * 
 	 * @return
 	 */
-	@RequestMapping("matchrel")
+	@RequestMapping("/matchrel")
 	public ModelAndView getMatchRelation()
 	{
 		List<CompSetting> settings = compService.list();

@@ -77,6 +77,13 @@ public interface MatchService extends IService<Match>
 	List<MatchInfo> getMatchInfos(String lid, Date start, Date end, Boolean hasResult);
 	
 	/**
+	 * 通过比赛编号查询比赛数据
+	 * @param mid 比赛编号
+	 * @return 比赛数据
+	 */
+	MatchInfo getMatchInfo(String mid);
+	
+	/**
 	 * 查询比赛数据
 	 * @param lids 联赛编号
 	 * @param tids 球队编号

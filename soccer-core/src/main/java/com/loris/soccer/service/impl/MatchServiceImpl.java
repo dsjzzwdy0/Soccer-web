@@ -328,4 +328,16 @@ public class MatchServiceImpl extends ServiceImpl<MatchMapper, Match> implements
 	{
 		return getMatchInfos(null, start, end, hasResult);
 	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MatchService#getMatchInfo(java.lang.String)
+	 */
+	@Override
+	public MatchInfo getMatchInfo(String mid)
+	{
+		QueryWrapper<MatchInfo> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq(SoccerConstants.NAME_FIELD_MID, mid);
+		return matchInfoMapper.selectOne(queryWrapper);
+	}
 }

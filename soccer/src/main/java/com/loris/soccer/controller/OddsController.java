@@ -36,6 +36,7 @@ import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.wrapper.OddsOpListWrapper;
+import com.loris.soccer.wrapper.OddsSequenceWrapper;
 
 /**   
  * @ClassName:  OddsController.java   
@@ -64,6 +65,9 @@ public class OddsController extends BaseController
 	/** 欧赔数据的包装管理器 */
 	private OddsOpListWrapper oddsOpListWrapper = new OddsOpListWrapper();
 	
+	/** 欧赔序列数据的包装器 */
+	private OddsSequenceWrapper oddsSequenceWrapper = new OddsSequenceWrapper();
+	
 	/**
 	 * 获得比赛的欧赔数据
 	 * @param mid 比赛编号
@@ -75,6 +79,19 @@ public class OddsController extends BaseController
 	{
 		List<OddsOp> ops = oddsService.selectOddsOp(mid);
 		return Rest.okData(oddsOpListWrapper.wrap(ops));
+	}
+	
+	/**
+	 * 获得比赛的序列欧赔值数据
+	 * @param mid 比赛编号
+	 * @return 序列值
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchSequenceOps")
+	public Rest getMatchSequenceOps(String mid)
+	{
+		List<OddsOp> ops = oddsService.selectOddsOp(mid);
+		return Rest.okData(oddsSequenceWrapper.wrap(ops));
 	}
 	
 	/**
