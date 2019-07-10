@@ -14,6 +14,7 @@ package com.loris.soccer.data;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.exception.HostForbiddenException;
@@ -28,6 +29,7 @@ import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
+import com.loris.soccer.service.OkoooDataService;
 
 /**   
  * @ClassName:  OkoooBasePlugin.java   
@@ -43,6 +45,10 @@ public class OkoooBasePlugin extends BasicWebPageTaskPlugin implements TaskProdu
 {
 	/** 网络下载器 */
 	protected WebFetcher webPagefetcher = null;
+	
+	/** 澳客数据服务器 */
+	@Autowired
+	protected OkoooDataService okoooDataService;
 	
 	/**
 	 * @param name

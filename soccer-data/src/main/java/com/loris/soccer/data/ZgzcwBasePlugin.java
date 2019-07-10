@@ -61,7 +61,7 @@ import com.loris.soccer.model.view.RoundInfo;
 import com.loris.soccer.model.view.SeasonInfo;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
-import com.loris.soccer.service.impl.SoccerDataService;
+import com.loris.soccer.service.impl.SoccerDataServiceImpl;
 
 /**
  * @ClassName: AbstractProducePlugin
@@ -79,7 +79,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	protected WebFetcher webPagefetcher;
 	
 	@Autowired
-	protected SoccerDataService soccerDataService;
+	protected SoccerDataServiceImpl soccerDataService;
 	
 	@Autowired
 	protected LeagueService leagueService;

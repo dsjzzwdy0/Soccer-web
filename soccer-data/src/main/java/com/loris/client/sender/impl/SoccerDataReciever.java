@@ -30,7 +30,7 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.Season;
-import com.loris.soccer.service.impl.SoccerDataService;
+import com.loris.soccer.service.impl.SoccerDataServiceImpl;
 
 /**   
  * @ClassName:  SoccerDataReciever    
@@ -47,7 +47,7 @@ public class SoccerDataReciever extends JsonDataReciever
 	private static Logger logger = Logger.getLogger(SoccerDataReciever.class);
 	
 	@Autowired
-	private SoccerDataService soccerDataService;
+	private SoccerDataServiceImpl soccerDataService;
 	
 	/** 数据类型 */
 	static Map<String, Class<?>> typeClasses = new HashMap<>();

@@ -1235,7 +1235,7 @@ public class App
 	private static void saveTableRecords(TableRecords records) throws Exception
 	{
 		long st = System.currentTimeMillis();
-		DataService dataService = (DataService) context.getBean(com.loris.soccer.service.impl.SoccerDataService.class);
+		DataService dataService = (DataService) context.getBean(com.loris.soccer.service.impl.SoccerDataServiceImpl.class);
 		dataService.saveTableRecords(records);
 		long en = System.currentTimeMillis();
 		logger.info("Save TableRecords " + records.toString() + " spend time is " + (en - st) + " ms.");
