@@ -25,7 +25,7 @@ import com.loris.client.model.WebPage;
 
 /**   
  * @ClassName:  FetcherSetting   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 数据下载器 
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
