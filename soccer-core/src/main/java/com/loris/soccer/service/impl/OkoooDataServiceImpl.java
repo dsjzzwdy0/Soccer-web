@@ -13,6 +13,7 @@ package com.loris.soccer.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.loris.common.model.TableRecords;
 import com.loris.soccer.service.OkoooDataService;
 
 /**   
@@ -27,5 +28,15 @@ import com.loris.soccer.service.OkoooDataService;
 @Service("okoooDataService")
 public class OkoooDataServiceImpl implements OkoooDataService
 {
+
+	/* (non-Javadoc)
+	 * @see com.loris.soccer.service.OkoooDataService#saveTableRecords(com.loris.common.model.TableRecords)
+	 */
+	@Override
+	public boolean saveTableRecords(TableRecords records)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

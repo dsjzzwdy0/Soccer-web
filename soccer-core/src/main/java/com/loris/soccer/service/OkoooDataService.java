@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.service;
 
+import com.loris.common.model.TableRecords;
+
 /**   
  * @ClassName:  OkoooDataService.java   
  * @Description: 澳客数据服务类 
@@ -22,5 +24,10 @@ package com.loris.soccer.service;
  */
 public interface OkoooDataService
 {
-
+	/**
+	 * 保存数据结果
+	 * @param records 数据结果表
+	 * @return 是否保存成功的标志
+	 */
+	boolean saveTableRecords(TableRecords records);
 }

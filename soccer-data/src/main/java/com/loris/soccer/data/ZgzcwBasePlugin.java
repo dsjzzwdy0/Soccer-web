@@ -242,7 +242,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		if (StringUtils.isBlank(page.getContent()) && !download(page))
 		{
-			logger.warn("Error when HttpCommonExecutor execute: " + page.getUrl());
+			logger.warn("Error when HtmlUnitFetcher execute: " + page.getUrl());
 			return false;
 		}
 		
