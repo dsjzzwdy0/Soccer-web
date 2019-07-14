@@ -60,6 +60,9 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 
 	/** 这里采用单线程处理的方式 */
 	WebClient client = null;
+	
+	/** 最大重新下载次数 */
+	static int maxDownTimes = 3;
 
 	/**
 	 * Create a new instance of HtmlUnitFetcher.
@@ -160,7 +163,7 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	{
 		try
 		{
-			synchronized (client)
+			//synchronized (client)
 			{
 				HtmlPage p = client.getPage(request);
 				return p;
@@ -172,7 +175,7 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 			logger.info("Error occured '" + e.getStatusCode() + "' when get: " + request.getUrl()
 					+ ", Retrieve the page again. Time is" + time);
 			time++;
-			if (time >= 3)
+			if (time >= maxDownTimes)
 			{
 				return null;
 			}
@@ -189,7 +192,7 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	 */
 	public boolean fetch(WebPage page) throws HostForbiddenException, UrlFetchException
 	{
-		logger.debug("Http '" + page.getMethod() + "' URL: " + page.getUrl());
+		logger.info("Http '" + page.getMethod() + "' URL: " + page.getUrl());
 		if (page.getHeaders() != null && page.getHeaders().size() > 0)
 		{
 			addHeaders(page.getHeaders(), client);

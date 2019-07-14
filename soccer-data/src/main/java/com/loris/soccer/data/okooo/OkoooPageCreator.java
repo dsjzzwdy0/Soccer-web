@@ -37,7 +37,7 @@ import static com.loris.soccer.data.okooo.OkoooConstants.*;
 public class OkoooPageCreator
 {
 	/** 通用的页面编码 */
-	protected static String encoding = EncodingUtil.ENCODING_UTF8;
+	protected static String encoding = EncodingUtil.ENCODING_GB2312;
 	
 	/** 数据类型与基础页面的对应工具 */
 	public static Map<String, Double> PAGE_PRIORITIES = new HashMap<>();

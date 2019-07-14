@@ -26,6 +26,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 import com.loris.client.fetcher.WebFetcher;
+import com.loris.client.fetcher.impl.HtmlUnitFetcher;
 import com.loris.client.fetcher.impl.HttpCommonFetcher;
 import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
@@ -69,6 +70,9 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.ZgzcwIssueDataPlugin;
 import com.loris.soccer.data.ZgzcwLeagueDataPlugin;
 import com.loris.soccer.data.ZgzcwMatchResultDataPlugin;
+import com.loris.soccer.data.okooo.OkoooConstants;
+import com.loris.soccer.data.okooo.OkoooPageCreator;
+import com.loris.soccer.data.okooo.parser.OkoooJcPageParser;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -81,6 +85,7 @@ import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsYpWebPageParser;
+import com.loris.soccer.model.BetBdOdds;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
@@ -91,6 +96,9 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.OkoooIssueMatch;
+import com.loris.soccer.model.OkoooLeague;
+import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchInfo;
@@ -134,7 +142,9 @@ public class App
 			// testUpload();
 			// testSourceFinance();
 			// testStat();
-			testTeamRating();
+			// testTeamRating();
+			
+			testOkooo();
 			
 			// testSigmoid();
 			// testMariaDB();
@@ -176,6 +186,70 @@ public class App
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked") 
+	public static void testOkooo() throws Exception
+	{
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_SCORE_JC);
+		logger.info("Download: " + page.getUrl());
+		if(downloadOkoooPage(page))
+		{
+			OkoooJcPageParser parser = new OkoooJcPageParser();
+			TableRecords records = parser.parse(page);
+			if(records == null)
+			{
+				logger.info("The record table is null.");
+				return;
+			}
+			
+			List<OkoooIssueMatch> issueMatchs = null;
+			for (String key : records.keySet())
+			{
+				logger.info(key);
+				switch (key)
+				{
+				case SoccerConstants.SOCCER_DATA_LEAGUE_OKOOO_LIST:
+					List<OkoooLeague> leagues = (List<OkoooLeague>)records.get(key);
+					logger.info(leagues.size());
+					for (OkoooLeague okoooLeague : leagues)
+					{
+						logger.info(okoooLeague);
+					}
+					break;
+				case SoccerConstants.SOCCER_DATA_MATCH_OKOOO_BD_LIST:
+					issueMatchs = (List<OkoooIssueMatch>) records.get(key);
+					for (OkoooIssueMatch okoooIssueMatch : issueMatchs)
+					{
+						logger.info(okoooIssueMatch);
+					}
+					break;
+				case SoccerConstants.SOCCER_DATA_MATCH_OKOOO_JC_LIST:
+					issueMatchs = (List<OkoooIssueMatch>) records.get(key);
+					for (OkoooIssueMatch okoooIssueMatch : issueMatchs)
+					{
+						logger.info(okoooIssueMatch);
+					}
+					break;
+				case SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST:
+					List<BetBdOdds> oddsList = (List<BetBdOdds>) records.get(key);
+					for (BetBdOdds betBdOdds : oddsList)
+					{
+						logger.info(betBdOdds);
+					}
+					break;
+				case SoccerConstants.SOCCER_DATA_MATCH_OKOOO_LIST:
+					List<OkoooMatch> matchs = (List<OkoooMatch>) records.get(key);
+					for (OkoooMatch okoooMatch : matchs)
+					{
+						logger.info(okoooMatch);
+					}
+					break;
+				default:
+					break;
+				}
+			}
 		}
 	}
 	
@@ -1214,6 +1288,28 @@ public class App
 		{
 			long st = System.currentTimeMillis();
 
+			if (!client.download(page))
+			{
+				logger.info("Error when downloading: " + page.getUrl());
+				return false;
+			}
+
+			long en = System.currentTimeMillis();
+			logger.info("Get web page spend time is " + (en - st) + " ms.");
+			return true;
+		}
+	}
+	
+	private static boolean downloadOkoooPage(WebPage page) throws Exception
+	{
+		FetcherSetting setting = (FetcherSetting) context.getBean("okoooSetting");
+		WebPage basePage = (WebPage) context.getBean("okoooWebPage");
+		try (WebFetcher client = new HtmlUnitFetcher(setting, basePage))
+		{
+			long st = System.currentTimeMillis();
+			client.init();
+			
+			logger.info("Starting to download new page: " + page.getUrl());
 			if (!client.download(page))
 			{
 				logger.info("Error when downloading: " + page.getUrl());

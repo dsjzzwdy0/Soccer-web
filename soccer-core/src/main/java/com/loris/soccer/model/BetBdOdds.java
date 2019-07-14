@@ -111,4 +111,14 @@ public class BetBdOdds extends AutoIdEntity
 			return true;
 		return false;
 	}
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "BetBdOdds [mid=" + mid + ", type=" + type + ", opentime=" + opentime + ", winodds=" + winodds
+				+ ", drawodds=" + drawodds + ", loseodds=" + loseodds + ", rqnum=" + rqnum + "]";
+	}
 }

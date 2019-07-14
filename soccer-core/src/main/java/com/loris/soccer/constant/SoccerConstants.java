@@ -50,8 +50,13 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_RECORD_ODDS_YP_LIST = "recyplist";
 	final static public String SOCCER_DATA_ODDS_SCORE_LIST = "scorelist";
 	final static public String SOCCER_DATA_CASINO_COMP_LIST = "casinocomps";
-	final static public String SOCCER_DATA_BETODDS_BD_LIST = "betjcodds";
-	final static public String SOCCER_DATA_BETODDS_JC_LIST = "betbdodds";
+	final static public String SOCCER_DATA_BETODDS_BD_LIST = "betbdodds";
+	final static public String SOCCER_DATA_BETODDS_JC_LIST = "betjcodds";
+	
+	final static public String SOCCER_DATA_MATCH_OKOOO_BD_LIST = "okooo_matchbds";
+	final static public String SOCCER_DATA_MATCH_OKOOO_JC_LIST = "okooo_matchjcs";
+	final static public String SOCCER_DATA_MATCH_OKOOO_LIST = "okooo_matchs";
+	final static public String SOCCER_DATA_LEAGUE_OKOOO_LIST = "okooo_leagues";
 	//final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
 
 
