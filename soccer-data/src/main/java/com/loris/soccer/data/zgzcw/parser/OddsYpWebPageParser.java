@@ -25,9 +25,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.common.util.ToolUtil;
-import com.loris.soccer.collection.CasinoCompList;
-import com.loris.soccer.collection.OddsYpList;
-import com.loris.soccer.collection.RecordOddsYpList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
@@ -110,9 +108,9 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		String matchTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(matchTime);
 
-		OddsYpList yps = new OddsYpList();
-		RecordOddsYpList recordYps = new RecordOddsYpList();
-		CasinoCompList comps = new CasinoCompList();
+		DataList<OddsYp> yps = new DataList<>();
+		DataList<RecordOddsYp> recordYps = new DataList<>();
+		DataList<CasinoComp> comps = new DataList<>();
 		recordYps.setOverwrite(true);
 		
 		for (Element corpElement : elements)
@@ -134,7 +132,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param yps 亚盘数据列表
 	 */
 	protected void parseYp(Document document, Element element, String mid, Date matchTime, 
-			List<OddsYp> yps, RecordOddsYpList recordYps, List<CasinoComp> comps)
+			List<OddsYp> yps, List<RecordOddsYp> recordYps, List<CasinoComp> comps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();

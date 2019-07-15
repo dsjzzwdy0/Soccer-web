@@ -11,16 +11,19 @@
  */
 package com.loris.soccer.data.okooo.parser.base;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.AbstractWebPageParser;
+import com.loris.common.util.DateUtil;
 import com.loris.soccer.data.okooo.OkoooConstants;
 
 /**   
  * @ClassName:  AbstractOkoooPageParser.java   
- * @Description: TODO(这里用一句话描述这个类的作用)   
+ * @Description: 澳客网数据下载解析器  
  * @author: 东方足彩
  * @date:   2019年1月28日 下午8:59:32   
  *     
@@ -63,5 +66,58 @@ public abstract class AbstractOkoooPageParser extends AbstractWebPageParser
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * 获得截止时间
+	 * 
+	 * @param matchtime 比赛时间
+	 * @param closetime 截止小时
+	 * @return 关闭的时间
+	 */
+	protected Date getCloseTime(Date matchtime, String closetime)
+	{
+		closetime += DateUtil.getYear() + "-" + closetime;
+		return DateUtil.tryToParseDate(closetime);
+	}
+	
+	/**
+	 * Get the Lid value.
+	 * 
+	 * @param url
+	 * @return
+	 */
+	protected String getLeadueId(String url)
+	{
+		String[] values = url.split(RIGHT_SPLASH);
+		int size = values.length;
+		String tid = values[size - 1];
+		return tid;
+	}
+
+	/**
+	 * 获得比赛时间
+	 * 
+	 * @param matchtime
+	 * @return
+	 */
+	protected Date getMatchTime(String matchtime)
+	{
+		String str = matchtime.replace("比赛时间：", "");
+		str = matchtime.replace("比赛时间:", "");
+		return DateUtil.tryToParseDate(str);
+	}
+
+	/**
+	 * 
+	 * @param matchtrends
+	 * @return
+	 */
+	protected String getMatchId(String matchtrends)
+	{
+		String[] values = matchtrends.split(RIGHT_SPLASH);
+		int size = values.length;
+		String mid = values[size - 2];
+		return mid;
 	}
 }

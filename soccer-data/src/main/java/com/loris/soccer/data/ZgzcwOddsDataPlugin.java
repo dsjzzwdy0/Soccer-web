@@ -13,16 +13,17 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.common.filter.Filter;
 import com.loris.common.util.DateUtil;
-import com.loris.soccer.collection.MatchItemList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
@@ -80,7 +81,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	{
 		Date start = new Date();
 		Date end = getEndDate(start);	
-		MatchItemList matchs = new MatchItemList();
+		List<MatchItem> matchs = new ArrayList<>();
 		getMatchItems(matchs, start, end);
 		
 		if(matchs.size() == 0)
@@ -100,7 +101,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	 * @param start 开始时间
 	 * @param end 结束时间
 	 */
-	protected void getMatchItems(MatchItemList matchs, Date start, Date end)
+	protected void getMatchItems(List<MatchItem> matchs, Date start, Date end)
 	{
 		List<Match> baseMatchs = matchService.getMatchs(start, end);
 		if(baseMatchs != null && baseMatchs.size() > 0)
@@ -116,15 +117,33 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	 * @param matchs 列表容器
 	 * @param list 比赛列表
 	 */
-	protected void addMatchItems(MatchItemList matchs, List<? extends MatchItem> list)
+	protected void addMatchItems(List<MatchItem> matchs, List<? extends MatchItem> list)
 	{
 		for (MatchItem matchItem : list)
 		{
-			if(!matchs.containsMid(matchItem.getMid()))
+			if(!checkExist(matchs, matchItem.getMid()))
 			{
 				matchs.add(matchItem);
 			}
 		}
+	}
+	
+	/**
+	 * 检测是否已经包含该场比赛数据
+	 * @param matchItems 比赛列表
+	 * @param mid 比赛编号
+	 * @return 是否存在的标志
+	 */
+	private boolean checkExist(List<MatchItem> matchItems, String mid)
+	{
+		for (MatchItem matchItem : matchItems)
+		{
+			if(StringUtils.equals(matchItem.getMid(), mid))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

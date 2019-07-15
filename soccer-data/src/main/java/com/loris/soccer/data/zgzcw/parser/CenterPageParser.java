@@ -24,7 +24,7 @@ import com.loris.common.model.TableRecords;
 import static com.loris.soccer.constant.SoccerConstants.*;
 
 import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.LogoList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwWebPageParser;
@@ -63,7 +63,7 @@ public class CenterPageParser extends AbstractZgzcwWebPageParser
 	{
 		Elements gamesContentMatcheses = document.select(".liansai .wrapper .mainbottom .gamesContent");
 		LeagueList leagues = new LeagueList();
-		LogoList logos = new LogoList();
+		DataList<Logo> logos = new DataList<>();
 		
 		for (Element element : gamesContentMatcheses)
 		{

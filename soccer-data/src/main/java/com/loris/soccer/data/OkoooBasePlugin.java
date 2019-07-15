@@ -35,7 +35,7 @@ import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.data.conf.WebPageProperties;
-import com.loris.soccer.service.OkoooDataService;
+import com.loris.soccer.service.DataService;
 
 /**   
  * @ClassName:  OkoooBasePlugin.java   
@@ -59,7 +59,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	/** 澳客数据服务器 */
 	@Autowired
-	protected OkoooDataService okoooDataService;
+	protected DataService okoooDataService;
 	
 	@Autowired
 	protected WebPageService pageService;

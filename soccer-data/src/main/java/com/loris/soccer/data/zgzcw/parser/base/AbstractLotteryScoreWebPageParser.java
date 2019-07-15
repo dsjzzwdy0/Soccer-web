@@ -22,7 +22,7 @@ import org.jsoup.select.Elements;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.OddsScoreList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.model.OddsScore;
@@ -57,7 +57,7 @@ public abstract class AbstractLotteryScoreWebPageParser extends AbstractLotteryW
 	@Override
 	protected TableRecords parse(WebPage page, Document document, TableRecords results) throws WebParserException
 	{
-		OddsScoreList oddsScores = new OddsScoreList();
+		DataList<OddsScore> oddsScores = new DataList<>();
 		parseOddsScores(document, oddsScores);
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST, oddsScores);
 		return results;

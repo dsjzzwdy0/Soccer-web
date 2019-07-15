@@ -19,12 +19,13 @@ import org.jsoup.select.Elements;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.LogoList;
-import com.loris.soccer.collection.MatchList;
-import com.loris.soccer.collection.MatchResultList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractLeagueWebPageParser;
+import com.loris.soccer.model.Logo;
+import com.loris.soccer.model.Match;
+import com.loris.soccer.model.MatchResult;
 
 /**   
  * @ClassName: LeagueRoundWebPageParser   
@@ -84,9 +85,9 @@ public class LeagueRoundWebPageParser extends AbstractLeagueWebPageParser
 		String season = page.getParam(ZgzcwConstants.NAME_FIELD_SEASON);
 		String round = page.getParam(ZgzcwConstants.NAME_FIELD_CUR_ROUND);
 		
-		MatchList matchs = new MatchList();
-		MatchResultList matchResults = new MatchResultList();
-		LogoList logos = new LogoList();
+		DataList<Match> matchs = new DataList<>();
+		DataList<MatchResult> matchResults = new DataList<>();
+		DataList<Logo> logos = new DataList<>();
 		matchs.setOverwrite(true);
 		matchResults.setOverwrite(true);
 		

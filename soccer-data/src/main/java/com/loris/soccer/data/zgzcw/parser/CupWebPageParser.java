@@ -10,6 +10,7 @@
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
 package com.loris.soccer.data.zgzcw.parser;
+
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,12 +21,8 @@ import org.jsoup.select.Elements;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.MatchList;
-import com.loris.soccer.collection.MatchResultList;
-import com.loris.soccer.collection.RoundList;
 import com.loris.soccer.collection.SeasonList;
-import com.loris.soccer.collection.TeamList;
-import com.loris.soccer.collection.TeamRfSeasonList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractLeagueWebPageParser;
@@ -33,6 +30,8 @@ import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.Round;
+import com.loris.soccer.model.Team;
+import com.loris.soccer.model.TeamRfSeason;
 
 /**   
  * @ClassName:  CupWebPageParser  
@@ -66,11 +65,11 @@ public class CupWebPageParser extends AbstractLeagueWebPageParser
 				
 		
 		SeasonList seasons = new SeasonList();
-		TeamList teams = new TeamList();
-		TeamRfSeasonList teamRfSeasons = new TeamRfSeasonList();
-		RoundList rounds = new RoundList();
-		MatchList matchs = new MatchList();
-		MatchResultList matchResults = new MatchResultList();
+		DataList<Team> teams = new DataList<>();
+		DataList<TeamRfSeason> teamRfSeasons = new DataList<>();
+		DataList<Round> rounds = new DataList<>();
+		DataList<Match> matchs = new DataList<>();
+		DataList<MatchResult> matchResults = new DataList<>();
 		
 		seasons.setOverwrite(false);
 		matchs.setOverwrite(true);

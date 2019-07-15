@@ -57,13 +57,8 @@ import com.loris.old.soccer.transfer.impl.MatchToMatchResult;
 import com.loris.old.soccer.transfer.impl.OldMatchToMatch;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.MatchInfoList;
-import com.loris.soccer.collection.IssueMatchList;
-import com.loris.soccer.collection.MatchList;
-import com.loris.soccer.collection.MatchResultList;
-import com.loris.soccer.collection.OddsNumList;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.collection.OddsOpList.OddsOpListType;
-import com.loris.soccer.collection.OddsScoreList;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.collection.SeasonList;
 import com.loris.soccer.constant.SoccerConstants;
@@ -86,6 +81,7 @@ import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsYpWebPageParser;
 import com.loris.soccer.model.BetBdOdds;
+import com.loris.soccer.model.BetJcOdds;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
@@ -235,6 +231,13 @@ public class App
 				case SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST:
 					List<BetBdOdds> oddsList = (List<BetBdOdds>) records.get(key);
 					for (BetBdOdds betBdOdds : oddsList)
+					{
+						logger.info(betBdOdds);
+					}
+					break;
+				case SoccerConstants.SOCCER_DATA_BETODDS_JC_LIST:
+					List<BetJcOdds> jcoddsList = (List<BetJcOdds>) records.get(key);
+					for (BetJcOdds betBdOdds : jcoddsList)
 					{
 						logger.info(betBdOdds);
 					}
@@ -407,14 +410,14 @@ public class App
 		result.setClientgoal(5);
 		result.setMid("这是管委会");
 		
-		MatchResultList results = new MatchResultList();
+		List<MatchResult> results = new ArrayList<>();
 		results.add(result);
 		
 		//TableRecords records = new TableRecords();
 		//records.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT, records);
 		//records.put("Tst", "test");
 		
-		Map<String, MatchResultList> records = new HashMap<>();
+		Map<String, List<MatchResult>> records = new HashMap<>();
 		records.put(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST, results);
 		logger.info(JSON.toJSONString(records));
 		
@@ -501,6 +504,7 @@ public class App
 		SchedulerFactory.startTaskScheduler(scheduler);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void testLeagueRoundWebPage() throws Exception
 	{
 		KeyMap params = new KeyMap();
@@ -523,7 +527,7 @@ public class App
 			logger.info("Parser error.");
 			return;
 		}
-		MatchList list = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		List<Match> list = (List<Match>) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 		if (list == null)
 		{
 			logger.info("No Match list, error.");
@@ -533,7 +537,7 @@ public class App
 
 		// RoundList rounds = (RoundList)
 		// records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
-		MatchResultList results = (MatchResultList) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
+		List<MatchResult> results = (List<MatchResult>) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
 		logger.info("Total Match size is " + results.size());
 		
 		saveTableRecords(records);
@@ -581,6 +585,7 @@ public class App
 		SchedulerFactory.startTaskScheduler(scheduler);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void testJcScoreWebPage() throws Exception
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_SCORE_JC);
@@ -598,7 +603,7 @@ public class App
 			return;
 		}
 
-		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST);
+		List<OddsScore> list = (List<OddsScore>) records.get(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST);
 		if (list == null)
 		{
 			logger.info("No OddsScore List, error.");
@@ -608,6 +613,7 @@ public class App
 		saveTableRecords(records);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void testBdScoreWebPage() throws Exception
 	{
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_SCORE_BD);
@@ -625,7 +631,7 @@ public class App
 			return;
 		}
 
-		OddsScoreList list = (OddsScoreList) records.get(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST);
+		List<OddsScore> list = (List<OddsScore>) records.get(SoccerConstants.SOCCER_DATA_ODDS_SCORE_LIST);
 		if (list == null)
 		{
 			logger.info("No OddsScore List, error.");
@@ -635,6 +641,7 @@ public class App
 		saveTableRecords(records);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void testLeagueCenterPage() throws Exception
 	{
 		String lid = "83";
@@ -654,7 +661,7 @@ public class App
 			return;
 		}
 
-		MatchList list = (MatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		List<Match> list = (List<Match>) records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
 		if (list == null)
 		{
 			logger.info("No Match list, error.");
@@ -664,7 +671,7 @@ public class App
 
 		// RoundList rounds = (RoundList)
 		// records.get(SoccerConstants.SOCCER_DATA_ROUND_LIST);
-		MatchResultList results = (MatchResultList) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
+		List<MatchResult> results = (List<MatchResult>) records.get(SoccerConstants.SOCCER_DATA_MATCH_RESULT_LIST);
 		int i = 1;
 		for (MatchResult result : results)
 		{
@@ -693,6 +700,7 @@ public class App
 		logger.info("Total spend time is " + (en - st) + " ms.");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void testOddsNumPage() throws Exception
 	{
 		String mid = "2402907";
@@ -714,7 +722,7 @@ public class App
 			return;
 		}
 
-		OddsNumList list = (OddsNumList) records.get(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST);
+		List<OddsNum> list = (List<OddsNum>) records.get(SoccerConstants.SOCCER_DATA_ODDS_NUM_LIST);
 		if (list == null)
 		{
 			logger.info("No NumList, error.");
@@ -928,6 +936,7 @@ public class App
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public static void testJcWebPage() throws Exception
 	{
 		Map<String, String> params = new LinkedHashMap<>();
@@ -951,7 +960,7 @@ public class App
 		 * int i = 1; for (MatchItem match : matchJcs) { logger.info(i +++ ": "
 		 * + match); }
 		 */
-		IssueMatchList matchJcs = (IssueMatchList) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
+		List<IssueMatch> matchJcs = (List<IssueMatch>) records.get(SoccerConstants.SOCCER_DATA_MATCH_JC_LIST);
 		if (matchJcs == null)
 		{
 			logger.info("Error: no Match JC data.");

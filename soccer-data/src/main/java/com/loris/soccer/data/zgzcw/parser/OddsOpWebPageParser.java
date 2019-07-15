@@ -12,6 +12,7 @@
 package com.loris.soccer.data.zgzcw.parser;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -25,9 +26,7 @@ import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.common.util.ToolUtil;
 import com.loris.common.util.URLParser;
-import com.loris.soccer.collection.CasinoCompList;
-import com.loris.soccer.collection.OddsOpList;
-import com.loris.soccer.collection.RecordOddsOpList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractZgzcwMatchWebPageParser;
@@ -74,9 +73,9 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		}
 		
 		String mid = page.getParams().get(SoccerConstants.NAME_FIELD_MID);
-		OddsOpList ops = new OddsOpList();
-		CasinoCompList comps = new CasinoCompList();
-		RecordOddsOpList recordOps = new RecordOddsOpList();
+		DataList<OddsOp> ops = new DataList<>();
+		DataList<CasinoComp> comps = new DataList<>();
+		DataList<RecordOddsOp> recordOps = new DataList<>();
 		
 		recordOps.setOverwrite(true);
 		
@@ -97,7 +96,8 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param element
 	 * @throws DateParseException 
 	 */
-	protected void parseOdds(Element element, String mid, OddsOpList ops, RecordOddsOpList recordOps, CasinoCompList comps)
+	protected void parseOdds(Element element, String mid, 
+			List<OddsOp> ops, List<RecordOddsOp> recordOps, List<CasinoComp> comps)
 	{
 		OddsOp firstOdds = new OddsOp(mid);
 		OddsOp odds = new OddsOp(mid);

@@ -12,6 +12,7 @@
 package com.loris.soccer.data.zgzcw.parser;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -21,9 +22,7 @@ import org.jsoup.select.Elements;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.BetBdOddsList;
-import com.loris.soccer.collection.IssueMatchList;
-import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.parser.base.AbstractLotteryMatchWebPageParser;
@@ -58,10 +57,10 @@ public class LotteryBdWebPageParser extends AbstractLotteryMatchWebPageParser
 	 * @param matchBds
 	 */
 	@Override
-	protected void parseMatchList(Document document, String issue, MatchList baseMatchs, 
-			IssueMatchList matchBds, TableRecords results)
+	protected void parseMatchList(Document document, String issue, List<Match> baseMatchs, 
+			List<IssueMatch> matchBds, TableRecords results)
 	{
-		BetBdOddsList oddsList = new BetBdOddsList();
+		DataList<BetBdOdds> oddsList = new DataList<>();
 		
 		Element element = document.selectFirst("#tw #dcc");
 		Elements childElements = element.children();

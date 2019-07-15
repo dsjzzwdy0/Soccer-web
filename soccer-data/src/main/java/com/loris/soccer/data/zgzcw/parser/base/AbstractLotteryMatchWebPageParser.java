@@ -11,15 +11,18 @@
  */
 package com.loris.soccer.data.zgzcw.parser.base;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.IssueMatchList;
-import com.loris.soccer.collection.MatchList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.model.IssueMatch;
+import com.loris.soccer.model.Match;
 
 /**   
  * @ClassName:  AbstractLotteryMatchPageParser    
@@ -56,8 +59,8 @@ public abstract class AbstractLotteryMatchWebPageParser extends AbstractLotteryW
 		{
 			issue = parseIssueElement(document);
 		}
-		IssueMatchList lotterMatches = new IssueMatchList();			//投注的比赛数据
-		MatchList baseMatchs = new MatchList();							//基本比赛数据
+		DataList<IssueMatch> lotterMatches = new DataList<>();			//投注的比赛数据
+		DataList<Match> baseMatchs = new DataList<>();							//基本比赛数据
 		baseMatchs.setOverwrite(false);
 		
 		parseMatchList(document, issue, baseMatchs, lotterMatches, results);
@@ -76,6 +79,6 @@ public abstract class AbstractLotteryMatchWebPageParser extends AbstractLotteryW
 	 * @param matchBds
 	 * @param baseMatchs
 	 */
-	protected abstract void parseMatchList(Document document, String issue, MatchList baseMatchs, 
-			IssueMatchList lotterMatches, TableRecords results);
+	protected abstract void parseMatchList(Document document, String issue, List<Match> baseMatchs, 
+			List<IssueMatch> lotterMatches, TableRecords results);
 }

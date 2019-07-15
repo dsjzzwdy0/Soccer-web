@@ -17,25 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loris.common.model.TableRecords;
-import com.loris.soccer.collection.BetBdOddsList;
-import com.loris.soccer.collection.BetJcOddsList;
-import com.loris.soccer.collection.CasinoCompList;
-import com.loris.soccer.collection.LeagueList;
-import com.loris.soccer.collection.LogoList;
-import com.loris.soccer.collection.IssueMatchList;
-import com.loris.soccer.collection.MatchList;
-import com.loris.soccer.collection.MatchResultList;
-import com.loris.soccer.collection.OddsNumList;
-import com.loris.soccer.collection.OddsOpList;
-import com.loris.soccer.collection.OddsScoreList;
-import com.loris.soccer.collection.OddsYpList;
-import com.loris.soccer.collection.RankList;
-import com.loris.soccer.collection.RecordOddsOpList;
-import com.loris.soccer.collection.RecordOddsYpList;
-import com.loris.soccer.collection.RoundList;
-import com.loris.soccer.collection.SeasonList;
-import com.loris.soccer.collection.TeamList;
-import com.loris.soccer.collection.TeamRfSeasonList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.model.BetBdOdds;
 import com.loris.soccer.model.BetJcOdds;
 import com.loris.soccer.model.CasinoComp;
@@ -48,6 +30,11 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.OkoooIssueMatch;
+import com.loris.soccer.model.OkoooLeague;
+import com.loris.soccer.model.OkoooMatch;
+import com.loris.soccer.model.OkoooOddsOp;
+import com.loris.soccer.model.OkoooOddsYp;
 import com.loris.soccer.model.Rank;
 import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.RecordOddsYp;
@@ -61,11 +48,13 @@ import com.loris.soccer.service.DataService;
 import com.loris.soccer.service.LeagueService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
+import com.loris.soccer.service.OkoooDataService;
 
 import static com.loris.soccer.constant.SoccerConstants.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * @ClassName: League
@@ -95,6 +84,23 @@ public class SoccerDataServiceImpl implements DataService
 	
 	@Autowired
 	private BetOddsService betOddsService;
+	
+	@Autowired
+	private OkoooDataService okoooDataService;
+	
+	
+	private static HashMap<String, Boolean> defaultOverwrites = new HashMap<>();
+	
+	static
+	{
+		defaultOverwrites.put(SOCCER_DATA_ODDS_OKOOO_OP_LIST, Boolean.TRUE);
+		defaultOverwrites.put(SOCCER_DATA_ODDS_OKOOO_YP_LIST, Boolean.TRUE);
+		defaultOverwrites.put(SOCCER_DATA_ODDS_OP_LIST, Boolean.TRUE);
+		defaultOverwrites.put(SOCCER_DATA_ODDS_YP_LIST, Boolean.TRUE);
+		defaultOverwrites.put(SOCCER_DATA_BETODDS_BD_LIST, Boolean.TRUE);
+		defaultOverwrites.put(SOCCER_DATA_BETODDS_JC_LIST, Boolean.TRUE);
+		defaultOverwrites.put(SOCCER_DATA_LEAGUE_LIST, Boolean.FALSE);
+	}
 
 	/**
 	 * 保存数据页面解析得到的内容
@@ -127,230 +133,103 @@ public class SoccerDataServiceImpl implements DataService
 	@Transactional
 	public boolean saveRecord(String key, Object value)
 	{
-		boolean overwrite = true;
+		boolean overwrite = getDefaultOverwrite(key);
+		if(value instanceof DataList<?>)
+		{
+			overwrite = ((DataList<?>)value).isOverwrite();
+		}
+		
 		switch (key)
 		{
 		case SOCCER_DATA_LEAGUE_LIST:
-			List<League> leagues = null;
-			if(value instanceof LeagueList)
-			{
-				leagues = (LeagueList) value;
-				overwrite = ((LeagueList)leagues).isOverwrite();
-			}
-			else
-			{
-				leagues = (List<League>) value;				
-			}
+			List<League> leagues = (List<League>) value;		
 			return leagueService.insertLeagues(leagues, overwrite);
 		case SOCCER_DATA_LOGO_LIST:
-			List<Logo> logos = null;
-			if(value instanceof LogoList)
-			{
-				logos = (LogoList)value;
-				overwrite = ((LogoList)value).isOverwrite();
-			}
-			else {
-				logos = (List<Logo>)value;
-			}
+			List<Logo> logos = (List<Logo>)value;
 			return leagueService.insertLogos(logos, overwrite);
 		case SOCCER_DATA_LEAGUE_ROUND_LIST:
-			List<Round> rounds = null;
-			if(value instanceof RoundList)
-			{
-				rounds = (RoundList)value;
-				overwrite = ((RoundList)value).isOverwrite();
-			}
-			else {
-				rounds = (List<Round>)value;
-			}
+			List<Round> rounds = (List<Round>)value;
 			return leagueService.insertRounds(rounds, overwrite);
 		case SOCCER_DATA_LEAGUE_SEASON_LIST:
-			List<Season> seasons = null;
-			if(value instanceof SeasonList)
-			{
-				seasons = (SeasonList)value;
-				overwrite = ((SeasonList)value).isOverwrite();
-			}
-			else {
-				seasons = (List<Season>)value;
-			}
+			List<Season> seasons = (List<Season>)value;
 			return leagueService.insertSeasons(seasons, overwrite);
 		case SOCCER_DATA_TEAM_LIST:
-			List<Team> teams = null;
-			if(value instanceof TeamList)
-			{
-				teams = (TeamList)value;
-				overwrite = ((TeamList)value).isOverwrite();
-			}
-			else {
-				teams = (List<Team>)value;
-			}
+			List<Team> teams = (List<Team>)value;
 			return leagueService.insertTeams(teams, overwrite);
 		case SOCCER_DATA_TEAM_SEASON_RELATION:
-			List<TeamRfSeason> teamRfSeasons = null;
-			if(value instanceof TeamRfSeasonList)
-			{
-				teamRfSeasons = (TeamRfSeasonList) value;
-				overwrite = ((TeamRfSeasonList)value).isOverwrite();
-			}
-			else {
-				teamRfSeasons = (List<TeamRfSeason>)value;
-			}
+			List<TeamRfSeason> teamRfSeasons = (List<TeamRfSeason>)value;
 			return leagueService.insertTeamRfSeasons(teamRfSeasons, overwrite);
 		case SOCCER_DATA_LEAGUE_RANK_LIST:
-			List<Rank> ranks = null;
-			if(value instanceof RankList)
-			{
-				ranks = (RankList) value;
-				overwrite = ((RankList)value).isOverwrite();
-			}
-			else
-			{
-				ranks = (List<Rank>)value;
-			}
+			List<Rank> ranks = (List<Rank>)value;
 			return leagueService.insertRanks(ranks, overwrite);
 		case SOCCER_DATA_MATCH_LIST:
-			List<Match> matchs = null;
-			if(value instanceof MatchList)
-			{
-				matchs = (MatchList) value;
-				overwrite = ((MatchList) value).isOverwrite();
-			}
-			else {
-				matchs = (List<Match>)value;
-			}
+			List<Match> matchs = (List<Match>)value;
 			return matchService.insertMatchs(matchs, overwrite);
 		case SOCCER_DATA_MATCH_BD_LIST:
 		case SOCCER_DATA_MATCH_JC_LIST:
-			List<IssueMatch> matchBds = null;
-			if(value instanceof IssueMatchList)
-			{			
-				IssueMatchList matchBdItemList = (IssueMatchList) value;
-				matchBds = new ArrayList<>();
-				for (IssueMatch matchBd : matchBdItemList)
-				{
-					matchBds.add((IssueMatch)matchBd);
-				}
-				overwrite = matchBdItemList.isOverwrite();
-			}
-			else
-			{
-				matchBds = (List<IssueMatch>)value;
-			}
+			List<IssueMatch> matchBds = (List<IssueMatch>)value;
 			return matchService.insertIssueMatchs(matchBds, overwrite);
 		case SOCCER_DATA_MATCH_RESULT_LIST:
-			List<MatchResult> matchResults = null;
-			if(value instanceof MatchResultList)
-			{
-				matchResults = (MatchResultList) value;
-				overwrite = ((MatchResultList) value).isOverwrite();
-			}
-			else
-			{
-				matchResults = (List<MatchResult>)value;
-			}
+			List<MatchResult> matchResults = (List<MatchResult>)value;
 			return matchService.insertMatchResults(matchResults, overwrite);
 		case SOCCER_DATA_ODDS_OP_LIST:
-			List<OddsOp> ops = null;
-			if(value instanceof OddsOpList)
-			{
-				ops = (OddsOpList) value;
-				overwrite = ((OddsOpList)value).isOverwrite();
-			}
-			else {
-				ops = (List<OddsOp>)value;
-			}
+			List<OddsOp> ops = (List<OddsOp>)value;
 			return oddsService.insertOddsOps(ops, overwrite);
 		case SOCCER_DATA_ODDS_YP_LIST:
-			List<OddsYp> yps = null;
-			if(value instanceof OddsYpList)
-			{
-				yps = (OddsYpList)value;
-				overwrite = ((OddsYpList)value).isOverwrite();
-			}
-			else {
-				yps = (List<OddsYp>)value;				
-			}
+			List<OddsYp> yps = (List<OddsYp>)value;				
 			return oddsService.insertOddsYps(yps, overwrite);
 		case SOCCER_DATA_RECORD_ODDS_OP_LIST:
 			List<RecordOddsOp> recordOddsOps = (List<RecordOddsOp>)value;
-			overwrite = true;
-			if(value instanceof RecordOddsOpList)
-			{
-				overwrite = ((RecordOddsOpList)value).isOverwrite();
-			}
 			return oddsService.insertRecordOddsOps(recordOddsOps, overwrite);
 		case SOCCER_DATA_RECORD_ODDS_YP_LIST:
 			List<RecordOddsYp> recordOddsYps = (List<RecordOddsYp>)value;
-			overwrite = true;
-			if(value instanceof RecordOddsYpList)
-			{
-				overwrite = ((RecordOddsYpList)value).isOverwrite();
-			}
 			return oddsService.insertRecordOddsYps(recordOddsYps, overwrite);
 		case SOCCER_DATA_ODDS_NUM_LIST:
-			List<OddsNum> nums = null;
-			if(value instanceof OddsNumList)
-			{
-				nums = (OddsNumList)value;
-				overwrite = ((OddsNumList)value).isOverwrite();
-			}
-			else {
-				nums = (List<OddsNum>) value;
-			}
+			List<OddsNum> nums = (List<OddsNum>) value;
 			return oddsService.insertOddsNums(nums, overwrite);
 		case SOCCER_DATA_ODDS_SCORE_LIST:
-			List<OddsScore> scores = null;
-			if(value instanceof OddsScoreList)
-			{
-				scores = (OddsScoreList)value;
-				overwrite = ((OddsScoreList)value).isOverwrite();
-			}
-			else
-			{
-				scores = (List<OddsScore>) value;
-			}
+			List<OddsScore> scores = (List<OddsScore>) value;
 			return oddsService.insertOddsScores(scores, overwrite);
 		case SOCCER_DATA_CASINO_COMP_LIST:
-			List<CasinoComp> comps = null;
-			if(value instanceof CasinoCompList)
-			{
-				comps = (CasinoCompList)value;
-				overwrite = ((CasinoCompList)value).isOverwrite();
-			}
-			else 
-			{
-				comps = (List<CasinoComp>)value;
-			}
+			List<CasinoComp> comps = (List<CasinoComp>)value;
 			return compService.insertCasinoComps(comps, overwrite);
 		case SOCCER_DATA_BETODDS_BD_LIST:
-			List<BetBdOdds> betBdOdds = null;
-			if(value instanceof BetBdOddsList)
-			{
-				betBdOdds = (BetBdOddsList)value;
-				overwrite = ((BetBdOddsList)value).isOverwrite();
-			}
-			else 
-			{
-				betBdOdds = (List<BetBdOdds>)value;
-			}
+			List<BetBdOdds> betBdOdds = (List<BetBdOdds>)value;
 			return betOddsService.insertBetBdOdds(betBdOdds, overwrite);
 		case SOCCER_DATA_BETODDS_JC_LIST:
-			List<BetJcOdds> betJcOdds = null;
-			if(value instanceof BetJcOddsList)
-			{
-				betJcOdds = (BetJcOddsList)value;
-				overwrite = ((BetJcOddsList)value).isOverwrite();
-			}
-			else 
-			{
-				betJcOdds = (List<BetJcOdds>)value;
-			}
+			List<BetJcOdds> betJcOdds = (List<BetJcOdds>)value;
 			return betOddsService.insertBetJcOdds(betJcOdds, overwrite);
+		case SOCCER_DATA_MATCH_OKOOO_LIST:
+			List<OkoooMatch> okoooMatchs = (List<OkoooMatch>)value;			
+			return okoooDataService.insertOkoooMatchs(okoooMatchs, overwrite);
+		case SOCCER_DATA_LEAGUE_OKOOO_LIST:
+			List<OkoooLeague> okoooLeagues = (List<OkoooLeague>)value;
+			return okoooDataService.insertOkoooLeagues(okoooLeagues, overwrite);
+		case SOCCER_DATA_MATCH_OKOOO_BD_LIST:
+		case SOCCER_DATA_MATCH_OKOOO_JC_LIST:
+			List<OkoooIssueMatch> okoooIssueMatchs = (List<OkoooIssueMatch>)value;
+			return okoooDataService.insertOkoooIssueMatch(okoooIssueMatchs, overwrite);
+		case SOCCER_DATA_ODDS_OKOOO_OP_LIST:
+			List<OkoooOddsOp> okoooOddsOps = (List<OkoooOddsOp>)value;
+			return okoooDataService.insertOkoooOddsOps(okoooOddsOps, overwrite);
+		case SOCCER_DATA_ODDS_OKOOO_YP_LIST:
+			List<OkoooOddsYp> okoooOddsYps = (List<OkoooOddsYp>)value;
+			return okoooDataService.insertOkoooOddsYps(okoooOddsYps, overwrite);
 		default:
 			// No nothing.
 			logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");
 			return false;
 		}
+	}
+	
+	/**
+	 * 获得默认的是否覆盖的标志
+	 * @param key 关键词
+	 * @return 是否覆盖的标志
+	 */
+	protected boolean getDefaultOverwrite(String key)
+	{
+		Boolean b = defaultOverwrites.get(key);
+		return (b == null) ? false : b;
 	}
 }

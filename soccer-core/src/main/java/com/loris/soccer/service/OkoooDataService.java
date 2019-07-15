@@ -11,7 +11,13 @@
  */
 package com.loris.soccer.service;
 
-import com.loris.common.model.TableRecords;
+import java.util.List;
+
+import com.loris.soccer.model.OkoooIssueMatch;
+import com.loris.soccer.model.OkoooLeague;
+import com.loris.soccer.model.OkoooMatch;
+import com.loris.soccer.model.OkoooOddsOp;
+import com.loris.soccer.model.OkoooOddsYp;
 
 /**   
  * @ClassName:  OkoooDataService.java   
@@ -25,9 +31,78 @@ import com.loris.common.model.TableRecords;
 public interface OkoooDataService
 {
 	/**
-	 * 保存数据结果
-	 * @param records 数据结果表
-	 * @return 是否保存成功的标志
+	 * 插入联赛数据类
+	 * 
+	 * @param leagues 联赛数据列表
+	 * @return 是否成功的标志
 	 */
-	boolean saveTableRecords(TableRecords records);
+	boolean insertOkoooLeagues(List<OkoooLeague> leagues);
+	
+	/**
+	 * 插入联赛数据
+	 * @param leagues 联赛数据
+	 * @param overwrite 是否覆盖数据
+	 * @return 插入成功的标志
+	 */
+	boolean insertOkoooLeagues(List<OkoooLeague> leagues, boolean overwrite);
+	
+	/**
+	 * 插入比赛数据
+	 * @param matchs 比赛列表
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooMatchs(List<OkoooMatch> matchs);
+	
+	/**
+	 * 插入比赛数据
+	 * @param matchs 比赛列表
+	 * @param overwrite 是否覆盖原有的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooMatchs(List<OkoooMatch> matchs, boolean overwrite);
+	
+	/**
+	 * 插入比赛期号的数据
+	 * @param issueMatchs 开盘的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooIssueMatch(List<OkoooIssueMatch> issueMatchs);
+	
+	/**
+	 * 插入比赛期号的数据
+	 * @param issueMatchs 开盘的数据
+	 * @param overwrite 是否覆盖原有的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooIssueMatch(List<OkoooIssueMatch> issueMatchs, boolean overwrite);
+	
+	/**
+	 * 插入欧赔数据列表
+	 * @param ops 欧赔列表
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooOddsOps(List<OkoooOddsOp> ops);
+	
+	/**
+	 * 插入欧赔数据列表
+	 * @param ops 欧赔列表
+	 * @param overwrite 是否覆盖原有的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooOddsOps(List<OkoooOddsOp> ops, boolean overwrite);
+	
+	/**
+	 * 是否插入亚盘数据列表
+	 * @param yps 亚盘列表
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooOddsYps(List<OkoooOddsYp> yps);
+	
+	/**
+	 * 是否插入亚盘数据列表
+	 * @param yps 亚盘列表
+	 * @param overwrite 是否覆盖原有的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooOddsYps(List<OkoooOddsYp> yps, boolean overwrite);
 }

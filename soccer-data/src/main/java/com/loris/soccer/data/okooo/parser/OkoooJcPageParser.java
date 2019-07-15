@@ -11,7 +11,6 @@
  */
 package com.loris.soccer.data.okooo.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.BetJcOddsList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.parser.base.AbstractOkoooPageParser;
@@ -68,10 +67,15 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 			return null;
 		}
 		
-		List<OkoooIssueMatch> issueMatchs = new ArrayList<>();
-		List<OkoooMatch> matchs = new ArrayList<>();
-		List<OkoooLeague> leagues = new ArrayList<>();
-		BetJcOddsList oddsList = new BetJcOddsList();
+		DataList<OkoooIssueMatch> issueMatchs = new DataList<>();
+		DataList<OkoooMatch> matchs = new DataList<>();
+		DataList<OkoooLeague> leagues = new DataList<>();
+		DataList<BetJcOdds> oddsList = new DataList<>();
+		
+		matchs.setOverwrite(false);
+		leagues.setOverwrite(false);
+		issueMatchs.setOverwrite(false);
+		oddsList.setOverwrite(true);
 		
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_JC_LIST, issueMatchs);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_LIST, matchs);
@@ -138,25 +142,24 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		String homename;
 		String clientname;
 
-		// 联赛信息
-		mid = element.attr("id");
-		mid = mid.replace("match_", "");
+		// 比赛基本信息
 		Element el = elements.get(0);
-		ordinary = el.selectFirst("span").text();
+		mid = element.attr("data-mid");							//比赛编号
+		ordinary = el.selectFirst("span").text();				//比赛序号
 		Element e2 = el.selectFirst("a");
-		leaguename = e2.text();
-		lid = getLeadueId(e2.attr("href"));
-
-		// 比赛时间信息
-		matchtime = el.selectFirst(".shijian").attr("title");
-		closetime = matchtime;
+		leaguename = e2.text();									//联赛名称
+		lid = getLeadueId(e2.attr("href"));						//联赛编号
+		matchtime = el.selectFirst(".shijian").attr("title");	//比赛时间
+		//System.out.println("Match time is: " + matchtime);
+		closetime = matchtime;									//结束时间
+		Date mtime = getMatchTime(matchtime);
 
 		// 球队信息
 		el = elements.get(1);
-		Elements teams = el.select(".zhud");
-		homename = teams.get(0).text();
-		clientname = teams.get(1).text();
-		Date mtime = getMatchTime(matchtime);
+		Element hteam = el.selectFirst(".zhu .zhud .zhum");
+		homename = hteam.text();
+		Element cteam = el.selectFirst(".fu .ked .zhum");
+		clientname = cteam.text();
 
 		OkoooIssueMatch issueMatch = new OkoooIssueMatch();
 		issueMatch.setIssue(issue);
@@ -164,7 +167,7 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		issueMatch.setMid(mid);
 		issueMatch.setType(SoccerConstants.LOTTERY_JC);
 		issueMatch.setOrdinary(ordinary);
-		issueMatch.setClosetime(getCloseTime(matchtime, closetime));
+		issueMatch.setClosetime(getCloseTime(mtime, closetime));
 		issueMatch.setMatchtime(mtime);
 		
 		OkoooMatch match = new OkoooMatch();
@@ -183,11 +186,11 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		match.setLid(lid);
 		
 		// 奖金信息
-		el = elements.get(4);
-		Element oddsEl = el.selectFirst(".frqBetObj");
+		Element oddsEl = element.selectFirst(".shenpf");
 		parseOdds(oddsEl, odds);
+		
 		// 让球信息
-		oddsEl = el.selectFirst(".rqBetObj");
+		oddsEl = element.selectFirst(".rangqiuspf");
 		parseRqOdds(oddsEl, odds);
 		
 		OkoooLeague league = new OkoooLeague();
@@ -215,8 +218,9 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		String winodds;
 		String drawodds;
 		String loseodds;
+		
 		// boolean isopen = true;
-		Elements elements = element.select("a");
+		Elements elements = element.select(".peilv");
 		if (elements.size() <= 0)
 		{
 			odds.setIsopen(false);
@@ -246,16 +250,16 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		String rqdrawodds;
 		String rqloseodds;
 
-		Elements elements = element.select("div");
-		if (elements.size() < 2)
+		Element rqEl = element.selectFirst(".rangqiuzhen");
+		if (rqEl == null)
 		{
 			odds.setIsrqopen(false);
 			return;
 		}
+		rq = rqEl.text();
 		odds.setIsrqopen(true);
-		rq = elements.get(0).selectFirst(".handicapObj").text();
-		Elements oddsEls = elements.get(2).select("a");
-
+		
+		Elements oddsEls = element.select(".peilv");
 		if (oddsEls.size() < 3)
 		{
 			return;
@@ -278,10 +282,9 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 	 */
 	private String getIssue(Element titleElement)
 	{
-		Element el = titleElement.selectFirst("td span span");
-		if (el != null)
+		if (titleElement != null)
 		{
-			String issue = el.text();
+			String issue = titleElement.text();
 			Date date = DateUtil.tryToParseDate(issue);
 			if (date != null)
 			{
@@ -289,57 +292,5 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 			}
 		}
 		return "";
-	}
-
-	/**
-	 * Get the Lid value.
-	 * 
-	 * @param url
-	 * @return
-	 */
-	protected String getLeadueId(String url)
-	{
-		String[] values = url.split(RIGHT_SPLASH);
-		int size = values.length;
-		String tid = values[size - 1];
-		return tid;
-	}
-
-	/**
-	 * 获得比赛时间
-	 * 
-	 * @param matchtime
-	 * @return
-	 */
-	protected Date getMatchTime(String matchtime)
-	{
-		String str = matchtime.replace("比赛时间：", "");
-		return DateUtil.tryToParseDate(str);
-	}
-
-	/**
-	 * 
-	 * @param matchtrends
-	 * @return
-	 */
-	protected String getMatchId(String matchtrends)
-	{
-		String[] values = matchtrends.split(RIGHT_SPLASH);
-		int size = values.length;
-		String mid = values[size - 2];
-		return mid;
-	}
-
-	/**
-	 * 获得截止时间
-	 * 
-	 * @param matchtime 比赛时间
-	 * @param closetime 截止小时
-	 * @return 关闭的时间
-	 */
-	private Date getCloseTime(String matchtime, String closetime)
-	{
-		closetime += DateUtil.getYear() + "-" + closetime;
-		return DateUtil.tryToParseDate(closetime);
 	}
 }

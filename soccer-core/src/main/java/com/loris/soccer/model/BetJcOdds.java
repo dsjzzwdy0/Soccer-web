@@ -82,4 +82,12 @@ public class BetJcOdds extends BetBdOdds
 	{
 		this.isrqopen = isrqopen;
 	}
+	@Override
+	public String toString()
+	{
+		return "BetJcOdds [isopen=" + isopen + ", isdanguan=" + isdanguan + ", rqwinodds=" + rqwinodds + ", rqdrawodds="
+				+ rqdrawodds + ", rqloseodds=" + rqloseodds + ", isrqopen=" + isrqopen + ", mid=" + mid + ", type="
+				+ type + ", opentime=" + opentime + ", winodds=" + winodds + ", drawodds=" + drawodds + ", loseodds="
+				+ loseodds + ", rqnum=" + rqnum + ", id=" + id + "]";
+	}
 }

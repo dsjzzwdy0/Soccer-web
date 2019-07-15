@@ -11,7 +11,6 @@
  */
 package com.loris.soccer.data.okooo.parser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +25,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.BetBdOddsList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.parser.base.AbstractOkoooPageParser;
@@ -69,20 +68,23 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 			return null;
 		}
 		
-		List<OkoooIssueMatch> matchs = new ArrayList<>();
-		List<OkoooMatch> baseMatchs = new ArrayList<>();
-		List<OkoooLeague> leagues = new ArrayList<>();
-		BetBdOddsList oddsList = new BetBdOddsList();
+		DataList<OkoooIssueMatch> issueMatchs = new DataList<>();
+		DataList<OkoooMatch> baseMatchs = new DataList<>();
+		DataList<OkoooLeague> leagues = new DataList<>();
+		DataList<BetBdOdds> oddsList = new DataList<>();
 		oddsList.setOverwrite(true);
+		issueMatchs.setOverwrite(false);
+		baseMatchs.setOverwrite(false);
+		leagues.setOverwrite(false);
 		
-		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_BD_LIST, matchs);
+		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_BD_LIST, issueMatchs);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_LIST, baseMatchs);
 		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_OKOOO_LIST, leagues);
 		results.put(SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST, oddsList);
 		
 		for (Element element : elements)
 		{
-			parseBdIssue(element, baseMatchs, matchs, oddsList, leagues);
+			parseBdIssue(element, baseMatchs, issueMatchs, oddsList, leagues);
 		}
 		return results;
 	}
@@ -156,11 +158,9 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		//比赛时间信息
 		el = elements.get(1);
 		matchtime = el.attr("title");
-		matchtime = getMatchTime(matchtime);
+		Date mtime = getMatchTime(matchtime);
 		closetime = el.selectFirst(".BuyTime").text();
 
-		Date mtime = DateUtil.tryToParseDate(matchtime);
-		
 		OkoooIssueMatch issueMatch = new OkoooIssueMatch();
 		issueMatch.setType(SoccerConstants.LOTTERY_BD);
 		OkoooMatch match = new OkoooMatch();
@@ -173,7 +173,7 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		issueMatch.setIssue(issue);
 		issueMatch.setIssueno(issue);
 		issueMatch.setMatchtime(mtime);
-		issueMatch.setClosetime(getCloseTime(matchtime, closetime));
+		issueMatch.setClosetime(getCloseTime(mtime, closetime));
 		
 		match.setMid(mid);
 		match.setLid(lid);
@@ -277,45 +277,6 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 	}
 	
 	/**
-	 * Get the Lid value.
-	 * 
-	 * @param url
-	 * @return
-	 */
-	protected String getLeadueId(String url)
-	{
-		String[] values = url.split(RIGHT_SPLASH);
-		int size = values.length;
-		String tid = values[size - 1];
-		return tid;
-	}
-	
-	/**
-	 * 获得比赛时间
-	 * 
-	 * @param matchtime
-	 * @return
-	 */
-	private String getMatchTime(String matchtime)
-	{
-		String str = matchtime.replace("比赛时间：", "");
-		return str;
-	}
-	
-	/**
-	 * 获得比赛的ID值
-	 * @param matchtrends
-	 * @return
-	 */
-	protected String getMatchId(String matchtrends)
-	{
-		String[] values = matchtrends.split(RIGHT_SPLASH);
-		int size = values.length;
-		String mid = values[size - 2];
-		return mid;
-	}
-	
-	/**
 	 * 获得期号信息
 	 * 
 	 * @param titleElement 信息元素
@@ -334,18 +295,5 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 			}
 		}
 		return "";
-	}
-	
-	/**
-	 * 获得截止时间
-	 * 
-	 * @param matchtime 比赛时间
-	 * @param closetime 截止小时
-	 * @return 关闭的时间
-	 */
-	private Date getCloseTime(String matchtime, String closetime)
-	{
-		closetime += DateUtil.getYear() + "-" + closetime;
-		return DateUtil.tryToParseDate(closetime);
 	}
 }

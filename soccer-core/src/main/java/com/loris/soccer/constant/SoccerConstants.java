@@ -57,6 +57,8 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_MATCH_OKOOO_JC_LIST = "okooo_matchjcs";
 	final static public String SOCCER_DATA_MATCH_OKOOO_LIST = "okooo_matchs";
 	final static public String SOCCER_DATA_LEAGUE_OKOOO_LIST = "okooo_leagues";
+	final static public String SOCCER_DATA_ODDS_OKOOO_OP_LIST = "okooo_oplist";
+	final static public String SOCCER_DATA_ODDS_OKOOO_YP_LIST = "okooo_yplist";
 	//final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
 
 

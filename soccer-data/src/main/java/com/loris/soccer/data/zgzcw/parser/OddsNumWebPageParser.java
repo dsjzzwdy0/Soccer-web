@@ -23,8 +23,7 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.CasinoCompList;
-import com.loris.soccer.collection.OddsNumList;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.model.CasinoComp;
@@ -73,8 +72,8 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 		String mathTime = page.getParams().get(SoccerConstants.NAME_FIELD_MATCHTIME);
 		Date time = DateUtil.tryToParseDate(mathTime);
 
-		OddsNumList nums = new OddsNumList();
-		CasinoCompList comps = new CasinoCompList();
+		DataList<OddsNum> nums = new DataList<>();
+		DataList<CasinoComp> comps = new DataList<>();
 		for (Element element2 : elements)
 		{
 			parseNum(document, element2, mid, time, nums, comps);
@@ -91,7 +90,8 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 	 * @param matchTime 比赛时间
 	 * @param nums 大小球列表
 	 */
-	protected void parseNum(Document document, Element element, String mid, Date matchTime, List<OddsNum> nums, CasinoCompList comps)
+	protected void parseNum(Document document, Element element, String mid, Date matchTime, 
+			List<OddsNum> nums, List<CasinoComp> comps)
 	{
 		Elements elements = element.select("td");
 		int size = elements.size();
