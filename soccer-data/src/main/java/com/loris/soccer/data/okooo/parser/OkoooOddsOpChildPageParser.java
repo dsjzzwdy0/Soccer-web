@@ -85,16 +85,6 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 		{
 			parseOddsOpListJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsOps, comps);
 		}
-		
-		String staticStr = getDataStr(content, ";|\n", "var static_str");
-		if(StringUtils.isNotEmpty(staticStr))
-		{
-			int corpNum = parseStaticInfo(staticStr);
-			if(corpNum <= 0)
-			{
-				
-			}
-		}
 		return results;
 	}
 
