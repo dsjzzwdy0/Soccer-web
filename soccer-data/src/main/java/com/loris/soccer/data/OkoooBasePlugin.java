@@ -13,6 +13,7 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -34,7 +35,10 @@ import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.TableRecords;
+import com.loris.common.util.DateUtil;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.model.OkoooOddsYp;
+import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.DataService;
 
 /**   
@@ -63,6 +67,9 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	@Autowired
 	protected WebPageService pageService;
+	
+	/** 下载子页面时等候的时间 */
+	protected int childInterval = 1000;
 	
 	/**
 	 * @param name
@@ -216,8 +223,8 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * 每一个亚盘页面的数据下载都不能完全一次性进行下载，必须对数据进行多次请求
+	 * @return 下载是否成功的标志
 	 * @throws IOException
 	 * @throws HostForbiddenException
 	 * @throws UrlFetchException
@@ -227,4 +234,55 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		return true;
 	}
 	
+	/**
+	 * 下载更多的亚盘数据
+	 * @param match
+	 * @param yps
+	 */
+	protected void downloadMoreYPRecords(MatchItem match, List<OkoooOddsYp> yps, int pageIndex)
+	{
+		//为了不被网站封停，需要对下载时间作一些调整，暂停下载数据
+		try
+		{
+			Thread.sleep(childInterval);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		try
+		{
+			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createYpPageWebPage(match.getMid(), pageIndex);
+			logger.info("Downloading '" + match.getMid() + "' page " + pageIndex);
+			
+			//数据下载
+			if(!download(morePage))
+			{
+				return;
+			}
+			OddsYpChildParser parser = new OddsYpChildParser();
+			parser.setMid(match.getMid());			
+			parser.setMatchTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
+			
+			//解析数据
+			if(parser.parseWebPage(morePage))
+			{
+				//int k = 1;
+				List<OkoooOddsYp> moreYps = parser.getYps();
+				yps.addAll(moreYps);
+				
+				//判断是否有更多的数据需要下载
+				if(moreYps.size() >= 30)
+				{
+					downloadMoreYPRecords(match, yps, (pageIndex +1));
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("Error when downloading more OkoooYpPages: " + pageIndex);
+		}
+		return;
+	}
 }

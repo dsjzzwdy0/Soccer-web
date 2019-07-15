@@ -108,6 +108,7 @@ public class IssueMatch extends MatchItem
 	public String toString()
 	{
 		return "IssueMatch [issue=" + issue + ", issueno=" + issueno + ", ordinary=" + ordinary + ", closetime="
-				+ closetime + ", type=" + type + ", isdelay=" + isdelay + ", delaytime=" + delaytime + "]";
+				+ closetime + ", type=" + type + ", isdelay=" + isdelay + ", delaytime=" + delaytime + ", mid=" + mid
+				+ ", matchtime=" + matchtime + "]";
 	}
 }
