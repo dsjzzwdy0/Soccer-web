@@ -29,4 +29,9 @@ public interface OkoooConstants
 	public static final String PAGE_SCORE_JC = "okooo_jc";
 	public static final String PAGE_ODDS_OP = "okooo_op";
 	public static final String PAGE_ODDS_YP = "okooo_yp";
+	public static final String PAGE_ODDS_OP_CHILD = "okooo_op_child";
+	public static final String PAGE_ODDS_YP_CHILD = "okooo_yp_child";
+	
+	
+	public static final String NAME_FIELD_CORP_TOTAL_NUM = "total_corp";
 }
