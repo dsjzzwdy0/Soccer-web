@@ -120,9 +120,9 @@ public class FetcherSetting
 		case "CHROME":
 			this.browser = BrowserVersion.CHROME;
 			break;
-		case "EDGE":
+		/*case "EDGE":
 			this.browser = BrowserVersion.EDGE;
-			break;
+			break;*/
 		default:
 			break;
 		}

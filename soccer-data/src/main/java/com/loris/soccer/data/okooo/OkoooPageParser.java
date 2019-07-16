@@ -19,6 +19,11 @@ import com.loris.client.model.WebPage;
 import com.loris.client.parser.WebPageParser;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.data.okooo.parser.OkoooBdPageParser;
+import com.loris.soccer.data.okooo.parser.OkoooJcPageParser;
+import com.loris.soccer.data.okooo.parser.OkoooOddsOpChildPageParser;
+import com.loris.soccer.data.okooo.parser.OkoooOddsOpPageParser;
+import com.loris.soccer.data.okooo.parser.OkoooOddsYpChildPageParser;
+import com.loris.soccer.data.okooo.parser.OkoooOddsYpPageParser;
 
 /**   
  * @ClassName:  OkoooPageParser.java   
@@ -37,6 +42,11 @@ public class OkoooPageParser
 	static
 	{
 		parsers.put(OkoooConstants.PAGE_SCORE_BD, new OkoooBdPageParser());
+		parsers.put(OkoooConstants.PAGE_SCORE_JC, new OkoooJcPageParser());
+		parsers.put(OkoooConstants.PAGE_ODDS_OP, new OkoooOddsOpPageParser());
+		parsers.put(OkoooConstants.PAGE_ODDS_YP, new OkoooOddsYpPageParser());
+		parsers.put(OkoooConstants.PAGE_ODDS_YP_CHILD, new OkoooOddsYpChildPageParser());
+		parsers.put(OkoooConstants.PAGE_ODDS_OP_CHILD, new OkoooOddsOpChildPageParser());
 	}
 	
 	/**

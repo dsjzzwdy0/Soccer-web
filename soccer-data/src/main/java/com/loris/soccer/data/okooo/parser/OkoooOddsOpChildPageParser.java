@@ -49,7 +49,7 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 	/**
 	 * @param acceptType
 	 */
-	public OkoooOddsOpChildPageParser(String acceptType)
+	public OkoooOddsOpChildPageParser()
 	{
 		super(OkoooConstants.PAGE_ODDS_OP_CHILD);
 	}
@@ -70,20 +70,35 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 			return null;
 		}
 		
-		String content = scriptEl.data();
-		String dataStr = getDataStr(content, ";|\n", "var data_str");	
-		
-		DataList<OkoooOddsOp> okoooOddsOps = new DataList<>();
-		DataList<CasinoComp> comps = new DataList<>();
-		comps.setOverwrite(false);
-		
-		results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST, okoooOddsOps);
-		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
-		
-		//logger.info(dataStr);
-		if(StringUtils.isNotEmpty(dataStr))
+		try
 		{
-			parseOddsOpListJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsOps, comps);
+			String content = scriptEl.data();
+			String dataStr = getDataStr(content, ";|\n", "var data_str");	
+		
+			if(StringUtils.isNoneBlank(dataStr))
+			{
+				DataList<OkoooOddsOp> okoooOddsOps = new DataList<>();
+				DataList<CasinoComp> comps = new DataList<>();
+				comps.setOverwrite(false);
+				
+				results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST, okoooOddsOps);
+				results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+
+				parseOddsOpListJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsOps, comps);
+			}
+			
+			String staticStr = getDataStr(content, ";|\n", "var static_str");
+			if(StringUtils.isNotEmpty(staticStr))
+			{
+				int total = parseTotalCount(staticStr);
+				if(total > 0)
+				{
+					results.put(OkoooConstants.NAME_FIELD_CORP_TOTAL_NUM, total);
+				}
+			}			
+		}
+		catch (Exception e) {
+			logger.info("Error when parse the Odds records values.");
 		}
 		return results;
 	}
@@ -295,16 +310,23 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 	}
 	
 	/**
-	 * 解析统计数据
-	 * @param staticStr
+	 * 解析欧赔数据的总公司数量
+	 * @param staticStr 字符串
+	 * @return 数量
 	 */
-	protected int parseStaticInfo(String staticStr)
+	protected int parseTotalCount(String staticStr)
 	{
-		JSONObject object = JSON.parseObject(staticStr);
-		if(object != null)
+		try
 		{
-			return NumberUtil.parseInt(object.get("count"));
+			JSONObject object = JSON.parseObject(staticStr);
+			if(object != null)
+			{
+				return NumberUtil.parseInt(object.get("count"));
+			}
 		}
+		catch (Exception e) {
+			logger.info("Error when parse the yp total number.");
+		}		
 		return -1;
 	}
 }

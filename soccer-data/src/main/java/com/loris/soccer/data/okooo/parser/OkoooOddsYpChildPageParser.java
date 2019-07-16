@@ -72,16 +72,33 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 			return null;
 		}
 		
-		String content = scriptEl.data();
-		String dataStr = getDataStr(content, ";|\n", "var data_str");
-
+		//logger.info(page.getContent());
 		try
 		{
-			DataList<OkoooOddsYp> okoooOddsYps = new DataList<>();
-			DataList<CasinoComp> comps = new DataList<>();
-			comps.setOverwrite(false);
-					
-			parseJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsYps, comps);
+			String content = scriptEl.data();
+			String dataStr = getDataStr(content, ";|\n", "var data_str");
+			
+			if(StringUtils.isNoneBlank(dataStr))
+			{
+				DataList<OkoooOddsYp> okoooOddsYps = new DataList<>();
+				DataList<CasinoComp> comps = new DataList<>();
+				comps.setOverwrite(false);
+				
+				results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST, okoooOddsYps);
+				results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+				
+				parseJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsYps, comps);
+			}
+			
+			String staticStr = getDataStr(content, ";|\n", "var static_str");
+			if(StringUtils.isNotEmpty(staticStr))
+			{
+				int total = parseTotalCount(staticStr);
+				if(total > 0)
+				{
+					results.put(OkoooConstants.NAME_FIELD_CORP_TOTAL_NUM, total);
+				}
+			}			
 		}
 		catch(Exception e)
 		{
@@ -89,6 +106,7 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 			logger.info("Error when parse OddsYp: " + e.toString());
 			return null;
 		}
+		
 		return results;
 	}
 	
@@ -182,6 +200,8 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 			}*/
 		}
 		yps.add(firstYp);
+		yps.add(lastYp);
+		comps.add(comp);
 	}
 	
 	/**
@@ -278,4 +298,24 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 		}
 	}
 
+	/**
+	 * 解析亚盘数据的总公司数量
+	 * @param staticStr 字符串
+	 * @return 数量
+	 */
+	protected int parseTotalCount(String staticStr)
+	{
+		try
+		{
+			JSONObject object = JSON.parseObject(staticStr);
+			if(object != null)
+			{
+				return NumberUtil.parseInt(object.get("count"));
+			}
+		}
+		catch (Exception e) {
+			logger.info("Error when parse the yp total number.");
+		}		
+		return -1;
+	}
 }

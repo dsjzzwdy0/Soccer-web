@@ -21,6 +21,7 @@ import com.loris.client.fetcher.util.HttpUtil;
 import com.loris.client.model.WebPage;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.EncodingUtil;
+import com.loris.common.util.NumberUtil;
 import com.loris.common.util.URLUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import static com.loris.soccer.data.okooo.OkoooConstants.*;
@@ -39,6 +40,9 @@ public class OkoooPageCreator
 	/** 通用的页面编码 */
 	protected static String encoding = EncodingUtil.ENCODING_GB2312;
 	
+	/** 主机地址 */
+	protected static String host = "www.okooo.com";
+	
 	/** 数据类型与基础页面的对应工具 */
 	public static Map<String, Double> PAGE_PRIORITIES = new HashMap<>();
 	public static Map<String, String> PAGE_BASE_URLS = new HashMap<>();
@@ -54,6 +58,8 @@ public class OkoooPageCreator
 		PAGE_BASE_URLS.put(PAGE_SCORE_JC, 			"http://www.okooo.com/jingcai/");
 		PAGE_BASE_URLS.put(PAGE_ODDS_OP,      		"http://www.okooo.com/soccer/match/"); 	// http://www.okooo.com/soccer/match/1061305/odds/
 		PAGE_BASE_URLS.put(PAGE_ODDS_YP,      		"http://www.okooo.com/soccer/match/"); 	// http://www.okooo.com/soccer/match/1061305/ah/
+		PAGE_BASE_URLS.put(PAGE_ODDS_OP_CHILD, 		"http://www.okooo.com/soccer/match/");	// http://www.okooo.com/soccer/match/1049273/odds/ajax/?page=5&trnum=150&companytype=BaijiaBooks&type=0
+		PAGE_BASE_URLS.put(PAGE_ODDS_YP_CHILD, 		"http://www.okooo.com/soccer/match/");	// http://www.okooo.com/soccer/match/1049273/ah/ajax/?page=2&trnum=60&companytype=BaijiaBooks
 	}
 	
 	/**
@@ -99,7 +105,6 @@ public class OkoooPageCreator
 		page.setCreatetime(new Date());
 		page.setSource(SOURCE_OKOOO);		
 		page.setPriority(getDefaultPriority(type, params));
-		
 		page.setEncoding(encoding);
 		page.setMethod(getHttpMethod(type));
 		page.setUrl(createURL(type, params));
@@ -157,8 +162,33 @@ public class OkoooPageCreator
 	 */
 	protected static void setHeaders(WebPage page)
 	{
+		Map<String, String> headers = null;
+		String referer = null;
+		
 		switch (page.getType())
 		{
+		case PAGE_ODDS_OP:
+		case PAGE_ODDS_YP:
+			/*headers = page.getHeaders();
+			referer = createURL(OkoooConstants.PAGE_SCORE_BD, page.getParams());
+			headers.put("Host", host);
+			headers.put("Referer", referer);
+			page.setHeaders(headers);*/
+			break;
+		case PAGE_ODDS_OP_CHILD:
+			headers = page.getHeaders();
+			referer = createURL(OkoooConstants.PAGE_ODDS_OP, page.getParams());
+			headers.put("Host", host);
+			headers.put("Referer", referer);
+			headers.put("X-Requested-With", "XMLHttpRequest");			
+			break;
+		case PAGE_ODDS_YP_CHILD:
+			headers = page.getHeaders();
+			referer = createURL(OkoooConstants.PAGE_ODDS_YP, page.getParams());
+			headers.put("Host", host);
+			headers.put("Referer", referer);
+			headers.put("X-Requested-With", "XMLHttpRequest");
+			break;
 		/*case PAGE_LEAGUE_LEAGUE_ROUND:
 			Map<String, String> headers = page.getHeaders();
 			String baseUrl = PAGE_BASE_URLS.get(page.getType());
@@ -184,6 +214,8 @@ public class OkoooPageCreator
 	protected static String createURL(String type, Map<String, String> params)
 	{
 		String baseURL = PAGE_BASE_URLS.get(type);
+		String page = null;
+		int pageIndex = 0;
 		switch (type)
 		{
 		case PAGE_ODDS_OP:				//百家OP页面
@@ -193,6 +225,20 @@ public class OkoooPageCreator
 		case PAGE_ODDS_YP:
 			checkParams(params, SoccerConstants.NAME_FIELD_MID);	//亚盘
 			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ah/";
+			break;
+		case PAGE_ODDS_YP_CHILD:
+			page = params.get(SoccerConstants.NAME_FIELD_PAGE);
+			if(StringUtils.isNotEmpty(page))  pageIndex = NumberUtil.parseInt(page);
+			if(pageIndex < 0) pageIndex = 0;
+			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ah/ajax/?";
+			baseURL += "page=" + pageIndex + "&trnum=" + (pageIndex * 30) + "&companytype=BaijiaBooks";
+			break;
+		case PAGE_ODDS_OP_CHILD:
+			page = params.get(SoccerConstants.NAME_FIELD_PAGE);
+			if(StringUtils.isNotEmpty(page))  pageIndex = NumberUtil.parseInt(page);
+			if(pageIndex < 0) pageIndex = 0;
+			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/odds/ajax/?";
+			baseURL += "page=" + pageIndex + "&trnum=" + (pageIndex * 30) + "&companytype=BaijiaBooks&type=0";
 			break;
 		default:
 			baseURL = URLUtil.makeDefaultUrl(baseURL, params);

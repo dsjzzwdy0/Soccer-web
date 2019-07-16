@@ -98,6 +98,7 @@ public interface SoccerConstants
 	final static public String NAME_FIELD_TID = "tid";
 	final static public String NAME_FIELD_ROUND = "round";
 	final static public String NAME_FIELD_CORPID = "corpid";
+	final static public String NAME_FIELD_PAGE = "page";
 	
 	/** 图标的类型 */
 	final static public String LOGO_TYPE_LEAGUE = "league";

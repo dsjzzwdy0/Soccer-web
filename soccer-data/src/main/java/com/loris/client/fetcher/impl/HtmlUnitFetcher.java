@@ -238,6 +238,7 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 	protected void createWebClient()
 	{
 		client = new WebClient(BrowserVersion.CHROME);
+		client.getOptions().setUseInsecureSSL(true);
 		client.getOptions().setJavaScriptEnabled(true);
 		client.getOptions().setCssEnabled(false);
 		client.getCookieManager().setCookiesEnabled(true);
@@ -245,6 +246,8 @@ public class HtmlUnitFetcher extends AbstractWebFetcher
 		client.getOptions().setThrowExceptionOnScriptError(false);            	// js运行错误时，是否抛出异常
 		client.getOptions().setTimeout(setting.getConnectionTimeout()); 		// 设置连接超时时间// ，这里是10S。如果为0，则无限期等;
 		client.waitForBackgroundJavaScript(waitForBackgroundJavaScript);
+		client.setJavaScriptTimeout(5*1000);
+		client.getOptions().setDoNotTrackEnabled(true);
 	}
 
 	/**

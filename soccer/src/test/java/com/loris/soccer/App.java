@@ -67,7 +67,7 @@ import com.loris.soccer.data.ZgzcwLeagueDataPlugin;
 import com.loris.soccer.data.ZgzcwMatchResultDataPlugin;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.OkoooPageCreator;
-import com.loris.soccer.data.okooo.parser.OkoooJcPageParser;
+import com.loris.soccer.data.okooo.OkoooPageParser;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -95,6 +95,8 @@ import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
+import com.loris.soccer.model.OkoooOddsOp;
+import com.loris.soccer.model.OkoooOddsYp;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.view.MatchInfo;
@@ -139,8 +141,9 @@ public class App
 			// testSourceFinance();
 			// testStat();
 			// testTeamRating();
+			// testOkooo();
 			
-			testOkooo();
+			testOkoooOdds();
 			
 			// testSigmoid();
 			// testMariaDB();
@@ -185,6 +188,54 @@ public class App
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static void testOkoooOdds() throws Exception
+	{
+		String mid = "1049271";
+		String matchtime = "2019-07-16 01:00";
+		
+		KeyMap params = new KeyMap();
+		params.put(SoccerConstants.NAME_FIELD_MID, mid);
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, matchtime);
+		params.put(SoccerConstants.NAME_FIELD_PAGE, "0");
+		
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_ODDS_OP_CHILD, params);
+		if(downloadOkoooPage(page))
+		{
+			TableRecords records = OkoooPageParser.parseWebPage(page);
+			if(records == null)
+			{
+				logger.info("The record table is null.");
+				return;
+			}
+			
+			for (String key : records.keySet())
+			{
+				logger.info(key);
+				switch (key)
+				{
+				case SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST:
+					List<OkoooOddsOp> ops = (List<OkoooOddsOp>)records.get(key);
+					for (OkoooOddsOp okoooOddsOp : ops)
+					{
+						logger.info(okoooOddsOp);
+					}
+					break;
+				case SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST:
+					List<OkoooOddsYp> yps = (List<OkoooOddsYp>) records.get(key);
+					for (OkoooOddsYp okoooOddsYp : yps)
+					{
+						logger.info(okoooOddsYp);
+					}
+					break;
+				default:
+					logger.info(records.get(key));
+					break;
+				}
+			}
+		}
+	}
+	
 	@SuppressWarnings("unchecked") 
 	public static void testOkooo() throws Exception
 	{
@@ -192,8 +243,7 @@ public class App
 		logger.info("Download: " + page.getUrl());
 		if(downloadOkoooPage(page))
 		{
-			OkoooJcPageParser parser = new OkoooJcPageParser();
-			TableRecords records = parser.parse(page);
+			TableRecords records = OkoooPageParser.parseWebPage(page);
 			if(records == null)
 			{
 				logger.info("The record table is null.");

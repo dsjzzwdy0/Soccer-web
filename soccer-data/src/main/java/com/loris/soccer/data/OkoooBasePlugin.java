@@ -33,12 +33,17 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
+import com.loris.client.task.util.ThreadUtil;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.TableRecords;
-import com.loris.common.util.DateUtil;
+import com.loris.soccer.collection.base.DataList;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.okooo.OkoooConstants;
+import com.loris.soccer.data.okooo.OkoooPageParser;
+import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.OkoooOddsOp;
 import com.loris.soccer.model.OkoooOddsYp;
-import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.DataService;
 
 /**   
@@ -202,14 +207,28 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @throws HostForbiddenException
 	 * @throws UrlFetchException
 	 */
-	protected TableRecords download(WebPage page) throws IOException, HostForbiddenException, UrlFetchException
+	protected TableRecords download(WebPage page) throws IOException, HostForbiddenException, UrlFetchException, WebParserException
 	{
 		logger.info("Starting get the data from : " + page.getUrl() 
 			+ (StringUtils.isEmpty(page.getParamstext()) ? "" : ", params:" + page.getParamstext()) );
-		if(!webPagefetcher.download(page))
+		
+		TableRecords records = null;
+		switch (page.getType())
 		{
-			logger.warn("Error occured when HtmlUnitFetcher execute: " + page.getUrl());
-			return null;
+		case OkoooConstants.PAGE_SCORE_BD:
+		case OkoooConstants.PAGE_SCORE_JC:
+			if(!webPagefetcher.download(page))
+			{
+				logger.warn("Error occured when HtmlUnitFetcher execute: " + page.getUrl());
+				return null;
+			}
+			records = OkoooPageParser.parseWebPage(page);
+			break;
+		case OkoooConstants.PAGE_ODDS_OP:
+			
+			break;
+		default:
+			break;
 		}
 		
 		try
@@ -219,70 +238,135 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		catch (Exception e) {
 			logger.info("Error occured when save the page: " + page.getUrl());
 		}
-		return null;
+		return records;
 	}
 	
 	/**
-	 * 每一个亚盘页面的数据下载都不能完全一次性进行下载，必须对数据进行多次请求
-	 * @return 下载是否成功的标志
+	 * 下载澳客网赔率数据页面
+	 * @param fetcher
+	 * @param page
+	 * @return
 	 * @throws IOException
 	 * @throws HostForbiddenException
 	 * @throws UrlFetchException
+	 * @throws WebParserException
 	 */
-	protected boolean downloadMoreOpPages() throws IOException, HostForbiddenException, UrlFetchException
+	public static TableRecords downloadOkoooOddsPage(HtmlUnitFetcher fetcher, WebPage page) 
+			throws IOException, HostForbiddenException, UrlFetchException, WebParserException
 	{
-		return true;
+		TableRecords results = null;
+		int totalComps = 0;				//总的单位家数		
+		String type = null;
+		switch (page.getType())
+		{
+		case OkoooConstants.PAGE_ODDS_YP:
+			type = OkoooConstants.PAGE_ODDS_YP_CHILD;
+			break;
+		case OkoooConstants.PAGE_ODDS_OP:
+			type = OkoooConstants.PAGE_ODDS_OP_CHILD;
+			break;
+		case OkoooConstants.PAGE_ODDS_OP_CHILD:
+		case OkoooConstants.PAGE_ODDS_YP_CHILD:
+			type = page.getType();
+			break;
+		default:
+			logger.info("The page type is '" + page.getType() + "' is not supported by the downloadOkoooOddsPage method.");
+			return null;
+		}
+		
+		page.setType(type);		
+		while(fetcher.download(page))
+		{
+			TableRecords records = OkoooPageParser.parseWebPage(page);
+			
+			//如果是记录数据为空，则跳出循环
+			if(records == null || records.isEmpty())
+			{
+				break;
+			}
+			
+			if(results == null)
+			{
+				results = records;
+			}
+			else
+			{
+				combineOkoooOddsTableRecords(results, records);
+			}			
+			
+			//为了模拟人为操作，需要进行等待
+			ThreadUtil.sleep(1000);
+		}
+
+		return results;
 	}
 	
 	/**
-	 * 下载更多的亚盘数据
-	 * @param match
-	 * @param yps
+	 * 合并两个数据记录
+	 * @param dest 
+	 * @param newRecords
 	 */
-	protected void downloadMoreYPRecords(MatchItem match, List<OkoooOddsYp> yps, int pageIndex)
+	@SuppressWarnings("unchecked")
+	protected static void combineOkoooOddsTableRecords(TableRecords dest, TableRecords newRecords)
 	{
-		//为了不被网站封停，需要对下载时间作一些调整，暂停下载数据
-		try
+		for (String key : newRecords.keySet())
 		{
-			Thread.sleep(childInterval);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		try
-		{
-			OkoooRequestHeaderWebPage morePage = OkoooPageCreator.createYpPageWebPage(match.getMid(), pageIndex);
-			logger.info("Downloading '" + match.getMid() + "' page " + pageIndex);
-			
-			//数据下载
-			if(!download(morePage))
+			Object value = newRecords.get(key);
+			switch (key)
 			{
-				return;
-			}
-			OddsYpChildParser parser = new OddsYpChildParser();
-			parser.setMid(match.getMid());			
-			parser.setMatchTime(DateUtil.tryToParseDate(morePage.getLoadtime()));
-			
-			//解析数据
-			if(parser.parseWebPage(morePage))
-			{
-				//int k = 1;
-				List<OkoooOddsYp> moreYps = parser.getYps();
-				yps.addAll(moreYps);
+			case SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST:
+				List<CasinoComp> newComps = (List<CasinoComp>)value;
+				DataList<CasinoComp> destComps = (DataList<CasinoComp>) dest.get(key);
 				
-				//判断是否有更多的数据需要下载
-				if(moreYps.size() >= 30)
+				if(destComps == null)
 				{
-					downloadMoreYPRecords(match, yps, (pageIndex +1));
+					dest.put(key, value);
 				}
+				else
+				{
+					combineList(destComps, newComps);
+				}
+				break;
+			case SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST:
+				List<OkoooOddsOp> newOps = (List<OkoooOddsOp>)value;
+				DataList<OkoooOddsOp> destOps = (DataList<OkoooOddsOp>)dest.get(key);
+				if(destOps == null)
+				{
+					dest.put(key, value);
+				}
+				else
+				{
+					combineList(destOps, newOps);
+				}
+				break;
+			case SoccerConstants.SOCCER_DATA_RECORD_ODDS_YP_LIST:
+				List<OkoooOddsYp> newYps = (List<OkoooOddsYp>)value;
+				DataList<OkoooOddsYp> destYps = (DataList<OkoooOddsYp>)dest.get(key);
+				if(destYps == null)
+				{
+					dest.put(key, value);
+				}
+				else
+				{
+					combineList(destYps, newYps);
+				}
+				break;
+			default:
+				break;
 			}
 		}
-		catch(Exception e)
+	}
+	
+	/**
+	 * 添加数据到现有的记录中
+	 * @param source
+	 * @param dest
+	 */
+	protected static <T> void combineList(DataList<T> dest, List<T> source)
+	{
+		for (T object : source)
 		{
-			logger.info("Error when downloading more OkoooYpPages: " + pageIndex);
+			dest.add(object);
 		}
-		return;
 	}
 }
