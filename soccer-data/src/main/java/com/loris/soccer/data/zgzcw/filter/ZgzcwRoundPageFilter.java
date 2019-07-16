@@ -9,13 +9,14 @@
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司传阅，禁止外泄以及用于其他的商业目
  */
-package com.loris.soccer.filter;
+package com.loris.soccer.data.zgzcw.filter;
 
 import java.util.Date;
 
 import com.loris.client.model.WebPage;
 import com.loris.common.util.ToolUtil;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.filter.WebPageFilter;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.view.RoundInfo;
 import com.loris.soccer.model.view.SeasonInfo;

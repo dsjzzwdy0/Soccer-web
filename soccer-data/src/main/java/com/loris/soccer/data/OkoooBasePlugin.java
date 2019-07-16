@@ -14,6 +14,8 @@ package com.loris.soccer.data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +48,10 @@ import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.data.okooo.OkoooPageParser;
+import com.loris.soccer.data.okooo.filter.OkoooPageFilter;
 import com.loris.soccer.data.okooo.util.OkoooUtil;
+import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.filter.LatestMatchFilter;
 import com.loris.soccer.filter.WebPageFilter;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.DataService;
@@ -81,15 +86,19 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	/** 过滤器 */
 	protected WebPageFilter webPageFilter = null;
 	
+	/** 注册的过滤器 */
+	private Map<String, Filter<?>> filters = new HashMap<>();
+	
 	/** 下载子页面时等候的时间 */
 	protected int childInterval = 1000;
 	
 	/**
-	 * @param name
+	 * Create a new instance of ZgzcwBasePlugin.
 	 */
-	public OkoooBasePlugin(String name)
+	public OkoooBasePlugin(String name, WebPageProperties webPageConf)
 	{
 		super(name);
+		this.webPageConf = webPageConf;
 	}
 
 	/**
@@ -115,12 +124,44 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		catch(Exception e)
 		{
-			throw new IllegalArgumentException("Error occured when HttpCommonFetcher init().");
+			throw new IllegalArgumentException("Error occured when HtmlUnitFetcher init().");
 		}
 		
 		//初始化过滤器
-		//initFilter(context);
+		initFilter(context);
 		initialized = true;
+	}
+	
+	/**
+	 * 初始化过滤器 
+	 */
+	protected void initFilter(TaskPluginContext context)
+	{
+		if(webPageFilter == null)
+		{
+			webPageFilter = this.createDefaultWebPageFilter();
+		}
+		
+		if(webPageFilter != null && !webPageFilter.isInitialized())
+		{
+			webPageFilter.initialize();
+		}
+		
+		filters.put(SoccerConstants.SOCCER_DATA_MATCH, 
+				new LatestMatchFilter(webPageConf.getNumDayOfHasOdds(), webPageConf.getDayNumOfGetPages()));
+	}
+	
+	/**
+	 * 创建默认的页面过滤器
+	 * @return
+	 */
+	protected WebPageFilter createDefaultWebPageFilter()
+	{
+		OkoooPageFilter filter = new OkoooPageFilter();
+		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
+		//registerProcessPageTypes(filter);
+		return filter;
 	}
 
 	/**
