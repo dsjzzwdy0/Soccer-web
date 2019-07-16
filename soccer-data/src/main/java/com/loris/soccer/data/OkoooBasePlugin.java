@@ -36,6 +36,7 @@ import com.loris.client.task.plugin.TaskProducePlugin;
 import com.loris.client.task.util.ThreadUtil;
 import com.loris.common.context.ApplicationContextHelper;
 import com.loris.common.model.TableRecords;
+import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
@@ -255,7 +256,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			throws IOException, HostForbiddenException, UrlFetchException, WebParserException
 	{
 		TableRecords results = null;
-		int totalComps = 0;				//总的单位家数		
+		int totalComps = 0;				//总的单位家数
 		String type = null;
 		switch (page.getType())
 		{
@@ -292,7 +293,12 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			else
 			{
 				combineOkoooOddsTableRecords(results, records);
-			}			
+			}
+			
+			if(totalComps <= 0)
+			{
+				totalComps = getCompsTotalNum(records);
+			}
 			
 			//为了模拟人为操作，需要进行等待
 			ThreadUtil.sleep(1000);
@@ -368,5 +374,16 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		{
 			dest.add(object);
 		}
+	}
+	
+	/**
+	 * 获得总的单位数
+	 * @param records 记录值
+	 * @return 数据量
+	 */
+	protected static int getCompsTotalNum(TableRecords records)
+	{
+		Integer t = (Integer)records.get(OkoooConstants.NAME_FIELD_CORP_TOTAL_NUM);
+		return t == null ? 0 : t;
 	}
 }
