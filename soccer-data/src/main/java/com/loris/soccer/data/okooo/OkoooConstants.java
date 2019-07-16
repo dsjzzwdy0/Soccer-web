@@ -25,8 +25,8 @@ public interface OkoooConstants
 	/** 数据来源定义 */
 	public static final String SOURCE_OKOOO = "okooo";
 	
-	public static final String PAGE_SCORE_BD = "okooo_bd";
-	public static final String PAGE_SCORE_JC = "okooo_jc";
+	public static final String PAGE_LOTTERY_BD = "okooo_bd";
+	public static final String PAGE_LOTTERY_JC = "okooo_jc";
 	public static final String PAGE_ODDS_OP = "okooo_op";
 	public static final String PAGE_ODDS_YP = "okooo_yp";
 	public static final String PAGE_ODDS_OP_CHILD = "okooo_op_child";

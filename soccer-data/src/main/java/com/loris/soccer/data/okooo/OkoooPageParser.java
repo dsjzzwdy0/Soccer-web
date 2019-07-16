@@ -41,8 +41,8 @@ public class OkoooPageParser
 	
 	static
 	{
-		parsers.put(OkoooConstants.PAGE_SCORE_BD, new OkoooBdPageParser());
-		parsers.put(OkoooConstants.PAGE_SCORE_JC, new OkoooJcPageParser());
+		parsers.put(OkoooConstants.PAGE_LOTTERY_BD, new OkoooBdPageParser());
+		parsers.put(OkoooConstants.PAGE_LOTTERY_JC, new OkoooJcPageParser());
 		parsers.put(OkoooConstants.PAGE_ODDS_OP, new OkoooOddsOpPageParser());
 		parsers.put(OkoooConstants.PAGE_ODDS_YP, new OkoooOddsYpPageParser());
 		parsers.put(OkoooConstants.PAGE_ODDS_YP_CHILD, new OkoooOddsYpChildPageParser());

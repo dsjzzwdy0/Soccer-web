@@ -52,7 +52,7 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 	 */
 	public OkoooBdPageParser()
 	{
-		super(OkoooConstants.PAGE_SCORE_BD);
+		super(OkoooConstants.PAGE_LOTTERY_BD);
 	}
 
 	/**

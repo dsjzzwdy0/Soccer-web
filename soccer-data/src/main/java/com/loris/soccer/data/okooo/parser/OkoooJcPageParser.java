@@ -51,7 +51,7 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 	 */
 	public OkoooJcPageParser()
 	{
-		super(OkoooConstants.PAGE_SCORE_JC);
+		super(OkoooConstants.PAGE_LOTTERY_JC);
 	}
 
 	/**

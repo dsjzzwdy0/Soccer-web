@@ -68,6 +68,7 @@ import com.loris.soccer.data.ZgzcwMatchResultDataPlugin;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.data.okooo.OkoooPageParser;
+import com.loris.soccer.data.okooo.util.OkoooUtil;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -199,27 +200,29 @@ public class App
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, matchtime);
 		params.put(SoccerConstants.NAME_FIELD_PAGE, "0");
 		
-		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_ODDS_OP_CHILD, params);
-		if(downloadOkoooPage(page))
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_ODDS_YP_CHILD, params);
+		
+		try(HtmlUnitFetcher fetcher = createHtmlUnitFetcher())
 		{
-			TableRecords records = OkoooPageParser.parseWebPage(page);
+			TableRecords records = OkoooUtil.downloadOkoooOddsPage(fetcher, page);
 			if(records == null)
 			{
 				logger.info("The record table is null.");
 				return;
 			}
-			
+
 			for (String key : records.keySet())
 			{
 				logger.info(key);
 				switch (key)
 				{
 				case SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST:
-					List<OkoooOddsOp> ops = (List<OkoooOddsOp>)records.get(key);
+					List<OkoooOddsOp> ops = (List<OkoooOddsOp>) records.get(key);
 					for (OkoooOddsOp okoooOddsOp : ops)
 					{
 						logger.info(okoooOddsOp);
 					}
+					logger.info("Total ops number is " + ops.size());
 					break;
 				case SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST:
 					List<OkoooOddsYp> yps = (List<OkoooOddsYp>) records.get(key);
@@ -227,11 +230,13 @@ public class App
 					{
 						logger.info(okoooOddsYp);
 					}
+					logger.info("Total yps number is " + yps.size());
 					break;
 				default:
 					logger.info(records.get(key));
 					break;
 				}
+
 			}
 		}
 	}
@@ -239,7 +244,7 @@ public class App
 	@SuppressWarnings("unchecked") 
 	public static void testOkooo() throws Exception
 	{
-		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_SCORE_JC);
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_LOTTERY_JC);
 		logger.info("Download: " + page.getUrl());
 		if(downloadOkoooPage(page))
 		{
@@ -1379,6 +1384,20 @@ public class App
 			logger.info("Get web page spend time is " + (en - st) + " ms.");
 			return true;
 		}
+	}
+	
+	/**
+	 * 创建下载管理器
+	 * @return
+	 * @throws Exception
+	 */
+	private static HtmlUnitFetcher createHtmlUnitFetcher() throws Exception
+	{
+		FetcherSetting setting = (FetcherSetting) context.getBean("okoooSetting");
+		WebPage basePage = (WebPage) context.getBean("okoooWebPage");
+		HtmlUnitFetcher client = new HtmlUnitFetcher(setting, basePage);
+		client.init();
+		return client;
 	}
 
 	/**

@@ -13,7 +13,9 @@ package com.loris.soccer.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -33,18 +35,20 @@ import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.BasicWebPageTaskPlugin;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
-import com.loris.client.task.util.ThreadUtil;
 import com.loris.common.context.ApplicationContextHelper;
+import com.loris.common.filter.Filter;
 import com.loris.common.model.TableRecords;
-import com.loris.common.util.NumberUtil;
-import com.loris.soccer.collection.base.DataList;
+import com.loris.common.util.DateUtil;
+import com.loris.common.util.KeyMap;
+import com.loris.common.util.ToolUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.okooo.OkoooConstants;
+import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.data.okooo.OkoooPageParser;
-import com.loris.soccer.model.CasinoComp;
-import com.loris.soccer.model.OkoooOddsOp;
-import com.loris.soccer.model.OkoooOddsYp;
+import com.loris.soccer.data.okooo.util.OkoooUtil;
+import com.loris.soccer.filter.WebPageFilter;
+import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.DataService;
 
 /**   
@@ -73,6 +77,9 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	@Autowired
 	protected WebPageService pageService;
+	
+	/** 过滤器 */
+	protected WebPageFilter webPageFilter = null;
 	
 	/** 下载子页面时等候的时间 */
 	protected int childInterval = 1000;
@@ -121,8 +128,15 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @see com.loris.client.task.plugin.TaskProcessPlugin#execute(com.loris.client.task.context.TaskPluginContext, com.loris.client.task.Task)
 	 */
 	@Override
-	public abstract boolean execute(TaskPluginContext context, Task task)
-			throws UrlFetchException, WebParserException, IOException, HostForbiddenException, SQLException;
+	public boolean execute(TaskPluginContext context, Task task)
+			throws UrlFetchException, WebParserException, IOException, HostForbiddenException, SQLException
+	{
+		if (!(task instanceof WebPage))
+		{
+			return false;
+		}
+		return executeWebPageTask(context, (WebPage) task);
+	}
 	
 
 	/**
@@ -137,9 +151,122 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param type
 	 * @param records
 	 */
-	protected void produceTask(String type, TableRecords records)
+	protected void produceTask(String pageType, TableRecords records)
 	{
+		// 通过不同的页面进行数据处理
+		switch (pageType)
+		{
+		case OkoooConstants.PAGE_LOTTERY_BD:
+		case OkoooConstants.PAGE_LOTTERY_JC:
+			
+			break;
+		default:
+			break;
+		}
+	}
+	
+	/**
+	 * 创建比赛数据下载任务
+	 * @param matchItems 数据列表
+	 * @param filter 过滤器
+	 * @return 是否创建的数据量大小0
+	 */
+	protected <T extends MatchItem> boolean createMatchTasks(List<T> matchItems, Filter<MatchItem> filter)
+	{
+		if(matchItems == null || matchItems.size() == 0)
+		{
+			logger.warn("There are no MatchItems in the match item list.");
+			return false;
+		}
 		
+		logger.info("There are " + matchItems.size() + " matches in the list.");
+		int size = 0;
+		
+		List<String> types = getMatchDataTypes();
+		if(types.size() == 0)
+		{
+			logger.info("There are no match data type defined in the WebPageProperties.");
+			return false;
+		}
+		
+		for (T matchItem : matchItems)
+		{
+			if (filter == null || filter.accept(matchItem))
+			{
+				if(ToolUtil.isEmpty(matchItem.getMatchtime()))
+				{
+					logger.info("Match has no matchtime property: " + matchItem);
+					continue;
+				}
+				createMatchDataTask(types, matchItem, false);
+				size ++;
+			}
+		}
+		return size > 0;
+	}
+	
+	/**
+	 * 建立比赛的数据下载任务
+	 * @param match 比赛数据
+	 * @param hasOp 是否下载欧赔数据
+	 * @param hasYp 是否下载亚盘数据
+	 * @param hasNum 是否下载大小球数据
+	 */
+	protected int createMatchDataTask(List<String> types, MatchItem match, boolean quiet)
+	{
+		Map<String, String> params = new KeyMap(SoccerConstants.NAME_FIELD_MID, match.getMid());		
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, DateUtil.formatDateTime(match.getMatchtime()));
+		
+		int size = 0;
+		for (String type : types)
+		{
+			if(createWebPageTask(OkoooPageCreator.createOkoooWebPage(type, params), match, quiet))
+				size ++;
+		}
+		return size;
+	}
+	
+	/**
+	 * 处理创建的页面
+	 * @param page 网络下载页面
+	 * @param quiet 是否通知处理器
+	 * @return 返回创建的标志
+	 */
+	protected<T> boolean createWebPageTask(WebPage page, T source, boolean quiet)
+	{
+		if(webPageFilter != null && !webPageFilter.accept(page, source))
+		{
+			return false;
+		}
+		return super.createWebPageTask(page, quiet);
+	}
+	
+	/**
+	 * 获得比赛数据的类型页面
+	 * @return 比赛数据
+	 */
+	protected List<String> getMatchDataTypes()
+	{
+		List<String> types = new ArrayList<>();
+		
+		for (String key : webPageConf.getPageBeCreated().keySet())
+		{
+			if(webPageConf.isPageBeCreated(key))
+			{
+				types.add(key);
+			}
+		}
+		
+		if (webPageConf.isPageBeCreated(OkoooConstants.PAGE_ODDS_OP))
+		{
+			types.add(OkoooConstants.PAGE_ODDS_OP);
+		}
+		if (webPageConf.isPageBeCreated(OkoooConstants.PAGE_ODDS_YP))
+		{
+			types.add(OkoooConstants.PAGE_ODDS_YP);
+		}
+
+		return types;
 	}
 	
 	/**
@@ -216,8 +343,8 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		TableRecords records = null;
 		switch (page.getType())
 		{
-		case OkoooConstants.PAGE_SCORE_BD:
-		case OkoooConstants.PAGE_SCORE_JC:
+		case OkoooConstants.PAGE_LOTTERY_BD:
+		case OkoooConstants.PAGE_LOTTERY_JC:
 			if(!webPagefetcher.download(page))
 			{
 				logger.warn("Error occured when HtmlUnitFetcher execute: " + page.getUrl());
@@ -226,7 +353,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			records = OkoooPageParser.parseWebPage(page);
 			break;
 		case OkoooConstants.PAGE_ODDS_OP:
-			
+			records = OkoooUtil.downloadOkoooOddsPage((HtmlUnitFetcher)webPagefetcher, page);
 			break;
 		default:
 			break;
@@ -240,150 +367,5 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			logger.info("Error occured when save the page: " + page.getUrl());
 		}
 		return records;
-	}
-	
-	/**
-	 * 下载澳客网赔率数据页面
-	 * @param fetcher
-	 * @param page
-	 * @return
-	 * @throws IOException
-	 * @throws HostForbiddenException
-	 * @throws UrlFetchException
-	 * @throws WebParserException
-	 */
-	public static TableRecords downloadOkoooOddsPage(HtmlUnitFetcher fetcher, WebPage page) 
-			throws IOException, HostForbiddenException, UrlFetchException, WebParserException
-	{
-		TableRecords results = null;
-		int totalComps = 0;				//总的单位家数
-		String type = null;
-		switch (page.getType())
-		{
-		case OkoooConstants.PAGE_ODDS_YP:
-			type = OkoooConstants.PAGE_ODDS_YP_CHILD;
-			break;
-		case OkoooConstants.PAGE_ODDS_OP:
-			type = OkoooConstants.PAGE_ODDS_OP_CHILD;
-			break;
-		case OkoooConstants.PAGE_ODDS_OP_CHILD:
-		case OkoooConstants.PAGE_ODDS_YP_CHILD:
-			type = page.getType();
-			break;
-		default:
-			logger.info("The page type is '" + page.getType() + "' is not supported by the downloadOkoooOddsPage method.");
-			return null;
-		}
-		
-		page.setType(type);		
-		while(fetcher.download(page))
-		{
-			TableRecords records = OkoooPageParser.parseWebPage(page);
-			
-			//如果是记录数据为空，则跳出循环
-			if(records == null || records.isEmpty())
-			{
-				break;
-			}
-			
-			if(results == null)
-			{
-				results = records;
-			}
-			else
-			{
-				combineOkoooOddsTableRecords(results, records);
-			}
-			
-			if(totalComps <= 0)
-			{
-				totalComps = getCompsTotalNum(records);
-			}
-			
-			//为了模拟人为操作，需要进行等待
-			ThreadUtil.sleep(1000);
-		}
-
-		return results;
-	}
-	
-	/**
-	 * 合并两个数据记录
-	 * @param dest 
-	 * @param newRecords
-	 */
-	@SuppressWarnings("unchecked")
-	protected static void combineOkoooOddsTableRecords(TableRecords dest, TableRecords newRecords)
-	{
-		for (String key : newRecords.keySet())
-		{
-			Object value = newRecords.get(key);
-			switch (key)
-			{
-			case SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST:
-				List<CasinoComp> newComps = (List<CasinoComp>)value;
-				DataList<CasinoComp> destComps = (DataList<CasinoComp>) dest.get(key);
-				
-				if(destComps == null)
-				{
-					dest.put(key, value);
-				}
-				else
-				{
-					combineList(destComps, newComps);
-				}
-				break;
-			case SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST:
-				List<OkoooOddsOp> newOps = (List<OkoooOddsOp>)value;
-				DataList<OkoooOddsOp> destOps = (DataList<OkoooOddsOp>)dest.get(key);
-				if(destOps == null)
-				{
-					dest.put(key, value);
-				}
-				else
-				{
-					combineList(destOps, newOps);
-				}
-				break;
-			case SoccerConstants.SOCCER_DATA_RECORD_ODDS_YP_LIST:
-				List<OkoooOddsYp> newYps = (List<OkoooOddsYp>)value;
-				DataList<OkoooOddsYp> destYps = (DataList<OkoooOddsYp>)dest.get(key);
-				if(destYps == null)
-				{
-					dest.put(key, value);
-				}
-				else
-				{
-					combineList(destYps, newYps);
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	}
-	
-	/**
-	 * 添加数据到现有的记录中
-	 * @param source
-	 * @param dest
-	 */
-	protected static <T> void combineList(DataList<T> dest, List<T> source)
-	{
-		for (T object : source)
-		{
-			dest.add(object);
-		}
-	}
-	
-	/**
-	 * 获得总的单位数
-	 * @param records 记录值
-	 * @return 数据量
-	 */
-	protected static int getCompsTotalNum(TableRecords records)
-	{
-		Integer t = (Integer)records.get(OkoooConstants.NAME_FIELD_CORP_TOTAL_NUM);
-		return t == null ? 0 : t;
 	}
 }

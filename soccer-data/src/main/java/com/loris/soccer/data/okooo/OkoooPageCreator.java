@@ -49,13 +49,13 @@ public class OkoooPageCreator
 	
 	static
 	{
-		PAGE_PRIORITIES.put(PAGE_SCORE_BD, 3500.0);
-		PAGE_PRIORITIES.put(PAGE_SCORE_JC, 3500.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_BD, 3500.0);
+		PAGE_PRIORITIES.put(PAGE_LOTTERY_JC, 3500.0);
 		PAGE_PRIORITIES.put(PAGE_ODDS_OP, 1000.0);
 		PAGE_PRIORITIES.put(PAGE_ODDS_YP, 1000.0);
 		
-		PAGE_BASE_URLS.put(PAGE_SCORE_BD, 			"http://www.okooo.com/danchang/");    	//&issue=
-		PAGE_BASE_URLS.put(PAGE_SCORE_JC, 			"http://www.okooo.com/jingcai/");
+		PAGE_BASE_URLS.put(PAGE_LOTTERY_BD, 			"http://www.okooo.com/danchang/");    	//&issue=
+		PAGE_BASE_URLS.put(PAGE_LOTTERY_JC, 			"http://www.okooo.com/jingcai/");
 		PAGE_BASE_URLS.put(PAGE_ODDS_OP,      		"http://www.okooo.com/soccer/match/"); 	// http://www.okooo.com/soccer/match/1061305/odds/
 		PAGE_BASE_URLS.put(PAGE_ODDS_YP,      		"http://www.okooo.com/soccer/match/"); 	// http://www.okooo.com/soccer/match/1061305/ah/
 		PAGE_BASE_URLS.put(PAGE_ODDS_OP_CHILD, 		"http://www.okooo.com/soccer/match/");	// http://www.okooo.com/soccer/match/1049273/odds/ajax/?page=5&trnum=150&companytype=BaijiaBooks&type=0
@@ -216,6 +216,7 @@ public class OkoooPageCreator
 		String baseURL = PAGE_BASE_URLS.get(type);
 		String page = null;
 		int pageIndex = 0;
+		int perPage = 30;
 		switch (type)
 		{
 		case PAGE_ODDS_OP:				//百家OP页面
@@ -231,14 +232,14 @@ public class OkoooPageCreator
 			if(StringUtils.isNotEmpty(page))  pageIndex = NumberUtil.parseInt(page);
 			if(pageIndex < 0) pageIndex = 0;
 			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/ah/ajax/?";
-			baseURL += "page=" + pageIndex + "&trnum=" + (pageIndex * 30) + "&companytype=BaijiaBooks";
+			baseURL += "page=" + pageIndex + "&trnum=" + (pageIndex * perPage) + "&companytype=BaijiaBooks";
 			break;
 		case PAGE_ODDS_OP_CHILD:
 			page = params.get(SoccerConstants.NAME_FIELD_PAGE);
 			if(StringUtils.isNotEmpty(page))  pageIndex = NumberUtil.parseInt(page);
 			if(pageIndex < 0) pageIndex = 0;
 			baseURL += params.get(SoccerConstants.NAME_FIELD_MID)  + "/odds/ajax/?";
-			baseURL += "page=" + pageIndex + "&trnum=" + (pageIndex * 30) + "&companytype=BaijiaBooks&type=0";
+			baseURL += "page=" + pageIndex + "&trnum=" + (pageIndex * perPage) + "&companytype=BaijiaBooks&type=0";
 			break;
 		default:
 			baseURL = URLUtil.makeDefaultUrl(baseURL, params);
