@@ -655,4 +655,36 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	{
 		this.webPageConf.setWebPageProperties(webPageConf);
 	}
+	
+	/**
+	 * 配置默认的信息
+	 * @return
+	 */
+	public static WebPageProperties getDefaultProperties()
+	{
+		WebPageProperties properties = new WebPageProperties();
+		properties.setDayNumOfGetPages(10);
+		properties.setNumDayOfHasOdds(4);
+		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
+		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：20小时
+		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_YP, oddsUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_NUM, oddsUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, leagueUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LEAGUE_CUP, leagueUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_JC, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_BD, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
+		
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_CENTER, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_JC, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_BD, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_BD, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_JC, true);
+		return properties;
+	}
 }

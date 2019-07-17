@@ -50,7 +50,7 @@ public class ZgzcwOddsDataPlugin extends ZgzcwBasePlugin
 	 */
 	public ZgzcwOddsDataPlugin()
 	{
-		this(WebPageProperties.getDefault());
+		this(ZgzcwBasePlugin.getDefaultProperties());
 	}
 	
 	/**

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
-import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.filter.WebPageFilter;
@@ -41,7 +40,7 @@ public class ZgzcwLeagueDataPlugin extends ZgzcwBasePlugin
 	 */
 	public ZgzcwLeagueDataPlugin()
 	{
-		super("联赛信息下载", WebPageProperties.getDefault());
+		super("联赛信息下载", ZgzcwBasePlugin.getDefaultProperties());
 	}
 
 	/**

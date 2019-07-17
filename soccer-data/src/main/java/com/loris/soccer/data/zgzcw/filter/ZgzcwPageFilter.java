@@ -40,14 +40,6 @@ public class ZgzcwPageFilter extends WebPageFilter
 	
 	/**
 	 * Create a new instance of DownloadedWebPageFilter.
-	 */
-	public ZgzcwPageFilter()
-	{
-		this(WebPageProperties.getDefault());
-	}
-	
-	/**
-	 * Create a new instance of DownloadedWebPageFilter.
 	 * @param types 数据类型
 	 * @param source 数据来源
 	 * @param start 开始日期

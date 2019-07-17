@@ -16,8 +16,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.loris.soccer.data.zgzcw.ZgzcwConstants;
-
 /**   
  * @ClassName: WebPageConf   
  * @Description: 页面配置数据  
@@ -184,37 +182,5 @@ public class WebPageProperties
 		pageBeCreated.clear();
 		if(properties.getPageBeCreated().size() > 0)
 			pageBeCreated.putAll(properties.getPageBeCreated());
-	}
-	
-	/**
-	 * 配置默认的信息
-	 * @return
-	 */
-	public static WebPageProperties getDefault()
-	{
-		WebPageProperties properties = new WebPageProperties();
-		properties.numDayfGetPages = 10;
-		properties.numDayOfHasOdds = 4;
-		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
-		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：20小时
-		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_YP, oddsUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_NUM, oddsUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, leagueUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LEAGUE_CUP, leagueUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_JC, realPageUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_BD, realPageUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
-		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
-		
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_CENTER, true);
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, true);
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_CUP, true);
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_JC, true);
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_BD, true);
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_BD, true);
-		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_JC, true);
-		return properties;
 	}
 }

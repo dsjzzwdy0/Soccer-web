@@ -11,7 +11,10 @@
  */
 package com.loris.soccer.data.okooo.filter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.loris.client.model.WebPage;
+import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.filter.WebPageFilter;
 
 /**   
@@ -32,7 +35,11 @@ public class OkoooPageFilter extends WebPageFilter
 	@Override
 	public <T> boolean accept(WebPage page, T source)
 	{
-		return false;
+		//不是澳客的数据下载器，则不能进行处理
+		if(!StringUtils.equals(page.getSource(), OkoooConstants.SOURCE_OKOOO))
+		{
+			return false;
+		}
+		return true;
 	}
-
 }

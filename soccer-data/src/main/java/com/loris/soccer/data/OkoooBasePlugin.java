@@ -50,9 +50,9 @@ import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.data.okooo.OkoooPageParser;
 import com.loris.soccer.data.okooo.filter.OkoooPageFilter;
 import com.loris.soccer.data.okooo.util.OkoooUtil;
-import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.filter.LatestMatchFilter;
 import com.loris.soccer.filter.WebPageFilter;
+import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.DataService;
 
@@ -158,10 +158,18 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	protected WebPageFilter createDefaultWebPageFilter()
 	{
 		OkoooPageFilter filter = new OkoooPageFilter();
-		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		filter.setSource(OkoooConstants.SOURCE_OKOOO);
 		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
-		//registerProcessPageTypes(filter);
+		registerProcessPageTypes(filter);
 		return filter;
+	}
+	
+	/**
+	 * 注册处理的页面类型
+	 * @param types 数据的类型
+	 */
+	protected void registerProcessPageTypes(WebPageFilter webPageFilter)
+	{
 	}
 
 	/**
@@ -192,17 +200,26 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	 * @param type
 	 * @param records
 	 */
+	@SuppressWarnings("unchecked")
 	protected void produceTask(String pageType, TableRecords records)
 	{
+		List<OkoooIssueMatch> matchs = null;
 		// 通过不同的页面进行数据处理
 		switch (pageType)
 		{
 		case OkoooConstants.PAGE_LOTTERY_BD:
+			matchs = (List<OkoooIssueMatch>)records.get(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_BD_LIST);
+			break;
 		case OkoooConstants.PAGE_LOTTERY_JC:
-			
+			matchs = (List<OkoooIssueMatch>)records.get(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_JC_LIST);
 			break;
 		default:
 			break;
+		}
+		
+		if(matchs != null)
+		{
+			createMatchTasks(matchs, (Filter<MatchItem>)filters.get(SoccerConstants.SOCCER_DATA_MATCH));
 		}
 	}
 	
@@ -409,4 +426,21 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		}
 		return records;
 	}
+	
+	
+	/**
+	 * 配置默认的信息
+	 * @return
+	 */
+	public static WebPageProperties getDefaultProperties()
+	{
+		WebPageProperties properties = new WebPageProperties();
+		properties.setDayNumOfGetPages(10);
+		properties.setNumDayOfHasOdds(4);
+
+		properties.setPageProduceNewTask(OkoooConstants.PAGE_LOTTERY_JC, true);
+		properties.setPageProduceNewTask(OkoooConstants.PAGE_LOTTERY_BD, true);
+		return properties;
+	}
+
 }

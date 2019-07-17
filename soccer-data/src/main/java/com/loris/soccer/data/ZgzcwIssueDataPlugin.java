@@ -52,7 +52,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 	 */
 	public ZgzcwIssueDataPlugin()
 	{
-		this(WebPageProperties.getDefault());
+		this(ZgzcwBasePlugin.getDefaultProperties());
 	}
 	
 	/**
