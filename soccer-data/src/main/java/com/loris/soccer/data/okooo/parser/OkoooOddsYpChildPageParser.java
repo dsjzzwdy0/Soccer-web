@@ -31,7 +31,7 @@ import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.dict.HandicapDict;
-import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooOddsYp;
 
 /**   
@@ -81,11 +81,11 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 			if(StringUtils.isNoneBlank(dataStr))
 			{
 				DataList<OkoooOddsYp> okoooOddsYps = new DataList<>();
-				DataList<CasinoComp> comps = new DataList<>();
+				DataList<OkoooCasinoComp> comps = new DataList<>();
 				comps.setOverwrite(false);
 				
 				results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST, okoooOddsYps);
-				results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+				results.put(SoccerConstants.SOCCER_DATA_CASINO_OKOOO_COMP_LIST, comps);
 				
 				parseJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsYps, comps);
 			}
@@ -114,7 +114,7 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 	 * 解析对象与数据
 	 * @param json Json字符串
 	 */
-	protected void parseJson(String json, String mid, Date matchTime, List<OkoooOddsYp> yps, List<CasinoComp> comps)
+	protected void parseJson(String json, String mid, Date matchTime, List<OkoooOddsYp> yps, List<OkoooCasinoComp> comps)
 	{
 		JSONArray array = JSON.parseArray(json);
 		for (Object object : array)
@@ -130,11 +130,14 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 	 * 解析亚盘记录数据
 	 * @param object
 	 */
-	protected void parseOddsYp(JSONObject object, String mid, Date matchTime, List<OkoooOddsYp> yps, List<CasinoComp> comps)
+	protected void parseOddsYp(JSONObject object, String mid, Date matchTime, List<OkoooOddsYp> yps, List<OkoooCasinoComp> comps)
 	{
 		OkoooOddsYp firstYp = new OkoooOddsYp();
 		OkoooOddsYp lastYp = new OkoooOddsYp();
-		CasinoComp comp = new CasinoComp();
+		OkoooCasinoComp comp = new OkoooCasinoComp();
+		
+		comp.setType(SoccerConstants.ODDS_TYPE_YP);
+		comp.setSource(OkoooConstants.SOURCE_OKOOO);
 		
 		firstYp.setMid(mid);
 		lastYp.setMid(mid);

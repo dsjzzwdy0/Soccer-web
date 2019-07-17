@@ -30,7 +30,7 @@ import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.parser.base.AbstractOkoooPageParser;
 import com.loris.soccer.dict.HandicapDict;
-import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooOddsYp;
 
 /**   
@@ -109,12 +109,12 @@ public class OkoooOddsYpPageParser extends AbstractOkoooPageParser
 		//logger.info(page.getContent());
 		
 		DataList<OkoooOddsYp> okoooOddsYps = new DataList<>();
-		DataList<CasinoComp> comps = new DataList<>();
+		DataList<OkoooCasinoComp> comps = new DataList<>();
 		
 		comps.setOverwrite(false);
 		
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST, okoooOddsYps);
-		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+		results.put(SoccerConstants.SOCCER_DATA_CASINO_OKOOO_COMP_LIST, comps);
 		
 		Elements elements = element.select("tr");
 		Date date = DateUtil.tryToParseDate(matchtime);
@@ -145,7 +145,7 @@ public class OkoooOddsYpPageParser extends AbstractOkoooPageParser
 	 * 解析亚盘数据记录
 	 * @param element 元素
 	 */
-	protected void parseOddsRecord(Element element, String mid, Date matchTime, List<OkoooOddsYp> yps, List<CasinoComp> comps)
+	protected void parseOddsRecord(Element element, String mid, Date matchTime, List<OkoooOddsYp> yps, List<OkoooCasinoComp> comps)
 	{
 		Elements elements = element.children();
 		if(elements.size() < 13)
@@ -234,7 +234,7 @@ public class OkoooOddsYpPageParser extends AbstractOkoooPageParser
 		yps.add(firstYp);
 		yps.add(lastYp);
 		
-		CasinoComp comp = new CasinoComp();
+		OkoooCasinoComp comp = new OkoooCasinoComp();
 		comp.setCorpid(gid);
 		comp.setName(gname);
 		comp.setType(SoccerConstants.ODDS_TYPE_YP);

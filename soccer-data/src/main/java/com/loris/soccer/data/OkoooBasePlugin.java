@@ -48,9 +48,9 @@ import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.data.okooo.OkoooPageParser;
+import com.loris.soccer.data.okooo.filter.OkoooMatchFilter;
 import com.loris.soccer.data.okooo.filter.OkoooPageFilter;
 import com.loris.soccer.data.okooo.util.OkoooUtil;
-import com.loris.soccer.filter.LatestMatchFilter;
 import com.loris.soccer.filter.WebPageFilter;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.base.MatchItem;
@@ -147,8 +147,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			webPageFilter.initialize();
 		}
 		
-		filters.put(SoccerConstants.SOCCER_DATA_MATCH, 
-				new LatestMatchFilter(webPageConf.getNumDayOfHasOdds(), webPageConf.getDayNumOfGetPages()));
+		filters.put(SoccerConstants.SOCCER_DATA_MATCH, new OkoooMatchFilter());
 	}
 	
 	/**
@@ -194,6 +193,25 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	 */
 	@Override
 	public abstract void produce(TaskPluginContext context) throws IOException, SQLException;
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.client.task.plugin.TaskPlugin#isFit(com.loris.client.task.Task)
+	 */
+	@Override
+	public boolean isFit(Task task)
+	{
+		if(!(task instanceof WebPage))
+		{
+			return false;
+		}
+		WebPage page = (WebPage) task;
+		if(!StringUtils.equals(OkoooConstants.SOURCE_OKOOO, page.getSource()))
+		{
+			return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * 产生新的下载任务
@@ -411,6 +429,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			records = OkoooPageParser.parseWebPage(page);
 			break;
 		case OkoooConstants.PAGE_ODDS_OP:
+		case OkoooConstants.PAGE_ODDS_YP:
 			records = OkoooUtil.downloadOkoooOddsPage((HtmlUnitFetcher)webPagefetcher, page);
 			break;
 		default:

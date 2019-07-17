@@ -192,15 +192,15 @@ public class App
 	@SuppressWarnings("unchecked")
 	public static void testOkoooOdds() throws Exception
 	{
-		String mid = "1049271";
-		String matchtime = "2019-07-16 01:00";
+		String mid = "1063150";
+		String matchtime = "2019-07-18 01:00:00";
 		
 		KeyMap params = new KeyMap();
 		params.put(SoccerConstants.NAME_FIELD_MID, mid);
 		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, matchtime);
-		params.put(SoccerConstants.NAME_FIELD_PAGE, "0");
+		//params.put(SoccerConstants.NAME_FIELD_PAGE, "0");
 		
-		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_ODDS_YP_CHILD, params);
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_ODDS_YP, params);
 		
 		try(HtmlUnitFetcher fetcher = createHtmlUnitFetcher())
 		{
@@ -244,7 +244,7 @@ public class App
 	@SuppressWarnings("unchecked") 
 	public static void testOkooo() throws Exception
 	{
-		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_LOTTERY_JC);
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_LOTTERY_BD);
 		logger.info("Download: " + page.getUrl());
 		if(downloadOkoooPage(page))
 		{

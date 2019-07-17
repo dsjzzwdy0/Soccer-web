@@ -30,6 +30,7 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
@@ -215,6 +216,9 @@ public class SoccerDataServiceImpl implements DataService
 		case SOCCER_DATA_ODDS_OKOOO_YP_LIST:
 			List<OkoooOddsYp> okoooOddsYps = (List<OkoooOddsYp>)value;
 			return okoooDataService.insertOkoooOddsYps(okoooOddsYps, overwrite);
+		case SOCCER_DATA_CASINO_OKOOO_COMP_LIST:
+			List<OkoooCasinoComp> okoooCasinoComps = (List<OkoooCasinoComp>)value;
+			return okoooDataService.insertOkoooCasinoComps(okoooCasinoComps, overwrite);
 		default:
 			// No nothing.
 			logger.warn("Warn: The Data '" + key + "' will not be saved into databases.");

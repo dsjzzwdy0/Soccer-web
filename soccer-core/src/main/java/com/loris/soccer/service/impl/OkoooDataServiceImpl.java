@@ -19,11 +19,13 @@ import org.springframework.stereotype.Service;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.dao.OkoooCasinoCompMapper;
 import com.loris.soccer.dao.OkoooIssueMatchMapper;
 import com.loris.soccer.dao.OkoooLeagueMapper;
 import com.loris.soccer.dao.OkoooMatchMapper;
 import com.loris.soccer.dao.OkoooOddsOpMapper;
 import com.loris.soccer.dao.OkoooOddsYpMapper;
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
@@ -60,6 +62,9 @@ public class OkoooDataServiceImpl implements OkoooDataService
 	
 	@Autowired
 	private OkoooOddsYpMapper okoooOddsYpMapper;
+	
+	@Autowired
+	private OkoooCasinoCompMapper okoooCasinoMapper;
 	
 	/**
 	 *  (non-Javadoc)
@@ -169,5 +174,27 @@ public class OkoooDataServiceImpl implements OkoooDataService
 		ObjectFilter<OkoooOddsYp> filter = new ObjectFilter<>();		
 		return SqlHelper.insertList(yps, OkoooOddsYp.class, okoooOddsYpMapper, filter,
 				SoccerConstants.NAME_FIELD_MID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OkoooDataService#insertOkoooCasinoComps(java.util.List)
+	 */
+	@Override
+	public boolean insertOkoooCasinoComps(List<OkoooCasinoComp> comps)
+	{
+		return insertOkoooCasinoComps(comps, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OkoooDataService#insertOkoooCasinoComps(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertOkoooCasinoComps(List<OkoooCasinoComp> comps, boolean overwrite)
+	{
+		ObjectFilter<OkoooCasinoComp> filter = new ObjectFilter<>();		
+		return SqlHelper.insertList(comps, OkoooCasinoComp.class, okoooCasinoMapper, filter,
+				SoccerConstants.NAME_FIELD_CORPID, sqlHelper, overwrite);
 	}
 }

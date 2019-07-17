@@ -13,6 +13,7 @@ package com.loris.soccer.service;
 
 import java.util.List;
 
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
@@ -105,4 +106,20 @@ public interface OkoooDataService
 	 * @return 是否成功的标志
 	 */
 	boolean insertOkoooOddsYps(List<OkoooOddsYp> yps, boolean overwrite);
+	
+	/**
+	 * 插入澳客博彩公司列表
+	 * @param comps 公司列表
+	 * @param overwrite 是否覆盖原有的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooCasinoComps(List<OkoooCasinoComp> comps);
+	
+	/**
+	 * 插入澳客博彩公司列表
+	 * @param comps 公司列表
+	 * @param overwrite 是否覆盖原有的数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooCasinoComps(List<OkoooCasinoComp> comps, boolean overwrite);
 }

@@ -77,7 +77,7 @@ public abstract class AbstractOkoooPageParser extends AbstractWebPageParser
 	 */
 	protected Date getCloseTime(Date matchtime, String closetime)
 	{
-		closetime += DateUtil.getYear() + "-" + closetime;
+		closetime = DateUtil.getYear() + "-" + closetime;
 		return DateUtil.tryToParseDate(closetime);
 	}
 	
@@ -104,7 +104,7 @@ public abstract class AbstractOkoooPageParser extends AbstractWebPageParser
 	protected Date getMatchTime(String matchtime)
 	{
 		String str = matchtime.replace("比赛时间：", "");
-		str = matchtime.replace("比赛时间:", "");
+		str = str.replace("比赛时间:", "");
 		return DateUtil.tryToParseDate(str);
 	}
 

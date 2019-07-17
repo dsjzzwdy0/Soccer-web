@@ -30,7 +30,7 @@ import com.loris.common.util.NumberUtil;
 import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.okooo.OkoooConstants;
-import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooOddsOp;
 
 /**   
@@ -78,11 +78,11 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 			if(StringUtils.isNoneBlank(dataStr))
 			{
 				DataList<OkoooOddsOp> okoooOddsOps = new DataList<>();
-				DataList<CasinoComp> comps = new DataList<>();
+				DataList<OkoooCasinoComp> comps = new DataList<>();
 				comps.setOverwrite(false);
 				
 				results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST, okoooOddsOps);
-				results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+				results.put(SoccerConstants.SOCCER_DATA_CASINO_OKOOO_COMP_LIST, comps);
 
 				parseOddsOpListJson(dataStr, mid, DateUtil.tryToParseDate(matchtime), okoooOddsOps, comps);
 			}
@@ -108,7 +108,7 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 	 * @param json Json字符串
 	 */
 	protected void parseOddsOpListJson(String json, String mid, Date matchTime, List<OkoooOddsOp> ops, 
-			List<CasinoComp> comps)
+			List<OkoooCasinoComp> comps)
 	{
 		JSONArray array = JSON.parseArray(json);
 		for (Object object : array)
@@ -130,18 +130,17 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 	 * 解析亚盘记录数据
 	 * @param object
 	 */
-	protected void parseOddsOp(JSONObject object, String mid, Date matchTime, List<OkoooOddsOp> ops, List<CasinoComp> comps)
+	protected void parseOddsOp(JSONObject object, String mid, Date matchTime, List<OkoooOddsOp> ops, List<OkoooCasinoComp> comps)
 	{
 		OkoooOddsOp firstOp = new OkoooOddsOp();
 		OkoooOddsOp lastOp = new OkoooOddsOp();
-		CasinoComp comp = new CasinoComp();
+		OkoooCasinoComp comp = new OkoooCasinoComp();
 		
 		firstOp.setMid(mid);
 		lastOp.setMid(mid);
 		
 		comp.setSource(OkoooConstants.SOURCE_OKOOO);
 		comp.setType(SoccerConstants.ODDS_TYPE_OP);
-		
 		
 		for (String key : object.keySet())
 		{
@@ -165,7 +164,7 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 			}
 			else if("End".equalsIgnoreCase(key))
 			{
-				parseLastOdds(firstOp, (JSONObject)value);
+				parseLastOdds(lastOp, (JSONObject)value);
 			}
 			else if("startUpdatetime".equalsIgnoreCase(key))
 			{

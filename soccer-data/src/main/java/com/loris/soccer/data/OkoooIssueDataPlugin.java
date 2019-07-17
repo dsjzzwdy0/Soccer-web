@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.loris.client.exception.HostForbiddenException;
 import com.loris.client.exception.UrlFetchException;
@@ -39,6 +40,7 @@ import cn.hutool.core.thread.ThreadUtil;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目的
  */
+@Component
 public class OkoooIssueDataPlugin extends OkoooBasePlugin
 {
 	private static Logger logger = Logger.getLogger(OkoooIssueDataPlugin.class);

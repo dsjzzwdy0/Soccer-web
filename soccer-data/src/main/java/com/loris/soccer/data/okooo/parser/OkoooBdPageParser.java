@@ -159,6 +159,7 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		el = elements.get(1);
 		matchtime = el.attr("title");
 		Date mtime = getMatchTime(matchtime);
+		//System.out.println("MatchTime: " + matchtime);
 		closetime = el.selectFirst(".BuyTime").text();
 
 		OkoooIssueMatch issueMatch = new OkoooIssueMatch();

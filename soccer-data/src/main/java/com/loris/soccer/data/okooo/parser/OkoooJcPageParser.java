@@ -138,7 +138,7 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		String leaguename;
 		String lid;
 		String matchtime;
-		String closetime;
+		//String closetime;
 		String homename;
 		String clientname;
 
@@ -151,7 +151,7 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		lid = getLeadueId(e2.attr("href"));						//联赛编号
 		matchtime = el.selectFirst(".shijian").attr("title");	//比赛时间
 		//System.out.println("Match time is: " + matchtime);
-		closetime = matchtime;									//结束时间
+		//closetime = matchtime;								//结束时间
 		Date mtime = getMatchTime(matchtime);
 
 		// 球队信息
@@ -167,7 +167,7 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		issueMatch.setMid(mid);
 		issueMatch.setType(SoccerConstants.LOTTERY_JC);
 		issueMatch.setOrdinary(ordinary);
-		issueMatch.setClosetime(getCloseTime(mtime, closetime));
+		issueMatch.setClosetime(mtime);
 		issueMatch.setMatchtime(mtime);
 		
 		OkoooMatch match = new OkoooMatch();

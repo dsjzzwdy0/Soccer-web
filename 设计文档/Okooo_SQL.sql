@@ -114,4 +114,18 @@ AUTO_INCREMENT=1553714
 ROW_FORMAT=DYNAMIC
 ;
 
-
+CREATE TABLE `okooo_casino_comp` (
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`corpid`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`name`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`ismain`  tinyint(1) NULL DEFAULT NULL ,
+`type`  varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`source`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`id`),
+INDEX `index_corpid` (`corpid`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=280
+ROW_FORMAT=DYNAMIC
+;

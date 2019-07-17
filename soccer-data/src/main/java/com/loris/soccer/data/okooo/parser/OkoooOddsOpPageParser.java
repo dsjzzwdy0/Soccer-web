@@ -29,7 +29,7 @@ import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.parser.base.AbstractOkoooPageParser;
-import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooOddsOp;
 
 /**   
@@ -106,11 +106,11 @@ public class OkoooOddsOpPageParser extends AbstractOkoooPageParser
 		}
 		
 		DataList<OkoooOddsOp> okoooOddsOps = new DataList<>();
-		DataList<CasinoComp> comps = new DataList<>();
+		DataList<OkoooCasinoComp> comps = new DataList<>();
 		comps.setOverwrite(false);
 		
 		results.put(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST, okoooOddsOps);
-		results.put(SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST, comps);
+		results.put(SoccerConstants.SOCCER_DATA_CASINO_OKOOO_COMP_LIST, comps);
 		
 		//解析百家欧赔数据
 		Elements oddsEls = document.select("#data_main_content table tbody tr");
@@ -144,7 +144,7 @@ public class OkoooOddsOpPageParser extends AbstractOkoooPageParser
 	 * @param element 元素
 	 */
 	protected void parseOkoooOddsOpRecords(Element element, String mid, Date matchTime, List<OkoooOddsOp> okoooOddsOps,
-			DataList<CasinoComp> comps)
+			DataList<OkoooCasinoComp> comps)
 	{
 		int firsttime;
 		String gid;
@@ -172,7 +172,7 @@ public class OkoooOddsOpPageParser extends AbstractOkoooPageParser
 		
 		OkoooOddsOp firstOp = new OkoooOddsOp();
 		OkoooOddsOp lastOp = new OkoooOddsOp();
-		CasinoComp comp = new CasinoComp();
+		OkoooCasinoComp comp = new OkoooCasinoComp();
 		
 		comp.setSource(OkoooConstants.SOURCE_OKOOO);
 		comp.setCorpid(gid);
