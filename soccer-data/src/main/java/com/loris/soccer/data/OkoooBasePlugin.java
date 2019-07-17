@@ -214,6 +214,25 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	}
 	
 	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.data.OkoooBasePlugin#close()
+	 */
+	@Override
+	public void close()
+	{
+		super.close();
+		try
+		{
+			webPagefetcher.close();
+		}
+		catch (Exception e)
+		{
+			logger.warn("Error occured when close the HtmlUnitFetcher.");
+		}
+		logger.info(this.name + " finished, closed.");
+	}
+	
+	/**
 	 * 产生新的下载任务
 	 * @param type
 	 * @param records
