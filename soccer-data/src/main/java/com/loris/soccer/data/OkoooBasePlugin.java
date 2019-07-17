@@ -90,7 +90,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	private Map<String, Filter<?>> filters = new HashMap<>();
 	
 	/** 下载子页面时等候的时间 */
-	protected int childInterval = 1000;
+	protected int childInterval = 500;
 	
 	/**
 	 * Create a new instance of ZgzcwBasePlugin.
