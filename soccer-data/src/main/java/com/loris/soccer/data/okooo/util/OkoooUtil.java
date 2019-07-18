@@ -156,7 +156,7 @@ public class OkoooUtil
 			Object value = newRecords.get(key);
 			switch (key)
 			{
-			case SoccerConstants.SOCCER_DATA_CASINO_COMP_LIST:
+			case SoccerConstants.SOCCER_DATA_CASINO_OKOOO_COMP_LIST:
 				List<CasinoComp> newComps = (List<CasinoComp>)value;
 				DataList<CasinoComp> destComps = (DataList<CasinoComp>) dest.get(key);
 				
