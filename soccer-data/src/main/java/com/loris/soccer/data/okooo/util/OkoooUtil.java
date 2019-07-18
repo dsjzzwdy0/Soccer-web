@@ -59,7 +59,7 @@ public class OkoooUtil
 	public static TableRecords downloadOkoooOddsPage(HtmlUnitFetcher fetcher, WebPage page) 
 			throws IOException, HostForbiddenException, UrlFetchException, WebParserException
 	{
-		return downloadOkoooOddsPage(fetcher, page, 30);
+		return downloadOkoooOddsPage(fetcher, page, 30, 500);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class OkoooUtil
 	 * @throws UrlFetchException
 	 * @throws WebParserException
 	 */
-	public static TableRecords downloadOkoooOddsPage(HtmlUnitFetcher fetcher, WebPage page, int pageNum) 
+	public static TableRecords downloadOkoooOddsPage(HtmlUnitFetcher fetcher, WebPage page, int pageNum, int childInterval) 
 			throws IOException, HostForbiddenException, UrlFetchException, WebParserException
 	{
 		TableRecords results = null;
@@ -137,7 +137,7 @@ public class OkoooUtil
 			}
 			
 			//为了模拟人为操作，需要进行等待
-			ThreadUtil.sleep(1000);
+			ThreadUtil.sleep(childInterval);
 		}
 
 		return results;
