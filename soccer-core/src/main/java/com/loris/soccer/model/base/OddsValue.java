@@ -16,6 +16,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.common.bean.AutoIdEntity;
+import com.loris.common.util.DateUtil;
 
 /**   
  * @ClassName:  League   
@@ -141,6 +142,6 @@ public class OddsValue extends AutoIdEntity
 		OddsValue value = (OddsValue) obj;
 		return StringUtils.equals(mid, value.mid) 
 				&& StringUtils.equals(corpid, value.corpid)
-				&& opentime == value.getOpentime();
+				&& DateUtil.compareDate(opentime, value.getOpentime()) == 0;
 	}
 }

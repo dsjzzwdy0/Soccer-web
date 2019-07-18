@@ -51,4 +51,12 @@ public class OddsYp extends OddsValue
 	{
 		return HandicapDict.getHandicapName(handicap);
 	}
+	@Override
+	public String toString()
+	{
+		return "OddsYp [handicap=" + handicap + ", mid=" + mid + ", corpid=" + corpid + ", opentime=" + opentime
+				+ ", winodds=" + winodds + ", loseodds=" + loseodds + ", winkelly=" + winkelly + ", losekelly="
+				+ losekelly + ", winprob=" + winprob + ", loseprob=" + loseprob + ", lossratio=" + lossratio
+				+ ", source=" + source + ", id=" + id + "]";
+	}
 }

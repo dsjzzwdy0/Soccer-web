@@ -146,6 +146,7 @@ public class App
 			
 			testOkoooOdds();
 			
+			// testDateCompare();			
 			// testSigmoid();
 			// testMariaDB();
 			// testDateString();
@@ -189,11 +190,20 @@ public class App
 		}
 	}
 	
+	public static void testDateCompare() throws Exception
+	{
+		String t = "2019-07-18 01:00:00";
+		Date d1 = DateUtil.tryToParseDate(t);
+		Date d2 = DateUtil.tryToParseDate(t);
+		logger.info("d1 == d2: " + (d1 == d2));
+		logger.info("compare(d1, d2): " + (DateUtil.compareDate(d1, d2) == 0));
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static void testOkoooOdds() throws Exception
 	{
-		String mid = "1063150";
-		String matchtime = "2019-07-18 01:00:00";
+		String mid = "1051887";
+		String matchtime = "2019-07-18 08:00:00";
 		
 		KeyMap params = new KeyMap();
 		params.put(SoccerConstants.NAME_FIELD_MID, mid);

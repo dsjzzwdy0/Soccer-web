@@ -223,7 +223,8 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		super.close();
 		try
 		{
-			webPagefetcher.close();
+			if(webPagefetcher != null)
+				webPagefetcher.close();
 		}
 		catch (Exception e)
 		{

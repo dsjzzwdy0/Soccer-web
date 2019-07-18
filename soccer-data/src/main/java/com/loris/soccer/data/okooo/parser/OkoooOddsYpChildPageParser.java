@@ -169,7 +169,7 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 				int l = ((Integer)value).intValue();
 				if(matchTime != null)
 				{
-					Date d = DateUtil.add(matchTime, l);
+					Date d = DateUtil.add(matchTime, -l * 1000);
 					lastYp.setOpentime(d);
 					//firstYp.setLasttime(DateUtil.DATE_TIME_FORMAT.format(d));
 				}
