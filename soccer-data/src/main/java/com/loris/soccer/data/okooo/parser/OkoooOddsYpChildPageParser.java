@@ -167,12 +167,8 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 			else if("Updatetime".equalsIgnoreCase(key))
 			{
 				int l = ((Integer)value).intValue();
-				if(matchTime != null)
-				{
-					Date d = DateUtil.add(matchTime, -l * 1000);
-					lastYp.setOpentime(d);
-					//firstYp.setLasttime(DateUtil.DATE_TIME_FORMAT.format(d));
-				}
+				Date d = DateUtil.add(new Date(), l * 1000);
+				lastYp.setOpentime(d);
 			}
 			else if("Createtime".equalsIgnoreCase(key))
 			{

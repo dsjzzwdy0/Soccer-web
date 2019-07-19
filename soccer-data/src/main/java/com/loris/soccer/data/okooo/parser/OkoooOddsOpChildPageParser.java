@@ -178,12 +178,8 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 			else if("Updatetime".equalsIgnoreCase(key))
 			{
 				int l = ((Integer)value).intValue();
-				if(matchTime != null)
-				{
-					Date d = DateUtil.add(matchTime, l * 1000);
-					lastOp.setOpentime(d);
-					//firstOp.setLasttime(DateUtil.DATE_TIME_FORMAT.format(d));
-				}
+				Date d = DateUtil.add(new Date(), l * 1000);
+				lastOp.setOpentime(d);
 			}
 			else if("Createtime".equalsIgnoreCase(key))
 			{
@@ -268,42 +264,48 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 	
 	/**
 	 * 解析凯利数据
-	 * @param yp 亚盘数据
+	 * @param op 亚盘数据
 	 * @param object 数据对象
 	 */
-	protected void parseKelly(OkoooOddsOp yp, JSONObject object)
+	protected void parseKelly(OkoooOddsOp op, JSONObject object)
 	{
 		for (String key : object.keySet())
 		{
 			Object value = object.get(key);
 			if("home".equalsIgnoreCase(key))
 			{
-				yp.setWinkelly(NumberUtil.parseFloat(value.toString()));
+				op.setWinkelly(NumberUtil.parseFloat(value.toString()));
 			}
 			else if("away".equalsIgnoreCase(key))
 			{
-				yp.setLosekelly(NumberUtil.parseFloat(value.toString()));
+				op.setLosekelly(NumberUtil.parseFloat(value.toString()));
+			}
+			else if("draw".equalsIgnoreCase(key)){
+				op.setDrawkelly(NumberUtil.parseFloat(value.toString()));
 			}
 		}
 	}
 	
 	/**
 	 * 解析概率值数据
-	 * @param yp 亚盘数据
+	 * @param op 亚盘数据
 	 * @param object 数据对象
 	 */
-	protected void parseProb(OkoooOddsOp yp, JSONObject object)
+	protected void parseProb(OkoooOddsOp op, JSONObject object)
 	{
 		for (String key : object.keySet())
 		{
 			Object value = object.get(key);
 			if("home".equalsIgnoreCase(key))
 			{
-				yp.setWinprob(NumberUtil.parseFloat(value.toString()));
+				op.setWinprob(NumberUtil.parseFloat(value.toString()));
 			}
 			else if("away".equalsIgnoreCase(key))
 			{
-				yp.setLoseprob(NumberUtil.parseFloat(value.toString()));
+				op.setLoseprob(NumberUtil.parseFloat(value.toString()));
+			}
+			else if("draw".equalsIgnoreCase(key)){
+				op.setDrawprob(NumberUtil.parseFloat(value.toString()));
 			}
 		}
 	}

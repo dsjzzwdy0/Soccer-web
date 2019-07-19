@@ -120,7 +120,8 @@ public class CasinoComp extends AutoIdEntity
 			return false;
 		}
 		CasinoComp other = (CasinoComp)obj;
-		return StringUtils.equals(type, other.getType()) && StringUtils.equals(corpid, other.getCorpid())
+		return StringUtils.equals(type, other.getType()) 
+				&& StringUtils.equals(corpid, other.getCorpid())
 				&& StringUtils.equals(source, other.source);
 	}
 }
