@@ -38,7 +38,7 @@ public class LeagueList extends DataList<League>
 	{
 	}
 	
-	public LeagueList(List<League> leagues)
+	public LeagueList(List<? extends League> leagues)
 	{
 		addAll(leagues);
 	}

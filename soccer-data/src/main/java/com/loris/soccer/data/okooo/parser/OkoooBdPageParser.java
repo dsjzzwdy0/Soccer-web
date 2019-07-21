@@ -33,6 +33,7 @@ import com.loris.soccer.model.BetBdOdds;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
+import com.loris.soccer.model.OkoooTeam;
 
 /**   
  * @ClassName:  OkoooBdPageParser.java   
@@ -68,23 +69,29 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 			return null;
 		}
 		
+		String issueno = getIssueNo(document.selectFirst(".danchangtop #SelectLotteryNo"));
+		
 		DataList<OkoooIssueMatch> issueMatchs = new DataList<>();
 		DataList<OkoooMatch> baseMatchs = new DataList<>();
 		DataList<OkoooLeague> leagues = new DataList<>();
 		DataList<BetBdOdds> oddsList = new DataList<>();
+		DataList<OkoooTeam> teams = new DataList<>();
+		
 		oddsList.setOverwrite(true);
 		issueMatchs.setOverwrite(false);
 		baseMatchs.setOverwrite(false);
 		leagues.setOverwrite(false);
+		teams.setOverwrite(false);
 		
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_BD_LIST, issueMatchs);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_LIST, baseMatchs);
 		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_OKOOO_LIST, leagues);
 		results.put(SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST, oddsList);
+		results.put(SoccerConstants.SOCCER_DATA_TEAM_OKOOO_LIST, teams);
 		
 		for (Element element : elements)
 		{
-			parseBdIssue(element, baseMatchs, issueMatchs, oddsList, leagues);
+			parseBdIssue(element, issueno, baseMatchs, issueMatchs, oddsList, leagues, teams);
 		}
 		return results;
 	}
@@ -93,8 +100,12 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 	 * 解析北单数据
 	 * @param element
 	 */
-	protected void parseBdIssue(Element element, List<OkoooMatch> baseMatchs, 
-			List<OkoooIssueMatch> matchs, List<BetBdOdds> oddsList, List<OkoooLeague> leagues)
+	protected void parseBdIssue(Element element, String issueno,
+			List<OkoooMatch> baseMatchs, 
+			List<OkoooIssueMatch> matchs, 
+			List<BetBdOdds> oddsList, 
+			List<OkoooLeague> leagues,
+			List<OkoooTeam> teams)
 	{
 		String issue;
 		int size;
@@ -112,7 +123,7 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		for(int i = 1; i < size; i ++)
 		{
 			el = elements.get(i);
-			parseBdMatch(el, issue, baseMatchs, matchs, oddsList, leagues);
+			parseBdMatch(el, issueno, issue, baseMatchs, matchs, oddsList, leagues, teams);
 		}
 	}
 	
@@ -125,11 +136,12 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 	 * @param oddsList 北单的开出盘号
 	 * @param leagues 联赛数据
 	 */
-	private void parseBdMatch(Element element, String issue,
+	private void parseBdMatch(Element element, String issueno, String issue,
 			List<OkoooMatch> baseMatchs, 
 			List<OkoooIssueMatch> issueMatchs,
 			List<BetBdOdds> oddsList, 
-			List<OkoooLeague> leagues)
+			List<OkoooLeague> leagues,
+			List<OkoooTeam> teams)
 	{
 		Elements elements = element.children();
 		if(elements.size() <= 0)
@@ -145,9 +157,6 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		String matchtime;
 		String closetime;
 		
-		//比赛编号
-		mid = element.attr("matchid");
-		
 		//联赛信息
 		Element el = elements.get(0);
 		ordinary = el.selectFirst("span i").text();
@@ -161,18 +170,23 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		Date mtime = getMatchTime(matchtime);
 		//System.out.println("MatchTime: " + matchtime);
 		closetime = el.selectFirst(".BuyTime").text();
+		
+		//比赛编号
+		//mid = element.attr("matchid");
+		el = elements.get(7).selectFirst("a");
+		mid = NumberUtil.parseLastIntegerString(el.attr("href"));		
 
 		OkoooIssueMatch issueMatch = new OkoooIssueMatch();
 		issueMatch.setType(SoccerConstants.LOTTERY_BD);
 		OkoooMatch match = new OkoooMatch();
 		BetBdOdds odds = new BetBdOdds();
-		OkoooLeague league = new OkoooLeague();	
+		OkoooLeague league = new OkoooLeague();
 		
 		//设置比赛的信息
 		issueMatch.setMid(mid);
 		issueMatch.setOrdinary(ordinary);
 		issueMatch.setIssue(issue);
-		issueMatch.setIssueno(issue);
+		issueMatch.setIssueno(issueno);
 		issueMatch.setMatchtime(mtime);
 		issueMatch.setClosetime(getCloseTime(mtime, closetime));
 		
@@ -187,7 +201,7 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		
 		//球队信息与奖金信息
 		el = elements.get(2);
-		parseTeamAndOdds(el, match, issueMatch, odds);
+		parseTeamAndOdds(el, match, issueMatch, odds, teams);
 		
 		issueMatchs.add(issueMatch);
 		baseMatchs.add(match);
@@ -205,10 +219,16 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 	 * @param issueMatch
 	 * @return 解析是否成功的标志
 	 */
-	protected boolean parseTeamAndOdds(Element element, OkoooMatch match, OkoooIssueMatch issueMatch, BetBdOdds odds)
+	protected boolean parseTeamAndOdds(Element element, 
+			OkoooMatch match, 
+			OkoooIssueMatch issueMatch,
+			BetBdOdds odds, 
+			List<OkoooTeam> teams)
 	{
 		String homename;
+		String homeid;
 		String clientname;
+		String clientid;
 		//String homerank = "";
 		//String clientrank = "";
 		String rq;
@@ -229,7 +249,10 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		{
 			homerank = "" + NumberUtil.parseIntegerFromString(e1.children().get(1).text());
 		}*/
-		homename = hrefElemement.selectFirst(".homename").text();
+		Element homeNameElement = hrefElemement.selectFirst(".homename");
+		homename = homeNameElement.text();
+		homeid = homeNameElement.attr("attr");	
+		
 		rq = parseRangqiu(hrefElemement.selectFirst(".handicapobj").text());
 		winodds = hrefElemement.selectFirst(".pltxt").text();
 		
@@ -244,7 +267,9 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		{
 			clientrank = "" + NumberUtil.parseIntegerFromString(e1.children().get(1).text());
 		}*/
-		clientname = hrefElemement.selectFirst(".awayname").text();
+		Element clientNameElement = hrefElemement.selectFirst(".awayname");
+		clientname = clientNameElement.text();
+		clientid = clientNameElement.attr("attr");
 		loseodds = hrefElemement.selectFirst(".pltxt").text();
 		
 		match.setHomeid(homename);
@@ -256,6 +281,13 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		odds.setWinodds(NumberUtil.parseFloat(winodds));
 		odds.setDrawodds(NumberUtil.parseFloat(drawodds));
 		odds.setLoseodds(NumberUtil.parseFloat(loseodds));
+		
+		OkoooTeam homeTeam = new OkoooTeam(homeid, homename, null);
+		homeTeam.setAlias(homename);
+		OkoooTeam clientTeam = new OkoooTeam(clientid, clientname, null);
+		clientTeam.setAlias(clientname);
+		teams.add(homeTeam);
+		teams.add(clientTeam);
 		
 		return true;
 	}
@@ -296,5 +328,29 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 			}
 		}
 		return "";
+	}
+	
+	/**
+	 * 获得北单比赛的期号
+	 * @param element 含有比赛的期号
+	 * @return 比赛期号
+	 */
+	protected String getIssueNo(Element element)
+	{
+		String issueno = "";
+		if(element == null) return issueno;
+		Elements elements = element.children();
+		for (Element element2 : elements)
+		{
+			if(StringUtils.isEmpty(issueno))
+			{
+				issueno = element2.val();
+			}
+			if(element2.hasAttr("selected") || StringUtils.equalsAnyIgnoreCase(element2.attr("selected"), "true"))
+			{
+				issueno = element2.val();
+			}
+		}
+		return issueno;
 	}
 }

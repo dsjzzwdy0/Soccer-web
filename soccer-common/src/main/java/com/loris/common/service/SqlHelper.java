@@ -671,7 +671,15 @@ public class SqlHelper
 			return false;
 		}
 		List<String> keyValues = ArraysUtil.getObjectFieldValue(values, clazz, key);
-		QueryWrapper<T> queryWrapper = new QueryWrapper<T>().in(key, keyValues);
+		QueryWrapper<T> queryWrapper = null;
+		if(keyValues != null && keyValues.size() > 0)
+		{
+			queryWrapper = new QueryWrapper<T>().in(key, keyValues);
+		}
+		else
+		{
+			queryWrapper = new QueryWrapper<>();
+		}
 		return insertList(values, clazz, mapper, filter, queryWrapper, helper, checkExist, overwrite);
 	}
 	

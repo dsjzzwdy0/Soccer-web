@@ -12,7 +12,7 @@
 package com.loris.soccer.model.mapping;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.common.bean.AutoIdEntity;
+import com.loris.soccer.model.base.Mapping;
 
 /**   
  * @ClassName:  LeagueMapping    
@@ -23,53 +23,42 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目的
  */
-@TableName("soccer_league_mapping")
-public class LeagueMapping extends AutoIdEntity
+@TableName("soccer_mapping_league")
+public class LeagueMapping extends Mapping
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected String sourcelid;
-	protected String sourdename;
-	protected String sourcefrom;
+	protected String sourcename;
 	
-	protected String destlid;
 	protected String destname;
-	protected String sourcedest;
-	public String getSourcelid()
+	
+	public LeagueMapping()
 	{
-		return sourcelid;
 	}
-	public void setSourcelid(String sourcelid)
+	
+	public LeagueMapping(String sourcelid, String sourdename, String sourcefrom, String destlid, String destname,
+			String sourcedest)
 	{
-		this.sourcelid = sourcelid;
+		this.sourceid = sourcelid;
+		this.sourcename = sourdename;
+		this.sourcefrom = sourcefrom;
+		this.destid = destlid;
+		this.destname = destname;
+		this.sourcedest = sourcedest;
 	}
+	
 	public String getSourdename()
 	{
-		return sourdename;
+		return sourcename;
 	}
 	public void setSourdename(String sourdename)
 	{
-		this.sourdename = sourdename;
+		this.sourcename = sourdename;
 	}
-	public String getSourcefrom()
-	{
-		return sourcefrom;
-	}
-	public void setSourcefrom(String sourcefrom)
-	{
-		this.sourcefrom = sourcefrom;
-	}
-	public String getDestlid()
-	{
-		return destlid;
-	}
-	public void setDestlid(String destlid)
-	{
-		this.destlid = destlid;
-	}
+
 	public String getDestname()
 	{
 		return destname;
@@ -78,12 +67,15 @@ public class LeagueMapping extends AutoIdEntity
 	{
 		this.destname = destname;
 	}
-	public String getSourcedest()
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
 	{
-		return sourcedest;
-	}
-	public void setSourcedest(String sourcedest)
-	{
-		this.sourcedest = sourcedest;
+		return "LeagueMapping [sourcename=" + sourcename + ", destname=" + destname + ", sourceid=" + sourceid
+				+ ", sourcefrom=" + sourcefrom + ", destid=" + destid + ", sourcedest=" + sourcedest + ", id=" + id
+				+ "]";
 	}
 }

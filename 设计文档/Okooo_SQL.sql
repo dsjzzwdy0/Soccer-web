@@ -16,6 +16,22 @@ AUTO_INCREMENT=515
 ROW_FORMAT=DYNAMIC
 ;
 
+CREATE TABLE `okooo_league_team` (
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`tid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`name`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`alias`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`country`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`id`),
+INDEX `index_lid` (`tid`) USING BTREE ,
+INDEX `index_name` (`name`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=6730
+ROW_FORMAT=DYNAMIC
+;
+
 CREATE TABLE `okooo_issue_match` (
 `id`  int(11) NOT NULL AUTO_INCREMENT ,
 `mid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
@@ -129,3 +145,63 @@ DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=280
 ROW_FORMAT=DYNAMIC
 ;
+
+CREATE TABLE `soccer_mapping_league`(
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`sourceid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcename`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcefrom`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`destid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`destname`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcedest`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`id`),
+INDEX `index_sourcelid` (`sourceid`) USING BTREE ,
+INDEX `index_source` (`sourcefrom`) USING BTREE ,
+INDEX `index_destlid` (`destid`) USING BTREE ,
+INDEX `index_dest` (`sourcedest`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=1
+ROW_FORMAT=DYNAMIC
+;
+
+CREATE TABLE `soccer_mapping_match` (
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`sourceid`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcefrom`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`destid`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcedest`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`matchtime`  timestamp NULL DEFAULT NULL ,
+PRIMARY KEY (`id`),
+INDEX `index_sourceid` (`sourceid`) USING BTREE,
+INDEX `index_source` (`sourcefrom`) USING BTREE, 
+INDEX `index_destid` (`destid`) USING BTREE,
+INDEX `index_dest` (`sourcedest`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=280
+ROW_FORMAT=DYNAMIC
+;
+
+CREATE TABLE `soccer_mapping_team` (
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`sourceid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcename`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcefrom`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`destid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`destname`  varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`sourcedest`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`id`),
+INDEX `index_sourcelid` (`sourceid`) USING BTREE ,
+INDEX `index_source` (`sourcefrom`) USING BTREE ,
+INDEX `index_destlid` (`destid`) USING BTREE ,
+INDEX `index_dest` (`sourcedest`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=1
+ROW_FORMAT=DYNAMIC
+;
+

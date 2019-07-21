@@ -141,4 +141,14 @@ public class MatchInfo extends Match
 		r.setScore(homegoal, clientgoal);
 		return r;
 	}
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "MatchInfo [leaguename=" + leaguename + ", homename=" + homename + ", clientname=" + clientname
+				+ ", lid=" + lid + ", mid=" + mid + ", matchtime=" + matchtime + "]";
+	}
 }

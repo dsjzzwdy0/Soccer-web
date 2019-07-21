@@ -36,6 +36,18 @@ public class Team extends AutoIdEntity
 	protected String tid;			//球队编号
 	protected String name;			//球队名称
 	protected String country;		//所属国家
+	
+	public Team()
+	{
+	}
+	
+	public Team(String tid, String name, String country)
+	{
+		this.tid = tid;
+		this.name = name;
+		this.country = country;
+	}
+	
 	public String getTid()
 	{
 		return tid;
@@ -67,5 +79,15 @@ public class Team extends AutoIdEntity
 		if(obj == this) return true;
 		if(obj == null || !(obj instanceof Team)) return false;
 		return StringUtils.equals(tid, ((Team)obj).getTid());
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "Team [tid=" + tid + ", name=" + name + ", country=" + country + "]";
 	}
 }

@@ -32,6 +32,7 @@ import com.loris.soccer.model.BetJcOdds;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
+import com.loris.soccer.model.OkoooTeam;
 
 /**   
  * @ClassName:  OkoooJcPageParser.java   
@@ -71,20 +72,23 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		DataList<OkoooMatch> matchs = new DataList<>();
 		DataList<OkoooLeague> leagues = new DataList<>();
 		DataList<BetJcOdds> oddsList = new DataList<>();
+		DataList<OkoooTeam> teams = new DataList<>();
 		
 		matchs.setOverwrite(false);
 		leagues.setOverwrite(false);
 		issueMatchs.setOverwrite(false);
 		oddsList.setOverwrite(true);
+		teams.setOverwrite(false);
 		
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_JC_LIST, issueMatchs);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_OKOOO_LIST, matchs);
 		results.put(SoccerConstants.SOCCER_DATA_LEAGUE_OKOOO_LIST, leagues);
 		results.put(SoccerConstants.SOCCER_DATA_BETODDS_JC_LIST, oddsList);
+		results.put(SoccerConstants.SOCCER_DATA_TEAM_OKOOO_LIST, teams);
 		
 		for (Element element : elements)
 		{
-			parseJcIssue(element, leagues, matchs, issueMatchs, oddsList);
+			parseJcIssue(element, leagues, matchs, issueMatchs, oddsList, teams);
 		}
 		return results;
 	}
@@ -94,8 +98,12 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 	 * 
 	 * @param element 数据元素
 	 */
-	protected void parseJcIssue(Element element, List<OkoooLeague> leagues,
-			List<OkoooMatch> matchs, List<OkoooIssueMatch> issueMatchs, List<BetJcOdds> oddsList)
+	protected void parseJcIssue(Element element, 
+			List<OkoooLeague> leagues,
+			List<OkoooMatch> matchs,
+			List<OkoooIssueMatch> issueMatchs,
+			List<BetJcOdds> oddsList,
+			List<OkoooTeam> teams)
 	{
 		Element issueElement = element.selectFirst(".cont_1 .riqi .a5 span");
 		Elements matchElements = element.select(".touzhu .touzhu_1");
@@ -114,7 +122,7 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		for (int i = 1; i < size; i++)
 		{
 			Element el = matchElements.get(i);
-			parseJcMatch(el, issue, leagues, matchs, issueMatchs, oddsList);
+			parseJcMatch(el, issue, leagues, matchs, issueMatchs, oddsList, teams);
 		}
 	}
 	
@@ -124,8 +132,12 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 	 * @param element 每场比赛的数据
 	 * @return 解析完成的比赛数据
 	 */
-	private void parseJcMatch(Element element, String issue, List<OkoooLeague> leagues,
-			List<OkoooMatch> matchs, List<OkoooIssueMatch> issueMatchs, List<BetJcOdds> oddsList)
+	private void parseJcMatch(Element element, String issue,
+			List<OkoooLeague> leagues,
+			List<OkoooMatch> matchs, 
+			List<OkoooIssueMatch> issueMatchs, 
+			List<BetJcOdds> oddsList,
+			List<OkoooTeam> teams)
 	{
 		Elements elements = element.children(); 
 		if (elements.size() <= 0)
@@ -139,7 +151,9 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		String lid;
 		String matchtime;
 		//String closetime;
+		String homeAlias;
 		String homename;
+		String clientAlias;
 		String clientname;
 
 		// 比赛基本信息
@@ -157,8 +171,11 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		// 球队信息
 		el = elements.get(1);
 		Element hteam = el.selectFirst(".zhu .zhud .zhum");
+		homeAlias = hteam.attr("title");
 		homename = hteam.text();
+		
 		Element cteam = el.selectFirst(".fu .ked .zhum");
+		clientAlias = cteam.attr("title");
 		clientname = cteam.text();
 
 		OkoooIssueMatch issueMatch = new OkoooIssueMatch();
@@ -176,6 +193,11 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		match.setHomeid(homename);
 		match.setClientid(clientname);
 		match.setMatchtime(mtime);
+		
+		OkoooTeam homeTeam = new OkoooTeam(null, homename, null);
+		homeTeam.setAlias(homeAlias);
+		OkoooTeam clientTeam = new OkoooTeam(null, clientname, null);
+		clientTeam.setAlias(clientAlias);
 		
 		BetJcOdds odds = new BetJcOdds();
 		odds.setMid(mid);
@@ -200,6 +222,8 @@ public class OkoooJcPageParser extends AbstractOkoooPageParser
 		issueMatchs.add(issueMatch);
 		matchs.add(match);
 		oddsList.add(odds);
+		teams.add(homeTeam);
+		teams.add(clientTeam);
 		
 		if(!leagues.contains(league))
 		{

@@ -11,8 +11,10 @@
  */
 package com.loris.soccer.model.mapping;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.common.bean.AutoIdEntity;
+import com.loris.soccer.model.base.Mapping;
 
 /**   
  * @ClassName:  MatchMapping    
@@ -23,48 +25,63 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目的
  */
-@TableName("soccer_match_mapping")
-public class MatchMapping extends AutoIdEntity
+@TableName("soccer_mapping_match")
+public class MatchMapping extends Mapping
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected String sourceid;
-	protected String sourcefrom;
-	protected String destid;
-	protected String sourcedest;
-	public String getSourceid()
+	protected Date matchtime;
+	
+	/**
+	 * create a new instance of MatchMapping
+	 */
+	public MatchMapping()
 	{
-		return sourceid;
 	}
-	public void setSourceid(String sourceid)
+	
+	/**
+	 * Create the MatchMapping
+	 * @param sourceid
+	 * @param sourcefrom
+	 * @param destid
+	 * @param sourcedest
+	 */
+	public MatchMapping(String sourceid, String sourcefrom, String destid, String sourcedest, Date matchtime)
 	{
 		this.sourceid = sourceid;
-	}
-	public String getSourcefrom()
-	{
-		return sourcefrom;
-	}
-	public void setSourcefrom(String sourcefrom)
-	{
 		this.sourcefrom = sourcefrom;
-	}
-	public String getDestid()
-	{
-		return destid;
-	}
-	public void setDestid(String destid)
-	{
 		this.destid = destid;
-	}
-	public String getSourcedest()
-	{
-		return sourcedest;
-	}
-	public void setSourcedest(String sourcedest)
-	{
 		this.sourcedest = sourcedest;
+		this.matchtime = matchtime;
+	}
+	
+	/**
+	 * @return the matchtime
+	 */
+	public Date getMatchtime()
+	{
+		return matchtime;
+	}
+
+	/**
+	 * @param matchtime the matchtime to set
+	 */
+	public void setMatchtime(Date matchtime)
+	{
+		this.matchtime = matchtime;
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "MatchMapping [sourceid=" + sourceid + ", sourcefrom=" + sourcefrom + ", destid=" + destid
+				+ ", sourcedest=" + sourcedest + ", matchtime=" + matchtime + "]";
 	}
 }

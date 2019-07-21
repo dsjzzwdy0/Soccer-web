@@ -11,7 +11,8 @@
  */
 package com.loris.soccer.model.mapping;
 
-import com.loris.common.bean.AutoIdEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.loris.soccer.model.base.Mapping;
 
 /**   
  * @ClassName:  TeamMapping    
@@ -22,27 +23,32 @@ import com.loris.common.bean.AutoIdEntity;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目的
  */
-public class TeamMapping extends AutoIdEntity
+@TableName("soccer_mapping_team")
+public class TeamMapping extends Mapping
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected String sourceid;
 	protected String sourcename;
-	protected String sourcefrom;
-	protected String destid;
 	protected String destname;
-	protected String sourcedest;
-	public String getSourceid()
+	
+	public TeamMapping()
 	{
-		return sourceid;
 	}
-	public void setSourceid(String sourceid)
+	
+	public TeamMapping(String sourceid, String sourdename, String sourcefrom, String destid, String destname,
+			String sourcedest)
 	{
 		this.sourceid = sourceid;
+		this.sourcename = sourdename;
+		this.sourcefrom = sourcefrom;
+		this.destid = destid;
+		this.destname = destname;
+		this.sourcedest = sourcedest;
 	}
+	
 	public String getSourcename()
 	{
 		return sourcename;
@@ -51,22 +57,7 @@ public class TeamMapping extends AutoIdEntity
 	{
 		this.sourcename = sourcename;
 	}
-	public String getSourcefrom()
-	{
-		return sourcefrom;
-	}
-	public void setSourcefrom(String sourcefrom)
-	{
-		this.sourcefrom = sourcefrom;
-	}
-	public String getDestid()
-	{
-		return destid;
-	}
-	public void setDestid(String destid)
-	{
-		this.destid = destid;
-	}
+	
 	public String getDestname()
 	{
 		return destname;
@@ -75,12 +66,15 @@ public class TeamMapping extends AutoIdEntity
 	{
 		this.destname = destname;
 	}
-	public String getSourcedest()
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
 	{
-		return sourcedest;
-	}
-	public void setSourcedest(String sourcedest)
-	{
-		this.sourcedest = sourcedest;
+		return "TeamMapping [sourcename=" + sourcename + ", destname=" + destname + ", sourceid=" + sourceid
+				+ ", sourcefrom=" + sourcefrom + ", destid=" + destid + ", sourcedest=" + sourcedest + ", id=" + id
+				+ "]";
 	}
 }

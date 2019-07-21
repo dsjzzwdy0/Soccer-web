@@ -60,6 +60,7 @@ public interface SoccerConstants
 	final static public String SOCCER_DATA_ODDS_OKOOO_OP_LIST = "okooo_oplist";
 	final static public String SOCCER_DATA_ODDS_OKOOO_YP_LIST = "okooo_yplist";
 	final static public String SOCCER_DATA_CASINO_OKOOO_COMP_LIST = "okooo_casinocomps";
+	final static public String SOCCER_DATA_TEAM_OKOOO_LIST = "okooo_teamlist";
 	//final static public String SOCCER_DATA_ODDS_SCORE = "oddsscore";
 
 
@@ -100,6 +101,7 @@ public interface SoccerConstants
 	final static public String NAME_FIELD_ROUND = "round";
 	final static public String NAME_FIELD_CORPID = "corpid";
 	final static public String NAME_FIELD_PAGE = "page";
+	final static public String NAME_FIELD_SOURCE_ID = "sourceid";
 	
 	/** 图标的类型 */
 	final static public String LOGO_TYPE_LEAGUE = "league";

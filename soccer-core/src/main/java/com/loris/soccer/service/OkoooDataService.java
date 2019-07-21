@@ -19,6 +19,7 @@ import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.OkoooOddsOp;
 import com.loris.soccer.model.OkoooOddsYp;
+import com.loris.soccer.model.OkoooTeam;
 
 /**   
  * @ClassName:  OkoooDataService.java   
@@ -122,4 +123,20 @@ public interface OkoooDataService
 	 * @return 是否成功的标志
 	 */
 	boolean insertOkoooCasinoComps(List<OkoooCasinoComp> comps, boolean overwrite);
+	
+	/**
+	 * 插入澳客网的球队数据信息
+	 * @param teams 球队列表
+	 * @param overwrite 是否覆盖原有数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooTeams(List<OkoooTeam> teams);
+	
+	/**
+	 * 插入澳客网的球队数据信息
+	 * @param teams 球队列表
+	 * @param overwrite 是否覆盖原有数据
+	 * @return 是否成功的标志
+	 */
+	boolean insertOkoooTeams(List<OkoooTeam> teams, boolean overwrite);
 }

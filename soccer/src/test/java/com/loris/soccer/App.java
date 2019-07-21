@@ -50,17 +50,21 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.ArraysUtil;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
+import com.loris.common.util.PairMap;
 import com.loris.common.web.wrapper.Rest;
 import com.loris.old.soccer.bean.OldMatch;
 import com.loris.old.soccer.service.OldMatchService;
 import com.loris.old.soccer.transfer.impl.MatchToMatchResult;
 import com.loris.old.soccer.transfer.impl.OldMatchToMatch;
 import com.loris.soccer.collection.LeagueList;
+import com.loris.soccer.collection.LeagueMappingList;
 import com.loris.soccer.collection.MatchInfoList;
+import com.loris.soccer.collection.MatchMappingList;
 import com.loris.soccer.collection.OddsOpList;
 import com.loris.soccer.collection.OddsOpList.OddsOpListType;
 import com.loris.soccer.collection.OddsYpList;
 import com.loris.soccer.collection.SeasonList;
+import com.loris.soccer.collection.TeamMappingList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.ZgzcwIssueDataPlugin;
 import com.loris.soccer.data.ZgzcwLeagueDataPlugin;
@@ -69,6 +73,7 @@ import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.data.okooo.OkoooPageParser;
 import com.loris.soccer.data.okooo.util.OkoooUtil;
+import com.loris.soccer.data.util.MappingUtil;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -81,8 +86,6 @@ import com.loris.soccer.data.zgzcw.parser.LotteryJcWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsNumWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsOpWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.OddsYpWebPageParser;
-import com.loris.soccer.model.BetBdOdds;
-import com.loris.soccer.model.BetJcOdds;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.Logo;
@@ -93,15 +96,17 @@ import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
-import com.loris.soccer.model.OkoooIssueMatch;
-import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.OkoooOddsOp;
 import com.loris.soccer.model.OkoooOddsYp;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
+import com.loris.soccer.model.mapping.LeagueMapping;
+import com.loris.soccer.model.mapping.MatchMapping;
+import com.loris.soccer.model.mapping.TeamMapping;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.DataService;
+import com.loris.soccer.service.MappingService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
 import com.loris.soccer.stat.MatchStat;
@@ -143,8 +148,9 @@ public class App
 			// testStat();
 			// testTeamRating();
 			// testOkooo();
+			// testOkoooOdds();
 			
-			testOkoooOdds();
+			testOkoooMapping();
 			
 			// testDateCompare();			
 			// testSigmoid();
@@ -189,6 +195,49 @@ public class App
 			context = null;
 		}
 	}
+	
+	/**
+	 * 测试澳客网的映射数据处理
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static void testOkoooMapping() throws Exception
+	{
+		MappingService mappingService = (MappingService)context.getBean("mappingService");
+		Date start = DateUtil.tryToParseDate("2019-07-17");
+		MatchMappingList matchMappings = MappingUtil.createOkoooIssueMatchMapping(mappingService, start, null);
+		
+		PairMap<OkoooMatch, MatchInfo> pairs = (PairMap<OkoooMatch, MatchInfo>)MappingUtil.getPairMatchs(mappingService, matchMappings);
+		int index = 0;
+		for (OkoooMatch match : pairs.keySet())
+		{
+			Object value = pairs.get(match);
+			logger.info(index +++ " " + match + "=>" + value);
+		}
+		
+		for (MatchMapping matchMapping : matchMappings)
+		{
+			logger.info(matchMapping);
+		}
+		
+		LeagueMappingList leagueMappings = MappingUtil.getOkoooLeagueMappings(mappingService, pairs);
+		for (LeagueMapping leagueMapping : leagueMappings)
+		{
+			logger.info(leagueMapping);
+		}
+		
+		TeamMappingList teamMappings = MappingUtil.getOkoooTeamMappings(mappingService, pairs);
+		for (TeamMapping teamMapping : teamMappings)
+		{
+			logger.info(teamMapping);
+		}
+		
+		logger.info("Save MatchMapping: " + matchMappings.size());
+		mappingService.insertList(MatchMapping.class, matchMappings);
+		mappingService.insertList(LeagueMapping.class, leagueMappings);
+		mappingService.insertList(TeamMapping.class, teamMappings);
+	}
+	
 	
 	public static void testDateCompare() throws Exception
 	{
@@ -251,13 +300,14 @@ public class App
 		}
 	}
 	
-	@SuppressWarnings("unchecked") 
 	public static void testOkooo() throws Exception
 	{
-		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_LOTTERY_BD);
+		DataService dataService = (DataService) context.getBean("soccerDataService");
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_LOTTERY_JC);
 		logger.info("Download: " + page.getUrl());
 		if(downloadOkoooPage(page))
 		{
+			//logger.info(page.getContent());
 			TableRecords records = OkoooPageParser.parseWebPage(page);
 			if(records == null)
 			{
@@ -265,6 +315,9 @@ public class App
 				return;
 			}
 			
+			dataService.saveTableRecords(records);
+			
+			/*
 			List<OkoooIssueMatch> issueMatchs = null;
 			for (String key : records.keySet())
 			{
@@ -293,7 +346,7 @@ public class App
 						logger.info(okoooIssueMatch);
 					}
 					break;
-				case SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST:
+					case SoccerConstants.SOCCER_DATA_BETODDS_BD_LIST:
 					List<BetBdOdds> oddsList = (List<BetBdOdds>) records.get(key);
 					for (BetBdOdds betBdOdds : oddsList)
 					{
@@ -314,10 +367,17 @@ public class App
 						logger.info(okoooMatch);
 					}
 					break;
+				case SoccerConstants.SOCCER_DATA_TEAM_OKOOO_LIST:
+					List<OkoooTeam> teams = (List<OkoooTeam>)records.get(key);
+					for (OkoooTeam okoooTeam : teams)
+					{
+						logger.info(okoooTeam);
+					}
+					break;
 				default:
 					break;
 				}
-			}
+			}*/
 		}
 	}
 	

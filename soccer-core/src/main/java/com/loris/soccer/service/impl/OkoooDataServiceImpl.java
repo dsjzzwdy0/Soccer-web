@@ -11,11 +11,14 @@
  */
 package com.loris.soccer.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
@@ -25,12 +28,14 @@ import com.loris.soccer.dao.OkoooLeagueMapper;
 import com.loris.soccer.dao.OkoooMatchMapper;
 import com.loris.soccer.dao.OkoooOddsOpMapper;
 import com.loris.soccer.dao.OkoooOddsYpMapper;
+import com.loris.soccer.dao.OkoooTeamMapper;
 import com.loris.soccer.model.OkoooCasinoComp;
 import com.loris.soccer.model.OkoooIssueMatch;
 import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.OkoooOddsOp;
 import com.loris.soccer.model.OkoooOddsYp;
+import com.loris.soccer.model.OkoooTeam;
 import com.loris.soccer.service.OkoooDataService;
 
 /**   
@@ -47,6 +52,9 @@ public class OkoooDataServiceImpl implements OkoooDataService
 {
 	@Autowired
 	private SqlHelper sqlHelper;
+	
+	@Autowired
+	private OkoooTeamMapper okoooTeamMapper;
 	
 	@Autowired
 	private OkoooLeagueMapper okoooLeagueMapper;
@@ -196,5 +204,70 @@ public class OkoooDataServiceImpl implements OkoooDataService
 		ObjectFilter<OkoooCasinoComp> filter = new ObjectFilter<>();		
 		return SqlHelper.insertList(comps, OkoooCasinoComp.class, okoooCasinoMapper, filter,
 				SoccerConstants.NAME_FIELD_CORPID, sqlHelper, overwrite);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OkoooDataService#insertOkoooTeams(java.util.List)
+	 */
+	@Override
+	public boolean insertOkoooTeams(List<OkoooTeam> teams)
+	{
+		return insertOkoooTeams(teams, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OkoooDataService#insertOkoooTeams(java.util.List, boolean)
+	 */
+	@Override
+	public boolean insertOkoooTeams(List<OkoooTeam> teams, boolean overwrite)
+	{
+		updateTeamIdIfNull(teams);		
+		ObjectFilter<OkoooTeam> filter = new ObjectFilter<>();		
+		return SqlHelper.insertList(teams, OkoooTeam.class, okoooTeamMapper, filter,
+				SoccerConstants.NAME_FIELD_TID, sqlHelper, overwrite);
+	}
+	
+	/**
+	 * 在澳客网中，竞彩页面解析的TID是空值，则要重新赋值
+	 * @param teams 球队数据
+	 */
+	public void updateTeamIdIfNull(List<OkoooTeam> teams)
+	{
+		List<OkoooTeam> tidNulls = new ArrayList<>();
+		List<String> names = new ArrayList<>();
+		for (OkoooTeam team : teams)
+		{
+			if(StringUtils.isBlank(team.getTid()))
+			{
+				tidNulls.add(team);
+				if(StringUtils.isNotBlank(team.getName()))
+					if(!names.contains(team.getName())) names.add(team.getName());
+				if(StringUtils.isNotBlank(team.getAlias()))
+					if(!names.contains(team.getAlias())) names.add(team.getAlias());
+			}
+		}
+		
+		if(tidNulls.size() == 0 || names.size() == 0)
+			return;
+	
+		QueryWrapper<OkoooTeam> queryWrapper = new QueryWrapper<>();
+		queryWrapper.in("name", names).or().in("alias", names);
+		List<OkoooTeam> sourceTeams = okoooTeamMapper.selectList(queryWrapper);
+		
+		for (OkoooTeam okoooTeam : tidNulls)
+		{
+			for (OkoooTeam team : sourceTeams)
+			{
+				if(StringUtils.equals(team.getName(), okoooTeam.getName()) ||
+					StringUtils.equals(team.getAlias(), okoooTeam.getAlias()) ||
+					StringUtils.equals(team.getName(), okoooTeam.getAlias()) ||
+					StringUtils.equals(team.getAlias(), okoooTeam.getName()))
+				{
+					okoooTeam.setTid(team.getTid());
+				}
+			}
+		}
 	}
 }
