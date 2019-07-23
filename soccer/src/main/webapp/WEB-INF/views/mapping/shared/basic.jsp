@@ -16,15 +16,8 @@
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/fonts/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/headernew.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/public.css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/build.css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-datepicker/bootstrap-datepicker.css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-select/bootstrap-select.min.css" />
 <script type="text/javascript" src="${ctxPath}/content/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="${ctxPath}/content/plugins/layer/layer.js"></script>
-<script type="text/javascript" src="${ctxPath}/content/plugins/popper/popper.min.js"></script>
 <script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
 <script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-select/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="${ctxPath}/content/scripts/soccer/public.js"></script>
+<script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>

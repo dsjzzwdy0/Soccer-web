@@ -25,4 +25,14 @@
     	<put-attribute name="body" value="/WEB-INF/views/soccer/{1}.jsp" />
     </definition>
     
+    <definition name="mapping.tiles.definition">
+    	<put-attribute name="meta" value="/WEB-INF/views/mapping/shared/basic.jsp" />
+    	<put-attribute name="header" value="/WEB-INF/views/mapping/shared/header.jsp" />
+    </definition>
+    
+    <definition name="*.mapping" extends="mapping.tiles.definition" 
+    	template="/WEB-INF/views/mapping/shared/layout.jsp">
+    	<put-attribute name="body" value="/WEB-INF/views/mapping/{1}.jsp" />
+    </definition>
+    
 </tiles-definitions>

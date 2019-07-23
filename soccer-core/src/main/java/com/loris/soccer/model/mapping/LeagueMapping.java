@@ -50,11 +50,11 @@ public class LeagueMapping extends Mapping
 		this.sourcedest = sourcedest;
 	}
 	
-	public String getSourdename()
+	public String getSourcename()
 	{
 		return sourcename;
 	}
-	public void setSourdename(String sourdename)
+	public void setSourcename(String sourdename)
 	{
 		this.sourcename = sourdename;
 	}

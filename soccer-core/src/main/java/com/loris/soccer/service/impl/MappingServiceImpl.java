@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
@@ -309,5 +311,17 @@ public class MappingServiceImpl implements MappingService
 		
 		return SqlHelper.insertList(mappings, clazz, mapper, new ObjectFilter<T>(),
 				SoccerConstants.NAME_FIELD_SOURCE_ID, sqlHelper, false);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MappingService#getLeagueMapping(com.loris.common.web.wrapper.Page)
+	 */
+	@Override
+	public IPage<LeagueMapping> getLeagueMapping(Page<LeagueMapping> page)
+	{
+		QueryWrapper<LeagueMapping> queryWrapper = new QueryWrapper<>();
+		
+		return leagueMappingMapper.selectPage(page, queryWrapper);
 	}
 }

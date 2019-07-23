@@ -14,6 +14,8 @@ package com.loris.soccer.service;
 import java.util.Date;
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.OkoooIssueMatch;
@@ -22,6 +24,7 @@ import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.OkoooTeam;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.base.Mapping;
+import com.loris.soccer.model.mapping.LeagueMapping;
 import com.loris.soccer.model.mapping.MatchMapping;
 import com.loris.soccer.model.view.MatchInfo;
 
@@ -137,4 +140,11 @@ public interface MappingService
 	 * @return 是否成功的标志
 	 */
 	<T extends Mapping> boolean insertList(Class<T> clazz, List<T> mappings);
+	
+	/**
+	 * 获得页面数据
+	 * @param page 分页信息
+	 * @return 分页数据列表
+	 */
+	IPage<LeagueMapping> getLeagueMapping(Page<LeagueMapping> page);
 }
