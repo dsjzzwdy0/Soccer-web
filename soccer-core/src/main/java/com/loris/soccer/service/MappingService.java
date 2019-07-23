@@ -119,6 +119,12 @@ public interface MappingService
 	List<Team> getTeams(List<String> tids);
 	
 	/**
+	 * 获得澳客球队列表
+	 * @return 球队列表
+	 */
+	List<OkoooTeam> getOkoooTeams();
+	
+	/**
 	 * 获得澳客联赛的球队信息
 	 * @param names 名称编号
 	 * @return 球队列表

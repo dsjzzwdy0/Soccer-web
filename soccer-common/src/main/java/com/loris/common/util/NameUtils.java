@@ -13,6 +13,8 @@ package com.loris.common.util;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @ClassName: StringUtils.java
  * @Description: 字符串的工具类
@@ -32,6 +34,8 @@ public class NameUtils
 	 */
 	public static float distanceOfTwoStrings(String str1, String str2)
 	{
+		if(StringUtils.isEmpty(str1) || StringUtils.isEmpty(str2)) return 0.0f;
+		
 		ArrayList<String> pairs1 = wordLetterPairs(str1.toUpperCase());
 		ArrayList<String> pairs2 = wordLetterPairs(str2.toUpperCase());
 		int intersection = 0;

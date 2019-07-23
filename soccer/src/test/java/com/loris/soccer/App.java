@@ -99,6 +99,7 @@ import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.OkoooOddsOp;
 import com.loris.soccer.model.OkoooOddsYp;
+import com.loris.soccer.model.OkoooTeam;
 import com.loris.soccer.model.Season;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.mapping.LeagueMapping;
@@ -149,8 +150,9 @@ public class App
 			// testTeamRating();
 			// testOkooo();
 			// testOkoooOdds();
-			
 			testOkoooMapping();
+			
+			// testOkoooTeamMapping();
 			
 			// testDateCompare();			
 			// testSigmoid();
@@ -193,6 +195,36 @@ public class App
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	/**
+	 * 测试对球队进行匹配
+	 * @throws Exception
+	 */
+	public static void testOkoooTeamMapping() throws Exception
+	{
+		MappingService mappingService = (MappingService)context.getBean("mappingService");
+		List<OkoooTeam> okoooTeams = mappingService.getOkoooTeams();
+		List<Team> teams = mappingService.getTeams();
+		
+		float[][] values = MappingUtil.computeTeamNameCoefficients(okoooTeams, teams);
+		int n = okoooTeams.size();
+		int m = teams.size();
+		
+		for (int i = 0; i < n; i ++)
+		{
+			float max = -1.0f;
+			int index = -1;
+			for(int j = 0; j < m; j ++)
+			{
+				if(max < values[i][j])
+				{
+					max = values[i][j];
+					index = j;
+				}
+			}
+			logger.info(i + ": " + okoooTeams.get(i) + "=>" + teams.get(index) + " = " + max);
 		}
 	}
 	

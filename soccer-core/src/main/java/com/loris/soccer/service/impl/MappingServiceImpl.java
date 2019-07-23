@@ -260,6 +260,16 @@ public class MappingServiceImpl implements MappingService
 		queryWrapper.in("tid", tids);
 		return teamMapper.selectList(queryWrapper);
 	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MappingService#getOkoooTeams()
+	 */
+	@Override
+	public List<OkoooTeam> getOkoooTeams()
+	{
+		return okoooTeamMapper.selectList(new QueryWrapper<>());
+	}
 
 	/**
 	 *  (non-Javadoc)
@@ -300,5 +310,4 @@ public class MappingServiceImpl implements MappingService
 		return SqlHelper.insertList(mappings, clazz, mapper, new ObjectFilter<T>(),
 				SoccerConstants.NAME_FIELD_SOURCE_ID, sqlHelper, false);
 	}
-
 }
