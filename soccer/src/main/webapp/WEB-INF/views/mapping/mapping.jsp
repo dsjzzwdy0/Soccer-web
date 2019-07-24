@@ -58,14 +58,6 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link"
-            href="https://live.bootstrap-table.com"
-            target="_blank">
-            Online Editor
-            <span class="badge badge-warning">New</span>
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="https://bootstrap-table.com/donate">
             Donate
           </a>
@@ -106,7 +98,7 @@
       </li>
     </ul>
 
-    <a class="btn btn-bd-download d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" href="${ctxPath}/">Download</a>
+    <a class="btn btn-bd-download d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" href="${ctxPath}/">东方足球网</a>
   </header>
 
   <div class="container-fluid">
@@ -126,18 +118,14 @@
 
         <nav class="collapse bd-links" id="bd-docs-nav">
           <div class="bd-toc-item">
-            <a class="bd-toc-link" href="#welcome.html">Welcome</a>
+            <a class="bd-toc-link" href="#welcome.html">澳客数据处理</a>
             <ul class="nav bd-sidenav">
-                <li><a href="#league">League</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#welcomes/from-data.html">From Data</a></li>
+                <li><a href="#league">联赛数据</a></li>
+                <li><a href="#team">球队数据</a></li>
+                <li><a href="#match">比赛数据</a></li>
                 <li><a href="#welcomes/from-url.html">From URL</a></li>
                 <li data-show=""><a href="#welcomes/modal-table.html">Modal Table</a></li>
                 <li data-show="bootstrap3"><a href="#welcomes/modal-table-bootstrap3.html">Modal Table</a></li>
-                <li data-show="semantic"><a href="#welcomes/modal-table-semantic.html">Modal Table</a></li>
-                <li data-show="bulma"><a href="#welcomes/modal-table-bulma.html">Modal Table</a></li>
-                <li data-show="materialize"><a href="#welcomes/modal-table-materialize.html">Modal Table</a></li>
-                <li data-show="foundation"><a href="#welcomes/modal-table-foundation.html">Modal Table</a></li>
                 <li><a href="#welcomes/group-columns.html">Group Columns</a></li>
                 <li><a href="#welcomes/sub-table.html">Sub Table</a></li>
                 <li><a href="#welcomes/multiple-table.html">Multiple Table</a></li>

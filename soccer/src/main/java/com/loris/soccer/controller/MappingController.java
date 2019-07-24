@@ -22,6 +22,7 @@ import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.PageWrapper;
 import com.loris.common.web.wrapper.Pagination;
 import com.loris.soccer.model.mapping.LeagueMapping;
+import com.loris.soccer.model.mapping.MatchMapping;
 import com.loris.soccer.model.mapping.TeamMapping;
 import com.loris.soccer.service.MappingService;
 
@@ -140,6 +141,18 @@ public class MappingController extends BaseController
 	public PageWrapper<TeamMapping> getTeamMappings(Pagination pagination)
 	{
 		return new PageWrapper<>(mappingService.getTeamMappings(pagination));
+	}
+	
+	/**
+	 * 获得球队数据的映射
+	 * @param pagination 分页数据表
+	 * @return 数据集
+	 */
+	@ResponseBody
+	@RequestMapping("/getMatchs")
+	public PageWrapper<MatchMapping> getMatchMappings(Pagination pagination)
+	{
+		return new PageWrapper<>(mappingService.getMatchMappings(pagination));
 	}
 	
 	/**

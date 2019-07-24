@@ -10,7 +10,7 @@
     <meta name="renderer" content="webkit">
     <title>Soccer - 主页</title>
     <link rel="shortcut icon" href="${ctxPath}/content/favicon.ico">
-    <link href="${ctxPath}/content/plugins/bootstrap-4.3.0/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="${ctxPath}/content/plugins/bootstrap-3.3.7/css/bootstrap.min.css?v=3.3.7" rel="stylesheet">
     <link href="${ctxPath}/content/fonts/css/font-awesome.css?v=4.4.0" rel="stylesheet">
     <link href="${ctxPath}/content/css/style.css?v=4.1.0" rel="stylesheet">
 </head>
@@ -33,7 +33,7 @@
 
     <!-- 全局js -->
     <script type="text/javascript" src="${ctxPath}/content/plugins/jquery/jquery.min.js?v=2.1.4"></script>
-    <script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-4.3.0/js/bootstrap.min.js?v=3.3.6"></script>
+    <script type="text/javascript" src="${ctxPath}/content/plugins/bootstrap-3.3.7/js/bootstrap.min.js?v=3.3.7"></script>
     <script type="text/javascript" src="${ctxPath}/content/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script type="text/javascript" src="${ctxPath}/content/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script type="text/javascript" src="${ctxPath}/content/plugins/layer/layer.js"></script>

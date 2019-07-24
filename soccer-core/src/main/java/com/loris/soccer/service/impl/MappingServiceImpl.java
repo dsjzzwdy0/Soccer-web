@@ -353,4 +353,25 @@ public class MappingServiceImpl implements MappingService
 		Page<TeamMapping> page = new Page<>(pagination.getPageIndex(), pagination.getLimit());
 		return teamMappingMapper.selectPage(page, queryWrapper);
 	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MappingService#getMatchMappings(com.loris.common.web.wrapper.Pagination)
+	 */
+	@Override
+	public IPage<MatchMapping> getMatchMappings(Pagination pagination)
+	{
+		QueryWrapper<MatchMapping> queryWrapper = new QueryWrapper<>();
+		
+		if(StringUtils.isNotBlank(pagination.getSearch()))
+		{
+			queryWrapper.like("sourcename", pagination.getSearch()).or().like("destname", pagination.getSearch());
+		}
+		if(StringUtils.isNotEmpty(pagination.getSort()))
+		{
+			queryWrapper.orderBy(true, StringUtils.equalsAnyIgnoreCase("asc", pagination.getOrder()), pagination.getSort());
+		}
+		Page<MatchMapping> page = new Page<>(pagination.getPageIndex(), pagination.getLimit());
+		return matchMappingMapper.selectPage(page, queryWrapper);
+	}
 }

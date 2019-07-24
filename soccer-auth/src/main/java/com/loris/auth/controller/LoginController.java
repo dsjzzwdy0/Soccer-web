@@ -91,6 +91,16 @@ public class LoginController extends BaseController
 			return "/login";
 		}
 	}
+	
+	/**
+	 * 首页面
+	 * @return
+	 */
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String Index()
+	{
+		return "/index";
+	}
 
 	/**
 	 * 点击登录执行的动作

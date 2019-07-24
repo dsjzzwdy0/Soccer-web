@@ -155,4 +155,11 @@ public interface MappingService
 	 * @return 分页的联赛球队数据表
 	 */
 	IPage<TeamMapping> getTeamMappings(Pagination pagination);
+	
+	/**
+	 * 分页
+	 * @param pagination
+	 * @return
+	 */
+	IPage<MatchMapping> getMatchMappings(Pagination pagination);
 }
