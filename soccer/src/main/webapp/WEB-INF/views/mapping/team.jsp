@@ -1,178 +1,152 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="com.loris.soccer.model.League"%>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
-
-
-<script>
-	init({
-		title : 'Welcome Examples',
-		desc : 'Examples with checkbox, sort, pagination, export, editable and other added features.',
-		scripts : [
-				'https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js',
-				'https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table-locale-all.min.js'
-				//'extensions/export/bootstrap-table-export.min.js' 
-				]
-	})
-</script>
-
+<link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/datacenter.css" />
 <style>
-.select, #locale {
-	width: 100%;
+.btn {
+	font-size: 12px;
+	height: 32px;
 }
-
-.like {
-	margin-right: 10px;
+.container_wrapper .gridTable th {
+    height: 40px;
+    font-size: 15px;
+}
+.container_wrapper .gridTable .th-inner {
+    height: 40px;
+    padding: 1px;
+}
+.fixed-table-container thead th .th-inner {
+    padding: 8px;
+    line-height: 40px;
 }
 </style>
-
-<div id="toolbar">
-	<button id="remove" class="btn btn-danger" disabled>
-		<i class="glyphicon glyphicon-remove"></i> Delete
-	</button>
+<div id="content" class="container_wrapper">
+	<div id="main" class="main_wrapper">
+		<div id="toolbar">
+            <div class="btn btn-primary" data-toggle="modal" data-target="#addModal">添加记录</div>
+        </div>
+            
+		<table id="gridTable" class="gridTable table-hover"
+			data-pagination="true" data-show-refresh="true">
+			<thead id="tableHeader">
+			</thead>
+			<tbody id="tableContent">
+			</tbody>
+		</table>
+	</div>
 </div>
-<table id="table" data-toolbar="#toolbar" data-search="true"
-	data-show-refresh="true" data-show-toggle="true"
-	data-show-fullscreen="true" data-show-columns="true"
-	data-detail-view="true" data-show-export="true"
-	data-click-to-select="true" data-detail-formatter="detailFormatter"
-	data-minimum-count-columns="2" data-show-pagination-switch="true"
-	data-pagination="true" data-id-field="id"
-	data-page-list="[10, 25, 50, 100, all]" data-show-footer="true"
-	data-side-pagination="server"
-	data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
-	data-response-handler="responseHandler">
-</table>
 
-<script>
-	var $table = $('#table')
-	var $remove = $('#remove')
-	var selections = []
+<script type="text/javascript">
+$(function() {
+    //根据窗口调整表格高度
+    $(window).resize(function() {
+        $('#gridTable').bootstrapTable('resetView', {
+            height: tableHeight()
+        })
+    })
 
-	function getIdSelections() {
-		return $.map($table.bootstrapTable('getSelections'), function(row) {
-			return row.id
-		})
-	}
+    $('#gridTable').bootstrapTable({
+        url: "getTeams",		//数据源
+        dataField: "rows",		//服务端返回数据键值 就是说记录放的键值是rows，分页时使用总记录数的键值为total
+        height: tableHeight(),	//高度调整
+        search: true,			//是否搜索
+        pagination: true,		//是否分页
+        pageSize: 20,			//单页记录数
+        pageList: [5, 10, 20, 50],//分页步进值
+        sidePagination: "server",//服务端分页
+        contentType: "application/x-www-form-urlencoded",//请求数据内容格式 默认是 application/json 自己根据格式自行服务端处理
+        dataType: "json",//期待返回数据类型
+        method: "post",//请求方式
+        searchAlign: "left",//查询框对齐方式
+        queryParamsType: "limit",//查询参数组织方式
+        queryParams: function getParams(params) {
+            //params obj
+            params.other = "otherInfo";
+            return params;
+        },
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: true,//列选择按钮
+        buttonsAlign: "left",//按钮对齐方式
+        toolbar: "#toolbar",//指定工具栏
+        toolbarAlign: "right",//工具栏对齐方式
+        columns: [
+            {
+                title: "全选",
+                field: "select",
+                checkbox: true,
+                width: 20,//宽度
+                align: "center",//水平
+                valign: "middle"//垂直
+            },
+            {
+                title: "ID",//标题
+                field: "id",//键名
+                sortable: true,//是否可排序
+                order: "desc"//默认排序方式
+            },
+            {
+                field: "sourcename",
+                title: "Okooo名称",
+                sortable: true,
+                titleTooltip: "这是来自于澳客网的数据"
+            },
+            {
+                field: "sourcefrom",
+                title: "数据来源",
+                sortable: false,
+            },
+            {
+                field: "destname",
+                title: "联赛名称",
+                sortable: true,
+                titleTooltip: "这是来自于中国足彩网的数据"
+            },
+            {
+                field: "sourcedest",
+                title: "数据来源",
+                sortable: false,
+            },
+            {
+                field: "operator",
+                title: "数据操作",
+                formatter: operateFormatter,		//对本列数据做格式化
+                width: '120px',
+            }
+        ],
+        onClickRow: function(row, $element) {
+            //$element是当前tr的jquery对象
+            //$element.css("background-color", "green");
+        },			//单击row事件
+        locale: "zh-CN", //中文支持
+        detailView: true, //是否显示详情折叠
+        detailFormatter: function(index, row, element)
+        {
+            var html = '';
+            $.each(row, function(key, val){
+                html += "<p>" + key + ":" + val +  "</p>"
+            });
+            return html;
+        }
+    });
+    
+ 	// 格式化按钮
+    function operateFormatter(value, row, index) {
+        return [
+            //'<button type="button" class="btn btn-primary" style="margin-right:5px;height:28px;" title="新增"><i class="glyphicon glyphicon-plus"></i></button>',
+            '<button type="button" class="btn btn-primary" style="margin-right:5px;height:28px;" title="修改"><i class="glyphicon glyphicon-pencil"></i></button>',
+            '<button type="button" class="btn btn-primary" style="margin-right:5px;height:28px;" title="删除"><i class="glyphicon glyphicon-trash"></i></button>'
+        ].join('');
 
-	function responseHandler(res) {
-		$.each(res.rows, function(i, row) {
-			row.state = $.inArray(row.id, selections) !== -1
-		})
-		return res
-	}
+    }
 
-	function detailFormatter(index, row) {
-		var html = []
-		$.each(row, function(key, value) {
-			html.push('<p><b>' + key + ':</b> ' + value + '</p>')
-		})
-		return html.join('')
-	}
-
-	function operateFormatter(value, row, index) {
-		return [ '<a class="like" href="javascript:void(0)" title="Like">',
-				'<i class="fa fa-heart"></i>', '</a>  ',
-				'<a class="remove" href="javascript:void(0)" title="Remove">',
-				'<i class="fa fa-trash"></i>', '</a>' ].join('')
-	}
-
-	window.operateEvents = {
-		'click .like' : function(e, value, row, index) {
-			alert('You click like action, row: ' + JSON.stringify(row))
-		},
-		'click .remove' : function(e, value, row, index) {
-			$table.bootstrapTable('remove', {
-				field : 'id',
-				values : [ row.id ]
-			})
-		}
-	}
-
-	function totalTextFormatter(data) {
-		return 'Total'
-	}
-
-	function totalNameFormatter(data) {
-		return data.length
-	}
-
-	function totalPriceFormatter(data) {
-		var field = this.field
-		return '$' + data.map(function(row) {
-			return +row[field].substring(1)
-		}).reduce(function(sum, i) {
-			return sum + i
-		}, 0)
-	}
-
-	function initTable() {
-		$table.bootstrapTable('destroy').bootstrapTable({
-			height : 550,
-			locale : 'zh-CN',
-			columns : [ [ {
-				field : 'state',
-				checkbox : true,
-				rowspan : 2,
-				align : 'center',
-				valign : 'middle'
-			}, {
-				title : 'Item ID',
-				field : 'id',
-				rowspan : 2,
-				align : 'center',
-				valign : 'middle',
-				sortable : true,
-				footerFormatter : totalTextFormatter
-			}, {
-				title : 'Item Detail',
-				colspan : 3,
-				align : 'center'
-			} ], [ {
-				field : 'name',
-				title : 'Item Name',
-				sortable : true,
-				footerFormatter : totalNameFormatter,
-				align : 'center'
-			}, {
-				field : 'price',
-				title : 'Item Price',
-				sortable : true,
-				align : 'center',
-				footerFormatter : totalPriceFormatter
-			}, {
-				field : 'operate',
-				title : 'Item Operate',
-				align : 'center',
-				events : window.operateEvents,
-				formatter : operateFormatter
-			} ] ]
-		})
-		$table.on('check.bs.table uncheck.bs.table '
-				+ 'check-all.bs.table uncheck-all.bs.table', function() {
-			$remove.prop('disabled',
-					!$table.bootstrapTable('getSelections').length)
-
-			// save your data, here just save the current page
-			selections = getIdSelections()
-			// push or splice the selections if you want to save all data selections
-		})
-		$table.on('all.bs.table', function(e, name, args) {
-			console.log(name, args)
-		})
-		$remove.click(function() {
-			var ids = getIdSelections()
-			$table.bootstrapTable('remove', {
-				field : 'id',
-				values : ids
-			})
-			$remove.prop('disabled', true)
-		})
-	}
-
-	function mounted() {
-		initTable()
-		$('#locale').change(initTable)
-		//alert("Mounted.")
-	}
+    $("#addRecord").click(function(){
+        alert("name:" + $("#name").val() + " age:" +$("#age").val());
+    });
+    
+    function tableHeight() {
+        return $(window).height() - 30;
+    }
+});
 </script>

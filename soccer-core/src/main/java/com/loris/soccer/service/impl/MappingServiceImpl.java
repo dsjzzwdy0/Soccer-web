@@ -316,10 +316,10 @@ public class MappingServiceImpl implements MappingService
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MappingService#getLeagueMapping(com.loris.common.web.wrapper.Pagination)
+	 * @see com.loris.soccer.service.MappingService#getLeagueMappings(com.loris.common.web.wrapper.Pagination)
 	 */
 	@Override
-	public IPage<LeagueMapping> getLeagueMapping(Pagination pagination)
+	public IPage<LeagueMapping> getLeagueMappings(Pagination pagination)
 	{
 		QueryWrapper<LeagueMapping> queryWrapper = new QueryWrapper<>();
 		if(StringUtils.isNotBlank(pagination.getSearch()))
@@ -332,5 +332,25 @@ public class MappingServiceImpl implements MappingService
 		}
 		Page<LeagueMapping> page = new Page<>(pagination.getPageIndex(), pagination.getLimit());
 		return leagueMappingMapper.selectPage(page, queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.MappingService#getTeamMappings(com.loris.common.web.wrapper.Pagination)
+	 */
+	@Override
+	public IPage<TeamMapping> getTeamMappings(Pagination pagination)
+	{
+		QueryWrapper<TeamMapping> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotBlank(pagination.getSearch()))
+		{
+			queryWrapper.like("sourcename", pagination.getSearch()).or().like("destname", pagination.getSearch());
+		}
+		if(StringUtils.isNotEmpty(pagination.getSort()))
+		{
+			queryWrapper.orderBy(true, StringUtils.equalsAnyIgnoreCase("asc", pagination.getOrder()), pagination.getSort());
+		}
+		Page<TeamMapping> page = new Page<>(pagination.getPageIndex(), pagination.getLimit());
+		return teamMappingMapper.selectPage(page, queryWrapper);
 	}
 }

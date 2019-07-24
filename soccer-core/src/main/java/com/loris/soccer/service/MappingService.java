@@ -26,6 +26,7 @@ import com.loris.soccer.model.Team;
 import com.loris.soccer.model.base.Mapping;
 import com.loris.soccer.model.mapping.LeagueMapping;
 import com.loris.soccer.model.mapping.MatchMapping;
+import com.loris.soccer.model.mapping.TeamMapping;
 import com.loris.soccer.model.view.MatchInfo;
 
 /**   
@@ -146,5 +147,12 @@ public interface MappingService
 	 * @param page 分页信息
 	 * @return 分页数据列表
 	 */
-	IPage<LeagueMapping> getLeagueMapping(Pagination pagination);
+	IPage<LeagueMapping> getLeagueMappings(Pagination pagination);
+	
+	/**
+	 * 获得联赛球队的映射数据表
+	 * @param pagination 分页信息
+	 * @return 分页的联赛球队数据表
+	 */
+	IPage<TeamMapping> getTeamMappings(Pagination pagination);
 }
