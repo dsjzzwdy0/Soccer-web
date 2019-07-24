@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
+import com.loris.common.web.wrapper.Pagination;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.IssueMatchMapper;
 import com.loris.soccer.dao.LeagueMapper;
@@ -315,13 +316,21 @@ public class MappingServiceImpl implements MappingService
 
 	/**
 	 *  (non-Javadoc)
-	 * @see com.loris.soccer.service.MappingService#getLeagueMapping(com.loris.common.web.wrapper.Page)
+	 * @see com.loris.soccer.service.MappingService#getLeagueMapping(com.loris.common.web.wrapper.Pagination)
 	 */
 	@Override
-	public IPage<LeagueMapping> getLeagueMapping(Page<LeagueMapping> page)
+	public IPage<LeagueMapping> getLeagueMapping(Pagination pagination)
 	{
 		QueryWrapper<LeagueMapping> queryWrapper = new QueryWrapper<>();
-		
+		if(StringUtils.isNotBlank(pagination.getSearch()))
+		{
+			queryWrapper.like("sourcename", pagination.getSearch()).or().like("destname", pagination.getSearch());
+		}
+		if(StringUtils.isNotEmpty(pagination.getSort()))
+		{
+			queryWrapper.orderBy(true, StringUtils.equalsAnyIgnoreCase("asc", pagination.getOrder()), pagination.getSort());
+		}
+		Page<LeagueMapping> page = new Page<>(pagination.getPageIndex(), pagination.getLimit());
 		return leagueMappingMapper.selectPage(page, queryWrapper);
 	}
 }

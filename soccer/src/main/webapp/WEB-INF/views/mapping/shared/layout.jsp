@@ -10,10 +10,6 @@
 <tiles:insertAttribute name="meta" />
 </head>
 <body>
-<!-- 页头 -->
-<div class="top_header" align="center">
-	<tiles:insertAttribute name="header" />
-</div>
 <tiles:insertAttribute name="body" />
 </body>
 </html>

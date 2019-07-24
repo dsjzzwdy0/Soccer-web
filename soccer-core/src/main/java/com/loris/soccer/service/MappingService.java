@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.loris.common.web.wrapper.Pagination;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
 import com.loris.soccer.model.OkoooIssueMatch;
@@ -146,5 +146,5 @@ public interface MappingService
 	 * @param page 分页信息
 	 * @return 分页数据列表
 	 */
-	IPage<LeagueMapping> getLeagueMapping(Page<LeagueMapping> page);
+	IPage<LeagueMapping> getLeagueMapping(Pagination pagination);
 }

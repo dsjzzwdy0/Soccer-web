@@ -7,6 +7,15 @@
 <div class="Newheader_box">
 	<div class="Newheader_content clearfix">
 		<div class="float_r">
+			<div class="navlist_box">
+				<span><a href="check?type=league">联赛匹配</a></span>
+			</div>
+			<div class="navlist_box">
+				<span><a href="check?type=team">球队匹配</a></span>
+			</div>
+			<div class="navlist_box">
+				<span><a href="check?type=match">比赛匹配</a></span>
+			</div>
 			<div class="navlist_box ">
 				<span>足彩网站 <em class="navIcon icon_down_sm"></em></span>
 				<div class="tc_xiala top_short">

@@ -20,72 +20,70 @@ package com.loris.common.web.wrapper;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄及用于其他的商业目的 
  */
-public class Page
+public class Pagination
 {
-	// 每页显示数量
-    private int limit;
-    
-    // 页码
-    private int page;
-    
-    // sql语句起始索引
-    private int offset;
-
-	/**
-	 * @return the limit
-	 */
+	protected int limit;
+	protected int offset;
+	protected String order;
+	protected String sort;
+	protected String search;
 	public int getLimit()
 	{
+		if(limit <= 0)
+			limit = 5;
 		return limit;
 	}
-
-	/**
-	 * @param limit the limit to set
-	 */
 	public void setLimit(int limit)
 	{
 		this.limit = limit;
 	}
-
-	/**
-	 * @return the page
-	 */
-	public int getPage()
-	{
-		return page;
-	}
-
-	/**
-	 * @param page the page to set
-	 */
-	public void setPage(int page)
-	{
-		this.page = page;
-	}
-
-	/**
-	 * @return the offset
-	 */
 	public int getOffset()
 	{
 		return offset;
 	}
-
-	/**
-	 * @param offset the offset to set
-	 */
 	public void setOffset(int offset)
 	{
 		this.offset = offset;
 	}
-
+	public String getOrder()
+	{
+		return order;
+	}
+	public void setOrder(String order)
+	{
+		this.order = order;
+	}
+	public String getSearch()
+	{
+		return search;
+	}
+	public void setSearch(String search)
+	{
+		this.search = search;
+	}
+	public String getSort()
+	{
+		return sort;
+	}
+	public void setSort(String sort)
+	{
+		this.sort = sort;
+	}
 	/**
-	 *  (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	 * 获得需要显示的数据页序号
+	 * 这里以第1页作为起始页
+	 * @return 页序号
 	 */
+	public int getPageIndex()
+	{
+		if(offset < 0)
+			offset = 0;
+		return offset / getLimit() + 1;
+	}
 	@Override
 	public String toString()
 	{
-		return "Page [limit=" + limit + ", page=" + page + ", offset=" + offset + "]";
-	}
+		return "Pagination [limit=" + limit + ", offset=" + offset + ", order=" + order + ", sort=" + sort + ", search="
+				+ search + "]";
+	}	
 }

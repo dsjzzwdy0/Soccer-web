@@ -27,7 +27,6 @@
     
     <definition name="mapping.tiles.definition">
     	<put-attribute name="meta" value="/WEB-INF/views/mapping/shared/basic.jsp" />
-    	<put-attribute name="header" value="/WEB-INF/views/mapping/shared/header.jsp" />
     </definition>
     
     <definition name="*.mapping" extends="mapping.tiles.definition" 

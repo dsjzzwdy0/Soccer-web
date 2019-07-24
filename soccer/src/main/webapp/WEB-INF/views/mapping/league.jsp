@@ -1,32 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.loris.soccer.model.League"%>
-<%@page import="com.loris.soccer.util.IssueMatchUtil" %>
-<%@page import="org.apache.commons.lang3.StringUtils" %>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
-
-<%
-    String issue = request.getParameter("issue");
-	String sid = request.getParameter("sid");		//配置编号
-	String type = request.getParameter("type");
-	if(StringUtils.isEmpty(issue))
-	{
-		issue = IssueMatchUtil.getCurrentIssue();
-	}
-	if(StringUtils.isEmpty(sid))
-	{
-		sid = "1011";
-	}
-	if(StringUtils.isEmpty(type))
-	{
-		type = "bd";
-	}
-%>
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/datacenter.css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/scripts/soccer/soccer-table.css" />
-
+<style>
+.btn {
+	font-size: 12px;
+	height: 32px;
+}
+.container_wrapper .gridTable th {
+    height: 40px;
+    font-size: 15px;
+}
+.container_wrapper .gridTable .th-inner {
+    height: 40px;
+    padding: 1px;
+}
+.fixed-table-container thead th .th-inner {
+    padding: 8px;
+    line-height: 40px;
+}
+</style>
 <div id="content" class="container_wrapper">
-	
 	<div id="main" class="main_wrapper">
 		<div id="toolbar">
             <div class="btn btn-primary" data-toggle="modal" data-target="#addModal">添加记录</div>
@@ -95,36 +90,37 @@ $(function() {
                 field: "sourcename",
                 title: "Okooo名称",
                 sortable: true,
-                titleTooltip: "this is name"
+                titleTooltip: "这是来自于澳客网的数据"
             },
             {
                 field: "sourcefrom",
                 title: "数据来源",
-                sortable: true,
+                sortable: false,
             },
             {
                 field: "destname",
                 title: "联赛名称",
                 sortable: true,
-                titleTooltip: "this is name"
+                titleTooltip: "这是来自于中国足彩网的数据"
             },
             {
                 field: "sourcedest",
                 title: "数据来源",
-                sortable: true,
+                sortable: false,
             },
             {
-                field: "info",
+                field: "operator",
                 title: "数据操作",
-                formatter: 'infoFormatter',		//对本列数据做格式化
+                formatter: operateFormatter,		//对本列数据做格式化
+                width: '120px',
             }
         ],
         onClickRow: function(row, $element) {
             //$element是当前tr的jquery对象
-            $element.css("background-color", "green");
+            //$element.css("background-color", "green");
         },			//单击row事件
         locale: "zh-CN", //中文支持
-        detailView: false, //是否显示详情折叠
+        detailView: true, //是否显示详情折叠
         detailFormatter: function(index, row, element)
         {
             var html = '';
@@ -134,6 +130,16 @@ $(function() {
             return html;
         }
     });
+    
+ 	// 格式化按钮
+    function operateFormatter(value, row, index) {
+        return [
+            //'<button type="button" class="btn btn-primary" style="margin-right:5px;height:28px;" title="新增"><i class="glyphicon glyphicon-plus"></i></button>',
+            '<button type="button" class="btn btn-primary" style="margin-right:5px;height:28px;" title="修改"><i class="glyphicon glyphicon-pencil"></i></button>',
+            '<button type="button" class="btn btn-primary" style="margin-right:5px;height:28px;" title="删除"><i class="glyphicon glyphicon-trash"></i></button>'
+        ].join('');
+
+    }
 
     $("#addRecord").click(function(){
         alert("name:" + $("#name").val() + " age:" +$("#age").val());

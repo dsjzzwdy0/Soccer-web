@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.PageWrapper;
+import com.loris.common.web.wrapper.Pagination;
 import com.loris.soccer.model.mapping.LeagueMapping;
 import com.loris.soccer.service.MappingService;
 
@@ -37,6 +37,8 @@ import com.loris.soccer.service.MappingService;
 @RequestMapping("/mapping")
 public class MappingController extends BaseController
 {
+	//private static Logger logger = Logger.getLogger(MappingController.class);
+	
 	static final String[][] MAPPING_TYPES = {
 			{"league", "联赛映射"},
 			{"team", "球队映射"},
@@ -45,6 +47,61 @@ public class MappingController extends BaseController
 
 	@Autowired
 	private MappingService mappingService;
+	
+	/**
+	 * 映射数据处理的首页
+	 * @return 视图
+	 */
+	@RequestMapping("index")
+	public ModelAndView index()
+	{
+		ModelAndView view = new ModelAndView("mapping/mapping");
+		return view;
+	}
+	
+	/**
+	 * 映射数据处理的首页
+	 * @return 视图
+	 */
+	@RequestMapping("/template")
+	public ModelAndView template()
+	{
+		ModelAndView view = new ModelAndView("mapping/template");
+		return view;
+	}
+	
+	/**
+	 * 联赛数据映射
+	 * @return 视图
+	 */
+	@RequestMapping("/league")
+	public ModelAndView league()
+	{
+		ModelAndView view = new ModelAndView("league.mapping");
+		return view;
+	}
+	
+	/**
+	 * 球队数据映射
+	 * @return 视图
+	 */
+	@RequestMapping("/team")
+	public ModelAndView team()
+	{
+		ModelAndView view = new ModelAndView("team.mapping");
+		return view;
+	}
+	
+	/**
+	 * 球队数据映射
+	 * @return 视图
+	 */
+	@RequestMapping("/match")
+	public ModelAndView match()
+	{
+		ModelAndView view = new ModelAndView("match.mapping");
+		return view;
+	}
 	
 	/**
 	 * 数据映射检查工具类
@@ -66,8 +123,9 @@ public class MappingController extends BaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/getLeagues")
-	public PageWrapper<LeagueMapping> getLeagueMappings(Page<LeagueMapping> page)
+	public PageWrapper<LeagueMapping> getLeagueMappings(Pagination page)
 	{
+		//logger.info("Page informatino: " + page);
 		return new PageWrapper<>(mappingService.getLeagueMapping(page));
 	}
 	

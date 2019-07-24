@@ -13,7 +13,6 @@
 <link rel="Shortcut Icon" href="${ctxPath}/content/images/loris_favicon_2.ico">
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/plugins/bootstrap-table/bootstrap-table.min.css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/content/fonts/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/headernew.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/content/css/soccer/public.css" />
 <script type="text/javascript" src="${ctxPath}/content/plugins/jquery/jquery.min.js"></script>
