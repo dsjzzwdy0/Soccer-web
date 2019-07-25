@@ -42,5 +42,22 @@
 	</div>
 </div>
 <script>
-
+$(function() {
+	var url = "getLeagues";
+	$.ajax({
+        type: "post",
+        url: url,
+        data: null,
+        dataType: "json",
+        async:false,
+        success:function(data) {
+        	
+        }
+	});
+	
+	function init(element, list)
+	{
+		
+	}
+});
 </script>

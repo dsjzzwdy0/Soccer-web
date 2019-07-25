@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.PageWrapper;
 import com.loris.common.web.wrapper.Pagination;
+import com.loris.soccer.data.okooo.OkoooConstants;
+import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.model.League;
+import com.loris.soccer.model.OkoooLeague;
 import com.loris.soccer.model.mapping.LeagueMapping;
 import com.loris.soccer.model.mapping.MatchMapping;
 import com.loris.soccer.model.mapping.TeamMapping;
@@ -142,7 +146,13 @@ public class MappingController extends BaseController
 	@RequestMapping("/getLeagues")
 	public Map<String, List<? extends League>> getLeagues(String type)
 	{
-		return null;
+		List<League> leagues = mappingService.getLeagues();
+		List<OkoooLeague> okoooLeagues = mappingService.getOkoooLeagues();
+		
+		Map<String, List<? extends League>> results = new HashMap<>();
+		results.put(ZgzcwConstants.SOURCE_ZGZCW, leagues);
+		results.put(OkoooConstants.SOURCE_OKOOO, okoooLeagues);
+		return results;
 	}
 	
 	/**
