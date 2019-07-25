@@ -84,22 +84,12 @@ public class LoginController extends BaseController
 	{
 		if (ShiroKit.isAuthenticated() && ShiroKit.getUser() != null)
 		{
-			return REDIRECT + "/";
+			return REDIRECT + "/main";
 		}
 		else
 		{
 			return "/login";
 		}
-	}
-	
-	/**
-	 * 首页面
-	 * @return
-	 */
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String Index()
-	{
-		return "/index";
 	}
 
 	/**

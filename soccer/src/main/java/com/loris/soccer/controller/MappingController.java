@@ -84,6 +84,17 @@ public class MappingController extends BaseController
 	}
 	
 	/**
+	 * 添加联赛映射数据
+	 * @return 视图
+	 */
+	@RequestMapping("/addLeagueMapping")
+	public ModelAndView addLeagueMapping()
+	{
+		ModelAndView view = new ModelAndView("league_add.mapping");
+		return view;
+	}
+	
+	/**
 	 * 球队数据映射
 	 * @return 视图
 	 */

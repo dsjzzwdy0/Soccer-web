@@ -13,10 +13,10 @@
 					<span>
 					<img alt="image" class="img-circle"
 						<c:if test="${avatar == null}">
-                             src="${ctxPath}/content/img/girl.gif"
+                             src="${ctxPath}/content/images/girl.gif"
 						</c:if>
 						<c:if test="${avatar != null}">
-                             src="${ctxPath}/content/img/${avatar}"
+                             src="${ctxPath}/content/images/${avatar}"
 						</c:if>
                              width="64px" height="64px" />
                     </span> 

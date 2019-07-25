@@ -22,6 +22,7 @@
 				/login = anon
 				/logout = anon
 				/index = authc
+				/mapping/** = anon
 				/user/list = anon
 				/content/** = anon 							<!-- 不需要任何权限 -->
 				/user/login = anon 							<!-- 可以不需要登录-->

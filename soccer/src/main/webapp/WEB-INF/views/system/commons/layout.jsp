@@ -12,7 +12,7 @@
 
     <!-- 全局css -->
     <link rel="shortcut icon" href="${ctxPath}/content/favicon.ico">
-    <link href="${ctxPath}/content/plugins/bootstrap-4.3.0/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="${ctxPath}/content/plugins/bootstrap-3.3.7/css/bootstrap.min.css?v=3.3.7" rel="stylesheet">
     <link href="${ctxPath}/content/fonts/css/font-awesome.css?v=4.4.0" rel="stylesheet">
     <link href="${ctxPath}/content/plugins/chosen/chosen.css" rel="stylesheet">
     <link href="${ctxPath}/content/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
@@ -26,7 +26,7 @@
 
     <!-- 全局js -->
     <script src="${ctxPath}/content/plugins/jquery/jquery.min.js?v=2.1.4"></script>
-    <script src="${ctxPath}/content/plugins/bootstrap-4.3.0/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="${ctxPath}/content/plugins/bootstrap-3.3.7/js/bootstrap.min.js?v=3.3.7"></script>
     <script src="${ctxPath}/content/plugins/ztree/jquery.ztree.all.min.js"></script>
     <script src="${ctxPath}/content/plugins/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="${ctxPath}/content/plugins/validate/bootstrapValidator.min.js"></script>
