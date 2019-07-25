@@ -11,6 +11,9 @@
  */
 package com.loris.soccer.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.loris.common.web.BaseController;
 import com.loris.common.web.wrapper.PageWrapper;
 import com.loris.common.web.wrapper.Pagination;
+import com.loris.soccer.model.League;
 import com.loris.soccer.model.mapping.LeagueMapping;
 import com.loris.soccer.model.mapping.MatchMapping;
 import com.loris.soccer.model.mapping.TeamMapping;
@@ -130,12 +134,24 @@ public class MappingController extends BaseController
 	}
 	
 	/**
+	 * 获得所有的联赛数据
+	 * @param type 类型: okooo、zgzcw/ all
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getLeagues")
+	public Map<String, List<? extends League>> getLeagues(String type)
+	{
+		return null;
+	}
+	
+	/**
 	 * 查询联赛映射数据列表
 	 * @param page 分页信息
 	 * @return 数据页面
 	 */
 	@ResponseBody
-	@RequestMapping("/getLeagues")
+	@RequestMapping("/getLeaguesMappings")
 	public PageWrapper<LeagueMapping> getLeagueMappings(Pagination page)
 	{
 		//logger.info("Page informatino: " + page);
@@ -148,7 +164,7 @@ public class MappingController extends BaseController
 	 * @return 数据集
 	 */
 	@ResponseBody
-	@RequestMapping("/getTeams")
+	@RequestMapping("/getTeamsMappings")
 	public PageWrapper<TeamMapping> getTeamMappings(Pagination pagination)
 	{
 		return new PageWrapper<>(mappingService.getTeamMappings(pagination));
@@ -160,7 +176,7 @@ public class MappingController extends BaseController
 	 * @return 数据集
 	 */
 	@ResponseBody
-	@RequestMapping("/getMatchs")
+	@RequestMapping("/getMatchsMappings")
 	public PageWrapper<MatchMapping> getMatchMappings(Pagination pagination)
 	{
 		return new PageWrapper<>(mappingService.getMatchMappings(pagination));

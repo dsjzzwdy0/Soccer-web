@@ -57,7 +57,7 @@ $(function() {
     })
 
     $('#gridTable').bootstrapTable({
-        url: "getLeagues",		//数据源
+        url: "getLeaguesMappings",		//数据源
         dataField: "rows",		//服务端返回数据键值 就是说记录放的键值是rows，分页时使用总记录数的键值为total
         height: tableHeight(),	//高度调整
         search: false,			//是否搜索

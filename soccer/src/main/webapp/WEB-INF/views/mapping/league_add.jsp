@@ -7,28 +7,22 @@
 	<div class="ibox-content">
 		<div class="form-horizontal" id="userInfoForm">
 			<div class="row">
+				
 				<div class="col-sm-6 b-r">
-					<fns:input id="account" name="账户" underline="true"/>
-					<fns:select id="sex" name="性别" underline="true">
+					<h2>澳客网数据</h2>
+					<fns:input id="sourceid" name="编号" underline="true"/>
+					<fns:select id="sourcename" name="名称" underline="true">
 						<option value="1">男</option>
 						<option value="2">女</option>
 					</fns:select>
-					<fns:input id="password" name="密码" underline="true" type="password"/>
-					<fns:input id="roleid" name="角色" underline="true" disabled="disabled"/>
-					<fns:input id="email" name="邮箱" type="email"/>
 				</div>
 				<div class="col-sm-6">
-					<div id="driverInfoContent">
-						<fns:input id="name" name="姓名" underline="true"/>
-						<fns:input id="birthday" name="出生日期" underline="true" type="date"
-								clickFun="laydate({istime: false, format: 'YYYY-MM-DD'})"/>
-						<fns:input id="rePassword" name="确认密码" type="password" underline="true"/>
-						<fns:input id="citySel" name="部门" underline="true" readonly="readonly" hidden="deptid"
-							clickFun="UserInfoDlg.showDeptSelectTree(); return false;"
-							style="background-color: #ffffff !important;"/>
-
-						<fns:input id="phone" name="电话"/>
-					</div>
+					<h2>足彩网数据</h2>
+					<fns:input id="destid" name="编号" underline="true"/>
+					<fns:select id="destname" name="名称" underline="true">
+						<option value="1">男</option>
+						<option value="2">女</option>
+					</fns:select>
 				</div>
 			</div>
 
@@ -45,6 +39,8 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
+<script>
+
+</script>
