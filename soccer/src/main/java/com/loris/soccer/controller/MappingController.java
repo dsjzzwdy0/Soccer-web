@@ -103,6 +103,17 @@ public class MappingController extends BaseController
 	}
 	
 	/**
+	 * 编辑联赛映射数据
+	 * @return 视图
+	 */
+	@RequestMapping("/modLeagueMapping")
+	public ModelAndView modLeagueMapping()
+	{
+		ModelAndView view = new ModelAndView("league_modify.mapping");
+		return view;
+	}
+	
+	/**
 	 * 球队数据映射
 	 * @return 视图
 	 */

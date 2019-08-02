@@ -14,7 +14,7 @@
             <jsp:doBody/>
         </select>
         <c:if test="${hidden != null && hidden != '' }">
-            <input class="form-control" type="hidden" id="${hidden}" value="${hiddenValue!}" />
+            <input class="form-control" type="hidden" id="${hidden}" value="${hiddenValue}" />
         </c:if>
     </div>
 </div>

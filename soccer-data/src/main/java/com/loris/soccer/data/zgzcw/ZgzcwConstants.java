@@ -45,6 +45,7 @@ public interface ZgzcwConstants
 	final static public String PAGE_CALENDAR = "calendar";
 	final static public String PAGE_SCORE_BD = "bdscore";
 	final static public String PAGE_SCORE_JC = "jcscore";
+	final static public String PAGE_LIVE_BD = "livebd";
 	
 	/** 专用于LeagueRoundWebPage所定义 */
 	final static public String NAME_FIELD_SOURCE_LID = "source_league_id";

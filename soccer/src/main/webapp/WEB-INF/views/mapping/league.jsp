@@ -14,7 +14,7 @@
 				<div class="row row-lg">
 					<div class="col-sm-12">
 						<div class="row">
-							<div class="col-lg-10 col-sm-9">
+							<div class="col-lg-8 col-sm-8">
 								<div class="row">
 									<div class="col-lg-4 col-sm-12">
 										<fns:NameCon id="name" name="用户名称" placeholder="帐号/姓名/手机号" />
@@ -27,7 +27,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-lg-2 col-sm-3">
+							<div class="col-lg-4 col-sm-4">
 								<div class="row">
 									<div class="col-lg-12 col-sm-12">
 										<fns:button name="搜索" icon="fa-search" btnType="primary" clickFun="MgrUser.search()" />

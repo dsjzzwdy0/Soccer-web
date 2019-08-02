@@ -80,6 +80,7 @@ public class ZgzcwPageCreator
 		PAGE_PRIORITIES.put(PAGE_LOTTERY_BD, 4000.0);
 		PAGE_PRIORITIES.put(PAGE_LOTTERY_JC, 4000.0);
 		PAGE_PRIORITIES.put(PAGE_LOTTERY_ZC, 4000.0);
+		PAGE_PRIORITIES.put(PAGE_LIVE_BD, 4000.0);
 		PAGE_PRIORITIES.put(PAGE_SCORE_BD, 3500.0);
 		PAGE_PRIORITIES.put(PAGE_SCORE_JC, 3500.0);
 		PAGE_PRIORITIES.put(PAGE_ODDS_OP, 1000.0);
@@ -104,6 +105,7 @@ public class ZgzcwPageCreator
 		PAGE_BASE_URLS.put(PAGE_JSON_ODDS_OP,       "http://fenxi.zgzcw.com/json/");
 		PAGE_BASE_URLS.put(PAGE_JSON_ODDS_YP,       "http://fenxi.zgzcw.com/json/");
 		PAGE_BASE_URLS.put(PAGE_JSON_ODDS_NUM,      "http://fenxi.zgzcw.com/json/");
+		PAGE_BASE_URLS.put(PAGE_LIVE_BD,            "http://live.zgzcw.com/bd/");
 	}
 	
 	/**

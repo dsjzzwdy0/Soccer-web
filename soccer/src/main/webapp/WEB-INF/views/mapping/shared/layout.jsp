@@ -80,6 +80,6 @@
 <div class="wrapper wrapper-content">
 	<tiles:insertAttribute name="body" />
 </div>
-<script src="${ctxPath}/content/scripts/content.js?v=1.0.0"></script>
+<script src="${ctxPath}/content/scripts/content.js"></script>
 </body>
 </html>
