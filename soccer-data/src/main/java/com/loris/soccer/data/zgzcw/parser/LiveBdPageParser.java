@@ -69,7 +69,7 @@ public class LiveBdPageParser extends AbstractZgzcwWebPageParser
 		DataList<IssueMatch> issueMatchs = new DataList<>();
 		
 		matchs.setOverwrite(false);
-		issueMatchs.setOverwrite(true);
+		issueMatchs.setOverwrite(false);
 		
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_LIST, matchs);
 		results.put(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST, issueMatchs);
@@ -133,6 +133,7 @@ public class LiveBdPageParser extends AbstractZgzcwWebPageParser
 		issueMatch.setMid(mid);
 		issueMatch.setMatchtime(matchtime);
 		issueMatch.setIssueno(issueno);
+		issueMatch.setType(SoccerConstants.LOTTERY_BD);
 		issueMatch.setIssue(LotteryUtil.getLotteryIssue(matchtime));
 		
 		issueMatchs.add(issueMatch);

@@ -24,7 +24,6 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
-import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
@@ -140,36 +139,38 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		{
 			return;
 		}
-
-		String first = element.attr("firsttime");
-		Date firstTime = DateUtil.tryToParseDate(first);
-		
+			
 		String name = elements.get(1).text();
+		String compid = elements.get(5).attr(compIdAttr);
+		
+		/*String first = element.attr("firsttime");
+		Date firstTime = DateUtil.tryToParseDate(first);	
 		float firstwinyp = parseDataAttr(elements.get(2));
 		String firsthandicap = elements.get(3).attr(dataAttr);
 		float firstloseyp = parseDataAttr(elements.get(4));
 		float lastwinyp = parseDataAttr(elements.get(5));
-		String compid = elements.get(5).attr(compIdAttr);
 		String lasthandicap = elements.get(6).attr(dataAttr);
-
 		float lastloseyp = parseDataAttr(elements.get(7));
-		String updatetime = elements.get(8).selectFirst("em").attr("title");
+		String updatetime = elements.get(8).selectFirst("em").attr("title");*/
 		float homeprob = parseDataAttr(elements.get(9));
 		float guestprob = parseDataAttr(elements.get(10));
 		float homekelly = parseDataAttr(elements.get(11));
 		float guestkelly = parseDataAttr(elements.get(12));
 		float lossratio = parseDataAttr(elements.get(13));
 		
-		{
-			OddsYp firstOdds = new OddsYp(mid);
-			OddsYp odds = new OddsYp(mid);
-			firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			
+		{			
 			CasinoComp comp = new CasinoComp();
-			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setSource(SoccerConstants.SOURCE_ZGZCW);
 			comp.setType(SoccerConstants.ODDS_TYPE_YP);
+			comp.setCorpid(compid);
+			comp.setName(name);
+			comp.setIsmain(false);
+			comps.add(comp);
 			
+			/*OddsYp firstOdds = new OddsYp(mid);
+			OddsYp odds = new OddsYp(mid);
+			firstOdds.setSource(SoccerConstants.SOURCE_ZGZCW);
+			odds.setSource(SoccerConstants.SOURCE_ZGZCW);
 			firstOdds.setCorpid(compid);
 			//firstOdds.setCorpname(name);
 			firstOdds.setOpentime(firstTime);		
@@ -193,27 +194,22 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			odds.setWinkelly(homekelly);
 			odds.setLosekelly(guestkelly);
 			odds.setLossratio(lossratio);
-			
-			comp.setCorpid(compid);
-			comp.setName(name);
-			comp.setIsmain(false);
-	
+				
 			yps.add(firstOdds);
 			yps.add(odds);
-			
-			comps.add(comp);
-			
+						
 			if(ToolUtil.isNotEmpty(firstOdds.getOpentime()) && ToolUtil.isNotEmpty(odds.getOpentime()))
 			{
 				RecordOddsYp recordYp = new RecordOddsYp();
 				recordYp.setFirstOddsYp(firstOdds);
 				recordYp.setLastOddsYp(odds);
 				recordYps.add(recordYp);
-			}
+			}*/
 		}
 		{
 			Element detailElement = getCorpElements(document, compid);
-			parseCorpYps(yps, comps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+			RecordOddsYp recordOddsYp = new RecordOddsYp();
+			parseCorpYps(yps, recordOddsYp, comps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
 		}
 	}
 	
@@ -228,7 +224,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 	 * @param losekelly
 	 * @param lossratio
 	 */
-	protected void parseCorpYps(List<OddsYp> yps, List<CasinoComp> comps, Element element, String mid, String compid, String name, 
+	protected void parseCorpYps(List<OddsYp> yps, RecordOddsYp recordOddsYp, List<CasinoComp> comps, Element element, String mid, String compid, String name, 
 			float homeprob, float guestprob, float homekelly, float guestkelly, float lossratio)
 	{
 		Elements elements = element.select("li");
@@ -246,10 +242,10 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
 			
 			OddsYp odds = new OddsYp(mid);
-			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			odds.setSource(SoccerConstants.SOURCE_ZGZCW);
 			
 			CasinoComp comp = new CasinoComp();
-			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setSource(SoccerConstants.SOURCE_ZGZCW);
 			comp.setType(SoccerConstants.ODDS_TYPE_YP);
 			
 			odds.setOpentime(new Date(opemtime));
@@ -270,6 +266,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 				
 			yps.add(odds);
 			comps.add(comp);
+			recordOddsYp.addOddsYp(odds);
 		}
 	}
 	

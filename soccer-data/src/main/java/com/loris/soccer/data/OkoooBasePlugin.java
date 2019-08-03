@@ -43,6 +43,7 @@ import com.loris.common.model.TableRecords;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.KeyMap;
 import com.loris.common.util.ToolUtil;
+import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.okooo.OkoooConstants;
@@ -51,10 +52,17 @@ import com.loris.soccer.data.okooo.OkoooPageParser;
 import com.loris.soccer.data.okooo.filter.OkoooMatchFilter;
 import com.loris.soccer.data.okooo.filter.OkoooPageFilter;
 import com.loris.soccer.data.okooo.util.OkoooUtil;
+import com.loris.soccer.data.util.MappingUtil;
+import com.loris.soccer.data.util.OddsUtil;
 import com.loris.soccer.filter.WebPageFilter;
 import com.loris.soccer.model.OkoooIssueMatch;
+import com.loris.soccer.model.OkoooOddsOp;
+import com.loris.soccer.model.OkoooOddsYp;
+import com.loris.soccer.model.RecordOddsOp;
+import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.service.DataService;
+import com.loris.soccer.service.MappingService;
 
 /**   
  * @ClassName:  OkoooBasePlugin.java   
@@ -82,6 +90,9 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	@Autowired
 	protected WebPageService pageService;
+	
+	@Autowired
+	protected MappingService mappingService;
 	
 	/** 过滤器 */
 	protected WebPageFilter webPageFilter = null;
@@ -157,8 +168,8 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	protected WebPageFilter createDefaultWebPageFilter()
 	{
 		OkoooPageFilter filter = new OkoooPageFilter();
-		filter.setSource(OkoooConstants.SOURCE_OKOOO);
-		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
+		filter.setSource(SoccerConstants.SOURCE_OKOOO);
+		filter.setStart(new Date(new Date().getTime() - 6 * 60* 60 * 1000));		//六个小时之前已经结束的比赛不再下载
 		registerProcessPageTypes(filter);
 		return filter;
 	}
@@ -206,11 +217,22 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			return false;
 		}
 		WebPage page = (WebPage) task;
-		if(!StringUtils.equals(OkoooConstants.SOURCE_OKOOO, page.getSource()))
+		if(!StringUtils.equals(SoccerConstants.SOURCE_OKOOO, page.getSource()))
 		{
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * 创建数据射
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 * @return 是否创建成功的标志
+	 */
+	public boolean createMappingsFromIssueMatch(Date start, Date end)
+	{
+		return MappingUtil.createMappingFromIssueMatch(mappingService, start, end);
 	}
 	
 	/**
@@ -451,6 +473,7 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		case OkoooConstants.PAGE_ODDS_OP:
 		case OkoooConstants.PAGE_ODDS_YP:
 			records = OkoooUtil.downloadOkoooOddsPage((HtmlUnitFetcher)webPagefetcher, page);
+			createRecordOdds(records);
 			break;
 		default:
 			break;
@@ -466,6 +489,29 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 		return records;
 	}
 	
+	/**
+	 * 创建数据赔率记录
+	 * @param records 数据记录
+	 */
+	@SuppressWarnings("unchecked")
+	protected void createRecordOdds(TableRecords records)
+	{
+		if(records.containsKey(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST))
+		{
+			List<OkoooOddsOp> ops = (List<OkoooOddsOp>)records.get(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST);
+			DataList<RecordOddsOp> recordOddsOps = OddsUtil.createRecordOddsOp(ops);
+			if(recordOddsOps != null && recordOddsOps.size() > 0)
+				records.put(SoccerConstants.SOCCER_DATA_RECORD_ODDS_OP_LIST, recordOddsOps);
+		}
+		if(records.containsKey(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST))
+		{
+			List<OkoooOddsYp> yps = (List<OkoooOddsYp>) records.get(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST);
+			DataList<RecordOddsYp> recordOddsYps = OddsUtil.createRecordOddsYp(yps);
+			if(recordOddsYps != null && recordOddsYps.size() > 0)
+				records.put(SoccerConstants.SOCCER_DATA_RECORD_ODDS_YP_LIST, recordOddsYps);
+		}
+	}
+	
 	
 	/**
 	 * 配置默认的信息
@@ -474,8 +520,8 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 	public static WebPageProperties getDefaultProperties()
 	{
 		WebPageProperties properties = new WebPageProperties();
-		properties.setDayNumOfGetPages(10);
-		properties.setNumDayOfHasOdds(4);
+		properties.setDayNumOfGetPages(1);
+		properties.setNumDayOfHasOdds(2);
 
 		properties.setPageProduceNewTask(OkoooConstants.PAGE_LOTTERY_JC, true);
 		properties.setPageProduceNewTask(OkoooConstants.PAGE_LOTTERY_BD, true);

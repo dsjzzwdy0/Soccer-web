@@ -21,17 +21,13 @@ package com.loris.soccer.data.okooo;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 public interface OkoooConstants
-{
-	/** 数据来源定义 */
-	public static final String SOURCE_OKOOO = "okooo";
-	
+{	
 	public static final String PAGE_LOTTERY_BD = "okooo_bd";
 	public static final String PAGE_LOTTERY_JC = "okooo_jc";
 	public static final String PAGE_ODDS_OP = "okooo_op";
 	public static final String PAGE_ODDS_YP = "okooo_yp";
 	public static final String PAGE_ODDS_OP_CHILD = "okooo_op_child";
 	public static final String PAGE_ODDS_YP_CHILD = "okooo_yp_child";
-	
 	
 	public static final String NAME_FIELD_CORP_TOTAL_NUM = "total_corp";
 }

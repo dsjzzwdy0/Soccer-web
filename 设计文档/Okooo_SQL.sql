@@ -12,7 +12,7 @@ INDEX `index_name` (`name`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=515
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -28,7 +28,7 @@ INDEX `index_name` (`name`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=6730
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -57,7 +57,7 @@ ROW_FORMAT=DYNAMIC
 CREATE TABLE `okooo_match` (
 `id`  int(11) NOT NULL AUTO_INCREMENT ,
 `mid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-`matchtime`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+`matchtime`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 `lid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `round`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `season`  varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
@@ -73,7 +73,7 @@ INDEX `index_clientid` (`clientid`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=38648
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -82,7 +82,7 @@ CREATE TABLE `okooo_odds_op` (
 `id`  int(11) NOT NULL AUTO_INCREMENT ,
 `mid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `corpid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`opentime`  timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP ,
+`opentime`  timestamp NULL DEFAULT NULL ,
 `winodds`  float NULL DEFAULT NULL ,
 `drawodds`  float NULL DEFAULT NULL ,
 `loseodds`  float NULL DEFAULT NULL ,
@@ -101,7 +101,7 @@ INDEX `index_soruce` (`source`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=5956438
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -109,7 +109,7 @@ CREATE TABLE `okooo_odds_yp` (
 `id`  int(11) NOT NULL AUTO_INCREMENT ,
 `mid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `corpid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`opentime`  timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP ,
+`opentime`  timestamp NULL DEFAULT NULL ,
 `winodds`  float NULL DEFAULT NULL ,
 `handicap`  float NULL DEFAULT NULL ,
 `loseodds`  float NULL DEFAULT NULL ,
@@ -126,7 +126,7 @@ INDEX `index_soruce` (`source`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=1553714
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -142,7 +142,7 @@ INDEX `index_corpid` (`corpid`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=280
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -181,7 +181,7 @@ INDEX `index_dest` (`sourcedest`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=280
+AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
@@ -205,3 +205,37 @@ AUTO_INCREMENT=1
 ROW_FORMAT=DYNAMIC
 ;
 
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_comp_casino_total`AS 
+select `soccer_comp_casino`.`id` AS `id`,`soccer_comp_casino`.`corpid` AS `corpid`,
+	`soccer_comp_casino`.`name` AS `name`,`soccer_comp_casino`.`ismain` AS `ismain`,`soccer_comp_casino`.`type` AS `type`,
+	`soccer_comp_casino`.`source` AS `source` from `soccer_comp_casino` 
+	union select `okooo_casino_comp`.`id` AS `id`,`okooo_casino_comp`.`corpid` AS `corpid`,
+	`okooo_casino_comp`.`name` AS `name`,`okooo_casino_comp`.`ismain` AS `ismain`,`okooo_casino_comp`.
+	`type` AS `type`,`okooo_casino_comp`.`source` AS `source` from `okooo_casino_comp` ;
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_record_op_info`AS 
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`sourceid` AS `okoooid`,`a`.`corpid` AS `corpid`,`a`.`firsttime` AS `firsttime`,`a`.`firstwinodds` AS `firstwinodds`,
+	`a`.`firstdrawodds` AS `firstdrawodds`,`a`.`firstloseodds` AS `firstloseodds`,`a`.`opentime` AS `opentime`,`a`.`winodds` AS `winodds`,
+	`a`.`drawodds` AS `drawodds`,`a`.`loseodds` AS `loseodds`,`a`.`winkelly` AS `winkelly`,`a`.`drawkelly` AS `drawkelly`,
+	`a`.`losekelly` AS `losekelly`,`a`.`winprob` AS `winprob`,`a`.`drawprob` AS `drawprob`,`a`.`loseprob` AS `loseprob`,
+	`a`.`lossratio` AS `lossratio`,`a`.`source` AS `source` from (`soccer_record_odds_op` `a` left join `soccer_mapping_match` `b` 
+	on((`a`.`mid` = `b`.`destid`))) ;
+
+CREATE 
+ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `soccer_record_yp_info`AS 
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`destid` AS `okoooid`, `a`.`corpid` AS `corpid`,`a`.`firsttime` AS `firsttime`,`a`.`firstwinodds` AS `firstwinodds`,
+	`a`.`firsthandicap` AS `firsthandicap`,`a`.`firstloseodds` AS `firstloseodds`,`a`.`opentime` AS `opentime`,`a`.`winodds` AS `winodds`,
+	`a`.`handicap` AS `handicap`,`a`.`loseodds` AS `loseodds`,`a`.`winkelly` AS `winkelly`,`a`.`losekelly` AS `losekelly`,
+	`a`.`winprob` AS `winprob`,`a`.`loseprob` AS `loseprob`,`a`.`lossratio` AS `lossratio`,`a`.`source` AS `source`
+	from (`soccer_record_odds_yp` `a` left join `soccer_mapping_match` `b` on((`a`.`mid` = `b`.`destid`))) ;

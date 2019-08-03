@@ -46,6 +46,7 @@ import com.loris.common.util.ToolUtil;
 import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.conf.WebPageProperties;
+import com.loris.soccer.data.util.MappingUtil;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
@@ -59,6 +60,7 @@ import com.loris.soccer.model.base.MatchItem;
 import com.loris.soccer.model.view.RoundInfo;
 import com.loris.soccer.model.view.SeasonInfo;
 import com.loris.soccer.service.LeagueService;
+import com.loris.soccer.service.MappingService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.impl.SoccerDataServiceImpl;
 
@@ -88,6 +90,9 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	
 	@Autowired
 	protected MatchService matchService;
+	
+	@Autowired
+	protected MappingService mappingService;
 	
 	/** 网络页面的过滤器 */
 	protected WebPageFilter webPageFilter = null;
@@ -167,7 +172,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	protected WebPageFilter createDefaultWebPageFilter()
 	{
 		ZgzcwPageFilter filter = new ZgzcwPageFilter(webPageConf);
-		filter.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		filter.setSource(SoccerConstants.SOURCE_ZGZCW);
 		filter.setStart(DateUtil.addDayNum(new Date(), - webPageConf.getDayNumOfGetPages()));
 		registerProcessPageTypes(filter);
 		return filter;
@@ -200,7 +205,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 			return false;
 		}
 		WebPage page = (WebPage) task;
-		if(!ZgzcwConstants.SOURCE_ZGZCW.equals(page.getSource()))
+		if(!SoccerConstants.SOURCE_ZGZCW.equals(page.getSource()))
 		{
 			return false;
 		}
@@ -636,6 +641,17 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 	}
 	
 	/**
+	 * 创建数据射
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 * @return 是否创建成功的标志
+	 */
+	public boolean createMappingsFromIssueMatch(Date start, Date end)
+	{
+		return MappingUtil.createMappingFromIssueMatch(mappingService, start, end);
+	}
+	
+	/**
 	 * 获得过滤器
 	 * @param type 类型
 	 * @return 返回过滤器
@@ -665,7 +681,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		WebPageProperties properties = new WebPageProperties();
 		properties.setDayNumOfGetPages(10);
 		properties.setNumDayOfHasOdds(4);
-		Long oddsUpdateTime = 4 * 60 * 60L;								//赔率页面更新时间：4小时
+		Long oddsUpdateTime = 2 * 60 * 60L;								//赔率页面更新时间：4小时
 		Long leagueUpdateTime = 24 * 60 * 60L;							//联赛页面更新时间：20小时
 		Long realPageUpdateTime = oddsUpdateTime;						//实时页面更新时间：4小时
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_ODDS_OP, oddsUpdateTime);
@@ -677,6 +693,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LOTTERY_BD, realPageUpdateTime);
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_BD, realPageUpdateTime);
 		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_SCORE_JC, realPageUpdateTime);
+		properties.setPageUpdateIntervalTime(ZgzcwConstants.PAGE_LIVE_BD, realPageUpdateTime);
 		
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_CENTER, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, true);
@@ -685,6 +702,7 @@ public abstract class ZgzcwBasePlugin extends BasicWebPageTaskPlugin implements 
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LOTTERY_BD, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_BD, true);
 		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_SCORE_JC, true);
+		properties.setPageProduceNewTask(ZgzcwConstants.PAGE_LIVE_BD, true);
 		return properties;
 	}
 }

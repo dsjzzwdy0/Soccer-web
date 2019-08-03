@@ -11,11 +11,13 @@
  */
 package com.loris.soccer.data.okooo.filter;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.loris.client.model.WebPage;
-import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.filter.WebPageFilter;
+import com.loris.soccer.model.base.MatchItem;
 
 /**   
  * @ClassName:  OkoooPageFilter.java   
@@ -36,9 +38,20 @@ public class OkoooPageFilter extends WebPageFilter
 	public <T> boolean accept(WebPage page, T source)
 	{
 		//不是澳客的数据下载器，则不能进行处理
-		if(!StringUtils.equals(page.getSource(), OkoooConstants.SOURCE_OKOOO))
+		if(!StringUtils.equals(page.getSource(), this.getSource()))
 		{
 			return false;
+		}
+		
+		//比赛数据
+		if(source instanceof MatchItem)
+		{
+			Date matchtime = ((MatchItem)source).getMatchtime();
+			if(matchtime == null) return false;
+			if(start != null)
+				if(start.getTime() >= matchtime.getTime()) return false;
+			if(end != null)
+				if(end.getTime() <= matchtime.getTime()) return false;
 		}
 		return true;
 	}

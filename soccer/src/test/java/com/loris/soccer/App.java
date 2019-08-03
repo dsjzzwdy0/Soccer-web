@@ -32,7 +32,7 @@ import com.loris.client.fetcher.setting.SettingFactory;
 import com.loris.client.fetcher.setting.FetcherSetting;
 import com.loris.client.fetcher.util.DashBoard;
 import com.loris.client.fetcher.util.HttpUtil;
-import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerPlugins;
 import com.loris.client.model.SchedulerStatus;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.LinksWebPageParser;
@@ -150,10 +150,8 @@ public class App
 			// testTeamRating();
 			// testOkooo();
 			// testOkoooOdds();
-			testOkoooMapping();
-			
+			// testOkoooMapping();
 			// testOkoooTeamMapping();
-			
 			// testDateCompare();			
 			// testSigmoid();
 			// testMariaDB();
@@ -171,6 +169,8 @@ public class App
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
 			// testJcWebPage();
+			testLiveBdWebPage();
+			
 			// testWebPageService();
 			// testLeagueRoundWebPage();
 			// testZgzcwCupWebPage();
@@ -605,13 +605,13 @@ public class App
 	{
 		SchedulerFactory factory = SchedulerFactory.me();
 		
-		SchedulerInfo info = new SchedulerInfo();
+		SchedulerPlugins info = new SchedulerPlugins();
 		info.setIntervaltime(4500);
 		info.setMaxActiveTaskThread(3);
 		info.setName("最新开盘数据下载");
 		info.setRandTimeSeed(200);
 		info.setType("zgzcw.downloader");
-		info.addPlugin(SchedulerInfo.PLUGIN_BEAN, ZgzcwIssueDataPlugin.class.getName());
+		info.addPlugin(SchedulerPlugins.PLUGIN_BEAN, ZgzcwIssueDataPlugin.class.getName());
 		
 		factory.addSchedulerInfo(info);
 		
@@ -706,7 +706,7 @@ public class App
 		types.add("yp");
 		types.add("league");
 		WebPageService pageService = context.getBean(WebPageService.class);
-		List<WebPage> pages = pageService.getWebPage(ZgzcwConstants.SOURCE_ZGZCW, types, null, null);
+		List<WebPage> pages = pageService.getWebPage(SoccerConstants.SOURCE_ZGZCW, types, null, null);
 		
 		int i = 1;
 		for (WebPage webPage : pages)
@@ -765,6 +765,44 @@ public class App
 		{
 			logger.info("No OddsScore List, error.");
 			return;
+		}
+		logger.info("Total OddsScore size is " + list.size());
+		saveTableRecords(records);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void testLiveBdWebPage() throws Exception
+	{
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LIVE_BD);
+		if (!downloadWebPage(page))
+		{
+			return;
+		}
+
+		TableRecords records = ZgzcwPageParser.parseWebPage(page);
+
+		if (records == null)
+		{
+			logger.info("Parser error.");
+			return;
+		}
+
+		List<IssueMatch> list = (List<IssueMatch>) records.get(SoccerConstants.SOCCER_DATA_MATCH_BD_LIST);
+		if (list == null)
+		{
+			logger.info("No OddsScore List, error.");
+			return;
+		}
+		
+		for (IssueMatch issueMatch : list)
+		{
+			logger.info(issueMatch);
+		}
+		
+		List<Match> matchs = (List<Match>)records.get(SoccerConstants.SOCCER_DATA_MATCH_LIST);
+		for (Match match : matchs)
+		{
+			logger.info(match);
 		}
 		logger.info("Total OddsScore size is " + list.size());
 		saveTableRecords(records);
@@ -1044,7 +1082,7 @@ public class App
 
 	public static void testSchedulerInfo() throws Exception
 	{
-		SchedulerInfo info = new SchedulerInfo();
+		SchedulerPlugins info = new SchedulerPlugins();
 		info.setId("101-190");
 		info.setName("数据下载的信息");
 		info.setIntervaltime(4000);
@@ -1052,7 +1090,7 @@ public class App
 		info.setRandTimeSeed(200);
 		info.setType("zgzcw.downloader");
 		info.addPlugin("bean:httpCommonPlugin");
-		info.addPlugin(SchedulerInfo.PLUGIN_CLASS, ZgzcwIssueDataPlugin.class.getName());
+		info.addPlugin(SchedulerPlugins.PLUGIN_CLASS, ZgzcwIssueDataPlugin.class.getName());
 
 		Scheduler scheduler = SchedulerFactory.createTaskScheduler(info);
 		logger.info(scheduler.getName());

@@ -15,6 +15,7 @@ import java.util.Date;
 
 import com.loris.client.model.WebPage;
 import com.loris.common.util.ToolUtil;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.filter.WebPageFilter;
 import com.loris.soccer.model.League;
@@ -36,7 +37,7 @@ public class ZgzcwRoundPageFilter extends WebPageFilter
 	 */
 	public ZgzcwRoundPageFilter()
 	{
-		this.source = ZgzcwConstants.SOURCE_ZGZCW;
+		this.source = SoccerConstants.SOURCE_ZGZCW;
 		types.add(ZgzcwConstants.PAGE_LEAGUE_CUP);
 		types.add(ZgzcwConstants.PAGE_LEAGUE_LEAGUE_ROUND);
 		this.start = null;

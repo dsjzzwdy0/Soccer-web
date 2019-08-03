@@ -174,10 +174,13 @@ public class OkoooOddsOpPageParser extends AbstractOkoooPageParser
 		OkoooOddsOp lastOp = new OkoooOddsOp();
 		OkoooCasinoComp comp = new OkoooCasinoComp();
 		
-		comp.setSource(OkoooConstants.SOURCE_OKOOO);
+		comp.setSource(SoccerConstants.SOURCE_OKOOO);
 		comp.setCorpid(gid);
 		comp.setName(gname);
 		comp.setType(SoccerConstants.ODDS_TYPE_OP);
+		
+		firstOp.setSource(SoccerConstants.SOURCE_OKOOO);
+		lastOp.setSource(SoccerConstants.SOURCE_OKOOO);
 		
 		firstOp.setCorpid(gid);
 		firstOp.setMid(mid);

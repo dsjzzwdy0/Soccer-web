@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.loris.client.dao.SchedulerInfoMapper;
-import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerPlugins;
 import com.loris.client.service.SchedulerInfoService;
 
 /**   
@@ -30,10 +30,10 @@ import com.loris.client.service.SchedulerInfoService;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @Service("schedulerInfoService")
-public class SchedulerInfoServiceImpl extends ServiceImpl<SchedulerInfoMapper, SchedulerInfo> implements SchedulerInfoService
+public class SchedulerInfoServiceImpl extends ServiceImpl<SchedulerInfoMapper, SchedulerPlugins> implements SchedulerInfoService
 {
 	@Override
-	public boolean save(SchedulerInfo schedulerInfo)
+	public boolean save(SchedulerPlugins schedulerInfo)
 	{
 		if (StringUtils.isNotBlank(schedulerInfo.getId()))
 		{
@@ -51,9 +51,9 @@ public class SchedulerInfoServiceImpl extends ServiceImpl<SchedulerInfoMapper, S
 	 * @see com.loris.client.service.SchedulerInfoService#getSchedulerInfo(java.lang.String)
 	 */
 	@Override
-	public SchedulerInfo getSchedulerInfo(String type)
+	public SchedulerPlugins getSchedulerInfo(String type)
 	{
-		QueryWrapper<SchedulerInfo> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<SchedulerPlugins> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("type", type);
 		return baseMapper.selectOne(queryWrapper);
 	}

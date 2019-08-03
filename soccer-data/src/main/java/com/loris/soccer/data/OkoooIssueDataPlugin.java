@@ -14,6 +14,7 @@ package com.loris.soccer.data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,12 +25,12 @@ import com.loris.client.exception.UrlFetchException;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
+import com.loris.client.task.util.ThreadUtil;
+import com.loris.common.util.DateUtil;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.okooo.OkoooConstants;
 import com.loris.soccer.data.okooo.OkoooPageCreator;
 import com.loris.soccer.filter.WebPageFilter;
-
-import cn.hutool.core.thread.ThreadUtil;
 
 /**   
  * @ClassName:  OkoooIssueDataPlugin    
@@ -83,6 +84,9 @@ public class OkoooIssueDataPlugin extends OkoooBasePlugin
 
 				ThreadUtil.sleep(childInterval);
 			}
+			
+			//创建数据映射
+			createMappingsFromIssueMatch(DateUtil.addDayNum(new Date(), -1), null);
 		}
 		catch (Exception e)
 		{

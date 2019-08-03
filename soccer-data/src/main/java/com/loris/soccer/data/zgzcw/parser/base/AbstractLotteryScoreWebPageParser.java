@@ -24,7 +24,6 @@ import com.loris.client.model.WebPage;
 import com.loris.common.model.TableRecords;
 import com.loris.soccer.collection.base.DataList;
 import com.loris.soccer.constant.SoccerConstants;
-import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.model.OddsScore;
 
 /**   
@@ -101,7 +100,7 @@ public abstract class AbstractLotteryScoreWebPageParser extends AbstractLotteryW
 			
 			OddsScore score = new OddsScore();
 			score.setOpentime(opentime);
-			score.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			score.setSource(SoccerConstants.SOURCE_ZGZCW);
 			score.setType(type);
 			
 			parseIssueOddsScore(element2, score);

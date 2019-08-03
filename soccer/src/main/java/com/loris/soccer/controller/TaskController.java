@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerPlugins;
 import com.loris.client.model.SchedulerStatus;
 import com.loris.client.scheduler.factory.SchedulerFactory;
 import com.loris.client.service.SchedulerInfoService;
@@ -56,7 +56,7 @@ public class TaskController extends BaseController
 	@RequestMapping("/listSchedulers")
 	public Rest getSchedulerInfoList(HttpServletRequest request)
 	{
-		List<SchedulerInfo> schedulerInfos = schedulerInfoService.list();
+		List<SchedulerPlugins> schedulerInfos = schedulerInfoService.list();
 		return Rest.okData(schedulerInfos);
 	}
 	
@@ -67,7 +67,7 @@ public class TaskController extends BaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/addScheduler")
-	public Rest addSchedulerInfo(@Validated SchedulerInfo info, BindingResult bindingResult)
+	public Rest addSchedulerInfo(@Validated SchedulerPlugins info, BindingResult bindingResult)
 	{
 		if(bindingResult.hasErrors())
 		{
@@ -99,7 +99,7 @@ public class TaskController extends BaseController
 	public Rest create(String sid)
 	{
 		SchedulerFactory schedulerFactory = SchedulerFactory.me();
-		SchedulerInfo schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
+		SchedulerPlugins schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
 		if(schedulerInfo != null)
 		{
 			schedulerFactory.save(schedulerInfo);
@@ -121,7 +121,7 @@ public class TaskController extends BaseController
 	public Rest getConf(String sid)
 	{
 		SchedulerFactory schedulerFactory = SchedulerFactory.me();
-		SchedulerInfo schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
+		SchedulerPlugins schedulerInfo = schedulerFactory.getInitSchedulerInfo(sid);
 		if(schedulerInfo != null)
 		{
 			return Rest.okData(schedulerInfo.wrapToWebElements());

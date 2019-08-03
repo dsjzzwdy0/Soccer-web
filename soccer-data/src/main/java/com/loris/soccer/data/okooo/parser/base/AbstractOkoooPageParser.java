@@ -19,7 +19,7 @@ import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.AbstractWebPageParser;
 import com.loris.common.util.DateUtil;
-import com.loris.soccer.data.okooo.OkoooConstants;
+import com.loris.soccer.constant.SoccerConstants;
 
 /**   
  * @ClassName:  AbstractOkoooPageParser.java   
@@ -56,7 +56,7 @@ public abstract class AbstractOkoooPageParser extends AbstractWebPageParser
 			return false;
 		}
 		
-		if(!OkoooConstants.SOURCE_OKOOO.equalsIgnoreCase(page.getSource()))
+		if(!SoccerConstants.SOURCE_OKOOO.equalsIgnoreCase(page.getSource()))
 		{
 			return false;
 		}

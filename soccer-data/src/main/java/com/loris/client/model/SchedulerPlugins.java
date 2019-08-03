@@ -31,8 +31,8 @@ import com.loris.common.web.wrapper.WebElementsWrapper;
  * @Copyright: 2019 www.tydic.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-@TableName("soccer_scheduler_info")
-public class SchedulerInfo extends UUIDEntity implements WebElementsWrapper
+@TableName("soccer_scheduler_plugins")
+public class SchedulerPlugins extends UUIDEntity implements WebElementsWrapper
 {
 	/** */
 	private static final long serialVersionUID = 1L;
@@ -48,7 +48,7 @@ public class SchedulerInfo extends UUIDEntity implements WebElementsWrapper
 	protected String type;
 	protected String plugins;
 	
-	public SchedulerInfo()
+	public SchedulerPlugins()
 	{
 		this.intervaltime = 200;
 		this.randTimeSeed = -100;
@@ -163,8 +163,8 @@ public class SchedulerInfo extends UUIDEntity implements WebElementsWrapper
 	public boolean equals(Object object)
 	{
 		if(this == object) return true;
-		if(!(object instanceof SchedulerInfo)) return false;
-		SchedulerInfo other = (SchedulerInfo) object;
+		if(!(object instanceof SchedulerPlugins)) return false;
+		SchedulerPlugins other = (SchedulerPlugins) object;
 		if(StringUtils.equals(id, other.id)) return true;
 		return StringUtils.equals(name, name);
 	}

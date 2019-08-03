@@ -194,9 +194,11 @@ public class OkoooOddsYpPageParser extends AbstractOkoooPageParser
 		
 		firstYp.setMid(mid);
 		firstYp.setCorpid(gid);
+		firstYp.setSource(SoccerConstants.SOURCE_OKOOO);
 		
 		lastYp.setMid(mid);
 		lastYp.setCorpid(gid);
+		lastYp.setSource(SoccerConstants.SOURCE_OKOOO);
 		
 		//firstYp.setGname(gname);
 		if(StringUtils.isNotEmpty(firsttime))
@@ -238,7 +240,7 @@ public class OkoooOddsYpPageParser extends AbstractOkoooPageParser
 		comp.setCorpid(gid);
 		comp.setName(gname);
 		comp.setType(SoccerConstants.ODDS_TYPE_YP);
-		comp.setSource(OkoooConstants.SOURCE_OKOOO);
+		comp.setSource(SoccerConstants.SOURCE_OKOOO);
 		comps.add(comp);
 	}
 	

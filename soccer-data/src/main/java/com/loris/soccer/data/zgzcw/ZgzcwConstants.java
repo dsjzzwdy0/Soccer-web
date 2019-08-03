@@ -24,10 +24,7 @@ import com.loris.soccer.constant.SoccerConstants;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 public interface ZgzcwConstants
-{
-	/** 数据来源定义 */
-	public static final String SOURCE_ZGZCW = "zgzcw";
-	
+{	
 	/** 数据页面名称定义 */
 	final static public String PAGE_LEAGUE_LEAGUE_ROUND = "leagueround";
 	final static public String PAGE_LEAGUE_LEAGUE = LEAGUE_TYPE_LEAGUE;

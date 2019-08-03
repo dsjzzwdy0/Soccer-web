@@ -149,7 +149,7 @@ public class ZgzcwPageCreator
 		WebPage page = new WebPage();
 		page.setType(type);
 		page.setCreatetime(new Date());
-		page.setSource(SOURCE_ZGZCW);		
+		page.setSource(SoccerConstants.SOURCE_ZGZCW);		
 		page.setPriority(getDefaultPriority(type, params));
 		
 		page.setEncoding(encoding);

@@ -126,10 +126,10 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			OddsNum odds = new OddsNum(mid);
 			CasinoComp comp = new CasinoComp();
 	
-			firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			firstOdds.setSource(SoccerConstants.SOURCE_ZGZCW);
+			odds.setSource(SoccerConstants.SOURCE_ZGZCW);
 			comp.setType(SoccerConstants.ODDS_TYPE_NUM);
-			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setSource(SoccerConstants.SOURCE_ZGZCW);
 			
 			firstOdds.setCorpid(compid);
 			//firstOdds.setCorpname(name);
@@ -200,9 +200,9 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			OddsNum odds = new OddsNum(mid);
 			CasinoComp comp = new CasinoComp();
 			comp.setType(SoccerConstants.ODDS_TYPE_NUM);
-			comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			comp.setSource(SoccerConstants.SOURCE_ZGZCW);
 			
-			odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+			odds.setSource(SoccerConstants.SOURCE_ZGZCW);
 			odds.setOpentime(new Date(opemtime));
 			odds.setCorpid(compid);
 			//odds.setCorpname(name);

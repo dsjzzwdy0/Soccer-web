@@ -52,7 +52,7 @@ public class LeagueRoundWebPageParser extends AbstractLeagueWebPageParser
 	@Override
 	protected boolean accept(WebPage page) throws WebParserException
 	{
-		if(!ZgzcwConstants.SOURCE_ZGZCW.equalsIgnoreCase(page.getSource()))
+		if(!SoccerConstants.SOURCE_ZGZCW.equalsIgnoreCase(page.getSource()))
 		{
 			return false;
 		}

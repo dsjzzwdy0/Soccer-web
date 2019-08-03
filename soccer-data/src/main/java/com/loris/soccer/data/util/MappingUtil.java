@@ -25,8 +25,7 @@ import com.loris.soccer.collection.LeagueList;
 import com.loris.soccer.collection.LeagueMappingList;
 import com.loris.soccer.collection.MatchMappingList;
 import com.loris.soccer.collection.TeamMappingList;
-import com.loris.soccer.data.okooo.OkoooConstants;
-import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.filter.MatchItemFilter;
 import com.loris.soccer.model.IssueMatch;
 import com.loris.soccer.model.League;
@@ -35,9 +34,13 @@ import com.loris.soccer.model.OkoooMatch;
 import com.loris.soccer.model.OkoooTeam;
 import com.loris.soccer.model.Team;
 import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.model.mapping.LeagueMapping;
 import com.loris.soccer.model.mapping.MatchMapping;
+import com.loris.soccer.model.mapping.TeamMapping;
 import com.loris.soccer.model.view.MatchInfo;
 import com.loris.soccer.service.MappingService;
+
+import cn.hutool.core.date.DateUtil;
 
 
 /**   
@@ -52,6 +55,67 @@ import com.loris.soccer.service.MappingService;
 public class MappingUtil
 {
 	private static Logger logger = Logger.getLogger(MappingUtil.class);
+	
+	/**
+	 * 从比赛期号的数据创建数据映射
+	 * @param mappingService 数据映射服务
+	 * @param start 开始时间
+	 * @param end 结束时间
+	 * @return 是否成功的标志
+	 */
+	public static boolean createMappingFromIssueMatch(MappingService mappingService, Date start, Date end)
+	{
+		logger.info("Create Mappings from IssueMatch from " + DateUtil.formatDateTime(start) 
+			+ (end == null ? "" : " to " + DateUtil.formatDateTime(end)));
+		MatchMappingList matchMappingList = createOkoooIssueMatchMapping(mappingService, start, end);	
+		if(matchMappingList == null || matchMappingList.size() <= 0)
+			return false;
+		
+		try
+		{
+			matchMappingList.setOverwrite(true);
+			mappingService.insertList(MatchMapping.class, matchMappingList);
+		}
+		catch (Exception e) {
+			logger.warn("Error occuredn when save MatchMappings, info: " + e.toString());
+		}
+		
+		//创建比赛数据的映射
+		PairMap<? extends Match, ? extends Match> matchPairs = getPairMatchs(mappingService, matchMappingList);
+		if(matchPairs == null || matchPairs.size() <= 0)
+		{
+			return true;
+		}	
+		
+		try
+		{			
+			LeagueMappingList leagueMappingList = getOkoooLeagueMappings(mappingService, matchPairs);
+			if(leagueMappingList != null && leagueMappingList.size() > 0)
+				{
+				leagueMappingList.setOverwrite(false);
+				mappingService.insertList(LeagueMapping.class, leagueMappingList);
+			}
+		}
+		catch (Exception e) {
+			logger.warn("Error occured when create LeagueMappings, info: " + e.toString());
+		}
+		
+		try
+		{
+			TeamMappingList teamMappingList = getOkoooTeamMappings(mappingService, matchPairs);
+			if(teamMappingList != null && teamMappingList.size() > 0)
+			{
+				teamMappingList.setOverwrite(false);
+				mappingService.insertList(TeamMapping.class, teamMappingList);
+			}
+		}
+		catch (Exception e) {
+			logger.warn("Error occured when create TeamMappings, info: " + e.toString());
+		}
+		
+		return true;
+	}
+	
 	
 	/**
 	 * 计算球队名称的相关系数
@@ -83,8 +147,8 @@ public class MappingUtil
 	 */
 	public static TeamMappingList getOkoooTeamMappings(MappingService service, PairMap<? extends Match, ? extends Match> matchPairs)
 	{
-		String source = OkoooConstants.SOURCE_OKOOO;
-		String dest = ZgzcwConstants.SOURCE_ZGZCW;
+		String source = SoccerConstants.SOURCE_OKOOO;
+		String dest = SoccerConstants.SOURCE_ZGZCW;
 		TeamMappingList teamMappingList = new TeamMappingList(source, dest);
 		
 		List<String> tids = new ArrayList<>();
@@ -134,8 +198,8 @@ public class MappingUtil
 	public static LeagueMappingList getOkoooLeagueMappings(MappingService service,
 			PairMap<? extends Match, ? extends Match> matchPairs)
 	{
-		String source = OkoooConstants.SOURCE_OKOOO;
-		String dest = ZgzcwConstants.SOURCE_ZGZCW;
+		String source = SoccerConstants.SOURCE_OKOOO;
+		String dest = SoccerConstants.SOURCE_ZGZCW;
 		LeagueMappingList leagueMappingList = new LeagueMappingList(source, dest);
 		
 		LeagueList leagues = new LeagueList(service.getLeagues());
@@ -205,15 +269,16 @@ public class MappingUtil
 	 */
 	public static MatchMappingList createOkoooIssueMatchMapping(MappingService service, Date start, Date end)
 	{
-		String source = OkoooConstants.SOURCE_OKOOO;
-		String dest = ZgzcwConstants.SOURCE_ZGZCW;
+		String source = SoccerConstants.SOURCE_OKOOO;
+		String dest = SoccerConstants.SOURCE_ZGZCW;
 		
 		//获取该时间段内已经获得映射的比赛数据列表
 		List<MatchMapping> mappings = service.getMatchMappings(source, dest, start, end);
 		MatchMappingList mappingList = new MatchMappingList(source, dest, mappings);
 		
 		//获得需要进行映射的比赛数据
-		List<? extends IssueMatch> sourceIssueMatchs = service.getOkoooIssueMatchs(start, end);	
+		List<? extends IssueMatch> sourceIssueMatchs = service.getOkoooIssueMatchs(start, end);
+		
 		//判断是否有比赛数据需要映射
 		if(sourceIssueMatchs == null || sourceIssueMatchs.size() <= 0)
 		{

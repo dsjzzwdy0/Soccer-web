@@ -103,10 +103,10 @@ public class OddsOpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		OddsOp odds = new OddsOp(mid);
 		CasinoComp comp = new CasinoComp();
 		
-		comp.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		comp.setSource(SoccerConstants.SOURCE_ZGZCW);
 		comp.setType(SoccerConstants.ODDS_TYPE_OP);
-		firstOdds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
-		odds.setSource(ZgzcwConstants.SOURCE_ZGZCW);
+		firstOdds.setSource(SoccerConstants.SOURCE_ZGZCW);
+		odds.setSource(SoccerConstants.SOURCE_ZGZCW);
 		
 		String first = element.attr("firsttime");
 		String last = element.attr("lasttime");

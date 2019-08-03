@@ -207,13 +207,13 @@ public class CompSetting extends AutoIdEntity
 	
 	public void addCasinoComp(CasinoComp comp)
 	{
-		addCasinoCompInfo(comp.getCorpid(), comp.getType());
+		addCasinoCompInfo(comp.getCorpid(), comp.getType(), comp.getSource());
 	}
 	
-	public void addCasinoCompInfo(String corpid, String type)
+	public void addCasinoCompInfo(String corpid, String type, String source)
 	{
 		if(params == null) params = "";
-		params += type + "=" + corpid + ";";
+		params += type + "=" + corpid + ",source=" + source + ";";
 	}
 	
 	/**
@@ -243,12 +243,39 @@ public class CompSetting extends AutoIdEntity
 		String[] strings = params.split(";");
 		for (String string : strings)
 		{
-			String[] str = string.split("=");
-			if(str == null || str.length != 2)
-				continue;
+			String[] str = string.split(",");
+			int len = str.length;
+			
+			//按照每一个字段域给赋值
 			CasinoComp comp = new CasinoComp();
-			comp.setType(str[0]);
-			comp.setCorpid(str[1]);
+			for(int i = 0; i < len; i ++)
+			{
+				String[] fields = str[i].split("=");
+				if(fields == null || fields.length < 2)
+					continue;
+				fields[0] = fields[0].trim();
+				fields[1] = fields[1].trim();
+				if(StringUtils.equalsAnyIgnoreCase(fields[0], SoccerConstants.ODDS_TYPE_OP) ||
+						StringUtils.equalsAnyIgnoreCase(fields[0], SoccerConstants.ODDS_TYPE_YP))
+				{
+					comp.setType(fields[0].toLowerCase());
+					comp.setCorpid(fields[1]);
+				}
+				else if(StringUtils.equalsAnyIgnoreCase(fields[0], "source"))
+				{
+					comp.setSource(fields[1]);
+				}
+			}
+			//如果都为空，则不加入
+			if(StringUtils.isEmpty(comp.getType()) || StringUtils.isEmpty(comp.getCorpid()))
+			{
+				continue;
+			}
+			//默认的数据来源
+			if(StringUtils.isEmpty(comp.getSource()))
+			{
+				comp.setSource(SoccerConstants.SOURCE_ZGZCW);
+			}
 			casinoComps.add(comp);
 		}
 	}

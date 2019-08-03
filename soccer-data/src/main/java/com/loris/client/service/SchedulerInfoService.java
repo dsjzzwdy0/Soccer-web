@@ -12,7 +12,7 @@
 package com.loris.client.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerPlugins;
 
 /**   
  * @ClassName:  SchedulerInfoService    
@@ -23,12 +23,12 @@ import com.loris.client.model.SchedulerInfo;
  * @Copyright: 2019 www.loris.com Inc. All rights reserved. 
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
-public interface SchedulerInfoService extends IService<SchedulerInfo>
+public interface SchedulerInfoService extends IService<SchedulerPlugins>
 {
 	/**
 	 * 获得管理器的类型数据
 	 * @param type 类型
 	 * @return
 	 */
-	SchedulerInfo getSchedulerInfo(String type);
+	SchedulerPlugins getSchedulerInfo(String type);
 }

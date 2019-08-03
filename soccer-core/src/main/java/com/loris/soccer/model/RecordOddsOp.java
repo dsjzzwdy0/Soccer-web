@@ -139,6 +139,7 @@ public class RecordOddsOp extends OddsOp
 		if(!(obj instanceof RecordOddsOp)) return false;
 		RecordOddsOp other = (RecordOddsOp) obj;
 		return StringUtils.equals(mid, other.mid) &&
-				StringUtils.equals(corpid, other.corpid);
+				StringUtils.equals(corpid, other.corpid)
+				&& StringUtils.equals(source, other.getSource());
 	}
 }

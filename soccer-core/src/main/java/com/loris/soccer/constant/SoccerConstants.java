@@ -22,6 +22,9 @@ package com.loris.soccer.constant;
  */
 public interface SoccerConstants
 {	
+	final static public String SOURCE_ZGZCW = "zgzcw";
+	final static public String SOURCE_OKOOO = "okooo";
+	
 	/** 缓存的名称 */
 	final static public String CAHE_ODDS_NAME = "SoccerCache";
 	

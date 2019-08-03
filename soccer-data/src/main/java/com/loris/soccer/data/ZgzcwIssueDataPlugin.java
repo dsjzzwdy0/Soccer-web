@@ -14,6 +14,7 @@ package com.loris.soccer.data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -23,6 +24,7 @@ import com.loris.client.model.WebPage;
 import com.loris.client.task.context.TaskPluginContext;
 import com.loris.client.task.plugin.TaskProcessPlugin;
 import com.loris.client.task.plugin.TaskProducePlugin;
+import com.loris.common.util.DateUtil;
 import com.loris.soccer.data.conf.WebPageProperties;
 import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
@@ -76,6 +78,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_ODDS_NUM);
 		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_LEAGUE_LEAGUE);
 		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_LEAGUE_CUP);
+		webPageFilter.addAcceptPageType(ZgzcwConstants.PAGE_LIVE_BD);
 	}
 
 	/**
@@ -89,6 +92,7 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 		List<WebPage> initPages = new ArrayList<>();
 		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_BD));
 		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LOTTERY_JC));
+		initPages.add(ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LIVE_BD));
 		
 		try
 		{
@@ -101,6 +105,9 @@ public class ZgzcwIssueDataPlugin extends ZgzcwBasePlugin implements TaskProduce
 
 				ThreadUtil.sleep(interval);
 			}
+			
+			//创建数据映射
+			createMappingsFromIssueMatch(DateUtil.addDayNum(new Date(), -1), null);
 		}
 		catch (Exception e)
 		{

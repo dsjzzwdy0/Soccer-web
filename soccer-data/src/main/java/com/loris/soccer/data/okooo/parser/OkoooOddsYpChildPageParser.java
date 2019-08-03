@@ -137,10 +137,12 @@ public class OkoooOddsYpChildPageParser extends OkoooOddsYpPageParser
 		OkoooCasinoComp comp = new OkoooCasinoComp();
 		
 		comp.setType(SoccerConstants.ODDS_TYPE_YP);
-		comp.setSource(OkoooConstants.SOURCE_OKOOO);
+		comp.setSource(SoccerConstants.SOURCE_OKOOO);
 		
 		firstYp.setMid(mid);
 		lastYp.setMid(mid);
+		firstYp.setSource(SoccerConstants.SOURCE_OKOOO);
+		lastYp.setSource(SoccerConstants.SOURCE_OKOOO);
 		
 		for (String key : object.keySet())
 		{

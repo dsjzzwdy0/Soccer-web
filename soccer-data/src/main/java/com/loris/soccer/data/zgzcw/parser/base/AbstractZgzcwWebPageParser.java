@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.loris.client.exception.WebParserException;
 import com.loris.client.model.WebPage;
 import com.loris.client.parser.impl.AbstractWebPageParser;
-import com.loris.soccer.data.zgzcw.ZgzcwConstants;
+import com.loris.soccer.constant.SoccerConstants;
 
 /**   
  * @ClassName:  AbstractZgzcwWebPageParser  
@@ -53,7 +53,7 @@ public abstract class AbstractZgzcwWebPageParser extends AbstractWebPageParser
 			return false;
 		}
 		
-		if(!ZgzcwConstants.SOURCE_ZGZCW.equalsIgnoreCase(page.getSource()))
+		if(!SoccerConstants.SOURCE_ZGZCW.equalsIgnoreCase(page.getSource()))
 		{
 			return false;
 		}

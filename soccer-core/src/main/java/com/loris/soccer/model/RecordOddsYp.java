@@ -37,6 +37,16 @@ public class RecordOddsYp extends OddsYp
 	private float firstwinodds;
 	private Float firsthandicap;
 	private float firstloseodds;
+	
+	public RecordOddsYp()
+	{
+	}
+	
+	public RecordOddsYp(OddsYp oddsYp)
+	{
+		this.addOddsYp(oddsYp);
+	}
+	
 	/**
 	 * @return the firsttime
 	 */

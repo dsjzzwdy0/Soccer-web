@@ -22,6 +22,7 @@ import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
 import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LeagueRoundWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LeagueWebPageParser;
+import com.loris.soccer.data.zgzcw.parser.LiveBdPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdScoreWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryJcScoreWebPageParser;
@@ -56,6 +57,7 @@ public class ZgzcwPageParser
 		parsers.put(ZgzcwConstants.PAGE_ODDS_OP, new OddsOpWebPageParser());
 		parsers.put(ZgzcwConstants.PAGE_ODDS_YP, new OddsYpWebPageParser());
 		parsers.put(ZgzcwConstants.PAGE_ODDS_NUM, new OddsNumWebPageParser());
+		parsers.put(ZgzcwConstants.PAGE_LIVE_BD, new LiveBdPageParser());
 	}
 	
 	/**

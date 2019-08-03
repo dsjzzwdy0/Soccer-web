@@ -138,8 +138,10 @@ public class OkoooOddsOpChildPageParser extends OkoooOddsOpPageParser
 		
 		firstOp.setMid(mid);
 		lastOp.setMid(mid);
+		firstOp.setSource(SoccerConstants.SOURCE_OKOOO);
+		lastOp.setSource(SoccerConstants.SOURCE_OKOOO);
 		
-		comp.setSource(OkoooConstants.SOURCE_OKOOO);
+		comp.setSource(SoccerConstants.SOURCE_OKOOO);
 		comp.setType(SoccerConstants.ODDS_TYPE_OP);
 		
 		for (String key : object.keySet())

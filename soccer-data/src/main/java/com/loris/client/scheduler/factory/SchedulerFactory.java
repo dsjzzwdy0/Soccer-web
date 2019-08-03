@@ -19,7 +19,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerPlugins;
 import com.loris.client.model.SchedulerStatus;
 import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.TaskScheduler;
@@ -49,10 +49,10 @@ public class SchedulerFactory
 	SchedulerStatusService schedulerStatusService;
 
 	/** Scheduler 的列表 */
-	List<SchedulerInfo> schedulerInfos = new ArrayList<>();
+	List<SchedulerPlugins> schedulerInfos = new ArrayList<>();
 
 	/** 当前的处理任务 */
-	Map<SchedulerInfo, Scheduler> schedulers = new HashMap<>();
+	Map<SchedulerPlugins, Scheduler> schedulers = new HashMap<>();
 
 	/** */
 	private static SchedulerFactory instance = null;
@@ -68,7 +68,7 @@ public class SchedulerFactory
 	{
 		if(schedulerInfoService != null)
 		{
-			List<SchedulerInfo> schedulerInfos = schedulerInfoService.list();
+			List<SchedulerPlugins> schedulerInfos = schedulerInfoService.list();
 			this.schedulerInfos.addAll(schedulerInfos);
 		}
 	}
@@ -78,7 +78,7 @@ public class SchedulerFactory
 	 * 
 	 * @return
 	 */
-	public List<SchedulerInfo> getSchedulers()
+	public List<SchedulerPlugins> getSchedulers()
 	{
 		return schedulerInfos;
 	}
@@ -88,7 +88,7 @@ public class SchedulerFactory
 	 * 
 	 * @param schedulers
 	 */
-	public void setSchedulers(List<SchedulerInfo> schedulers)
+	public void setSchedulers(List<SchedulerPlugins> schedulers)
 	{
 		this.schedulerInfos = schedulers;
 	}
@@ -100,9 +100,9 @@ public class SchedulerFactory
 	 *            Sid编号
 	 * @return
 	 */
-	public SchedulerInfo getInitSchedulerInfo(String sid)
+	public SchedulerPlugins getInitSchedulerInfo(String sid)
 	{
-		for (SchedulerInfo schedulerInfo : schedulerInfos)
+		for (SchedulerPlugins schedulerInfo : schedulerInfos)
 		{
 			if (sid.equals(schedulerInfo.getId()))
 			{
@@ -118,7 +118,7 @@ public class SchedulerFactory
 	 * @param info
 	 * @return
 	 */
-	public Scheduler getScheduler(SchedulerInfo info)
+	public Scheduler getScheduler(SchedulerPlugins info)
 	{
 		return schedulers.get(info);
 	}
@@ -127,9 +127,9 @@ public class SchedulerFactory
 	 * 添加任务处理类型
 	 * @param info
 	 */
-	public void addSchedulerInfo(SchedulerInfo info)
+	public void addSchedulerInfo(SchedulerPlugins info)
 	{
-		for (SchedulerInfo schedulerInfo : schedulerInfos)
+		for (SchedulerPlugins schedulerInfo : schedulerInfos)
 		{
 			if(schedulerInfo.equals(info)) return;
 		}
@@ -144,7 +144,7 @@ public class SchedulerFactory
 	 */
 	public Scheduler getScheduler(String sid)
 	{
-		for (SchedulerInfo schedulerInfo : schedulers.keySet())
+		for (SchedulerPlugins schedulerInfo : schedulers.keySet())
 		{
 			if (sid.equals(schedulerInfo.getId()))
 			{
@@ -160,7 +160,7 @@ public class SchedulerFactory
 	 * @param info 计算信息
 	 * @return 是否成功的标志
 	 */
-	public boolean save(SchedulerInfo info)
+	public boolean save(SchedulerPlugins info)
 	{
 		return schedulerInfoService.save(info);
 	}
@@ -171,7 +171,7 @@ public class SchedulerFactory
 	 */
 	public boolean saveAllSchedulers()
 	{
-		for (SchedulerInfo schedulerInfo : schedulerInfos)
+		for (SchedulerPlugins schedulerInfo : schedulerInfos)
 		{
 			schedulerInfoService.save(schedulerInfo);
 		}
@@ -204,7 +204,7 @@ public class SchedulerFactory
 	 * @param info 状态配置信息
 	 * @return 调度器
 	 */
-	public static Scheduler createTaskScheduler(SchedulerInfo info)
+	public static Scheduler createTaskScheduler(SchedulerPlugins info)
 	{
 		SchedulerStatus status = new SchedulerStatus(info);
 		return createTaskScheduler(status);
@@ -225,11 +225,11 @@ public class SchedulerFactory
 		for (String pluginName : plugins)
 		{
 			logger.info(status.getName() + " add plugin: " + pluginName);
-			if(pluginName.startsWith(SchedulerInfo.PLUGIN_BEAN + ":"))
+			if(pluginName.startsWith(SchedulerPlugins.PLUGIN_BEAN + ":"))
 			{
 				try
 				{
-					TaskPlugin plugin = (TaskPlugin)ApplicationContextHelper.getBean(StrKit.removePrefix(pluginName, SchedulerInfo.PLUGIN_BEAN + ":"));
+					TaskPlugin plugin = (TaskPlugin)ApplicationContextHelper.getBean(StrKit.removePrefix(pluginName, SchedulerPlugins.PLUGIN_BEAN + ":"));
 					scheduler.addTaskPlugin(plugin);
 				}
 				catch(Exception e)
@@ -238,11 +238,11 @@ public class SchedulerFactory
 					logger.info(e.getStackTrace());
 				}
 			}
-			else if(pluginName.startsWith(SchedulerInfo.PLUGIN_CLASS + ":"))
+			else if(pluginName.startsWith(SchedulerPlugins.PLUGIN_CLASS + ":"))
 			{
 				try
 				{
-					TaskPlugin plugin = (TaskPlugin) ApplicationContextHelper.getBean(Class.forName(StrKit.removePrefix(pluginName, SchedulerInfo.PLUGIN_CLASS + ":")));
+					TaskPlugin plugin = (TaskPlugin) ApplicationContextHelper.getBean(Class.forName(StrKit.removePrefix(pluginName, SchedulerPlugins.PLUGIN_CLASS + ":")));
 					scheduler.addTaskPlugin(plugin);
 				}
 				catch (ClassNotFoundException e)
@@ -254,7 +254,7 @@ public class SchedulerFactory
 			{
 				try
 				{
-					TaskPlugin plugin = (TaskPlugin)ApplicationContextHelper.getBean(StrKit.removePrefix(pluginName, SchedulerInfo.PLUGIN_BEAN + ":"));
+					TaskPlugin plugin = (TaskPlugin)ApplicationContextHelper.getBean(StrKit.removePrefix(pluginName, SchedulerPlugins.PLUGIN_BEAN + ":"));
 					scheduler.addTaskPlugin(plugin);
 				}
 				catch(Exception e)

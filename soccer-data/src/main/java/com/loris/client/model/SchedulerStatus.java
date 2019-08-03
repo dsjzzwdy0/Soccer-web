@@ -62,7 +62,7 @@ public class SchedulerStatus extends AutoIdEntity
 		this.createtime = new Date();
 	}
 	
-	public SchedulerStatus(SchedulerInfo schedulerInfo)
+	public SchedulerStatus(SchedulerPlugins schedulerInfo)
 	{
 		this();
 		setSchedulerInfo(schedulerInfo);
@@ -70,7 +70,7 @@ public class SchedulerStatus extends AutoIdEntity
 		this.finishtime = null;
 	}
 	
-	public void setSchedulerInfo(SchedulerInfo info)
+	public void setSchedulerInfo(SchedulerPlugins info)
 	{
 		this.sid = info.getId();
 		this.intervaltime = info.getIntervaltime();
@@ -238,9 +238,9 @@ public class SchedulerStatus extends AutoIdEntity
 	 * 获得任务数据
 	 * @return
 	 */
-	public SchedulerInfo getSchedulerInfo()
+	public SchedulerPlugins getSchedulerInfo()
 	{
-		SchedulerInfo info = new SchedulerInfo();
+		SchedulerPlugins info = new SchedulerPlugins();
 		info.setId(this.sid);
 		info.setIntervaltime(intervaltime);
 		info.setName(name);
@@ -258,7 +258,7 @@ public class SchedulerStatus extends AutoIdEntity
 	public List<String> getPluginInfos()
 	{
 		List<String> list = new ArrayList<>();
-		String[] strings = plugins.split(SchedulerInfo.separator);
+		String[] strings = plugins.split(SchedulerPlugins.separator);
 		for (String string : strings)
 		{
 			if(StringUtils.isNotBlank(string))

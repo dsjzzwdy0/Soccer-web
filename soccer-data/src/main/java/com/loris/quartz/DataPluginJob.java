@@ -17,7 +17,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.loris.client.model.SchedulerInfo;
+import com.loris.client.model.SchedulerPlugins;
 import com.loris.client.scheduler.Scheduler;
 import com.loris.client.scheduler.factory.SchedulerFactory;
 import com.loris.client.service.SchedulerInfoService;
@@ -54,7 +54,7 @@ public class DataPluginJob extends BaseJob
 		}
 		
 		SchedulerInfoService schedulerInfoService = ApplicationContextHelper.getBean(SchedulerInfoService.class);
-		SchedulerInfo schedulerInfo = schedulerInfoService.getSchedulerInfo(type);
+		SchedulerPlugins schedulerInfo = schedulerInfoService.getSchedulerInfo(type);
 		
 		if(schedulerInfo == null)
 		{

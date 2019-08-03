@@ -103,7 +103,7 @@ public class OkoooPageCreator
 		WebPage page = new WebPage();
 		page.setType(type);
 		page.setCreatetime(new Date());
-		page.setSource(SOURCE_OKOOO);		
+		page.setSource(SoccerConstants.SOURCE_OKOOO);		
 		page.setPriority(getDefaultPriority(type, params));
 		page.setEncoding(encoding);
 		page.setMethod(getHttpMethod(type));

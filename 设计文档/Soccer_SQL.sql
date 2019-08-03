@@ -1,7 +1,7 @@
 CREATE TABLE `soccer_web_page` (
 	`id`  int(11) NOT NULL AUTO_INCREMENT ,
 	`name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-	`url`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`url`  varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`encoding`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`protocol`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 	`host`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
@@ -373,7 +373,7 @@ create table soccer_odds_score(
 	INDEX `index_type` (`type`) USING BTREE
 );
 
-create table soccer_scheduler_info(
+create table soccer_scheduler_plugins(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	name varchar(30),
 	maxactivetaskthread int,
@@ -403,7 +403,7 @@ create table soccer_scheduler_status(
 	PRIMARY KEY (`id`)
 );
 
-create table soccer_job_info(
+create table soccer_scheduler_qartz_job(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,
 	jobname varchar(20),
 	classname varchar(100),
