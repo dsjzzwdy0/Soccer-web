@@ -92,11 +92,14 @@ function createTable(matchdocs)
 }
 
 //创建表格头部
-function createTableHeader(header, columns, showFirst, showLast)
+function createTableHeader(header, columns)
 {
 	var top = [];
+	var center = [];
 	var bottom = [];
 	var size = columns.length;
+	var showFirst = true;
+	var showLast = true;
 	for(var i = 0; i < size; i ++)
 	{
 		c = columns[i];
@@ -107,16 +110,34 @@ function createTableHeader(header, columns, showFirst, showLast)
 			{
 				continue;
 			}
-			top.push('<th><div class="th-wrap">');
+			
+			colspan = 0;
+			if(showFirst) colspan += 3;
+			if(showLast) colspan += 3;
+			top.push('<th colspan="' + colspan + '"><div class="th-wrap">');
 			top.push(c.field);
 			top.push('</div></th>');
 			
-			bottom.push('<th class="oddsvalue">');
-			bottom.push('')
+			if(showFirst)
+			{
+				center.push('<th colspan="3"><div class="th-wrap">');
+				center.push('初盘');
+				center.push('</div></th>');
+				
+				bottom.push(formatOddsHeader(c.field, true));
+			}
+			if(showLast)
+			{
+				center.push('<th colspan="3"><div class="th-wrap">');
+				center.push('即时');
+				center.push('</div></th>');
+				
+				bottom.push(formatOddsHeader(c.field, false));
+			}
 		}
 		else
 		{
-			top.push('<th rowspan="2"><div class="th-wrap">');
+			top.push('<th rowspan="3"><div class="th-wrap">');
 			if($.isNullOrEmpty(c.name))
 				top.push(c.field);
 			else
@@ -129,6 +150,11 @@ function createTableHeader(header, columns, showFirst, showLast)
 			}
 			top.push('</div></th>');
 		}
+	}
+	
+	formatOddsHeader = function(corpname, isFirst)
+	{
+		
 	}
 }
 
