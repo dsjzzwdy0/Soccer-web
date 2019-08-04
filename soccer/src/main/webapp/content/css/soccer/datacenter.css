@@ -113,7 +113,7 @@
 .container_wrapper .gridTable .association
 {
 	margin: 0px auto;	
-	width: 60px;
+	width: 48px;
 	height: 30px;
 	line-height: 30px;
 	vertical-align: middle;
@@ -452,28 +452,28 @@
 
 .container_wrapper .gridTable .association_red
 {
-	background: url(../../images/soccer/circle-1.png) no-repeat;
+	background: url(../../images/soccer/circle-1.png) no-repeat center 50%;
 }
 
 .container_wrapper .gridTable .association_thin
 {
-	background: url(../../images/soccer/circle-2.png) no-repeat;
+	background: url(../../images/soccer/circle-2.png) no-repeat center 50%;
 }
 
 .container_wrapper .gridTable .association_cyan
 {
 	color: white;
-	background: url(../../images/soccer/circle-3.png) no-repeat;
+	background: url(../../images/soccer/circle-3.png) no-repeat center 50%;
 }
 
 .container_wrapper .gridTable .association_blue
 {
 	color: white;
-	background: url(../../images/soccer/circle-4.png) no-repeat;
+	background: url(../../images/soccer/circle-4.png) no-repeat center 50%;
 }
 
 .container_wrapper .gridTable .association_orange
 {
 	color: white;
-	background: url(../../images/soccer/circle-5.png) no-repeat;
+	background: url(../../images/soccer/circle-5.png) no-repeat center 50%;
 }

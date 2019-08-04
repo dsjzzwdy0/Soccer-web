@@ -25,8 +25,10 @@ import com.loris.common.service.SqlHelper;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.CasinoCompMapper;
 import com.loris.soccer.dao.CompSettingMapper;
+import com.loris.soccer.dao.view.CasinoCompInfoMapper;
 import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.CompSetting;
+import com.loris.soccer.model.view.CasinoCompInfo;
 import com.loris.soccer.service.CompService;
 
 /**   
@@ -46,6 +48,9 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 	
 	@Autowired
 	private CasinoCompMapper casinoCompMapper;
+	
+	@Autowired
+	private CasinoCompInfoMapper casinoCompInfoMapper;
 	
 	/** 默认的公司配置 */
 	private CompSetting defaultSetting;
@@ -77,9 +82,9 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 	 * @see com.loris.soccer.service.CompService#getCasinoComps()
 	 */
 	@Override
-	public List<CasinoComp> getCasinoComps()
+	public List<CasinoCompInfo> getCasinoComps()
 	{
-		return casinoCompMapper.selectList(new QueryWrapper<CasinoComp>());
+		return casinoCompInfoMapper.selectList(new QueryWrapper<CasinoCompInfo>());
 	}
 
 	/**
@@ -87,14 +92,14 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 	 * @see com.loris.soccer.service.CompService#getCasinoComps(java.lang.String)
 	 */
 	@Override
-	public List<CasinoComp> getCasinoComps(String type)
+	public List<CasinoCompInfo> getCasinoComps(String type)
 	{
-		QueryWrapper<CasinoComp> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<CasinoCompInfo> queryWrapper = new QueryWrapper<>();
 		if(StringUtils.isNotEmpty(type))
 		{
 			queryWrapper.eq("type", type);
 		}
-		return casinoCompMapper.selectList(queryWrapper);
+		return casinoCompInfoMapper.selectList(queryWrapper);
 	}
 
 	/**
@@ -112,7 +117,6 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 			updateCompSetting(setting);
 		}
 		return setting;
-		
 	}
 
 	/**
@@ -159,9 +163,9 @@ public class CompServiceImpl extends ServiceImpl<CompSettingMapper, CompSetting>
 	protected void updateCompSetting(CompSetting compSetting)
 	{
 		List<String> ids = compSetting.getCorpIds(null);
-		QueryWrapper<CasinoComp> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<CasinoCompInfo> queryWrapper = new QueryWrapper<>();
 		queryWrapper.in("corpid", ids);
-		List<CasinoComp> comps = casinoCompMapper.selectList(queryWrapper);
+		List<CasinoCompInfo> comps = casinoCompInfoMapper.selectList(queryWrapper);
 		
 		if(comps == null || comps.size() == 0)
 		{

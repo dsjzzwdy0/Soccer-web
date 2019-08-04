@@ -78,7 +78,6 @@ import com.loris.soccer.data.zgzcw.ZgzcwConstants;
 import com.loris.soccer.data.zgzcw.ZgzcwPageCreator;
 import com.loris.soccer.data.zgzcw.ZgzcwPageParser;
 import com.loris.soccer.data.zgzcw.parser.CenterPageParser;
-import com.loris.soccer.data.zgzcw.parser.CupWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdScoreWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryBdWebPageParser;
 import com.loris.soccer.data.zgzcw.parser.LotteryJcScoreWebPageParser;
@@ -169,11 +168,10 @@ public class App
 			// testZgzcwLeagueWebPage();
 			// testBdWebPage();
 			// testJcWebPage();
-			testLiveBdWebPage();
-			
+			// testLiveBdWebPage();
 			// testWebPageService();
 			// testLeagueRoundWebPage();
-			// testZgzcwCupWebPage();
+			testZgzcwCupWebPage();
 			// testZgzcwLeagueCenterScheduler();	
 			// testBdMatchInfo();
 			// addSchedulerInfo();
@@ -1199,8 +1197,8 @@ public class App
 	public static void testZgzcwCupWebPage() throws Exception
 	{
 		Map<String, String> params = new LinkedHashMap<>();
-		params.put("lid", "67");
-		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_CUP, params);
+		params.put("lid", "181");
+		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_LEAGUE_LEAGUE, params);
 
 		if (!downloadWebPage(page))
 		{
@@ -1209,8 +1207,8 @@ public class App
 
 		// logger.info(page.getContent());
 
-		CupWebPageParser parser = new CupWebPageParser();
-		TableRecords records = parser.parse(page);
+		TableRecords records = ZgzcwPageParser.parseWebPage(page);
+		
 		if (records == null)
 		{
 			logger.info("Parser error.");
@@ -1228,6 +1226,13 @@ public class App
 		for (Team team : teams)
 		{
 			logger.info(i++ + ": " + team.getTid() + ", " + team.getName());
+		}
+		
+		List<Season> seasons = (List<Season>)records.get(SoccerConstants.SOCCER_DATA_LEAGUE_SEASON_LIST);
+		i = 1;
+		for (Season season : seasons)
+		{
+			logger.info(i +++ ": " + season);
 		}
 		saveTableRecords(records);
 	}
@@ -1347,8 +1352,8 @@ public class App
 	public static void testZgzcwYpWebPage() throws Exception
 	{
 		Map<String, String> params = new LinkedHashMap<>();
-		params.put(SoccerConstants.NAME_FIELD_MID, "2514558");
-		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-04-21 13:00:00");
+		params.put(SoccerConstants.NAME_FIELD_MID, "2509215");
+		params.put(SoccerConstants.NAME_FIELD_MATCHTIME, "2019-08-04 05:00:00");
 		WebPage page = ZgzcwPageCreator.createZgzcwWebPage(ZgzcwConstants.PAGE_ODDS_YP, params);
 
 		if (!downloadWebPage(page))

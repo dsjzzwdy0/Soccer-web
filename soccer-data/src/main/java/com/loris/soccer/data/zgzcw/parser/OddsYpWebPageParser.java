@@ -210,6 +210,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			Element detailElement = getCorpElements(document, compid);
 			RecordOddsYp recordOddsYp = new RecordOddsYp();
 			parseCorpYps(yps, recordOddsYp, comps, detailElement, mid, compid, name, homeprob, guestprob, homekelly, guestkelly, lossratio);
+			recordYps.add(recordOddsYp);
 		}
 	}
 	
@@ -237,9 +238,9 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 			}
 			
 			long opemtime = NumberUtil.parseLong(ypElement.attr("timestamp"));
-			float winodds = NumberUtil.parseFloat(getElementValue(valueEls.get(0)));
-			String handicap = getElementValue(valueEls.get(1));
-			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
+			float winodds = NumberUtil.parseFloat(formatValue(valueEls.get(0)));
+			String handicap = formatValue(valueEls.get(1));
+			float loseodds = NumberUtil.parseFloat(formatValue(valueEls.get(2)));
 			
 			OddsYp odds = new OddsYp(mid);
 			odds.setSource(SoccerConstants.SOURCE_ZGZCW);
@@ -320,7 +321,7 @@ public class OddsYpWebPageParser extends AbstractZgzcwMatchWebPageParser
 		return d;
 	}
 	
-	protected String getElementValue(Element element)
+	protected String formatValue(Element element)
 	{
 		String value = element.text();
 		value = value.replace("↓", "");

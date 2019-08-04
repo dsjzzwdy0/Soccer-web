@@ -28,10 +28,16 @@ import com.loris.soccer.dao.OddsScoreMapper;
 import com.loris.soccer.dao.OddsYpMapper;
 import com.loris.soccer.dao.RecordOddsOpMapper;
 import com.loris.soccer.dao.RecordOddsYpMapper;
+import com.loris.soccer.dao.view.RecordOddsOpInfoMapper;
+import com.loris.soccer.dao.view.RecordOddsYpInfoMapper;
+import com.loris.soccer.model.CasinoComp;
+import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.RecordOddsYp;
+import com.loris.soccer.model.view.RecordOddsOpInfo;
+import com.loris.soccer.model.view.RecordOddsYpInfo;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
 import com.loris.soccer.service.OddsService;
@@ -69,6 +75,12 @@ public class OddsServiceImpl implements OddsService
 	
 	@Autowired
 	private RecordOddsYpMapper recordOddsYpMapper;
+	
+	@Autowired
+	private RecordOddsOpInfoMapper recordOddsOpinfoMapper;
+	
+	@Autowired
+	private RecordOddsYpInfoMapper recordOddsYpInfoMapper;
 	
 	/**
 	 * 通过比赛编号获得欧赔数据列表
@@ -322,6 +334,7 @@ public class OddsServiceImpl implements OddsService
 	 * @see com.loris.soccer.service.OddsService#getRecordOddsOps(java.util.List, java.util.List)
 	 */
 	@Override
+	@Deprecated
 	public List<RecordOddsOp> getRecordOddsOps(List<String> mids, List<String> corpids)
 	{
 		QueryWrapper<RecordOddsOp> queryWrapper = new QueryWrapper<>();
@@ -341,6 +354,7 @@ public class OddsServiceImpl implements OddsService
 	 * @see com.loris.soccer.service.OddsService#getRecordOddsYps(java.util.List, java.util.List)
 	 */
 	@Override
+	@Deprecated
 	public List<RecordOddsYp> getRecordOddsYps(List<String> mids, List<String> corpids)
 	{
 		QueryWrapper<RecordOddsYp> queryWrapper = new QueryWrapper<>();
@@ -353,5 +367,47 @@ public class OddsServiceImpl implements OddsService
 			queryWrapper.in(SoccerConstants.NAME_FIELD_CORPID, corpids);
 		}
 		return recordOddsYpMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#getRecordOddsOps(java.util.List, com.loris.soccer.model.CompSetting)
+	 */
+	@Override
+	public List<RecordOddsOpInfo> getRecordOddsOps(List<String> mids, CompSetting compSetting)
+	{
+		List<CasinoComp> comps = compSetting.getOpComps();
+		if(comps == null || comps.size() <= 0) return null;
+		
+		QueryWrapper<RecordOddsOpInfo> queryWrapper = new QueryWrapper<>();
+		for (CasinoComp comp : comps)
+		{
+			queryWrapper.or(wrapper->wrapper.eq("corpid", comp.getCorpid()).eq("source", comp.getSource()));
+		}
+		queryWrapper.and(wrapper->wrapper.in("mid", mids).or().in("destid", mids));
+		
+		//System.out.println(queryWrapper.getCustomSqlSegment());
+		return recordOddsOpinfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#getRecordOddsYps(java.util.List, com.loris.soccer.model.CompSetting)
+	 */
+	@Override
+	public List<RecordOddsYpInfo> getRecordOddsYps(List<String> mids, CompSetting compSetting)
+	{
+		List<CasinoComp> comps = compSetting.getYpComps();
+		if(comps == null || comps.size() <= 0) return null;
+		
+		QueryWrapper<RecordOddsYpInfo> queryWrapper = new QueryWrapper<>();
+		for (CasinoComp comp : comps)
+		{
+			queryWrapper.or(wrapper->wrapper.eq("corpid", comp.getCorpid()).eq("source", comp.getSource()));
+		}
+		queryWrapper.and(wrapper->wrapper.in("mid", mids).or().in("destid", mids));
+		
+		//System.out.println(queryWrapper.getCustomSqlSegment());
+		return recordOddsYpInfoMapper.selectList(queryWrapper);
 	}
 }

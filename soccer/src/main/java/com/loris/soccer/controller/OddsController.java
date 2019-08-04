@@ -26,12 +26,12 @@ import com.loris.common.web.wrapper.Rest;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsOp;
-import com.loris.soccer.model.RecordOddsOp;
-import com.loris.soccer.model.RecordOddsYp;
 import com.loris.soccer.model.Round;
 import com.loris.soccer.model.complex.MatchOddsList;
 import com.loris.soccer.model.view.IssueMatchInfo;
 import com.loris.soccer.model.view.MatchInfo;
+import com.loris.soccer.model.view.RecordOddsOpInfo;
+import com.loris.soccer.model.view.RecordOddsYpInfo;
 import com.loris.soccer.service.CompService;
 import com.loris.soccer.service.MatchService;
 import com.loris.soccer.service.OddsService;
@@ -239,22 +239,60 @@ public class OddsController extends BaseController
 		List<String> opcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_OP);
 		if (opcorpids != null && opcorpids.size() > 0)
 		{
-			List<RecordOddsOp> ops = oddsService.getRecordOddsOps(mids, opcorpids);
-			// logger.info("总共的欧赔数据的量为： " + ops.size());
+			List<RecordOddsOpInfo> ops = oddsService.getRecordOddsOps(mids, setting);
+			processRecordOddsInfo(ops, RecordOddsOpInfo.class);
+			//logger.info("总共的欧赔数据的量为： " + ops.size());
 			matchOddsList.addRecodOddsOpList(ops);
 		}
 
 		List<String> ypcorpids = setting.getCorpIds(SoccerConstants.ODDS_TYPE_YP);
 		if (ypcorpids != null && ypcorpids.size() > 0)
 		{
-			List<RecordOddsYp> yps = oddsService.getRecordOddsYps(mids, ypcorpids);
-			// logger.info("总共的欧赔数据的量为： " + yps.size());
+			List<RecordOddsYpInfo> yps = oddsService.getRecordOddsYps(mids, setting);
+			processRecordOddsInfo(yps, RecordOddsYpInfo.class);
+			
+			//logger.info("总共的亚盘赔数据的量为： " + yps.size());
 			matchOddsList.addRecodOddsYpList(yps);
 		}
 
 		long en = System.currentTimeMillis();
 		logger.info("Load " + matchOddsList.sizeOfMatch() + " match Total spend time is " + (en - st) + " ms.");
 		return true;
+	}
+	
+	/**
+	 * 对数据进行二次处理，这是因为数据在存储的时候
+	 * @param records
+	 * @param clazz
+	 */
+	protected <T> void processRecordOddsInfo(List<T> records, Class<T> clazz)
+	{
+		if(clazz.isAssignableFrom(RecordOddsOpInfo.class))
+		{
+			for (T t : records)
+			{
+				RecordOddsOpInfo rec = (RecordOddsOpInfo)t;
+				if(StringUtils.isNotBlank(rec.getDestid()))
+				{
+					String okoooid = rec.getMid();
+					rec.setMid(rec.getDestid());
+					rec.setDestid(okoooid);
+				}
+			}
+		}
+		else if(clazz.isAssignableFrom(RecordOddsYpInfo.class))
+		{
+			for(T t : records)
+			{
+				RecordOddsYpInfo rec = (RecordOddsYpInfo)t;
+				if(StringUtils.isNotBlank(rec.getDestid()))
+				{
+					String okoooid = rec.getMid();
+					rec.setMid(rec.getDestid());
+					rec.setDestid(okoooid);
+				}
+			}
+		}
 	}
 	
 	/**

@@ -36,20 +36,21 @@ public class OddsItem
 {
 	protected String corpid;
 	protected String type;
+	protected String source;
 	protected Date firsttime;
 	protected Date lasttime;
 	protected float[] values = new float[6];
 	
-	public OddsItem(String corpid, String type)
+	public OddsItem(String corpid, String type, String source)
 	{
 		this.corpid = corpid;
 		this.type = type;
+		this.source = source;
 	}
 	
 	public OddsItem(OddsValue odds, String type)
 	{
-		this.corpid = odds.getCorpid();
-		this.type = type;
+		this(odds.getCorpid(), type, odds.getSource());		
 		addOdds(odds, type);
 	}
 	
@@ -95,6 +96,22 @@ public class OddsItem
 	{
 		this.lasttime = lasttime;
 	}
+	/**
+	 * @return the source
+	 */
+	public String getSource()
+	{
+		return source;
+	}
+
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(String source)
+	{
+		this.source = source;
+	}
+
 	public float[] getValues()
 	{
 		return values;
@@ -108,6 +125,7 @@ public class OddsItem
 	{
 		this.corpid = op.getCorpid();
 		this.type = SoccerConstants.ODDS_TYPE_OP;
+		this.source = op.getSource();
 		if(firsttime == null || DateUtil.compareDate(firsttime, op.getFirsttime()) > 0)
 		{
 			firsttime = op.getFirsttime();
@@ -128,6 +146,7 @@ public class OddsItem
 	{
 		this.corpid = yp.getCorpid();
 		this.type = SoccerConstants.ODDS_TYPE_YP;
+		this.source = yp.getSource();
 		if(firsttime == null || DateUtil.compareDate(firsttime, yp.getFirsttime()) > 0)
 		{
 			firsttime = yp.getFirsttime();

@@ -281,6 +281,16 @@ public class CompSetting extends AutoIdEntity
 	}
 	
 	/**
+	 * 获得欧赔公司列表
+	 * @return 欧赔公司
+	 */
+	@JsonIgnore
+	public List<CasinoComp> getOpComps()
+	{
+		return getComps(SoccerConstants.ODDS_TYPE_OP);
+	}
+	
+	/**
 	 * 获得欧赔公司ID数据的列表
 	 * @return
 	 */
@@ -288,6 +298,16 @@ public class CompSetting extends AutoIdEntity
 	public List<String> getOpCorpIds()
 	{
 		return getCorpIds(SoccerConstants.ODDS_TYPE_OP);
+	}
+	 
+	/**
+	 * 获得来盘公司的数据列表
+	 * @return
+	 */
+	@JsonIgnore
+	public List<CasinoComp> getYpComps()
+	{
+		return getComps(SoccerConstants.ODDS_TYPE_YP);
 	}
 	 
 	/**
@@ -319,4 +339,24 @@ public class CompSetting extends AutoIdEntity
 		}
 		return ids;
 	}
+    
+    /**
+     * 按照类型对公司的数据进行过滤
+     * @param type
+     * @return
+     */
+    @JsonIgnore
+    public List<CasinoComp> getComps(String type)
+    {
+    	List<CasinoComp> comps = new ArrayList<>();
+    	for (CasinoComp casinoComp : casinoComps)
+		{
+    		if(StringUtils.isEmpty(type) || StringUtils.equals(type, casinoComp.getType()))
+    		{
+    			if(!comps.contains(casinoComp))
+    				comps.add(casinoComp);
+    		}
+		}
+    	return comps;
+    }
 }

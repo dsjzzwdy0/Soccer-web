@@ -84,14 +84,17 @@ public abstract class AbstractLeagueWebPageParser extends AbstractZgzcwWebPagePa
 		{
 			return;
 		}
-		String seasonInfo = "";
+		String seasonname = "";
 		Elements els = element.select("a");
 		for (Element el : els)
 		{
-			seasonInfo = el.select("li").first().text();
+			seasonname = el.selectFirst("li").text();
+			if(StringUtils.isEmpty(seasonname) || StringUtils.equals("世界排名", seasonname))
+				continue;
+			
 			Season s = new Season();
 			s.setLid(lid);
-			s.setSeason(seasonInfo);
+			s.setSeason(seasonname);
 			seasons.add(s);
 		}
 	}

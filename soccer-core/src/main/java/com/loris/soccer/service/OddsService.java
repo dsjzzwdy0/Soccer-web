@@ -13,10 +13,13 @@ package com.loris.soccer.service;
 
 import java.util.List;
 
+import com.loris.soccer.model.CompSetting;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.RecordOddsOp;
 import com.loris.soccer.model.RecordOddsYp;
+import com.loris.soccer.model.view.RecordOddsOpInfo;
+import com.loris.soccer.model.view.RecordOddsYpInfo;
 import com.loris.soccer.model.OddsScore;
 import com.loris.soccer.model.OddsYp;
 
@@ -161,6 +164,14 @@ public interface OddsService
 	List<RecordOddsOp> getRecordOddsOps(List<String> mids, List<String> corpids);
 	
 	/**
+	 * 获得初始和最新的欧赔值
+	 * @param mids
+	 * @param compSetting
+	 * @return
+	 */
+	List<RecordOddsOpInfo> getRecordOddsOps(List<String> mids, CompSetting compSetting);
+	
+	/**
 	 * 插入亚盘数据记录
 	 * @param yps 亚盘数据
 	 * @return 是不成功的标志
@@ -182,6 +193,14 @@ public interface OddsService
 	 * @return
 	 */
 	List<RecordOddsYp> getRecordOddsYps(List<String> mids, List<String> corpids);
+	
+	/**
+	 * 获得亚盘最新和初始赔率的值
+	 * @param mids
+	 * @param corpids
+	 * @return
+	 */
+	List<RecordOddsYpInfo> getRecordOddsYps(List<String> mids, CompSetting compSetting);
 	
 	/**
 	 * 更新数据列表

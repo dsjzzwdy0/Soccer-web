@@ -172,14 +172,14 @@ public class MatchOddsList
 			matchOdds.add(m);
 		}
 	}
-	public void addRecodOddsOpList(List<RecordOddsOp> ops)
+	public void addRecodOddsOpList(List<? extends RecordOddsOp> ops)
 	{
 		for (RecordOddsOp recordOddsOp : ops)
 		{
 			addRecordOddsOp(recordOddsOp);
 		}
 	}
-	public void addRecodOddsYpList(List<RecordOddsYp> yps)
+	public void addRecodOddsYpList(List<? extends RecordOddsYp> yps)
 	{
 		for (RecordOddsYp recordOddsYp : yps)
 		{

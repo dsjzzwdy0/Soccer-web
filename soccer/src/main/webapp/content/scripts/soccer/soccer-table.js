@@ -58,34 +58,6 @@ $.fn.extend({
 	},
 });
 
-//盘口数据的处理
-var OddsUtil = OddsUtil || {};
-OddsUtil.NAME_YPS =
-	[ "平手", "平/半", "半球", "半/一", "一球", "一/球半", "球半", "球半/两", "两球", "两/两半", "两半", "两半/三", "三球", 
-	  "受平/半", "受半球", "受半/一","受一球", "受一/球半", "受球半", "受球半/两", "受两球", "受两/两半", "受两半", "受两半/三", "受三球" ];
-OddsUtil.NAME_YPS_VALUES =
-	[ 0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, -0.25, -0.50, -0.75, -1.0,
-			-1.25, -1.5, -1.75, -2.0, -2.25, -2.5, -2.75, -3.0 ];
-OddsUtil.DEFAUL_THRESHOLD =0.002;
-OddsUtil.formatHandicap = function(value)
-{
-	var len = OddsUtil.NAME_YPS_VALUES.length;
-	for(var i = 0; i < len ; i ++)
-	{
-		if(OddsUtil.withinErrorMargin(value, OddsUtil.NAME_YPS_VALUES[i], OddsUtil.DEFAUL_THRESHOLD))
-		{
-			return OddsUtil.NAME_YPS[i];
-		}
-	}
-	return '';
-}
-
-if (!Array.isArray)
-{
-	Array.isArray = function(arg) {
-		return Object.prototype.toString.call(arg) === '[object Array]';
-	};
-}
 
 var Association = Association || {};
 Association.AssClasses = ['association_red', 'association_thin', 'association_cyan', 'association_blue', 'association_orange'];
@@ -104,42 +76,6 @@ Association.getRelationClass = function(index)
 	return Association.AssClasses[index];
 }
 
-/**
- * 检测是否在误差范围内
- * @param left
- * @param right
- * @returns
- */
-OddsUtil.withinErrorMargin = function(left, right)
-{
-	return $.withinErrorMargin(left, right, 0.003);
-}
-OddsUtil.withinErrorMargin = function(left, right, threshold)
-{
-	if($.isNullOrEmpty(threshold) || threshold <= 0)
-	{
-		threshold = DEFAUL_THRESHOLD;
-	}
-	return Math.abs(left - right) < threshold;
-}
-
-/**
- * 通过让球的名称获得让球数
- * @param name
- * @returns
- */
-OddsUtil.getHandicapValue = function(name)
-{
-	var len = NAME_YPS.length;
-	for(var i = 0; i < len ; i ++)
-	{
-		if(name == NAME_YPS[i])
-		{
-			return NAME_YPS_VALUES[i];
-		}
-	}
-	return -100;
-}
 
 /**
  * 状态改变监听器
@@ -465,13 +401,14 @@ function SoccerTableColumns()
 					else
 					{							
 						var st = first ? 0 : 3;
+						var title = formatOddsTitle(first, odds);
 						if(j == 1)
 						{
-							return '<div class="oddsvalue">' + OddsUtil.formatHandicap(odds.values[st + j])+ '</div>';
+							return '<div class="oddsvalue" title="' + title + '">' + OddsUtil.formatHandicap(odds.values[st + j])+ '</div>';
 						}
 						else
 						{
-							return '<div class="oddsvalue">' + formatValue(odds.values[st + j]) + '</div>';
+							return '<div class="oddsvalue" title="' + title + '">' + formatValue(odds.values[st + j]) + '</div>';
 						}
 					}
 				}
@@ -639,7 +576,7 @@ function SoccerTableColumns()
 	function formatCommonOpvalueComlumn(index, match, op, corp, first)
 	{
 		var st = first ? 0 : 3;
-		var title = formatOpTitle(first, op);
+		var title = formatOddsTitle(first, op);
 		return '<div class="oddsvalue" title="' + (st) + '">' 
 			+ formatValue(op.values[st + j]) + '</div>';
 	}
@@ -663,12 +600,12 @@ function SoccerTableColumns()
 			relateClass += ' relation';
 		}		
 		var vals = op.values;
-		var title = formatOpTitle(first, op);
+		var title = formatOddsTitle(first, op);
 		return '<div class="association ' + relateClass + '" title="' + title + '" index="' + relateIndex +
 			'" mid="' + match.mid + '" gid="' + op.gid + '" type="' + first + '">' + formatValue(vals[st + index]) + '</div>'
 	}
 	
-	function formatOpTitle(first, op)
+	function formatOddsTitle(first, op)
 	{
 		var st = first ? 0 : 3;
 		var vals = op.values;

@@ -222,20 +222,20 @@ ALGORITHM=UNDEFINED
 DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
 VIEW `soccer_record_op_info`AS 
-select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`sourceid` AS `okoooid`,`a`.`corpid` AS `corpid`,`a`.`firsttime` AS `firsttime`,`a`.`firstwinodds` AS `firstwinodds`,
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`destid` AS `destid`,`a`.`corpid` AS `corpid`,`a`.`firsttime` AS `firsttime`,`a`.`firstwinodds` AS `firstwinodds`,
 	`a`.`firstdrawodds` AS `firstdrawodds`,`a`.`firstloseodds` AS `firstloseodds`,`a`.`opentime` AS `opentime`,`a`.`winodds` AS `winodds`,
 	`a`.`drawodds` AS `drawodds`,`a`.`loseodds` AS `loseodds`,`a`.`winkelly` AS `winkelly`,`a`.`drawkelly` AS `drawkelly`,
 	`a`.`losekelly` AS `losekelly`,`a`.`winprob` AS `winprob`,`a`.`drawprob` AS `drawprob`,`a`.`loseprob` AS `loseprob`,
 	`a`.`lossratio` AS `lossratio`,`a`.`source` AS `source` from (`soccer_record_odds_op` `a` left join `soccer_mapping_match` `b` 
-	on((`a`.`mid` = `b`.`destid`))) ;
+	on((`a`.`mid` = `b`.`sourceid`))) ;
 
 CREATE 
 ALGORITHM=UNDEFINED 
 DEFINER=`root`@`localhost` 
 SQL SECURITY DEFINER 
 VIEW `soccer_record_yp_info`AS 
-select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`destid` AS `okoooid`, `a`.`corpid` AS `corpid`,`a`.`firsttime` AS `firsttime`,`a`.`firstwinodds` AS `firstwinodds`,
+select `a`.`id` AS `id`,`a`.`mid` AS `mid`,`b`.`destid` AS `destid`, `a`.`corpid` AS `corpid`,`a`.`firsttime` AS `firsttime`,`a`.`firstwinodds` AS `firstwinodds`,
 	`a`.`firsthandicap` AS `firsthandicap`,`a`.`firstloseodds` AS `firstloseodds`,`a`.`opentime` AS `opentime`,`a`.`winodds` AS `winodds`,
 	`a`.`handicap` AS `handicap`,`a`.`loseodds` AS `loseodds`,`a`.`winkelly` AS `winkelly`,`a`.`losekelly` AS `losekelly`,
 	`a`.`winprob` AS `winprob`,`a`.`loseprob` AS `loseprob`,`a`.`lossratio` AS `lossratio`,`a`.`source` AS `source`
-	from (`soccer_record_odds_yp` `a` left join `soccer_mapping_match` `b` on((`a`.`mid` = `b`.`destid`))) ;
+	from (`soccer_record_odds_yp` `a` left join `soccer_mapping_match` `b` on((`a`.`mid` = `b`.`sourceid`))) ;

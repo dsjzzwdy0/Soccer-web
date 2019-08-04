@@ -16,6 +16,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.loris.soccer.model.CasinoComp;
 import com.loris.soccer.model.CompSetting;
+import com.loris.soccer.model.view.CasinoCompInfo;
 
 /**   
  * @ClassName:  CompService.java   
@@ -45,14 +46,14 @@ public interface CompService extends IService<CompSetting>
 	 * 获得博彩公司列表
 	 * @return
 	 */
-	List<CasinoComp> getCasinoComps();
+	List<CasinoCompInfo> getCasinoComps();
 	
 	/**
 	 * 获得博彩公司列表
 	 * @param type 类型
 	 * @return
 	 */
-	List<CasinoComp> getCasinoComps(String type);
+	List<CasinoCompInfo> getCasinoComps(String type);
 	
 	/**
 	 * 获得配置数据

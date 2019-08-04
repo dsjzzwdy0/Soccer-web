@@ -166,6 +166,7 @@ public class RecordOddsYp extends OddsYp
 		if(!(obj instanceof RecordOddsYp)) return false;
 		RecordOddsYp other = (RecordOddsYp) obj;
 		return StringUtils.equals(mid, other.mid) &&
-				StringUtils.equals(corpid, other.corpid);
+				StringUtils.equals(corpid, other.corpid) &&
+				StringUtils.equals(source, other.source);
 	}
 }

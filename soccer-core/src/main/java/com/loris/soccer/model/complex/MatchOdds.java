@@ -196,12 +196,13 @@ public class MatchOdds
 	{
 		this.odds.addAll(odds);
 	}
-	public OddsItem getOddsItem(String corpid, String type)
+	public OddsItem getOddsItem(String corpid, String type, String source)
 	{
 		for (OddsItem oddsItem : odds)
 		{
 			if(StringUtils.equals(corpid, oddsItem.getCorpid())
-					&& StringUtils.equals(type, oddsItem.getType()))
+					&& StringUtils.equals(type, oddsItem.getType()) 
+					&& StringUtils.equals(source, oddsItem.getSource()))
 			{
 				return oddsItem;
 			}
@@ -211,7 +212,7 @@ public class MatchOdds
 	
 	public void addOddsOp(OddsOp op)
 	{
-		OddsItem item = getOddsItem(op.getCorpid(), SoccerConstants.ODDS_TYPE_OP);
+		OddsItem item = getOddsItem(op.getCorpid(), SoccerConstants.ODDS_TYPE_OP, op.getSource());
 		if(item == null)
 		{
 			item = new OddsItem(op, SoccerConstants.ODDS_TYPE_OP);
@@ -224,7 +225,7 @@ public class MatchOdds
 	}
 	public void addRecordOddsOp(RecordOddsOp op)
 	{
-		OddsItem item = getOddsItem(op.getCorpid(), SoccerConstants.ODDS_TYPE_OP);
+		OddsItem item = getOddsItem(op.getCorpid(), SoccerConstants.ODDS_TYPE_OP, op.getSource());
 		if(item == null)
 		{
 			item = new OddsItem(op);
@@ -237,7 +238,7 @@ public class MatchOdds
 	}
 	public void addRecordOddsYp(RecordOddsYp yp)
 	{
-		OddsItem item = getOddsItem(yp.getCorpid(), SoccerConstants.ODDS_TYPE_OP);
+		OddsItem item = getOddsItem(yp.getCorpid(), SoccerConstants.ODDS_TYPE_YP, yp.getSource());
 		if(item == null)
 		{
 			item = new OddsItem(yp);
@@ -250,7 +251,7 @@ public class MatchOdds
 	}
 	public void addOddsYp(OddsYp yp)
 	{
-		OddsItem item = getOddsItem(yp.getCorpid(), SoccerConstants.ODDS_TYPE_YP);
+		OddsItem item = getOddsItem(yp.getCorpid(), SoccerConstants.ODDS_TYPE_YP, yp.getSource());
 		if(item == null)
 		{
 			item = new OddsItem(yp, SoccerConstants.ODDS_TYPE_YP);

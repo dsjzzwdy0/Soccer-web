@@ -193,9 +193,9 @@ public class OddsNumWebPageParser extends OddsYpWebPageParser
 			}
 			
 			long opemtime = NumberUtil.parseLong(ypElement.attr("timestamp"));
-			float winodds = NumberUtil.parseFloat(getElementValue(valueEls.get(0)));
-			String goal = getElementValue(valueEls.get(1));
-			float loseodds = NumberUtil.parseFloat(getElementValue(valueEls.get(2)));
+			float winodds = NumberUtil.parseFloat(formatValue(valueEls.get(0)));
+			String goal = formatValue(valueEls.get(1));
+			float loseodds = NumberUtil.parseFloat(formatValue(valueEls.get(2)));
 			
 			OddsNum odds = new OddsNum(mid);
 			CasinoComp comp = new CasinoComp();
