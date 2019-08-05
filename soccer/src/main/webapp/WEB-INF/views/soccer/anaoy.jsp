@@ -137,6 +137,9 @@ function createTableHeader(header, columns)
 		}
 		else
 		{
+			var name = c.name;
+			if($.isNullOrEmpty(name)) name = c.field;
+			
 			top.push('<th rowspan="3"><div class="th-wrap">');
 			if($.isNullOrEmpty(c.name))
 				top.push(c.field);
@@ -155,6 +158,23 @@ function createTableHeader(header, columns)
 	formatOddsHeader = function(corpname, isFirst)
 	{
 		
+	}
+	
+	formatBasicHeader = function(rowspan, sortable,  name, field, index)
+	{
+		var html = [];
+		html.push('<th' + ($.isNotNullOrEmpty(rowspan) ? ' rowspan="' + rowspan + '"') + '>');
+		html.push('<div class="th-wrap">');
+		html.push(name);
+		if(sortalbe)
+		{
+			html.push('<div class="sorting-action" data-field="' + field + '"';
+			if($.isNotNullOrEmpty(index)) html.push(' data-index=' + index + '"');
+			html.push('>');
+			html.push('<i class="sa-icon sa-up iconfont icon-sanjiao2"></i><i class="sa-icon sa-down iconfont icon-sanjiao1"></i></div>');
+		}
+		html.push('</div></th>');
+		return html;
 	}
 }
 
