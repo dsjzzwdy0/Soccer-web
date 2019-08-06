@@ -76,28 +76,6 @@ Association.getRelationClass = function(index)
 	return Association.AssClasses[index];
 }
 
-
-/**
- * 状态改变监听器
- * @returns
- */
-function StateListeners()
-{
-	this.listeners = [];
-	this.add = function(listener)
-	{
-		this.listeners.push(listener);
-	},
-	this.notify = function(state, source, conf)
-	{
-		var len = this.listeners.length;
-		for(var i = 0; i < len; i ++)
-		{
-			this.listeners[i](state, source, conf);
-		}
-	}
-}
-
 function Relator(threshold, sameLeague, useDraw)
 {
 	this.threshold = threshold;
