@@ -58,7 +58,6 @@ $.fn.extend({
 	},
 });
 
-
 var Association = Association || {};
 Association.AssClasses = ['association_red', 'association_thin', 'association_cyan', 'association_blue', 'association_orange'];
 
@@ -509,7 +508,7 @@ function SoccerTableColumns()
 		
 		rows = rows.concat(this.createBasicMatchColumns(2));	
 		
-		var opcorps = corpSetting.getOpCorps();
+		/*var opcorps = corpSetting.getOpCorps();
 		var opcorplen = opcorps.length;
 		var ypcorps = corpSetting.getYpCorps();
 		var ypcorplen = ypcorps.length;
@@ -534,7 +533,28 @@ function SoccerTableColumns()
 			}	
 			rows.push(c);
 			rows1 = rows1.concat(this.createBasicYpColumns(corp));	
+		}*/
+		
+		var comps = corpSetting.getCorps();
+		var len = comps.length;
+		for(var i = 0; i < len; i ++)
+		{
+			var corp = comps[i];
+			var c = {
+				name: corp.name + (corp.oddstype=='op' ? '(欧赔)' : '(亚盘)'),
+				colspan: 3
+			}			
+			rows.push(c);
+			if(corp.oddstype == 'op')
+			{
+				rows1 = rows1.concat(this.createBasicOpColumns(corp));
+			}
+			else
+			{
+				rows1 = rows1.concat(this.createBasicYpColumns(corp));
+			}
 		}
+		
 		rows.push(this.createOperatorColumns(2));		
 		columns.push(rows);
 		if(rows1.length > 0) columns.push(rows1);
@@ -647,7 +667,7 @@ function CorpSetting(comps)
 	{
 		var p = comps[i];
 		var corp = {
-			id: p.id,
+			id: i,
 			name: p.name,
 			type: p.type,
 			gid: p.corpid,

@@ -120,6 +120,8 @@ function createMatchOddsTable(conf)
 				var corpSetting = new CorpSetting(json.data.comps);
 				soccerTable.options.setting = corpSetting;
 				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
+				
+				updateCompsSelect(corpSetting);
 			}
 			if ($.isNotNullOrEmpty(json.data.matchOdds))
 			{
@@ -219,7 +221,10 @@ $(document).ready(function() {
 	showNewToolBar();
 	showSettingSel();
 	showOddsType();
-	
+	if($.isNotNullOrEmpty(type))
+	{
+		$('#typeSel').val(type);
+	}
 	if($.isNotNullOrEmpty(sid))
 	{
 		$('#settingSel').val(sid);

@@ -111,9 +111,9 @@ public class SoccerController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/analysis")
-	public ModelAndView getAnalysisPage(String type)
+	public ModelAndView getAnalysisPage(String page)
 	{
-		int index = getAnalysisPageIndex(type);
+		int index = getAnalysisPageIndex(page);
 		List<CompSetting> settings = compService.list();
 		ModelAndView view = new ModelAndView(ANALYSIS_PAGE_TYPES[index][0] + ".soccer");
 		view.addObject("type", "analysis");

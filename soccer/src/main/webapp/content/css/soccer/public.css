@@ -61,6 +61,16 @@ body
 	background: #eee;
 }
 
+.fs-label-wrap, .fs-dropdown
+{
+	height: 24px;
+	border-color: #686565;
+}
+
+.fs-dropdown .fs-options {
+	background-color: white;
+	border: 1px black;
+}
 .gridTable tbody tr:nth-child(even)
 {
 	background: #fff;
@@ -130,6 +140,11 @@ button
 	visibility: hidden
 }
 .clearfix { *zoom:1
+}
+
+.fs-wrap
+{
+	width: 120px;
 }
 .clear
 {

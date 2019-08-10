@@ -39,11 +39,6 @@
 	color: #555
 }
 
-.checkbox input[type=checkbox], .checkbox input[type=radio] {
-	opacity: 0;
-	z-index: 1
-}
-
 .checkbox input[type=checkbox]:focus+label::before, .checkbox input[type=radio]:focus+label::before
 	{
 	outline: thin dotted;
@@ -338,17 +333,21 @@
 }
 
 input[type=checkbox].styled:checked+label:after, input[type=radio].styled:checked+label:after
-	{
+{
 	font-family: fontawesome;
 	content: "\f00c"
 }
 
 input[type=checkbox] .styled:checked+label::before, input[type=radio] .styled:checked+label::before
-	{
+{
 	color: #fff
 }
 
 input[type=checkbox] .styled:checked+label::after, input[type=radio] .styled:checked+label::after
-	{
+{
 	color: #fff
+}
+
+.multiselect-container{ /*下拉框的样式*/
+    width:195px;
 }

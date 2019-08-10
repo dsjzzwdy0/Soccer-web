@@ -32,10 +32,6 @@
 		</ul>
 	</div>
 	<div class="sx_form_c pl-chosse-cont">
-		<div class="fl">
-			<input id="btnRefresh" class="pl-topbtn-cur" value="刷  新" type="button">
-			<input id="hideChosen" class="pl-topbtn" value="恢 复" type="button">
-		</div>
 		<select id="typeSel" class="sel_list">
 			<option value="bd" selected="selected">北单数据</option>
 			<option value="jc">竞彩数据</option>
@@ -75,9 +71,11 @@
 			共 <span id="matchNumAll">10</span>场比赛，隐藏了 <span id="matchNumHide">0</span>场。
 			<a href="javascript:;" style="display: none" id="recover">恢复</a>
 		</div>
-		
+
 		<div id="newToolbar" class="newToolBar" style="display: none; float: right; margin-right: 10px;">
-			<label for="sameLeague" class="check_same_league"><input class="sel_list" id="sameLeague" style="margin-right: 4px; display:none;" type="checkbox" checked="true" />同联赛内比较</label>
+			<div class="check_same_league" style="float: left;">
+				<input class="sel_list" id="sameLeague" style="margin-right: 4px; margin-top: auto; display:none;" type="checkbox" checked="true" />同联赛内比较
+			</div>
 			<select id="oddsType" class="sel_list" style="width:70px; display:none;">
 				<option value="start" selected>初盘</option>
 				<option value="now">即时</option>
@@ -95,6 +93,18 @@
 				<option value="0.08">0.08</option>
 				<option value="0.10">0.10</option>
 			</select>
+			
+			<div style="display: inline-block; float: left;">选择赔率公司</div>
+			<select id="comps-multi-select" multiple="multiple">
+				<optgroup label="欧赔">
+				    <option value="1" selected="selected">平均欧赔</option>
+				    <option value="2" selected="selected">Fonbet</option>
+				    <option value="3" selected="selected">Missonjon</option>
+			    </optgroup>
+			    <optgroup label="亚盘">
+				    <option value="5">Fonbet</option>
+			    </optgroup>
+			</select>
 			<input type="button" class="pl-topbtn" id="btnConfigure" value="排 序"/>
 			<input type="button" class="pl-topbtn" id="btnReUnion" value="重 置"/>		
 		</div>
@@ -102,6 +112,7 @@
 </div>
 <script type="text/javascript">
 var stateListeners = new StateListeners();
+var complabel = '赔率公司选择';
 function showNewToolBar()
 {
 	$('.top-chosse #newToolbar').show();
@@ -182,6 +193,7 @@ function getConfValue()
 	var issue = $('#issueSel').val();
 	var sid = $('#settingSel').val();
 	var sort = $('#sort').val();
+	var compIds = $('#comps-multi-select').val();
 	var threshold = Number($('#threshold').val());
 	var sameleague = $('#sameLeague').prop('checked');
 	var showOrdinary = $('#showOrdinary').prop('checked');
@@ -212,8 +224,73 @@ function getConfValue()
 		threshold: threshold,
 		sameLeague: sameleague,
 		showOrdinary: showOrdinary,
-		lids: lids
+		lids: lids,
+		showCompIds: compIds,
+		isCompShow: function(id)
+		{
+			var len = this.showCompIds.length;
+			for(var i = 0; i < len; i ++)
+			{
+				if(this.showCompIds[i] == id) return true;
+			}
+			return false;
+		}
 	};
+}
+
+function createSelectOpts(label, comps)
+{
+	var selecthtml = [];
+	var size = comps.length;
+	selecthtml.push('<optgroup label="' + label + '">');
+	for(var i = 0; i < size; i ++)
+	{
+		var comp = comps[i];    		
+		selecthtml.push('<option value="' + comp.id + '" selected="selected">' + comp.name + '</option>');
+	}
+	selecthtml.push('</optgroup>');
+	return selecthtml.join(' ');
+}
+
+function createDropdownSelects(label, comps)
+{
+	var dropdownhtml = [];
+	var size = comps.length;
+	dropdownhtml.push('<div class="fs-options"><div class="fs-optgroup">');
+	dropdownhtml.push('<div class="fs-optgroup-label">' + label + '</div>');
+	for(var i = 0; i < size; i ++)
+	{
+		var comp = comps[i];
+		dropdownhtml.push('<div class="fs-option selected" data-value="' + comp.id + '"><span class="fs-checkbox"><i></i></span>');
+		dropdownhtml.push('<div class="fs-option-label">' + comp.name + '</div></div>');
+	}
+	dropdownhtml.push('</div></div>');
+	return dropdownhtml.join(' ');
+}
+
+function updateCompsSelect(compSetting)
+{
+	var selecthtml = [];
+	var drophtml = [];
+	var opcomps = compSetting.getOpCorps();
+	if(opcomps.length > 0)
+	{
+		var label = '欧赔';
+		selecthtml.push(createSelectOpts(label, opcomps));
+		drophtml.push(createDropdownSelects(label, opcomps));
+	}
+	var ypcomps = compSetting.getYpCorps();
+	if(ypcomps.length > 0)
+	{
+		var label = '亚盘';
+		selecthtml.push(createSelectOpts(label, ypcomps));
+		drophtml.push(createDropdownSelects(label, ypcomps));
+	}
+	var select = $('#comps-multi-select');
+	var t = $(select).parent();
+	$(t).find('.fs-label').html(complabel);
+	$(t).find('.fs-dropdown').html(drophtml.join(''));
+	$(select).html(selecthtml.join(''));
 }
 
 //选择的数据
@@ -254,6 +331,39 @@ $(function(){
         };
         var conf = getConfValue();
 		stateListeners.notify('change', this, conf);
-    })
+    });
+	
+
+    $('#comps-multi-select').fSelect({
+    	placeholder: complabel,
+    	showSearch: false,
+    	numDisplayed: 0,
+        overflowText: '已选择{n}公司',
+    });
+    
+    $('#btnConfigure').on('click', function(){
+    	conf = getConfValue();
+    	alert(conf.isCompShow('0'));
+    });
+    
+    /*
+    $('#btnReUnion').on('click', function(){
+    	var select = $('#comps-multi-select');
+    	//$(select).removeClass('hidden');
+    	var t = $(select).parent();
+    	$(t).find('.fs-label').html('赔率公司选择');
+    	
+    	var dropdownhtml = [];
+    	var selecthtml = [];
+    	
+    	dropdownhtml.push(createDropdownSelects('欧赔', opcomps));
+    	dropdownhtml.push(createDropdownSelects('亚盘', ypcomps));
+    	
+    	selecthtml.push(createSelectOpts('欧赔', opcomps));
+    	selecthtml.push(createSelectOpts('亚盘', ypcomps));
+    	
+        $(t).find('.fs-dropdown').html(dropdownhtml.join(''));
+    	$(select).html(selecthtml.join(''));
+    });*/
 })
 </script>

@@ -273,11 +273,6 @@
     cursor: pointer;
 }
 
-.pl-chosse-cont {
-    line-height: 24px;
-    color: #252525;
-}
-
 .pl-wind-ss, .pl-wind-gs {
     position: absolute;
     top: -1px;
@@ -333,10 +328,9 @@
     cursor: pointer;
 }
 .pl-wind-b {
-
     text-indent: 12px;
     cursor: pointer;
-
+	border-color: #686565;
 }
 .pl-wind-cont {
     width: 360px;
