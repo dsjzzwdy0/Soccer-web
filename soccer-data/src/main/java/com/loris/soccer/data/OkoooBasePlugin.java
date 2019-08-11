@@ -501,14 +501,20 @@ public abstract class OkoooBasePlugin extends BasicWebPageTaskPlugin implements 
 			List<OkoooOddsOp> ops = (List<OkoooOddsOp>)records.get(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_OP_LIST);
 			DataList<RecordOddsOp> recordOddsOps = OddsUtil.createRecordOddsOp(ops);
 			if(recordOddsOps != null && recordOddsOps.size() > 0)
+			{
+				recordOddsOps.setOverwrite(true);
 				records.put(SoccerConstants.SOCCER_DATA_RECORD_ODDS_OP_LIST, recordOddsOps);
+			}
 		}
 		if(records.containsKey(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST))
 		{
 			List<OkoooOddsYp> yps = (List<OkoooOddsYp>) records.get(SoccerConstants.SOCCER_DATA_ODDS_OKOOO_YP_LIST);
 			DataList<RecordOddsYp> recordOddsYps = OddsUtil.createRecordOddsYp(yps);
 			if(recordOddsYps != null && recordOddsYps.size() > 0)
+			{
+				recordOddsYps.setOverwrite(true);
 				records.put(SoccerConstants.SOCCER_DATA_RECORD_ODDS_YP_LIST, recordOddsYps);
+			}
 		}
 	}
 	
