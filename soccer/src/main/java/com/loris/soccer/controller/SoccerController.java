@@ -134,14 +134,14 @@ public class SoccerController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/analeague")
-	public ModelAndView getLeagueAnalysisPage(String type, Round round, String source)
+	public ModelAndView getLeagueAnalysisPage(String page, Round round, String source)
 	{
 		if(StringUtils.isEmpty(round.getLid()) || StringUtils.isEmpty(round.getSeason()) ||
 				StringUtils.isEmpty(round.getRound()))
 		{
 			throw new ParamsException("Illegal params be set.");
 		}
-		int index = getLeaguePageIndex(type);
+		int index = getLeaguePageIndex(page);
 		List<CompSetting> settings = compService.list();
 		League league = leagueService.getLeague(round.getLid());
 		ModelAndView view = new ModelAndView(LEAGUE_PAGE_TYPES[index][0] + ".soccer");
@@ -159,16 +159,14 @@ public class SoccerController extends BaseController
 	/**
 	 * 获得比赛分析页面
 	 * 
-	 * @param type
-	 *            类型
-	 * @param mid
-	 *            比赛编号
+	 * @param page 类型
+	 * @param mid 比赛编号
 	 * @return 分析页面
 	 */
 	@RequestMapping("/match")
-	public ModelAndView getMatchPage(String type, String mid)
+	public ModelAndView getMatchPage(String page, String mid)
 	{
-		int index = getMatchPageIndex(type);
+		int index = getMatchPageIndex(page);
 		MatchInfo match = matchService.getMatchInfo(mid);
 		if (match == null)
 		{

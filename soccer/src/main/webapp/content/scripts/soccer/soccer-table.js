@@ -32,6 +32,66 @@ function getDataFromServer(soccerTable, gridTable) {
 }
 
 /**
+ * 赔率公司选择
+ */
+var complabel = '赔率公司选择';
+function createSelectOpts(label, comps)
+{
+	var selecthtml = [];
+	var size = comps.length;
+	selecthtml.push('<optgroup label="' + label + '">');
+	for(var i = 0; i < size; i ++)
+	{
+		var comp = comps[i];    		
+		selecthtml.push('<option value="' + comp.id + '" selected="selected">' + comp.name + '</option>');
+	}
+	selecthtml.push('</optgroup>');
+	return selecthtml.join(' ');
+}
+
+function createDropdownSelects(label, comps)
+{
+	var dropdownhtml = [];
+	var size = comps.length;
+	dropdownhtml.push('<div class="fs-options"><div class="fs-optgroup">');
+	dropdownhtml.push('<div class="fs-optgroup-label">' + label + '</div>');
+	for(var i = 0; i < size; i ++)
+	{
+		var comp = comps[i];
+		dropdownhtml.push('<div class="fs-option selected" data-value="' + comp.id + '"><span class="fs-checkbox"><i></i></span>');
+		dropdownhtml.push('<div class="fs-option-label">' + comp.name + '</div></div>');
+	}
+	dropdownhtml.push('</div></div>');
+	return dropdownhtml.join(' ');
+}
+
+function updateCompsSelect(compSetting)
+{
+	var selecthtml = [];
+	var drophtml = [];
+	var opcomps = compSetting.getOpCorps();
+	if(opcomps.length > 0)
+	{
+		var label = '欧赔';
+		selecthtml.push(createSelectOpts(label, opcomps));
+		drophtml.push(createDropdownSelects(label, opcomps));
+	}
+	var ypcomps = compSetting.getYpCorps();
+	if(ypcomps.length > 0)
+	{
+		var label = '亚盘';
+		selecthtml.push(createSelectOpts(label, ypcomps));
+		drophtml.push(createDropdownSelects(label, ypcomps));
+	}
+	var select = $('#comps-multi-select');
+	var t = $(select).parent();
+	$(t).find('.fs-label').html(complabel);
+	$(t).find('.fs-dropdown').html(drophtml.join(''));
+	$(select).html(selecthtml.join(''));
+}
+
+
+/**
  * 扩展函数
  */
 $.fn.extend({
@@ -344,7 +404,7 @@ function SoccerTableColumns()
 					if($.isNullOrEmpty(odds) || $.isNullOrEmpty(odds.values)) return '无';
 					else if($.isNotNullOrEmpty(table.options.relator))
 					{
-						return formatRelateOpValueColumn(j, row, odds, c, first);
+						return formatRelateOddsValueColumn(j, row, odds, c, first);
 					}
 					else
 					{
@@ -375,6 +435,10 @@ function SoccerTableColumns()
 					var j = oddsIndex;
 					var odds = MatchDoc.getYpOdds(row, c.gid);
 					if($.isNullOrEmpty(odds)) return '无';
+					else if($.isNotNullOrEmpty(table.options.relator))
+					{
+						return formatRelateOddsValueColumn(j, row, odds, c, first);
+					}
 					else
 					{							
 						var st = first ? 0 : 3;
@@ -500,11 +564,12 @@ function SoccerTableColumns()
 	}
 	
 	//按照数据比较的配置进行数据分析
-	this.createCorpSettingColumns = function(corpSetting)
+	this.createCorpSettingColumns = function(options)
 	{
 		var columns = [];
 		var rows = [];
 		var rows1 = [];
+		var corpSetting = options.setting;
 		
 		rows = rows.concat(this.createBasicMatchColumns(2));	
 		
@@ -534,12 +599,14 @@ function SoccerTableColumns()
 			rows.push(c);
 			rows1 = rows1.concat(this.createBasicYpColumns(corp));	
 		}*/
-		
+
+		if($.isNullOrEmpty(corpSetting)) return columns;
 		var comps = corpSetting.getCorps();
 		var len = comps.length;
 		for(var i = 0; i < len; i ++)
 		{
 			var corp = comps[i];
+			if(!options.isCompShow(corp.id)) continue;
 			var c = {
 				name: corp.name + (corp.oddstype=='op' ? '(欧赔)' : '(亚盘)'),
 				colspan: 3
@@ -562,14 +629,14 @@ function SoccerTableColumns()
 	}
 	
 	//数据格式化
-	function formatValue(value)
+	function formatValue(value, index, type)
 	{
 		if($.isNullOrEmpty(value) || value == 'NaN')
 		{
 			return value;
 		}
+		if(type == 'yp' && index == 1) return OddsUtil.formatHandicap(value);
 		return value.toFixed(2);
-
 	}
 	function formatCommonOpvalueComlumn(index, match, op, corp, first)
 	{
@@ -580,7 +647,7 @@ function SoccerTableColumns()
 	}
 	
 	//格式化关联欧赔数据栏目
-	function formatRelateOpValueColumn(index, match, op, corp, first)
+	function formatRelateOddsValueColumn(index, match, op, corp, first)
 	{
 		var relateClass = '';
 		var relateIndex = -1;
@@ -600,16 +667,42 @@ function SoccerTableColumns()
 		var vals = op.values;
 		var title = formatOddsTitle(first, op);
 		return '<div class="association ' + relateClass + '" title="' + title + '" index="' + relateIndex +
-			'" mid="' + match.mid + '" gid="' + op.gid + '" type="' + first + '">' + formatValue(vals[st + index]) + '</div>'
+			'" mid="' + match.mid + '" gid="' + op.gid + '" type="' + first + '">' + formatValue(vals[st + index], index, op.type) + '</div>'
 	}
+	/*
+	//格式化关联欧赔数据栏目
+	function formatRelateOddsValueColumn(index, match, yp, corp, first)
+	{
+		var relateClass = '';
+		var relateIndex = -1;
+		var doc = table.matchDoc;
+		var st = first ? 0 : 3;
+		var idx = MatchDoc.getOpMaxProbIndex(yp, first);
+		if($.isNotNullOrEmpty(doc) && (idx == (st + index)))
+		{
+			//var r = doc.getMatchRelation(match, corp, first);
+			relateIndex = doc.getMatchRelationIndex(match, corp, first);
+			relateClass = relateIndex >= 0 ? Association.getRelationClass(relateIndex) : '';	
+		}		
+		if($.isNotNullOrEmpty(relateClass))
+		{
+			relateClass += ' relation';
+		}		
+		var vals = yp.values;
+		var title = formatOddsTitle(first, yp);
+		return '<div class="association ' + relateClass + '" title="' + title + '" index="' + relateIndex +
+			'" mid="' + match.mid + '" gid="' + yp.gid + '" type="' + first + '">' + formatValue(vals[st + index], index, yp.type) + '</div>'
+	}*/
 	
 	function formatOddsTitle(first, op)
 	{
 		var st = first ? 0 : 3;
 		var vals = op.values;
-		return first ? '初盘时间 ' + formatDate(new Date(op.firsttime), 'yyyy-MM-dd hh:mm') + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')'
-				: '即时盘时间 ' + formatDate(new Date(op.lasttime), 'yyyy-MM-dd hh:mm') + ' (' + vals[st + 0] + ',' + vals[st + 1] + ',' + vals[st + 2] + ')';
+		var type = op.type;
+		return first ? '初盘时间 ' + formatDate(new Date(op.firsttime), 'yyyy-MM-dd hh:mm') + ' (' + vals[st + 0] + ',' + formatValue(vals[st + 1], 1, type) + ',' + vals[st + 2] + ')'
+				: '即时盘时间 ' + formatDate(new Date(op.lasttime), 'yyyy-MM-dd hh:mm') + ' (' + vals[st + 0] + ',' + formatValue(vals[st + 1], 1, type) + ',' + vals[st + 2] + ')';
 	}
+	
 	
 	/**
 	 * 格式化比赛的球队信息
@@ -827,7 +920,35 @@ function FieldFilter(field, values, contained)
  */
 function SoccerTable(options)
 {
-	this.options = options;
+	this.options = {
+		refresh : false,
+		sorter : null,
+		relator : null,
+		rows : null,
+		results : null,
+		columns : null,
+		setting : null,
+		first : true,
+		filter : null,
+		showCompIds: null,
+		clear : function() {
+			this.columns = null;
+			this.rows = null;
+			this.setting = null;
+			this.filter = null;
+			this.showCompIds = null;
+		},
+		isCompShow: function(id)
+		{
+			if($.isNullOrEmpty(this.showCompIds)) return true;
+			var len = this.showCompIds.length;
+			for(var i = 0; i < len; i ++)
+			{
+				if(this.showCompIds[i] == id) return true;
+			}
+			return false;
+		}
+	}
 	
 	this.$table = null;
 	this.$body = null;
@@ -835,8 +956,11 @@ function SoccerTable(options)
 	this.sortable = false;	
 	this.matchDoc = null;
 	
+	$.extend(this.options, options);
+	
 	this.createTable = function($table)
 	{
+		this.options.columns = new SoccerTableColumns().createCorpSettingColumns(this.options);
 		this.$table = $table;
 		if($.isNullOrEmpty($table))
 		{
@@ -855,7 +979,7 @@ function SoccerTable(options)
 		this.$header = $header;
 		//if($.isNullOrEmpty(($header).html().trim()))
 		{
-			this.createHeaders($header);
+			this.createHeaders(this.$header);
 		}
 		
 		//处理表格内容
@@ -866,6 +990,11 @@ function SoccerTable(options)
 		}
 		this.$body = $body;
 		this.createColumns($body);
+	}
+	
+	this.reset = function()
+	{
+		this.columns = [];
 	}
 	
 	/**
@@ -969,6 +1098,11 @@ function SoccerTable(options)
 	
 	this.update = function()
 	{
+		if($.isNullOrEmpty(this.columns) || this.columns.length == 0)
+		{
+			this.options.columns = new SoccerTableColumns().createCorpSettingColumns(this.options);
+			this.createHeaders(this.$header);
+		}
 		this.resortDataList();
 	}
 	
@@ -1498,7 +1632,7 @@ function MatchDoc(matchList)
 	// corpid: 博彩公司的编号
 	this.getMatchRelationIndex = function(match, corp, first)
 	{
-		var op = MatchDoc.getOpOdds(match, corp.gid);
+		var op = MatchDoc.getOdds(match, corp);
 		if($.isNullOrEmpty(op))
 		{
 			return -1;
@@ -1541,7 +1675,7 @@ function MatchDoc(matchList)
 		//清空数组
 		this.relates.splice(0, this.relates.length);
 		
-		var corps = setting.getOpCorps();
+		var corps = setting.getCorps();
 		if($.isNullOrEmpty(corps))
 		{
 			return false;
@@ -1601,8 +1735,8 @@ function MatchDoc(matchList)
 		{
 			return;
 		}		
-		var op1 = MatchDoc.getOpOdds(match1, corp.gid);
-		var op2 = MatchDoc.getOpOdds(match2, corp.gid);
+		var op1 = MatchDoc.getOdds(match1, corp);
+		var op2 = MatchDoc.getOdds(match2, corp);
 		
 		//如果没有值，则不进行检测
 		if($.isNullOrEmpty(op1) || $.isNullOrEmpty(op2))
@@ -1658,17 +1792,64 @@ function MatchDoc(matchList)
 //first: 是否检测初值
 MatchDoc.getOpMaxProb = function(op, first)
 {
-	var st = first ? 0 : 3;
-	return op.values[st] < op.values[st + 2] ? op.values[st] : op.values[st + 2];
+	if(op.type == 'yp')
+	{
+		var st = first ? 0 : 3;
+		if(op.values[1] == 0)
+		{
+			return (op.values[st] < op.values[st + 2]) ? op.values[st] : op.values[st + 2];;
+		}
+		else
+		{
+			return (op.values[1] > 0) ? op.values[st] : op.values[st + 2];;
+		}
+	}
+	else
+	{
+		var st = first ? 0 : 3;
+		return (op.values[st] < op.values[st + 2]) ? op.values[st] : op.values[st + 2];
+	}
 }
 //获得概率值最大的值，
 //op: 欧赔值
 //first: 是否检测初值
 MatchDoc.getOpMaxProbIndex = function(op, first)
 {
-	var st = first ? 0 : 3;
-	return op.values[st] < op.values[st + 2] ? st : (st + 2);
+	if(op.type == 'yp')
+	{
+		var st = first ? 0 : 3;
+		if(op.values[1] == 0)
+		{
+			return (op.values[st] < op.values[st + 2]) ? st : (st + 2);
+		}
+		else
+		{
+			return (op.values[1] > 0) ? st : (st + 2);
+		}
+	}
+	else
+	{
+		var st = first ? 0 : 3;
+		return (op.values[st] < op.values[st + 2]) ? st : (st + 2);
+	}
 }
+
+MatchDoc.getOdds = function(match, corp)
+{
+	var oddsnum = match.odds.length;
+	for(var i = 0; i < oddsnum; i ++)
+	{
+		var odds = match.odds[i];
+		if(odds.corpid == corp.gid && 
+				odds.type == corp.type &&
+				odds.source == corp.source)
+		{
+			return odds;
+		}
+	}
+	return null;
+}
+
 //获得欧赔数据记录
 MatchDoc.getOpOdds = function(match, gid)
 {

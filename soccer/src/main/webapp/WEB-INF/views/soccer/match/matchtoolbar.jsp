@@ -18,12 +18,12 @@
 
 <div class="bfyc-header marb10">
 	<ul>
-		<li class="<c:if test="${page=='bjop'}">cur</c:if>"><a href="match?type=bjop&mid=${match.mid}">百家欧赔</a></li>
-		<li class="<c:if test="${page=='ypdb'}">cur</c:if>"><a href="match?type=ypdb&mid=${match.mid}">亚盘对比</a></li>
-		<li class="<c:if test="${page=='opvar'}">cur</c:if>"><a href="match?type=opvar&mid=${match.mid}">欧赔分析</a></li>
-		<li class="<c:if test="${page=='dxdb'}">cur</c:if>"><a href="match?type=dxdb&mid=${match.mid}">大小对比</a></li>
-		<li class="<c:if test="${page=='bfyc'}">cur</c:if>"><a href="match?type=bfyc&mid=${match.mid}" name="anchor-top">八方预测</a></li>
-		<li id="bsls" class="<c:if test="${page=='bsls'}">cur</c:if>"><a href="match?type=bsls&mid=${match.mid}">比赛历史</a></li>
+		<li class="<c:if test="${page=='bjop'}">cur</c:if>"><a href="match?page=bjop&mid=${match.mid}">百家欧赔</a></li>
+		<li class="<c:if test="${page=='ypdb'}">cur</c:if>"><a href="match?page=ypdb&mid=${match.mid}">亚盘对比</a></li>
+		<li class="<c:if test="${page=='opvar'}">cur</c:if>"><a href="match?page=opvar&mid=${match.mid}">欧赔分析</a></li>
+		<li class="<c:if test="${page=='dxdb'}">cur</c:if>"><a href="match?page=dxdb&mid=${match.mid}">大小对比</a></li>
+		<li class="<c:if test="${page=='bfyc'}">cur</c:if>"><a href="match?page=bfyc&mid=${match.mid}" name="anchor-top">八方预测</a></li>
+		<li id="bsls" class="<c:if test="${page=='bsls'}">cur</c:if>"><a href="match?page=bsls&mid=${match.mid}">比赛历史</a></li>
 		<li class="" style="position: relative;">
 			<s style="position: absolute; background: url(..content/images/new.png) no-repeat; display: block; width: 20px; height: 22px; top: -20px; right: -10px;">
 			</s>

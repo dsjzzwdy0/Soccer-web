@@ -79,7 +79,7 @@ var options = {
 function openLeagueRel(lid, season, round, source)
 {
 	var sid = $('#settingSel').val();
-	window.open('analeague?type=leaguerel&lid=' + lid + '&season=' + season + '&round=' 
+	window.open('analeague?page=leaguerel&lid=' + lid + '&season=' + season + '&round=' 
 			+ round + '&source=' + source + '&sid=' + sid);
 }
 
@@ -113,7 +113,7 @@ function createMatchOddsTable(conf)
 			if ($.isNotNullOrEmpty(json.data.comps)) {
 				var corpSetting = new CorpSetting(json.data.comps);
 				soccerTable.options.setting = corpSetting;
-				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
+				updateCompsSelect(corpSetting);
 			}
 			if ($.isNotNullOrEmpty(json.data.matchOdds))
 			{
@@ -185,6 +185,7 @@ function getRelatedMatch(element)
 
 function stateChange(state, source, conf)
 {
+	var options = table.options;
 	options.first = conf.first;
 	if($.isNotNullOrEmpty(options.relator))
 	{
@@ -200,7 +201,12 @@ function stateChange(state, source, conf)
 		createMatchOddsTable(conf);
 	}
 	else
-	{		
+	{
+		if(sourceId == 'btnConfigure')
+		{
+			options.showCompIds = conf.showCompIds;
+			table.reset();
+		}
 		var filter = options.filter;
 		if($.isNullOrEmpty(filter))
 		{
@@ -232,10 +238,6 @@ $(document).ready(function() {
 	var conf = getConfValue();
 	createMatchOddsTable(conf);	
 	stateListeners.add(stateChange);
-	
-	$('#btnRefresh').on('click', function(){
-		$('#gridTable').soccerTable('destroy');
-	});
 
 	$('#hideChosen').on('click', function(){
 		//layer.msg('Recovery');

@@ -106,7 +106,7 @@ function createLeagueMatchOddsTable(conf)
 			if ($.isNotNullOrEmpty(json.data.comps)) {
 				var corpSetting = new CorpSetting(json.data.comps);
 				soccerTable.options.setting = corpSetting;
-				soccerTable.options.columns = new SoccerTableColumns().createCorpSettingColumns(corpSetting);
+				updateCompsSelect(corpSetting);
 			}
 			if ($.isNotNullOrEmpty(json.data.matchOdds))
 			{
@@ -123,20 +123,26 @@ function createLeagueMatchOddsTable(conf)
 
 function stateChange(state, source, conf)
 {
+	options = table.options;
 	options.first = conf.first;
 	if($.isNotNullOrEmpty(options.relator))
 	{
 		options.relator.threshold = conf.threshold;
 		options.relator.sameLeague = conf.sameLeague;
 	}
-	
-	if($(source).attr('id') == 'settingSel')
+	var sourceId = $(source).attr('id');
+	if(sourceId == 'settingSel')
 	{
 		options.clear();
 		createLeagueMatchOddsTable(conf);
 	}
 	else
 	{
+		if(sourceId == 'btnConfigure')
+		{
+			options.showCompIds = conf.showCompIds;
+			table.reset();
+		}
 		table.update();
 	}
 }

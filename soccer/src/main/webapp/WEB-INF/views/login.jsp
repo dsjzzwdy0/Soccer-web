@@ -8,8 +8,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guns - 登录</title>
-    <link rel="shortcut icon" href="${ctxPath}/content/favicon.ico">
+    <title>东方足球网 - 登录</title>
+    <link rel="shortcut icon" href="${ctxPath}/content/images/loris_favicon_2.ico">
     <link href="${ctxPath}/content/plugins/bootstrap-4.3.0/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="${ctxPath}/content/fonts/css/font-awesome.css?v=4.4.0" rel="stylesheet">
     <link href="${ctxPath}/content/css/animate.css" rel="stylesheet">

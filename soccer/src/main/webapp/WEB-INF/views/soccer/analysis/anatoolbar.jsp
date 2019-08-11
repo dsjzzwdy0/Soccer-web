@@ -18,17 +18,17 @@
 			<li class="n_1">
 				<a href="
 					<c:if test="${page=='anarel'}">javascript:void(0);</c:if>
-					<c:if test="${page!='anarel'}">analysis?type=anarel<c:if test="${not empty lid}">&lid=${lid}</c:if>
+					<c:if test="${page!='anarel'}">analysis?page=anarel<c:if test="${not empty lid}">&lid=${lid}</c:if>
 					</c:if>" 
 					title="欧赔数据关联分析" class="<c:if test="${page=='anarel'}">cur</c:if>">关联分析
 				</a>
 			</li>
-			<li class="n_2"><a href="<c:if test="${page=='anaoy'}">javascript:void(0);</c:if><c:if test="${page!='anaoy'}">analysis?type=anaoy<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩情况对比" class="<c:if test="${page=='anaoy'}">cur</c:if>">战绩情况对比</a></li>
-			<li class="n_3"><a href="<c:if test="${page=='anaop'}">javascript:void(0);</c:if><c:if test="${page!='anaop'}">analysis?type=anaop<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔对比" class="<c:if test="${page=='anaop'}">cur</c:if>">欧赔对比</a></li>
-			<li class="n_4"><a href="<c:if test="${page=='anayp'}">javascript:void(0);</c:if><c:if test="${page!='anayp'}">analysis?type=anayp<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="亚盘对比" class="<c:if test="${page=='anayp'}">cur</c:if>">亚盘对比</a></li>
-			<li class="n_5"><a href="<c:if test="${page=='anafc'}">javascript:void(0);</c:if><c:if test="${page!='anafc'}">analysis?type=anafc<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔方差分析" class="<c:if test="${page=='anafc'}">cur</c:if>">方差分析</a></li>
-			<li class="n_6"><a href="<c:if test="${page=='anazj'}">javascript:void(0);</c:if><c:if test="${page!='anazj'}">analysis?type=anazj<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩对比分析" class="<c:if test="${page=='anazj'}">cur</c:if>">战绩分析</a></li>
-			<li class="n_7"><a href="<c:if test="${page=='anazh'}">javascript:void(0);</c:if><c:if test="${page!='anazh'}">analysis?type=anazh<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="综合分析" class="<c:if test="${page=='anazh'}">cur</c:if>">综合分析</a></li>
+			<li class="n_2"><a href="<c:if test="${page=='anaoy'}">javascript:void(0);</c:if><c:if test="${page!='anaoy'}">analysis?page=anaoy<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩情况对比" class="<c:if test="${page=='anaoy'}">cur</c:if>">战绩情况对比</a></li>
+			<li class="n_3"><a href="<c:if test="${page=='anaop'}">javascript:void(0);</c:if><c:if test="${page!='anaop'}">analysis?page=anaop<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔对比" class="<c:if test="${page=='anaop'}">cur</c:if>">欧赔对比</a></li>
+			<li class="n_4"><a href="<c:if test="${page=='anayp'}">javascript:void(0);</c:if><c:if test="${page!='anayp'}">analysis?page=anayp<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="亚盘对比" class="<c:if test="${page=='anayp'}">cur</c:if>">亚盘对比</a></li>
+			<li class="n_5"><a href="<c:if test="${page=='anafc'}">javascript:void(0);</c:if><c:if test="${page!='anafc'}">analysis?page=anafc<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="欧赔方差分析" class="<c:if test="${page=='anafc'}">cur</c:if>">方差分析</a></li>
+			<li class="n_6"><a href="<c:if test="${page=='anazj'}">javascript:void(0);</c:if><c:if test="${page!='anazj'}">analysis?page=anazj<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="战绩对比分析" class="<c:if test="${page=='anazj'}">cur</c:if>">战绩分析</a></li>
+			<li class="n_7"><a href="<c:if test="${page=='anazh'}">javascript:void(0);</c:if><c:if test="${page!='anazh'}">analysis?page=anazh<c:if test="${not empty lid}">&lid=${lid}</c:if></c:if>" title="综合分析" class="<c:if test="${page=='anazh'}">cur</c:if>">综合分析</a></li>
 		</ul>
 	</div>
 	<div class="sx_form_c pl-chosse-cont">
@@ -46,32 +46,7 @@
 				<option value="${setting.sid }" >${setting.name}</option>
 			</c:forEach>
 		</select>
-		<div class="pl-wind-b game_select" id="ssxz">
-			赛事选择
-			<div class="pl-wind-ss" style="display: none;">
-				<div class="pl-wind-b1">赛事选择</div>
-				<div style="clear:both;"></div>
-				<div class="pl-wind-cont">
-					<ul class="ssxz-ul" style="display: none;">
-						<li id="leagueList">
-						</li>
-						<div style="clear: both;"></div>
-						<li class="pl-wind-btn sx_form_b">
-							<input value="全选" type="button" id="btnFull">
-							<input value="反选" type="button" id="btnRevert">
-							<input value="全不选" type="button" id="btnNone">
-						</li>
-					</ul>
-					<div class="clear"></div>
-				</div>
-			</div>
-		</div>
 		
-		<div style="float:left; margin-left:3px;">
-			共 <span id="matchNumAll">10</span>场比赛，隐藏了 <span id="matchNumHide">0</span>场。
-			<a href="javascript:;" style="display: none" id="recover">恢复</a>
-		</div>
-
 		<div id="newToolbar" class="newToolBar" style="display: none; float: right; margin-right: 10px;">
 			<div class="check_same_league" style="float: left;">
 				<input class="sel_list" id="sameLeague" style="margin-right: 4px; margin-top: auto; display:none;" type="checkbox" checked="true" />同联赛内比较
@@ -94,25 +69,53 @@
 				<option value="0.10">0.10</option>
 			</select>
 			
-			<div style="display: inline-block; float: left;">选择赔率公司</div>
-			<select id="comps-multi-select" multiple="multiple">
-				<optgroup label="欧赔">
-				    <option value="1" selected="selected">平均欧赔</option>
-				    <option value="2" selected="selected">Fonbet</option>
-				    <option value="3" selected="selected">Missonjon</option>
-			    </optgroup>
-			    <optgroup label="亚盘">
-				    <option value="5">Fonbet</option>
-			    </optgroup>
-			</select>
-			<input type="button" class="pl-topbtn" id="btnConfigure" value="排 序"/>
-			<input type="button" class="pl-topbtn" id="btnReUnion" value="重 置"/>		
+			<div class="pl-wind-b game_select" id="ssxz">
+				赛事选择
+				<div class="pl-wind-ss" style="display: none;">
+					<div class="pl-wind-b1">赛事选择</div>
+					<div style="clear:both;"></div>
+					<div class="pl-wind-cont">
+						<ul class="ssxz-ul" style="display: none;">
+							<li id="leagueList">
+							</li>
+							<div style="clear: both;"></div>
+							<li class="pl-wind-btn sx_form_b">
+								<input value="全选" type="button" id="btnFull">
+								<input value="反选" type="button" id="btnRevert">
+								<input value="全不选" type="button" id="btnNone">
+							</li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div style="float:left; margin-left:3px;">
+				共 <span id="matchNumAll">10</span>场比赛，隐藏了 <span id="matchNumHide">0</span>场。
+				<a href="javascript:;" style="display: none" id="recover">恢复</a>
+			</div>
+		
+			<div style="display: inline-block; float: left;">
+				<select id="comps-multi-select" multiple="multiple">
+					<optgroup label="欧赔">
+					    <option value="1" selected="selected">平均欧赔</option>
+					    <option value="2" selected="selected">Fonbet</option>
+					    <option value="3" selected="selected">Missonjon</option>
+				    </optgroup>
+				    <optgroup label="亚盘">
+					    <option value="5">Fonbet</option>
+				    </optgroup>
+				</select>
+			</div>
+			<div style="display: inline-block; float: right;">
+				<input type="button" class="pl-topbtn" id="btnConfigure" style="margin-left: 3px; width: 80px; height: 24px;" value="刷  新"/>
+				<input type="button" class="pl-topbtn" id="btnRefresh" style="margin-left: 3px; width: 80px; height: 24px;" value="重新加载"/>
+			</div>		
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
 var stateListeners = new StateListeners();
-var complabel = '赔率公司选择';
 function showNewToolBar()
 {
 	$('.top-chosse #newToolbar').show();
@@ -238,61 +241,6 @@ function getConfValue()
 	};
 }
 
-function createSelectOpts(label, comps)
-{
-	var selecthtml = [];
-	var size = comps.length;
-	selecthtml.push('<optgroup label="' + label + '">');
-	for(var i = 0; i < size; i ++)
-	{
-		var comp = comps[i];    		
-		selecthtml.push('<option value="' + comp.id + '" selected="selected">' + comp.name + '</option>');
-	}
-	selecthtml.push('</optgroup>');
-	return selecthtml.join(' ');
-}
-
-function createDropdownSelects(label, comps)
-{
-	var dropdownhtml = [];
-	var size = comps.length;
-	dropdownhtml.push('<div class="fs-options"><div class="fs-optgroup">');
-	dropdownhtml.push('<div class="fs-optgroup-label">' + label + '</div>');
-	for(var i = 0; i < size; i ++)
-	{
-		var comp = comps[i];
-		dropdownhtml.push('<div class="fs-option selected" data-value="' + comp.id + '"><span class="fs-checkbox"><i></i></span>');
-		dropdownhtml.push('<div class="fs-option-label">' + comp.name + '</div></div>');
-	}
-	dropdownhtml.push('</div></div>');
-	return dropdownhtml.join(' ');
-}
-
-function updateCompsSelect(compSetting)
-{
-	var selecthtml = [];
-	var drophtml = [];
-	var opcomps = compSetting.getOpCorps();
-	if(opcomps.length > 0)
-	{
-		var label = '欧赔';
-		selecthtml.push(createSelectOpts(label, opcomps));
-		drophtml.push(createDropdownSelects(label, opcomps));
-	}
-	var ypcomps = compSetting.getYpCorps();
-	if(ypcomps.length > 0)
-	{
-		var label = '亚盘';
-		selecthtml.push(createSelectOpts(label, ypcomps));
-		drophtml.push(createDropdownSelects(label, ypcomps));
-	}
-	var select = $('#comps-multi-select');
-	var t = $(select).parent();
-	$(t).find('.fs-label').html(complabel);
-	$(t).find('.fs-dropdown').html(drophtml.join(''));
-	$(select).html(selecthtml.join(''));
-}
-
 //选择的数据
 $(function(){
 	$(document).on('click','.game_select',function(){
@@ -338,32 +286,17 @@ $(function(){
     	placeholder: complabel,
     	showSearch: false,
     	numDisplayed: 0,
-        overflowText: '已选择{n}公司',
+        overflowText: '已选择{n}家公司',
     });
     
     $('#btnConfigure').on('click', function(){
     	conf = getConfValue();
-    	alert(conf.isCompShow('0'));
+    	stateListeners.notify('change', this, conf);
     });
     
-    /*
-    $('#btnReUnion').on('click', function(){
-    	var select = $('#comps-multi-select');
-    	//$(select).removeClass('hidden');
-    	var t = $(select).parent();
-    	$(t).find('.fs-label').html('赔率公司选择');
-    	
-    	var dropdownhtml = [];
-    	var selecthtml = [];
-    	
-    	dropdownhtml.push(createDropdownSelects('欧赔', opcomps));
-    	dropdownhtml.push(createDropdownSelects('亚盘', ypcomps));
-    	
-    	selecthtml.push(createSelectOpts('欧赔', opcomps));
-    	selecthtml.push(createSelectOpts('亚盘', ypcomps));
-    	
-        $(t).find('.fs-dropdown').html(dropdownhtml.join(''));
-    	$(select).html(selecthtml.join(''));
-    });*/
+    $('#btnRefresh').on('click', function(){
+    	conf = getConfValue();
+    	stateListeners.notify('change', this, conf);
+    });
 })
 </script>
