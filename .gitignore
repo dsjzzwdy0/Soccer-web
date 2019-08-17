@@ -1,0 +1,12 @@
+﻿##############################
+
+## Folders                  ##
+
+##############################
+soccer-core/target
+soccer-auth/target
+soccer-common/target
+soccer-data/target
+soccer-client/target
+soccer/target
+logs
