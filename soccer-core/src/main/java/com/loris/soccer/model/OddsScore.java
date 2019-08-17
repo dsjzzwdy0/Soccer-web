@@ -77,7 +77,9 @@ public class OddsScore extends MatchItem
 
 	public void setOddsvalue(String oddsvalue)
 	{
+		this.params.clear();
 		this.oddsvalue = oddsvalue;
+		decodeOddsScore(oddsvalue, params);
 	}
 
 	public String getType()
