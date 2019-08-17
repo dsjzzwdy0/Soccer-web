@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
 import com.loris.soccer.model.base.MatchItem;
 
@@ -77,9 +78,37 @@ public class OddsScore extends MatchItem
 
 	public void setOddsvalue(String oddsvalue)
 	{
-		this.params.clear();
 		this.oddsvalue = oddsvalue;
+		this.params.clear();
 		decodeOddsScore(oddsvalue, params);
+	}
+	
+	public void setOpentime(Date opentime)
+	{
+		this.opentime = opentime;
+	}
+	
+	public void remove(String name)
+	{
+		this.params.remove(name);
+		this.oddsvalue = encodeOddsScore(params);
+	}
+
+	/**
+	 * @return the params
+	 */
+	public Map<String, Float> getParams()
+	{
+		return params;
+	}
+
+	/**
+	 * @param params the params to set
+	 */
+	public void setParams(Map<String, Float> params)
+	{
+		this.params = params;
+		this.oddsvalue = encodeOddsScore(params);
 	}
 
 	public String getType()
@@ -106,10 +135,10 @@ public class OddsScore extends MatchItem
 	{
 		return opentime;
 	}
-
-	public void setOpentime(Date opentime)
+	
+	public int size()
 	{
-		this.opentime = opentime;
+		return params.size();
 	}
 	
 	/**
@@ -186,7 +215,8 @@ public class OddsScore extends MatchItem
 		return StringUtils.equals(mid, other.mid)
 				&& StringUtils.equals(ordinary, other.ordinary)
 				&& StringUtils.equals(type, other.type)
-				&& StringUtils.equals(source, other.source);
+				&& StringUtils.equals(source, other.source) 
+				&& DateUtil.equals(opentime, other.opentime);
 	}
 
 	@Override

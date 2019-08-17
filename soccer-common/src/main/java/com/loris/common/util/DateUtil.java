@@ -25,8 +25,11 @@ public class DateUtil
 	private static final Pattern p = Pattern.compile("^(\\d+)\\D*(\\d*)\\D*(\\d*)\\D*(\\d*)\\D*(\\d*)\\D*(\\d*)");
 	
 	/** 日期格式串 */
-	final static Pattern DATE_FORMAT = Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}[ ][0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2}");
+	final static Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}[ ][0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2}");
 
+	/** 日期格式串 */
+	final static Pattern DAY_PATTERN = Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}");
+	
 	/** The DateFormat. */
 	final public static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -237,10 +240,22 @@ public class DateUtil
 	 */
 	public static int compareDate(Date d1, Date d2)
 	{
-		if(d1 == null && d2 != null) return -1;
-		else if(d1 == null && d2 == null) return 0;
+		if(d1 == null && d2 == null) return 0;
+		else if(d1 == null && d2 != null) return -1;
 		else if(d1 != null && d2 == null) return 1;
 		return Long.compare(d1.getTime(), d2.getTime());
+	}
+	
+	/**
+	 * 判断两个日期是否相等
+	 * @param d1 日期1
+	 * @param d2 日期2
+	 * @return 是否相等
+	 */
+	public static boolean equals(Date d1, Date d2)
+	{
+		if(d1 == d2) return true;
+		return compareDate(d1, d2) == 0;
 	}
 
 	/**
@@ -428,6 +443,22 @@ public class DateUtil
 		tempStart.add(Calendar.DAY_OF_YEAR, addDayNum);
 		return tempStart.getTime();
 	}
+	
+	/**
+	 * Get the day string. 把一个日期型的字符串转换成标准的日期字符串 2018-01-12
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String parseFirstDayString(String str)
+	{
+		Matcher matcher = DAY_PATTERN.matcher(str);
+		if(matcher.find())
+		{
+			return matcher.group();
+		}
+		return null;
+	}
 
 	/**
 	 * Get the day string. 把一个日期型的字符串转换成标准的日期字符串 2018-01-12
@@ -456,7 +487,7 @@ public class DateUtil
 	 */
 	public static String parseFirstDateString(String str)
 	{
-		Matcher matcher = DATE_FORMAT.matcher(str);
+		Matcher matcher = DATETIME_PATTERN.matcher(str);
 		if(matcher.find())
 		{
 			return matcher.group();
@@ -472,7 +503,7 @@ public class DateUtil
 	public static List<String> parseAllDateString(String str)
 	{
 		List<String> dates = new ArrayList<>();
-		Matcher matcher = DATE_FORMAT.matcher(str);
+		Matcher matcher = DATETIME_PATTERN.matcher(str);
 		while(matcher.find())
 		{
 			dates.add(matcher.group());

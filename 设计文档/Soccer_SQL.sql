@@ -360,18 +360,24 @@ create table soccer_record_odds_yp(
 	INDEX `index_soruce` (`source`) USING BTREE
 );
 
-create table soccer_odds_score(
-	`id`  int(11) NOT NULL AUTO_INCREMENT,
-	mid varchar(10),
-	ordinary varchar(10),
-	type varchar(5),
-	oddsvalue varchar(240),
-	opentime timestamp,
-	source varchar(10),
-	PRIMARY KEY (`id`),	
-	INDEX `index_mid` (`mid`) USING BTREE,
-	INDEX `index_type` (`type`) USING BTREE
-);
+CREATE TABLE `soccer_odds_score` (
+	`id`  int(11) NOT NULL AUTO_INCREMENT ,
+	`mid`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`ordinary`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`matchtime`  timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP ,
+	`type`  varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`oddsvalue`  varchar(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	`opentime`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+	`source`  varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+	PRIMARY KEY (`id`),
+	INDEX `index_mid` (`mid`) USING BTREE ,
+	INDEX `index_type` (`type`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=1
+ROW_FORMAT=DYNAMIC
+;
 
 create table soccer_scheduler_plugins(
 	`id`  int(11) NOT NULL AUTO_INCREMENT,

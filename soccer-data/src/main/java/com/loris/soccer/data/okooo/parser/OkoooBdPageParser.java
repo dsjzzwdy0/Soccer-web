@@ -329,28 +329,4 @@ public class OkoooBdPageParser extends AbstractOkoooPageParser
 		}
 		return "";
 	}
-	
-	/**
-	 * 获得北单比赛的期号
-	 * @param element 含有比赛的期号
-	 * @return 比赛期号
-	 */
-	protected String getIssueNo(Element element)
-	{
-		String issueno = "";
-		if(element == null) return issueno;
-		Elements elements = element.children();
-		for (Element element2 : elements)
-		{
-			if(StringUtils.isEmpty(issueno))
-			{
-				issueno = element2.val();
-			}
-			if(element2.hasAttr("selected") || StringUtils.equalsAnyIgnoreCase(element2.attr("selected"), "true"))
-			{
-				issueno = element2.val();
-			}
-		}
-		return issueno;
-	}
 }

@@ -11,6 +11,8 @@
  */
 package com.loris.soccer.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**   
@@ -30,4 +32,21 @@ public class OkoooLeague extends League
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		if(obj == null || !(obj instanceof OkoooLeague))
+		{
+			return false;
+		}
+		return StringUtils.isNotBlank(lid) && lid.equalsIgnoreCase(((OkoooLeague)obj).getLid());
+	}
 }

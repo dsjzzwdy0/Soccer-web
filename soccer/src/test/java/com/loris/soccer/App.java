@@ -138,7 +138,7 @@ public class App
 			// testSourceFinance();
 			// testStat();
 			// testTeamRating();
-			// testOkooo();
+			testOkooo();
 			// testOkoooOdds();
 			// testOkoooMapping();
 			// testOkoooTeamMapping();
@@ -162,7 +162,7 @@ public class App
 			// testLiveBdWebPage();
 			// testWebPageService();
 			// testLeagueRoundWebPage();
-			testZgzcwCupWebPage();
+			// testZgzcwCupWebPage();
 			// testZgzcwLeagueCenterScheduler();	
 			// testBdMatchInfo();
 			// addSchedulerInfo();
@@ -324,7 +324,7 @@ public class App
 	public static void testOkooo() throws Exception
 	{
 		DataService dataService = (DataService) context.getBean("soccerDataService");
-		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_LOTTERY_JC);
+		WebPage page = OkoooPageCreator.createOkoooWebPage(OkoooConstants.PAGE_BD_SCORE);
 		logger.info("Download: " + page.getUrl());
 		if(downloadOkoooPage(page))
 		{
