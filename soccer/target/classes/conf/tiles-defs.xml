@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<!-- Definitions for Tiles documentation -->
+<tiles-definitions>    
+    <definition name="system.tiles.definition">
+    	<put-attribute name="meta" value="/WEB-INF/views/system/commons/basic.jsp" />
+    	<put-attribute name="header" value="/WEB-INF/views/system/commons/header.jsp" />
+    	<put-attribute name="footer" value="/WEB-INF/views/system/commons/footer.jsp" />
+    </definition>
+    
+    <definition name="*.system" extends="system.tiles.definition" 
+    	template="/WEB-INF/views/system/commons/layout.jsp">
+    	<put-attribute name="body" value="/WEB-INF/views/system/{1}.jsp" />
+    </definition>
+    
+    <definition name="soccer.tiles.definition">
+    	<put-attribute name="meta" value="/WEB-INF/views/soccer/shared/basic.jsp" />
+    	<put-attribute name="header" value="/WEB-INF/views/soccer/shared/header.jsp" />
+    	<put-attribute name="footer" value="/WEB-INF/views/soccer/shared/footer.jsp" />
+    </definition>
+    
+    <definition name="*.soccer" extends="soccer.tiles.definition" 
+    	template="/WEB-INF/views/soccer/shared/layout.jsp">
+    	<put-attribute name="body" value="/WEB-INF/views/soccer/{1}.jsp" />
+    </definition>
+    
+    <definition name="mapping.tiles.definition">
+    	<put-attribute name="meta" value="/WEB-INF/views/mapping/shared/basic.jsp" />
+    </definition>
+    
+    <definition name="*.mapping" extends="mapping.tiles.definition" 
+    	template="/WEB-INF/views/mapping/shared/layout.jsp">
+    	<put-attribute name="body" value="/WEB-INF/views/mapping/{1}.jsp" />
+    </definition>
+    
+</tiles-definitions>

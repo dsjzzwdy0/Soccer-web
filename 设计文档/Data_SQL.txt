@@ -1,0 +1,22 @@
+﻿insert into soccer_job_info(jobname, classname, groupname,cronexpression, data, enabled,createtime)
+	values
+  ('足彩网期号数据下载', 'com.loris.quartz.DataPluginJob', 'SOCCER_DATA_DOWNLOAD', '0 45 13 * * ?', 'issue.zgzcw', true, now()),   
+  ('足彩网赔率数据下载', 'com.loris.quartz.DataPluginJob', 'SOCCER_DATA_DOWNLOAD', '0 45 11,23 * * ?', 'odds.zgzcw', true, now()),
+  ('足足彩网联赛页面下载', 'com.loris.quartz.DataPluginJob', 'SOCCER_DATA_DOWNLOAD', '0 45 18 ? * MON,TUE,THU,FRI', 'league.zgzcw', true, now());
+  
+  
+insert into soccer_scheduler_info(name, intervaltime, maxactivetaskthread, randtimeseed,type,plugins)
+	values
+	('当前期号数据', 5000, 3, 200, 'issue.zgzcw', 'class:com.loris.soccer.data.ZgzcwIssueDataPlugin'),
+	('最近赔率数据', 5000, 3, 200, 'odds.zgzcw', 'class:com.loris.soccer.data.ZgzcwOddsDataPlugin'),
+	('当前比赛数据', 5000, 3, 200, 'league.zgzcw', 'class:com.loris.soccer.data.ZgzcwLeagueDataPlugin');
+	
+	
+insert into soccer_league_rank_latest(lid, tid, type, season, round, rank, gamenum, winnum, drawnum, losenum, score, wingoal, losegoal)
+select lid, tid, type, season, round, rank, gamenum, winnum, drawnum, losenum, score, wingoal, losegoal from soccer_league_rank_info
+
+
+
+
+
+select lid, homeid as tname from okooo_match GROUP BY homeid union select lid, clientid as tname from okooo_match GROUP BY clientid
