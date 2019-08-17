@@ -113,6 +113,17 @@ public class OddsScore extends MatchItem
 	}
 	
 	/**
+	 * 加入数据内容
+	 * @param name
+	 * @param value
+	 */
+	public void put(String name, Float value)
+	{
+		this.params.put(name, value);
+		this.oddsvalue = encodeOddsScore(params);
+	}
+	
+	/**
 	 * 解析赔率比分的数据
 	 * @param text
 	 * @param params
