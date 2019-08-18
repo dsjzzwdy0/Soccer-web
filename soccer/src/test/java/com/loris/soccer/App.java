@@ -198,6 +198,12 @@ public class App
 		{
 			Map<Result, Float> results = oddsScore.getResultOdds();
 			logger.info(oddsScore.getMid() + " Size of result is " + results.size());
+			float[] probs = new float[results.size()];
+			int i = 0;
+			for (Result result : results.keySet())
+			{
+				probs[i] = results.get(result);
+			}
 		}
 	}
 	
