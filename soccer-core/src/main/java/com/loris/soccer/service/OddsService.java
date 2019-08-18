@@ -11,6 +11,7 @@
  */
 package com.loris.soccer.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.loris.soccer.model.CompSetting;
@@ -201,6 +202,15 @@ public interface OddsService
 	 * @return
 	 */
 	List<RecordOddsYpInfo> getRecordOddsYps(List<String> mids, CompSetting compSetting);
+	
+	/**
+	 * 获得某一场比赛的
+	 * @param mid
+	 * @param start
+	 * @param end
+	 * @return 比分数据的列表
+	 */
+	List<OddsScore> getOddsScores(String mid, Date start, Date end);
 	
 	/**
 	 * 更新数据列表

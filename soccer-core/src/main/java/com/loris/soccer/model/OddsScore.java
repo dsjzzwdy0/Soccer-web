@@ -21,7 +21,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.loris.common.util.DateUtil;
 import com.loris.common.util.NumberUtil;
+import com.loris.soccer.constant.SoccerConstants;
+import com.loris.soccer.model.MatchResult.ResultType;
 import com.loris.soccer.model.base.MatchItem;
+import com.loris.soccer.model.base.Result;
 
 
 /**
@@ -139,6 +142,70 @@ public class OddsScore extends MatchItem
 	public int size()
 	{
 		return params.size();
+	}
+	
+	/**
+	 * 按照比赛结果获得赔率 
+	 * @return
+	 */
+	public Map<Result, Float> getResultOdds()
+	{
+		if(params == null || params.size() <= 0) return null;
+		Map<Result, Float> results = new HashMap<>();
+		for (String score : params.keySet())
+		{
+			Result result = new Result(score);
+			if(result.getResultType() == null)
+			{
+				setDefaultResult(score, result);
+			}
+			results.put(result, params.get(score));
+		}		
+		return results;
+	}
+	
+	/**
+	 * 设置默认的比赛结果
+	 * @param score
+	 * @param result
+	 */
+	protected void setDefaultResult(String score, Result result)
+	{
+		if(StringUtils.equals(ELSE_DRAW, score))
+		{
+			result.setResultType(ResultType.DRAW);
+			result.setHomegoal(4);
+			result.setClientgoal(4);
+		}
+		else if(StringUtils.equals(ELSE_WIN, score))
+		{
+			result.setResultType(ResultType.WIN);
+			if(StringUtils.equals(type, SoccerConstants.LOTTERY_BD))
+			{
+				result.setHomegoal(5);
+				result.setClientgoal(1);
+			}
+			else
+			{
+				result.setHomegoal(6);
+				result.setClientgoal(1);
+			}
+		}
+		else
+		{
+			result.setResultType(ResultType.LOSE);
+			if(StringUtils.equals(type, SoccerConstants.LOTTERY_BD))
+			{
+				result.setHomegoal(1);
+				result.setClientgoal(5);
+			}
+			else
+			{
+				result.setHomegoal(1);
+				result.setClientgoal(6);
+			}
+		}
+			
 	}
 	
 	/**

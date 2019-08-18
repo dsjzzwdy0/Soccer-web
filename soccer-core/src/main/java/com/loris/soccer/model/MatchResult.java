@@ -14,7 +14,7 @@ package com.loris.soccer.model;
 import org.apache.commons.lang3.StringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.loris.common.bean.AutoIdEntity;
+import com.loris.soccer.model.base.Result;
 
 /**   
  * @ClassName:  MatchResult   
@@ -26,7 +26,7 @@ import com.loris.common.bean.AutoIdEntity;
  * 注意：本内容仅限于天津东方足彩有限公司内部传阅，禁止外泄以及用于其他的商业目 
  */
 @TableName("soccer_match_result")
-public class MatchResult extends AutoIdEntity
+public class MatchResult extends Result
 {
 	public static enum ResultType{
 		WIN,      	//胜
@@ -65,68 +65,7 @@ public class MatchResult extends AutoIdEntity
 	{
 		this.mid = mid;
 	}
-	public ResultType getResultType()
-	{
-		return result;
-	}
-	public void setResultType(ResultType result)
-	{
-		this.result = result;
-	}
-	public Integer getHomegoal()
-	{
-		return homegoal;
-	}
-	public void setHomegoal(Integer homegoal)
-	{
-		this.homegoal = homegoal;
-	}
-	public Integer getClientgoal()
-	{
-		return clientgoal;
-	}
-	public void setClientgoal(Integer clientgoal)
-	{
-		this.clientgoal = clientgoal;
-	}
-	
-	public void setScore(Integer homegoal, Integer clientgoal)
-	{
-		this.homegoal = homegoal;
-		this.clientgoal = clientgoal;
-		if(homegoal > clientgoal)
-		{
-			result = ResultType.WIN;
-		}
-		else if(homegoal == clientgoal)
-		{
-			result = ResultType.DRAW;
-		}
-		else
-		{
-			result = ResultType.LOSE;
-		}
-	}
-	
-	public void setScore(String score)
-	{
-		String[] str = score.split(":");	
-		if(str.length != 2)
-		{
-			return;
-		}
-		try
-		{
-			int homegoal = Integer.parseInt(str[0]);
-			int clientgoal = Integer.parseInt(str[1]);
-			setScore(homegoal, clientgoal);
-		}
-		catch(Exception e)
-		{
-			//Do nothing
-		}
-	}
-	
+		
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -141,29 +80,5 @@ public class MatchResult extends AutoIdEntity
 	{
 		return "MatchResult [mid=" + mid + ", result=" + result + ", homegoal=" + homegoal + ", clientgoal="
 				+ clientgoal + "]";
-	}
-
-	/**
-	 * 检测是否是一个比赛结果数据
-	 * @param score 比赛结果字符串
-	 * @return 是否的标志
-	 */
-	public static boolean validateScore(String score)
-	{
-		String[] str = score.split(":");	
-		if(str.length != 2)
-		{
-			return false;
-		}
-		try
-		{
-			Integer.parseInt(str[0]);
-			Integer.parseInt(str[1]);
-			return true;
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
 	}
 }

@@ -88,6 +88,7 @@ import com.loris.soccer.model.Logo;
 import com.loris.soccer.model.Match;
 import com.loris.soccer.model.MatchResult;
 import com.loris.soccer.model.MatchResult.ResultType;
+import com.loris.soccer.model.base.Result;
 import com.loris.soccer.model.OddsNum;
 import com.loris.soccer.model.OddsOp;
 import com.loris.soccer.model.OddsScore;
@@ -138,7 +139,8 @@ public class App
 			// testSourceFinance();
 			// testStat();
 			// testTeamRating();
-			testOkooo();
+			testOddsScore();
+			// testOkooo();
 			// testOkoooOdds();
 			// testOkoooMapping();
 			// testOkoooTeamMapping();
@@ -184,6 +186,18 @@ public class App
 				e.printStackTrace();
 			}
 			context = null;
+		}
+	}
+	
+	public static void testOddsScore() throws Exception
+	{
+		OddsService oddsService = (OddsService) context.getBean("oddsService");
+		//String mid = "";
+		List<OddsScore> scores = oddsService.getOddsScores(null, null, null);
+		for (OddsScore oddsScore : scores)
+		{
+			Map<Result, Float> results = oddsScore.getResultOdds();
+			logger.info(oddsScore.getMid() + " Size of result is " + results.size());
 		}
 	}
 	

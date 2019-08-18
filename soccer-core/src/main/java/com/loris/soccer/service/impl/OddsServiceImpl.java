@@ -11,8 +11,10 @@
  */
 package com.loris.soccer.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.loris.common.filter.ObjectFilter;
 import com.loris.common.service.SqlHelper;
+import com.loris.common.util.ToolUtil;
 import com.loris.soccer.constant.SoccerConstants;
 import com.loris.soccer.dao.OddsNumMapper;
 import com.loris.soccer.dao.OddsOpMapper;
@@ -409,5 +412,28 @@ public class OddsServiceImpl implements OddsService
 		
 		//System.out.println(queryWrapper.getCustomSqlSegment());
 		return recordOddsYpInfoMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 *  (non-Javadoc)
+	 * @see com.loris.soccer.service.OddsService#getOddsScores(java.lang.String, java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<OddsScore> getOddsScores(String mid, Date start, Date end)
+	{
+		QueryWrapper<OddsScore> queryWrapper = new QueryWrapper<>();
+		if(StringUtils.isNotEmpty(mid))
+		{
+			queryWrapper.eq("mid", mid);
+		}
+		if(ToolUtil.isNotEmpty(start))
+		{
+			queryWrapper.gt("opentime", start);
+		}
+		if(ToolUtil.isNotEmpty(end))
+		{
+			queryWrapper.lt("opentime", end);
+		}
+		return oddsScoreMapper.selectList(queryWrapper);
 	}
 }
